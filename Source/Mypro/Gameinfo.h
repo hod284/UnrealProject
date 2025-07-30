@@ -8,10 +8,26 @@
 #include "EngineMinimal.h"
 #include "Engine.h"
 #include "Engine/EngineTypes.h"
-#include "../Mypro/common/PointerManager.h"
+//
+
+
+// 이미지 헤더파일 모아놓은곳
+#include "Components/Button.h"
+#include "Components/TextBlock.h"
+#include "Components/ProgressBar.h"
+#include "Components/Image.h"
+#include "Components/CanvasPanelSlot.h"
+#include "Components/ListView.h"
+#include "Components/TileView.h"
+#include "Components/TreeView.h"
+#include "Components/Border.h"
+#include "Components/ScrollBox.h"
+#include "Components/ScrollBoxSlot.h"
+//
+
 #include "Gameinfo.generated.h"
-// 포인터나 언리얼 스마트 포인터 모아 놓은 클래스
-extern TObjectPtr<PointerManager> UpointerManager;
+
+
 
 //게임상태 정의
 UENUM()
