@@ -6,7 +6,9 @@
 #include "Components/ActorComponent.h"
 #include "Mylayercomponent.generated.h"
 
-
+/*
+유니티에있는 오브젝트레이어를 액터컴포넌트로 구현한것
+*/
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MYPRO_API UMylayercomponent : public UActorComponent
 {

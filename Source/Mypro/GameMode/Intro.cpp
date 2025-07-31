@@ -5,5 +5,15 @@
 // 빌드한뒤 게임 시작할때 쓰이는 시작점 지정 메크로
 //IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, Mypro, "Mypro");
 
+void AIntro::BeginPlay()
+{
+	Super::BeginPlay();
+	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetGameState(NowGameState::Intro);
+}
 
+AIntro::AIntro()
+{
+	
+	PlayerControllerClass = AMainPlayerController::StaticClass();
 
+}

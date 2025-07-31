@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "../Gameinfo.h"
 #include "Blueprint/UserWidget.h"
 #include "CharterChoice.generated.h"
 

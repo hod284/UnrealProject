@@ -17,6 +17,8 @@
 #include "Components/ProgressBar.h"
 #include "Components/Image.h"
 #include "Components/CanvasPanelSlot.h"
+#include "Components/CanvasPanel.h"
+#include "Components/WidgetSwitcher.h"
 #include "Components/ListView.h"
 #include "Components/TileView.h"
 #include "Components/TreeView.h"
@@ -28,12 +30,13 @@
 #include "Gameinfo.generated.h"
 
 
+DECLARE_LOG_CATEGORY_EXTERN(LogMypro, Warning, All);
 
 //게임상태 정의
 UENUM()
-enum  NowState: uint8
+enum  NowGameState: uint8
 {
-	Intro, playgame, gameover
+	None,Intro, playgame, gameover
 };
 
 //게임상태 정의
@@ -71,6 +74,3 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 Skill4_ATK; // 스킬4 공격력 
 };
-
-// 언리얼 로그 정의 
-DECLARE_LOG_CATEGORY_EXTERN(LogMypro, Log, All);

@@ -3,6 +3,8 @@
 #pragma once
 
 #include "../Gameinfo.h"
+#include  "../player/MainPlayerController.h"
+#include  "../singleton/GameManager.h"
 #include "GameFramework/GameModeBase.h"
 #include "Intro.generated.h"
 
@@ -14,4 +16,8 @@ class MYPRO_API AIntro : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+public:
+	// override는 부모클래스의 함수를 재정의한다고 컴파일러에게 명확히 알려준다.
+	virtual void BeginPlay() override;
+	AIntro();
 };

@@ -5,17 +5,16 @@
 #include "../Gameinfo.h"
 #include "SkillStatus.h"
 #include "Blueprint/UserWidget.h"
-#include "PlayUI.generated.h"
+#include "PlayMainUI.generated.h"
+
 /**
- 스킬및 플레이를 할때 이용할 UI 모아놓은 캔버스 위젯 클래스입니다.
+ * 
  */
 UCLASS()
-class MYPRO_API UPlayUI : public UUserWidget
+class MYPRO_API UPlayMainUI : public UUserWidget
 {
 	GENERATED_BODY()
-public:
-
-	UPlayUI(const FObjectInitializer& ObjectInitializer);
+protected:
 	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<USkillStatus> Skill1;
 	UPROPERTY(BlueprintReadWrite)
@@ -25,4 +24,7 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<USkillStatus> Skill4;
 	virtual void NativeConstruct() override;
+public:
+
+	UPlayMainUI(const FObjectInitializer& ObjectInitializer);
 };
