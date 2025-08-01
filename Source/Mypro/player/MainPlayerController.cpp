@@ -21,20 +21,9 @@ void AMainPlayerController::BeginPlay()
 	{
 		if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Intro)
 		{
-			MainWidgetBluprinte = LoadClass<UUserWidget>(nullptr, TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/widget/IntroMainUIWidget.IntroMainUIWidget_C'"));
-			if (IsValid(MainWidgetBluprinte))
-			{
-				MainWidget = CreateWidget<UUserWidget>(this, MainWidgetBluprinte);
-				if (MainWidget)
-				{
-					MainWidget->AddToViewport();
-				}
-			}
+			 GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetIntroMainUI_widget()->AddToViewport();
 		}
-		else
-		{
-
-		}
+		
 	}
 }
 

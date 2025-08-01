@@ -4,6 +4,7 @@
 
 #include "../Gameinfo.h"
 #include "../singleton/GameManager.h"
+#include "../singleton/UImanager.h"
 #include "GameFramework/PlayerController.h"
 #include "MainPlayerController.generated.h"
 
@@ -20,11 +21,9 @@ class MYPRO_API AMainPlayerController : public APlayerController
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY()
-	
-	TSubclassOf<UUserWidget> MainWidgetBluprinte; // 레벨에 메인으로 걸리는 위젯 블루프린트입니다.
-	TObjectPtr<UUserWidget> MainWidget; // 레벨에 메인으로 걸리는 위젯입니다.
-	AMainPlayerController();// 생성자
+
 	// override는 부모클래스의 함수를 재정의한다고 컴파일러에게 명확히 알려준다.
 	virtual void BeginPlay() override;
+
+	AMainPlayerController();
 };

@@ -3,6 +3,18 @@
 
 #include "UImanager.h"
 
+void UUImanager::Initialize(FSubsystemCollectionBase& Collection)
+{
+	Super::Initialize(Collection);
+	// Initialize the UI manager here, if needed
+	if (IntroMainUI)
+		IntroMainUI_widget = CreateWidget<UUserWidget>(GetWorld(), IntroMainUI);
+	
+	if (PlayMainUI)
+		PlayMainUI_widget = CreateWidget<UUserWidget>(GetWorld(), PlayMainUI);
+
+}
+
 UUImanager::UUImanager()
 {
 	static ConstructorHelpers::FClassFinder<UUserWidget> WidgetClass_intro(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/widget/IntroMainUIWidget.IntroMainUIWidget_C'"));

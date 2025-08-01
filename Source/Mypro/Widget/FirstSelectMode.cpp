@@ -46,20 +46,20 @@ void UFirstSelectMode::UnHoverMultiButton()
 
 void UFirstSelectMode::ClickSingleButton()
 {
-	//UIntroMainUI* ui = Cast<UIntroMainUI>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->IntroMainUI);
-	//if (ui)
-	//{
-	//	ui->SetSwitcherIndex(1);
-	//}
+	UIntroMainUI* ui = Cast<UIntroMainUI>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetIntroMainUI_widget());
+	if (ui)
+	{
+		ui->SetSwitcherIndex(1);
+	}
 }
 
 void UFirstSelectMode::ClickMultiButton()
 {
-	//UIntroMainUI* ui = Cast<UIntroMainUI>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->IntroMainUI);
-	//if (ui)
-	//{
-	//	ui->SetSwitcherIndex(1);
-	//}
+	UIntroMainUI* ui = Cast<UIntroMainUI>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetIntroMainUI_widget());
+	if (ui)
+	{
+		ui->SetSwitcherIndex(1);
+	}
 }
 
 
