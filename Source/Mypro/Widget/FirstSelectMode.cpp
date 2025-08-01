@@ -10,13 +10,13 @@ void UFirstSelectMode::NativeConstruct()
 	SingleButton->OnHovered.AddDynamic(this, &UFirstSelectMode::HoverSingleButton);
 	// 싱글버튼 언호버 이벤트 연결
 	SingleButton->OnUnhovered.AddDynamic(this, &UFirstSelectMode::UnHoverSingleButton);
-	
+	// 싱글버튼 클릭 이벤트 연결
 	SingleButton->OnClicked.AddDynamic(this, &UFirstSelectMode::ClickSingleButton);
 	// 멀티버튼 호버 이벤트 연결
 	MultiButton->OnHovered.AddDynamic(this, &UFirstSelectMode::HoverMultiButton);
 	// 멀티버튼 언호버 이벤트 연결
 	MultiButton->OnUnhovered.AddDynamic(this, &UFirstSelectMode::UnHoverMultiButton);
-
+	// 멀티버튼 클릭 이벤트 연결
 	MultiButton->OnClicked.AddDynamic(this, &UFirstSelectMode::ClickMultiButton);
 }
 
