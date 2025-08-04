@@ -21,6 +21,7 @@ void AMainPlayerController::BeginPlay()
 	{
 		if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Intro)
 		{
+			// 현재 레벨에서 모든 액터들을 들고 오는 로직
 			UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActor::StaticClass(), SceneActorList);
 			// Intro UI를 생성하고 뷰포트에 추가
 			 GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetIntroMainUI_widget()->AddToViewport();

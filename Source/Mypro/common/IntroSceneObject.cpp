@@ -27,6 +27,7 @@ void AIntroSceneObject::Tick(float DeltaTime)
 
 void AIntroSceneObject::CalltheSelectCharacter(CharacterChoice choice)
 {
+	// 티멥을 for문을 통해 전부초기화
 	for (const TPair<CharacterChoice, ASelectCharacter*>& pair : SelectCharacterList)
 		pair.Value->Inite();
 	auto character = SelectCharacterList[choice];
