@@ -5,6 +5,7 @@
 #include "../Gameinfo.h"
 #include "../singleton/GameManager.h"
 #include "../singleton/UImanager.h"
+#include "../common/IntroSceneObject.h"
 #include "GameFramework/PlayerController.h"
 #include "MainPlayerController.generated.h"
 
@@ -20,10 +21,33 @@ class MYPRO_API AMainPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
-public:
-
+protected:
 	// override는 부모클래스의 함수를 재정의한다고 컴파일러에게 명확히 알려준다.
 	virtual void BeginPlay() override;
-
+	TArray<AActor*>SceneActorList;
 	AMainPlayerController();
+public:
+    /// <summary>
+    /// 레벨에 있는 인트로씬 옵브젝트 찾기위해 만든 함수
+    /// </summary>
+    /// <returns></returns>
+    AActor* GetLevelSceneObjectActor()
+    {
+		/*
+		getclass와staticclass의 차이점은 파생클래스를 가져오는냐 아니면 자신의 클래스를 가져오는냐의 차이
+		getlass는 파생클래스까지 가져오고 staticclass는 자신의 클래스만 가져온다
+		그래서 두개를 이용해 특정 클래스 액터를 찾아오는 로직 생성
+		*/
+	   AActor* Choice  = nullptr;
+	   for (AActor* Actor : SceneActorList)
+	   {
+	      	if (Actor->GetClass() == AIntroSceneObject :: StaticClass())
+	      	{
+	      		Choice = Actor;
+				break;
+			}
+	   }
+	   return Choice;
+    }
+     
 };

@@ -4,6 +4,8 @@
 
 #include "../Gameinfo.h"
 #include "../singleton/UImanager.h"
+#include "../player/MainPlayerController.h"
+#include "../common/IntroSceneObject.h"
 #include "IntroMainUI.h"
 #include "Blueprint/UserWidget.h"
 #include "FirstSelectMode.generated.h"
@@ -39,4 +41,5 @@ protected:
 	void ClickMultiButton(); // 멀티 플레이 버튼 클릭 이벤트
 	// Called when the game starts
 	virtual void NativeConstruct() override;
+	void FirstSelectCharacter(); // 버튼을 누르고 난뒤 처음 캐릭터 선택
 };

@@ -9,7 +9,12 @@
 #include "Engine.h"
 #include "Engine/EngineTypes.h"
 //
+// 리슨 서버 헤더 파일 모아놓은	곳
+#include "Net/UnrealNetwork.h"
 
+
+
+//
 
 // 이미지 헤더파일 모아놓은곳
 #include "Components/Button.h"
@@ -26,20 +31,33 @@
 #include "Components/ScrollBox.h"
 #include "Components/ScrollBoxSlot.h"
 //
-
+//나머지	헤더 파일 모아놓은곳
+#include "Camera/CameraComponent.h"
 #include "Gameinfo.generated.h"
 
 
 DECLARE_LOG_CATEGORY_EXTERN(LogMypro, Warning, All);
 
+
+/*
+  이넘 클래스와 이넘의 차이점
+
+*/
 //게임상태 정의
 UENUM()
-enum  NowGameState: uint8
+enum class  NowGameState: uint8
 {
 	None,Intro, playgame, gameover
 };
 
-//게임상태 정의
+//게임UI 인지 아니지 여부
+UENUM(BlueprintType)
+enum class UIORNOT : uint8
+{
+	UI, UINot
+};
+
+//게임캐릭터 정의
 UENUM(BlueprintType)
 enum class CharacterChoice : uint8
 {

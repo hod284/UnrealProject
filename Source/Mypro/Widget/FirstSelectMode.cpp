@@ -20,44 +20,65 @@ void UFirstSelectMode::NativeConstruct()
 	MultiButton->OnClicked.AddDynamic(this, &UFirstSelectMode::ClickMultiButton);
 }
 
+void UFirstSelectMode::FirstSelectCharacter()
+{
+	AMainPlayerController* controller = Cast<AMainPlayerController>(GetWorld()->GetFirstPlayerController());
+	if (controller)
+	{
+		AIntroSceneObject* levelob = Cast<AIntroSceneObject>(controller->GetLevelSceneObjectActor());
+		if (levelob)
+		{
+			levelob->CalltheSelectCharacter(CharacterChoice::Warrior);
+		}
+	}
+}
+
 void UFirstSelectMode::HoverSingleButton()
 {
+	// 싱글 버튼 호버 시 애니메이션 재생
 	if(single)
 		PlayAnimation(single,0.0,0,EUMGSequencePlayMode::Forward,1.0f);
 }
 
 void UFirstSelectMode::UnHoverSingleButton()
 {
+	// 싱글 버튼 언호버 시 애니메이션 정지
 	if (single)
 		StopAnimation(single);
 }
 
 void UFirstSelectMode::HoverMultiButton()
 {
+	// 멀티 버튼 호버 시 애니메이션 재생
 	if(multi)
 		PlayAnimation(multi,0.0, 0, EUMGSequencePlayMode::Forward, 1.0f);
 }
 
 void UFirstSelectMode::UnHoverMultiButton()
 {
+	// 멀티 버튼 언호버 시 애니메이션 정지
 	if (multi)
 		StopAnimation(multi);
 }
 
 void UFirstSelectMode::ClickSingleButton()
 {
+	// 싱글 버튼 클릭 시 IntroMainUI의 스위처 인덱스를 1로 설정하여 캐릭터 선택화면 으로 전환
 	UIntroMainUI* ui = Cast<UIntroMainUI>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetIntroMainUI_widget());
 	if (ui)
 	{
+		FirstSelectCharacter();
 		ui->SetSwitcherIndex(1);
 	}
 }
 
 void UFirstSelectMode::ClickMultiButton()
 {
+	// 멀티 버튼 클릭 시 IntroMainUI의 스위처 인덱스를 1로 설정하여 캐릭터 선택 화면으로 전환
 	UIntroMainUI* ui = Cast<UIntroMainUI>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetIntroMainUI_widget());
 	if (ui)
 	{
+		FirstSelectCharacter();
 		ui->SetSwitcherIndex(1);
 	}
 }

@@ -21,6 +21,8 @@ void AMainPlayerController::BeginPlay()
 	{
 		if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Intro)
 		{
+			UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActor::StaticClass(), SceneActorList);
+			// Intro UI를 생성하고 뷰포트에 추가
 			 GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetIntroMainUI_widget()->AddToViewport();
 		}
 		
