@@ -26,4 +26,5 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	void CalltheSelectCharacter(CharacterChoice choice); // 캐릭터 선택 함수
+	void CallthePlayCharacter(CharacterChoice choice); // 본게임에 들어갈때 플레이 할 캐릭터 선택
 };

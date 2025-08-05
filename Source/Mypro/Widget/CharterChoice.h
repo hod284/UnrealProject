@@ -4,13 +4,14 @@
 
 #include "../Gameinfo.h"
 #include "../player/MainPlayerController.h"
+#include "../singleton/GameManager.h"
 #include "../singleton/UImanager.h"
 #include "../common/IntroSceneObject.h"
 #include "Blueprint/UserWidget.h"
 #include "CharterChoice.generated.h"
 
 /**
- * 
+ 캐릭터 선택화면 위젯 클래스
  */
 UCLASS()
 class MYPRO_API UCharterChoice : public UUserWidget
@@ -44,7 +45,11 @@ protected:
 	TObjectPtr<UButton>	skill4_MA;// skill4 매지션 선택 버튼
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UTextBlock> CharacterTitle; // 캐릭터 타이틀
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UButton> Start; // 게임 스타트
+	CharacterChoice temp;
 	virtual void NativeConstruct() override;
+
 public:
 	UFUNCTION()
 	void Backclick();
@@ -54,7 +59,9 @@ public:
 	void Character2Click(); // 방패와 검을 들고 있는 남성 캐릭터  선택 버튼 클릭 이벤트
 	UFUNCTION()
 	void Character3Click(); // 아무것도 안들고 있는 남성 캐릭터 선택 버튼 클릭 이벤트
+	UFUNCTION()
+	void StartButtonClick();
 	void CharacterButtonChoice(CharacterChoice ch); // 캐릭터 선택 함수
-	
+	void GameStart(CharacterChoice ch); // 캐릭터 선택 함수
 
 };

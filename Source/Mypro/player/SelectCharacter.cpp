@@ -19,12 +19,14 @@ ASelectCharacter::ASelectCharacter()
 	CameraComponent->SetupAttachment(SpringArm);
 	SpringArm->SetupAttachment(SkeletalMeshComponent);
 	SkeletalMeshComponent->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+	
 }
 
 // Called when the game starts or when spawned
 void ASelectCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	MyMat = UMaterialInstanceDynamic::Create(SelecteMa, this);
 }
 
 // Called every frame
@@ -80,6 +82,11 @@ void ASelectCharacter::Inite()
 {
 	GetWorldTimerManager().ClearTimer(Timerahbdle);
 	SkeletalMeshComponent->PlayAnimation(idle, true);
+}
+
+void ASelectCharacter::StartGame()
+{
+	MyMat->SetScalarParameterValue("Amount", 1.0);
 }
 
 

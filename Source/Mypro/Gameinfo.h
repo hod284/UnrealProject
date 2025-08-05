@@ -41,7 +41,9 @@ DECLARE_LOG_CATEGORY_EXTERN(LogMypro, Warning, All);
 
 /*
   이넘 클래스와 이넘의 차이점
-
+  이넘은 과 이넘클래스의 차이점은 전역스코프와 자신의 자식에 스코프를 두는냐의 차이와 타입을 안전성을 따질수 있다
+  이넘은 자동으로 int로 변하는 반면 이넘 클래스는 개발자가 정해주어야지 타입이 지정된다
+  스코프의 개념이 다르다 보니 이넘은 중복이 인정이 안되는 반면 이넘 클래스는 중복이 허용이 된다
 */
 //게임상태 정의
 UENUM()
@@ -61,7 +63,7 @@ enum class UIORNOT : uint8
 UENUM(BlueprintType)
 enum class CharacterChoice : uint8
 {
-	Guiden, Warrior,DarkMagion
+	Guiden, Warrior,DarkMagion, None
 };
 // 게임 레이어 정의
 UENUM(BlueprintType)

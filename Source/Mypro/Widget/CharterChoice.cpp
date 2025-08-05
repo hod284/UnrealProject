@@ -9,7 +9,7 @@ void UCharterChoice::NativeConstruct()
 	Character1->OnClicked.AddDynamic(this, &UCharterChoice::Character1Click);
 	Character2->OnClicked.AddDynamic(this, &UCharterChoice::Character2Click);
 	Character3->OnClicked.AddDynamic(this, &UCharterChoice::Character3Click);
-	FText text = FText::FromString(TEXT("Auora"));
+	Start->OnClicked.AddDynamic(this, &UCharterChoice::StartButtonClick);
 }
 
 
@@ -18,6 +18,7 @@ void UCharterChoice::Character1Click()
 {
 	FText text = FText::FromString(TEXT("Auora"));
 	CharacterTitle->SetText(text);
+	temp = CharacterChoice::Warrior;
 	CharacterButtonChoice(CharacterChoice::Warrior);
 }
 
@@ -25,6 +26,7 @@ void UCharterChoice::Character2Click()
 {
 	FText text = FText::FromString(TEXT("Gudion"));
 	CharacterTitle->SetText(text);
+	temp = CharacterChoice::Guiden;
 	CharacterButtonChoice(CharacterChoice::Guiden);
 }
 
@@ -32,7 +34,13 @@ void UCharterChoice::Character3Click()
 {
 	FText text = FText::FromString(TEXT("DarkMagion"));
 	CharacterTitle->SetText(text);
+	temp = CharacterChoice::DarkMagion;
 	CharacterButtonChoice(CharacterChoice::DarkMagion);
+}
+
+void UCharterChoice::StartButtonClick()
+{
+    GameStart(temp);
 }
 
 void UCharterChoice::CharacterButtonChoice(CharacterChoice ch)
@@ -65,6 +73,18 @@ void UCharterChoice::CharacterButtonChoice(CharacterChoice ch)
 		AIntroSceneObject* levelob = Cast<AIntroSceneObject>(controller->GetLevelSceneObjectActor());
 		if (levelob)
 			levelob->CalltheSelectCharacter(ch);
+	}
+}
+
+void UCharterChoice::GameStart(CharacterChoice ch)
+{
+	AMainPlayerController* controller = Cast<AMainPlayerController>(GetWorld()->GetFirstPlayerController());
+	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSelectCharacter(ch);
+	if (controller)
+	{
+		AIntroSceneObject* levelob = Cast<AIntroSceneObject>(controller->GetLevelSceneObjectActor());
+		if (levelob)
+			levelob->CallthePlayCharacter(ch);
 	}
 }
 
