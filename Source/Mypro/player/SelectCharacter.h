@@ -34,10 +34,7 @@ protected:
 	TObjectPtr<UAnimSequence> SelectedAnim; // 선택 애니메이션
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "value")
 	TObjectPtr<UAnimSequence> idle; // 기본애니메이션
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CustomMaterial")
-	TObjectPtr<UMaterialInterface> SelecteMa; // 선택된후 적용되는 메테리얼
-	UPROPERTY(BlueprintReadWrite)
-	TObjectPtr<UMaterialInstanceDynamic> MyMat; // 메테리얼 만들어 놓은 변수에 값을 적용하기 위한 오브젝트
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

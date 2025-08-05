@@ -26,7 +26,6 @@ ASelectCharacter::ASelectCharacter()
 void ASelectCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	MyMat = UMaterialInstanceDynamic::Create(SelecteMa, this);
 }
 
 // Called every frame
@@ -86,7 +85,7 @@ void ASelectCharacter::Inite()
 
 void ASelectCharacter::StartGame()
 {
-	MyMat->SetScalarParameterValue("Amount", 1.0);
+
 }
 
 
