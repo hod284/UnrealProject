@@ -34,6 +34,9 @@ protected:
 	TObjectPtr<UAnimSequence> SelectedAnim; // 선택 애니메이션
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "value")
 	TObjectPtr<UAnimSequence> idle; // 기본애니메이션
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UNiagaraComponent> Niagara; // 나이아가라 파티클
+
 
 public:	
 	// Called every frame
@@ -49,5 +52,6 @@ public:
 	void idleAnimation();
 	// 캐릭터 다른거 선택할때 초기화함수
 	void Inite();
+	// 캐릭터 선택하고 본게임 들어가는 함수
 	void StartGame();
 };

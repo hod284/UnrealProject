@@ -28,7 +28,8 @@ void UFirstSelectMode::FirstSelectCharacter()
 		AIntroSceneObject* levelob = Cast<AIntroSceneObject>(controller->GetLevelSceneObjectActor());
 		if (levelob)
 		{
-			levelob->CalltheSelectCharacter(CharacterChoice::Warrior);
+			GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->SetTemp(Characters::Warrior);
+			levelob->CalltheSelectCharacter(Characters::Warrior);
 		}
 	}
 }

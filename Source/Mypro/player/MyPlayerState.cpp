@@ -3,7 +3,7 @@
 
 #include "MyPlayerState.h"
 
-void AMyPlayerState::SetMyCharacter_Implementation(CharacterChoice character)
+void AMyPlayerState::SetMyCharacter_Implementation(Characters character)
 {
 }
 void AMyPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

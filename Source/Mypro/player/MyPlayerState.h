@@ -15,11 +15,11 @@ class MYPRO_API AMyPlayerState : public APlayerState
 	GENERATED_BODY()
 public:
 	UFUNCTION(Server, Reliable)
-	void SetMyCharacter(CharacterChoice character);
+	void SetMyCharacter(Characters character);
 
 
 	UPROPERTY(Replicated)
-	CharacterChoice MyCharacter;
+	Characters MyCharacter;
 
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps)  const override;
 };

@@ -15,6 +15,8 @@
 
 
 //
+#include "NiagaraSystem.h"
+#include "NiagaraComponent.h"
 
 // 이미지 헤더파일 모아놓은곳
 #include "Components/Button.h"
@@ -61,7 +63,7 @@ enum class UIORNOT : uint8
 
 //게임캐릭터 정의
 UENUM(BlueprintType)
-enum class CharacterChoice : uint8
+enum class Characters : uint8
 {
 	Guiden, Warrior,DarkMagion, None
 };
@@ -78,7 +80,7 @@ struct FCharacterInfo:public FTableRowBase
 	GENERATED_BODY()
 public:
 	UPROPERTY(EditAnywhere)
-	CharacterChoice CType; // 캐릭터 타입
+	Characters CType; // 캐릭터 타입
 	UPROPERTY(EditAnywhere)
 	int32 HP; // 체력
 	UPROPERTY(EditAnywhere)

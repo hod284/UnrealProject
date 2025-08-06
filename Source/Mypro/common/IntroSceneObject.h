@@ -20,11 +20,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "listofSelctcharacter")
-	TMap<CharacterChoice, ASelectCharacter*> SelectCharacterList; // 캐릭터 리스트
+	TMap<Characters, ASelectCharacter*> SelectCharacterList; // 캐릭터 리스트
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	void CalltheSelectCharacter(CharacterChoice choice); // 캐릭터 선택 함수
-	void CallthePlayCharacter(CharacterChoice choice); // 본게임에 들어갈때 플레이 할 캐릭터 선택
+	void CalltheSelectCharacter(Characters choice); // 캐릭터 선택 함수
+	void CallthePlayCharacter(Characters choice); // 본게임에 들어갈때 플레이 할 캐릭터 선택
 };

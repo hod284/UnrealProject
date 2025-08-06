@@ -22,7 +22,6 @@ protected:
 	TObjectPtr<UWidgetSwitcher> Switcher;
 
 
-
 	virtual void NativeConstruct() override;
 	virtual void NativeDestruct() override;
 };

@@ -17,7 +17,7 @@ private:
 	// 게임 메니저에서 게임 스테이트 설정
 	NowGameState  state = NowGameState ::None;
 	// 게임 메니저에서 플레이 캐릭터 선택
-	CharacterChoice character = CharacterChoice::None;
+	Characters character = Characters::None;
 public:
 	// 기본 생성자
 	// 생성자에 초기화하지 않겠다는뜻
@@ -29,10 +29,10 @@ public:
 	const NowGameState GetGameState() const { 
 		return state; 
 	}
-	void SetSelectCharacter(CharacterChoice  ch) {
+	void SetSelectCharacter(Characters  ch) {
 		character = ch;
 	}
-	const CharacterChoice  GetSelectedcharacter() const {
+	const Characters  GetSelectedcharacter() const {
 		return character;
 	}
 };

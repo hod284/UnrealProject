@@ -13,13 +13,21 @@ ASelectCharacter::ASelectCharacter()
 	SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMeshComponent"));
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
+	Niagara = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Niagara"));
 	SetRootComponent(CapsulComponent);
 	CapsulComponent->bVisualizeComponent = true;
 	SkeletalMeshComponent->SetupAttachment(CapsulComponent);
+	Niagara->SetupAttachment(CapsulComponent);
 	CameraComponent->SetupAttachment(SpringArm);
-	SpringArm->SetupAttachment(SkeletalMeshComponent);
+	SpringArm->SetupAttachment(CapsulComponent);
 	SkeletalMeshComponent->SetAnimationMode(EAnimationMode::AnimationSingleNode);
-	
+	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> GetParticle(TEXT("/Script/Niagara.NiagaraSystem'/Game/material/magionaprticle.magionaprticle'"));
+	Niagara->SetAutoActivate(false);
+	if (GetParticle.Succeeded())
+	{
+		UNiagaraSystem* pa = GetParticle.Object;
+		Niagara->SetAsset(pa);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -63,6 +71,7 @@ void ASelectCharacter::Selected()
 	*/
 	GetWorld()->GetTimerManager().SetTimer(Timerahbdle,this,&ASelectCharacter::SelectedAnimation,2.0f, false);
 	//
+	Niagara->SetVisibility(false);
 }
 
 void ASelectCharacter::SelectedAnimation()
@@ -85,7 +94,12 @@ void ASelectCharacter::Inite()
 
 void ASelectCharacter::StartGame()
 {
-
+	UE_LOG(LogMypro, Warning, TEXT("start"));
+	Niagara->SetVisibility(true);
+	Niagara->Activate();
 }
+
+
+
 
 

@@ -46,6 +46,14 @@ public:
 	}
 
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
-	
+	// 초기 화면에서 현재 캐릭터 선택 상태 공유하기 위해 만들어 놓은 변수
+	Characters temp;
+	void SetTemp(Characters ch)
+	{
+		temp = ch;
+	}
+	const Characters  Gettemp() const {
+		return temp;
+	}
 	UUImanager();
 };

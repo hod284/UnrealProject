@@ -25,19 +25,19 @@ void AIntroSceneObject::Tick(float DeltaTime)
 
 }
 
-void AIntroSceneObject::CalltheSelectCharacter(CharacterChoice choice)
+void AIntroSceneObject::CalltheSelectCharacter(Characters choice)
 {
 	// 티멥에 있는 캐릭터 클래스를 for문을 통해 전부초기화
-	for (const TPair<CharacterChoice, ASelectCharacter*>& pair : SelectCharacterList)
+	for (const TPair<Characters, ASelectCharacter*>& pair : SelectCharacterList)
 		pair.Value->Inite();
 	auto character = SelectCharacterList[choice];
 	character->Selected();
 }
 
-void AIntroSceneObject::CallthePlayCharacter(CharacterChoice choice)
+void AIntroSceneObject::CallthePlayCharacter(Characters choice)
 {
 	// 티멥에 있는 캐릭터 클래스를 for문을 통해 전부초기화
-	for (const TPair<CharacterChoice, ASelectCharacter*>& pair : SelectCharacterList)
+	for (const TPair<Characters, ASelectCharacter*>& pair : SelectCharacterList)
 		pair.Value->Inite();
 	auto character = SelectCharacterList[choice];
 	character->StartGame();

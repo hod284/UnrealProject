@@ -6,7 +6,9 @@
 void UIntroMainUI::SetSwitcherIndex(int32 Index)
 {
 	if (Switcher)
+	{
 		Switcher->SetActiveWidgetIndex(Index);
+	}
 	else
 	UE_LOG(LogMypro, Warning, TEXT("Switcher is null!"));
 	
