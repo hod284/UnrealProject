@@ -21,6 +21,12 @@ protected:
 	virtual void BeginPlay() override;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "listofSelctcharacter")
 	TMap<Characters, ASelectCharacter*> SelectCharacterList; // 캐릭터 리스트
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
+	//백그라운드 음악
+	TObjectPtr<USoundCue> BackgroundMusicCue;
+	
+	UPROPERTY(EditAnywhere,  BlueprintReadOnly)
+	TObjectPtr<UAudioComponent> AudioComponent;
 
 public:	
 	// Called every frame

@@ -8,6 +8,9 @@ AIntroSceneObject::AIntroSceneObject()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComponent"));
+	AudioComponent->SetupAttachment(RootComponent);
+
 
 }
 
@@ -15,7 +18,11 @@ AIntroSceneObject::AIntroSceneObject()
 void AIntroSceneObject::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	AudioComponent->bAutoActivate = false;
+	AudioComponent->SetSound(BackgroundMusicCue);
+	AudioComponent->bIsUISound = false;
+	AudioComponent->bAllowSpatialization = false;
+	AudioComponent->Play();
 }
 
 // Called every frame

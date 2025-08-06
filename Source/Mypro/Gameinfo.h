@@ -17,6 +17,7 @@
 //
 #include "NiagaraSystem.h"
 #include "NiagaraComponent.h"
+#include "Components/AudioComponent.h"
 
 // 이미지 헤더파일 모아놓은곳
 #include "Components/Button.h"
