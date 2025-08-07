@@ -4,6 +4,8 @@
 
 #include "../Gameinfo.h"
 #include "../player/SelectCharacter.h"
+#include "../singleton/UImanager.h"
+#include "../singleton/GameManager.h"
 #include "GameFramework/Actor.h"
 #include "IntroSceneObject.generated.h"
 
@@ -17,20 +19,35 @@ public:
 	AIntroSceneObject();
 
 protected:
+
+	//FTimerHandle은 타이머를 관리하는 핸들이다.
+	FTimerHandle Timerahbdle;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "listofSelctcharacter")
 	TMap<Characters, ASelectCharacter*> SelectCharacterList; // 캐릭터 리스트
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
 	//백그라운드 음악
-	TObjectPtr<USoundCue> BackgroundMusicCue;
-	
-	UPROPERTY(EditAnywhere,  BlueprintReadOnly)
+	TObjectPtr<USoundCue> BackgroundMusicCue_intro;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cutscene")
+	TObjectPtr<ULevelSequence> CutsceneSequence;
+	TObjectPtr <ULevelSequencePlayer> SequencePlayer;
+	 ALevelSequenceActor* SequenceActor;
+
+	UPROPERTY(EditAnywhere,  BlueprintReadOnly, Category = "Audio")
 	TObjectPtr<UAudioComponent> AudioComponent;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<UMediaPlayer> MyMediaPlayer;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	void CalltheSelectCharacter(Characters choice); // 캐릭터 선택 함수
 	void CallthePlayCharacter(Characters choice); // 본게임에 들어갈때 플레이 할 캐릭터 선택
+	// 시퀀스 플레이
+	void PlaySequence();
+	// 로딩 할때 나오는 비디오 
+	void PlayloadingVideo();
+	// 플레이신 비동기 로드 완료 될때 나오는 함수
+	void PlaySceneLoad(const FName& PackageName, UPackage* LoadedPackage, EAsyncLoadingResult::Type Result);
 };

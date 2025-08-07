@@ -26,7 +26,11 @@ void AMainPlayerController::BeginPlay()
 			// Intro UI를 생성하고 뷰포트에 추가
 			 GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetIntroMainUI_widget()->AddToViewport();
 		}
-		
+		else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+		{
+			// Intro UI를 생성하고 뷰포트에 추가
+			GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPlayMainUI_widget() ->AddToViewport();
+		}
 	}
 }
 

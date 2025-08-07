@@ -15,10 +15,18 @@
 
 
 //
+#include "MediaSoundComponent.h"
 #include "NiagaraSystem.h"
 #include "NiagaraComponent.h"
 #include "Components/AudioComponent.h"
-
+#include "LevelSequenceActor.h"
+#include "LevelSequencePlayer.h"
+#include "LevelSequence.h"
+#include "Engine/AssetManager.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Engine/LevelStreaming.h"
+#include "Streaming/LevelStreamingDelegates.h"
 // 이미지 헤더파일 모아놓은곳
 #include "Components/Button.h"
 #include "Components/TextBlock.h"

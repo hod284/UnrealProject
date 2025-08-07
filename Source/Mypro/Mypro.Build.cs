@@ -8,7 +8,12 @@ public class Mypro : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput","Niagara","AIModule","NavigationSystem","UMG" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput","Niagara","AIModule",
+			"NavigationSystem",
+			"UMG", 
+			"LevelSequence",
+			"MovieScene", 
+			"MediaAssets" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
