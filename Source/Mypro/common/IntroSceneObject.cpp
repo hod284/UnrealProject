@@ -79,13 +79,13 @@ void AIntroSceneObject::PlaySceneLoad(const FName& PackageName, UPackage* Loaded
 {
 	if (Result == EAsyncLoadingResult::Succeeded)
 	{
-		GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetGameState(NowGameState::playgame);
 		UGameplayStatics::OpenLevel(GetWorld(), PackageName);
 	}
 }
 
 void AIntroSceneObject::PlaySceneLoadAsync()
 {
+	GetWorldTimerManager().ClearTimer(Timerahbdle);
 	FSoftObjectPath LevelPath(TEXT("/Game/Virtual_Studio_Kit/Maps/Studio_D.Studio_D'"));
 	if (LevelPath.IsValid())
 	{
