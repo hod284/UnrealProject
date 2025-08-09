@@ -12,7 +12,6 @@ void UUImanager::Initialize(FSubsystemCollectionBase& Collection)
 	
 	if (PlayMainUI)
 		PlayMainUI_widget = CreateWidget<UUserWidget>(GetWorld(), PlayMainUI);
-
 }
 
 UUImanager::UUImanager()

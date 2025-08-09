@@ -31,11 +31,11 @@ protected:
 	TObjectPtr <ULevelSequencePlayer> SequencePlayer;
 	 ALevelSequenceActor* SequenceActor;
 ;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Cutscene")
 	TObjectPtr<UMediaPlayer> MyMediaPlayer_loading;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Cutscene")
 	TObjectPtr<UMediaPlayer> MyMediaPlayer_intro;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Cutscene")
 	TObjectPtr <UMediaSoundComponent> SoundComp;
 public:	
 	// Called every frame

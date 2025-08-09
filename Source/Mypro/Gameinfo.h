@@ -12,7 +12,7 @@
 //
 // 리슨 서버 헤더 파일 모아놓은	곳
 #include "Net/UnrealNetwork.h"
-
+#include "Engine/AssetManager.h"
 
 
 //
@@ -24,7 +24,6 @@
 #include "LevelSequenceActor.h"
 #include "LevelSequencePlayer.h"
 #include "LevelSequence.h"
-#include "Engine/AssetManager.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/LevelStreaming.h"
@@ -49,7 +48,7 @@
 #include "Gameinfo.generated.h"
 
 
-//DECLARE_LOG_CATEGORY_EXTERN(LogMypro, Warning, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogMypro, Warning, All);
 
 
 /*

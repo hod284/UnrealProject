@@ -4,10 +4,10 @@
 
 #include "../Gameinfo.h"
 #include "../player/MainPlayerController.h"
+#include "../singleton/DataManager.h"
 #include "../singleton/GameManager.h"
 #include "../singleton/UImanager.h"
 #include "../common/IntroSceneObject.h"
-#include "PlayerStatePannel.h"
 #include "Blueprint/UserWidget.h"
 #include "ChChoiceClass.generated.h"
 
@@ -48,6 +48,17 @@ protected:
 	TObjectPtr<UTextBlock> Titletext; // 캐릭터 타이틀
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UButton> Start; // 게임 스타트
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UProgressBar>  NormalAtk;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UProgressBar> 	skill1Atk;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UProgressBar> 	skill2Atk;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UProgressBar> 	skill3Atk;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UProgressBar> 	skill4Atk;
+	void SetDataValue(Characters ch, const FCharacterInfo* daInfo);
 	virtual void NativeConstruct() override;
 public:
 	UFUNCTION()
