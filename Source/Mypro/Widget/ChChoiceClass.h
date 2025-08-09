@@ -7,6 +7,7 @@
 #include "../singleton/GameManager.h"
 #include "../singleton/UImanager.h"
 #include "../common/IntroSceneObject.h"
+#include "PlayerStatePannel.h"
 #include "Blueprint/UserWidget.h"
 #include "ChChoiceClass.generated.h"
 
@@ -47,8 +48,11 @@ protected:
 	TObjectPtr<UTextBlock> Titletext; // 캐릭터 타이틀
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UButton> Start; // 게임 스타트
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UUserWidget> Status; // 캐릭터 상세정보
+	TSubclassOf<UPlayerStatePannel> StatusUI; // 인트로 메인 클래스
 	virtual void NativeConstruct() override;
-
+	UChChoiceClass(const FObjectInitializer& ObjectInitializer);
 public:
 	UFUNCTION()
 	void Backclick();
