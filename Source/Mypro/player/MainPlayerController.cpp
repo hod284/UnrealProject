@@ -25,6 +25,11 @@ void AMainPlayerController::BeginPlay()
 			UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActor::StaticClass(), SceneActorList);
 			// Intro UI를 생성하고 뷰포트에 추가
 			 GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetIntroMainUI_widget()->AddToViewport();
+			 if (UGameUserSettings* Settings = GEngine->GetGameUserSettings())
+			 {
+				 Settings->SetScreenResolution(FIntPoint(1920, 1080));
+				 Settings->ApplySettings(true); // 즉시 적용
+			 }
 		}
 		else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
 		{

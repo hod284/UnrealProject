@@ -8,21 +8,15 @@ AIntroSceneObject::AIntroSceneObject()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComponent"));
-	AudioComponent->SetupAttachment(RootComponent);
-
-
 }
 
 // Called when the game starts or when spawned
 void AIntroSceneObject::BeginPlay()
 {
 	Super::BeginPlay();
-	AudioComponent->bAutoActivate = false;
-	AudioComponent->SetSound(BackgroundMusicCue_intro);
-	AudioComponent->bIsUISound = false;
-	AudioComponent->bAllowSpatialization = false;
-	AudioComponent->Play();
+    SoundComp = NewObject<UMediaSoundComponent>(this);
+	SoundComp->SetMediaPlayer(MyMediaPlayer_intro);
+	SoundComp->RegisterComponent();
 }
 
 // Called every frame
@@ -70,20 +64,16 @@ void AIntroSceneObject::PlaySequence()
 }
 void AIntroSceneObject::PlayloadingVideo()
 {
-	AudioComponent->Stop();
 	UIntroMainUI* ui = Cast<UIntroMainUI>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetIntroMainUI_widget());
 	if (ui)
 	{
+		MyMediaPlayer_loading->Play();
 		ui->SetSwitcherIndex(2);
-		UMediaSoundComponent* SoundComp = NewObject<UMediaSoundComponent>(this);
-		SoundComp->SetMediaPlayer(MyMediaPlayer);
+		SoundComp->SetMediaPlayer(MyMediaPlayer_loading);
 		SoundComp->RegisterComponent();
 	}
-	FSoftObjectPath LevelPath(TEXT("/Game/Virtual_Studio_Kit/Maps/Studio_D.Studio_D'"));
-	if (LevelPath.IsValid())
-	{
-		LoadPackageAsync(LevelPath.ToString(), FLoadPackageAsyncDelegate::CreateUObject(this, &AIntroSceneObject::PlaySceneLoad),0,PKG_ContainsMap);
-	}
+	GetWorldTimerManager().ClearTimer(Timerahbdle);
+	GetWorld()->GetTimerManager().SetTimer(Timerahbdle, this, &AIntroSceneObject::PlaySceneLoadAsync, 2.0, false);
 }
 void AIntroSceneObject::PlaySceneLoad(const FName& PackageName, UPackage* LoadedPackage, EAsyncLoadingResult::Type Result)
 {
@@ -95,6 +85,15 @@ void AIntroSceneObject::PlaySceneLoad(const FName& PackageName, UPackage* Loaded
 	else
 	UE_LOG(LogMypro, Warning, TEXT("SceneLoadFail"))
 
+}
+
+void AIntroSceneObject::PlaySceneLoadAsync()
+{
+	FSoftObjectPath LevelPath(TEXT("/Game/Virtual_Studio_Kit/Maps/Studio_D.Studio_D'"));
+	if (LevelPath.IsValid())
+	{
+		LoadPackageAsync(LevelPath.ToString(), FLoadPackageAsyncDelegate::CreateUObject(this, &AIntroSceneObject::PlaySceneLoad), 0, PKG_ContainsMap);
+	}
 }
 
 

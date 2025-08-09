@@ -8,6 +8,7 @@
 #include "EngineMinimal.h"
 #include "Engine.h"
 #include "Engine/EngineTypes.h"
+#include "Engine/GameViewportClient.h"
 //
 // 리슨 서버 헤더 파일 모아놓은	곳
 #include "Net/UnrealNetwork.h"
@@ -15,6 +16,7 @@
 
 
 //
+#include "MediaPlayer.h"
 #include "MediaSoundComponent.h"
 #include "NiagaraSystem.h"
 #include "NiagaraComponent.h"
@@ -94,6 +96,26 @@ public:
 	int32 HP; // 체력
 	UPROPERTY(EditAnywhere)
 	int32 MP; // 마나
+	UPROPERTY(EditAnywhere)
+	int32 ATK; // 공격력
+	UPROPERTY(EditAnywhere)
+	int32 Skill1_ATK; // 스킬1 공격력 
+	UPROPERTY(EditAnywhere)
+	int32 Skill2_ATK; // 스킬2 공격력 
+	UPROPERTY(EditAnywhere)
+	int32 Skill3_ATK; // 스킬3 공격력 
+	UPROPERTY(EditAnywhere)
+	int32 Skill4_ATK; // 스킬4 공격력 
+};
+USTRUCT(BlueprintType)
+struct FCMonsterInfo :public FTableRowBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere)
+	int32 HP; // 체력
+	UPROPERTY(EditAnywhere)
+	int32 StunGage; // 스턴게이지
 	UPROPERTY(EditAnywhere)
 	int32 ATK; // 공격력
 	UPROPERTY(EditAnywhere)

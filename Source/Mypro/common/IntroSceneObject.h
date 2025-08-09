@@ -26,19 +26,17 @@ protected:
 	virtual void BeginPlay() override;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "listofSelctcharacter")
 	TMap<Characters, ASelectCharacter*> SelectCharacterList; // 캐릭터 리스트
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
-	//백그라운드 음악
-	TObjectPtr<USoundCue> BackgroundMusicCue_intro;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cutscene")
 	TObjectPtr<ULevelSequence> CutsceneSequence;
 	TObjectPtr <ULevelSequencePlayer> SequencePlayer;
 	 ALevelSequenceActor* SequenceActor;
-
-	UPROPERTY(EditAnywhere,  BlueprintReadOnly, Category = "Audio")
-	TObjectPtr<UAudioComponent> AudioComponent;
+;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TObjectPtr<UMediaPlayer> MyMediaPlayer;
-
+	TObjectPtr<UMediaPlayer> MyMediaPlayer_loading;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<UMediaPlayer> MyMediaPlayer_intro;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TObjectPtr <UMediaSoundComponent> SoundComp;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -50,4 +48,6 @@ public:
 	void PlayloadingVideo();
 	// 플레이신 비동기 로드 완료 될때 나오는 함수
 	void PlaySceneLoad(const FName& PackageName, UPackage* LoadedPackage, EAsyncLoadingResult::Type Result);
+	// 플레이신 비동기 로드 
+	void PlaySceneLoadAsync();
 };

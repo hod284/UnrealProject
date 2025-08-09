@@ -31,7 +31,7 @@ public:
     /// 레벨에 있는 인트로씬 옵브젝트 찾기위해 만든 함수
     /// </summary>
     /// <returns></returns>
-    AActor* GetLevelSceneObjectActor()
+    AActor* GetLevelSceneObjectActor() const
     {
 		/*
 		getclass와staticclass의 차이점은 파생클래스를 가져오는냐 아니면 자신의 클래스를 가져오는냐의 차이
