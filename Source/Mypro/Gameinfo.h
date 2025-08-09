@@ -49,7 +49,7 @@
 #include "Gameinfo.generated.h"
 
 
-DECLARE_LOG_CATEGORY_EXTERN(LogMypro, Warning, All);
+//DECLARE_LOG_CATEGORY_EXTERN(LogMypro, Warning, All);
 
 
 /*

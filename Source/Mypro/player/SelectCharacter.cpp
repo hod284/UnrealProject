@@ -94,7 +94,6 @@ void ASelectCharacter::Inite()
 
 void ASelectCharacter::StartGame()
 {
-	UE_LOG(LogMypro, Warning, TEXT("start"));
 	Niagara->SetVisibility(true);
 	Niagara->Activate();
 }

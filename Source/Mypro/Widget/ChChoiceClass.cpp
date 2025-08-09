@@ -19,7 +19,6 @@ void UChChoiceClass::NativeConstruct()
 	skill2_MA = Cast<UButton>(GetWidgetFromName("skill2b_ma"));
 	skill3_MA = Cast<UButton>(GetWidgetFromName("skill3b_ma"));
 	skill4_MA = Cast<UButton>(GetWidgetFromName("skill4b_ma"));
-	Status = CreateWidget<UUserWidget>(GetWorld(), StatusUI);
 	back->OnClicked.AddDynamic(this, &UChChoiceClass::Backclick);
 	Character1->OnClicked.AddDynamic(this, &UChChoiceClass::Character1Click);
 	Character2->OnClicked.AddDynamic(this, &UChChoiceClass::Character2Click);
@@ -27,15 +26,7 @@ void UChChoiceClass::NativeConstruct()
 	Start->OnClicked.AddDynamic(this, &UChChoiceClass::StartButtonClick);
 }
 
-UChChoiceClass::UChChoiceClass(const FObjectInitializer& ObjectInitializer):
-	UUserWidget(ObjectInitializer)
-{
-	static ConstructorHelpers::FClassFinder<UUserWidget>  STATUS(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/widget/statePannel.statePannel_C'"));
-	if (STATUS.Succeeded())
-	{
-		StatusUI = STATUS.Class;
-	}
-}
+
 
 
 void UChChoiceClass::Character1Click()
@@ -43,8 +34,6 @@ void UChChoiceClass::Character1Click()
 	FText text = FText::FromString(TEXT("Auora"));
 	Titletext->SetText(text);
 	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSelectCharacter(Characters::Warrior);
-	//UPlayerStatePannel* st = Cast<UPlayerStatePannel>(Status.GetClass());
-	//st->SetData(Characters::Warrior);
 	CharacterButtonChoice(Characters::Warrior);
 }
 
@@ -53,8 +42,6 @@ void UChChoiceClass::Character2Click()
 	FText text = FText::FromString(TEXT("Gudion"));
 	Titletext->SetText(text);
 	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSelectCharacter(Characters::Guiden);
-	//UPlayerStatePannel* st = Cast<UPlayerStatePannel>(Status.GetClass());
-	//st->SetData(Characters::Guiden);
 	CharacterButtonChoice(Characters::Guiden);
 }
 
@@ -63,8 +50,6 @@ void UChChoiceClass::Character3Click()
 	FText text = FText::FromString(TEXT("DarkMagion"));
 	Titletext->SetText(text);
 	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSelectCharacter(Characters::DarkMagion);
-	//UPlayerStatePannel  *st =  Cast<UPlayerStatePannel>(Status.GetClass());
-	//st->SetData(Characters::DarkMagion);
 	CharacterButtonChoice(Characters::DarkMagion);
 }
 

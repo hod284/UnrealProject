@@ -82,9 +82,6 @@ void AIntroSceneObject::PlaySceneLoad(const FName& PackageName, UPackage* Loaded
 		GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetGameState(NowGameState::playgame);
 		UGameplayStatics::OpenLevel(GetWorld(), PackageName);
 	}
-	else
-	UE_LOG(LogMypro, Warning, TEXT("SceneLoadFail"))
-
 }
 
 void AIntroSceneObject::PlaySceneLoadAsync()

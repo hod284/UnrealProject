@@ -1,3 +1,3 @@
 #include "Gameinfo.h"
 
-DEFINE_LOG_CATEGORY(LogMypro);
+//DEFINE_LOG_CATEGORY(LogMypro);

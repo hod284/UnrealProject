@@ -9,20 +9,17 @@ void UIntroMainUI::SetSwitcherIndex(int32 Index)
 	{
 		Switcher->SetActiveWidgetIndex(Index);
 	}
-	else
-	UE_LOG(LogMypro, Warning, TEXT("Switcher is null!"));
-	
+
 }
 
 void UIntroMainUI::NativeConstruct()
 {
 	Super::NativePreConstruct();
 
-	UE_LOG(LogMypro, Warning, TEXT("NativePreConstruct"));
 }
 
 void UIntroMainUI::NativeDestruct()
 {
 	Super::NativeDestruct();
-	UE_LOG(LogMypro, Warning, TEXT("NativeDestruct"));
+
 }
