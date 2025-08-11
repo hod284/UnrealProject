@@ -16,10 +16,15 @@ class MYPRO_API UIntroMainUI : public UUserWidget
 public:
 	UFUNCTION()
 	void SetSwitcherIndex(int32 Index);
-
+	UFUNCTION()
+	void SetPercenttext(float pe);
 protected:
 	UPROPERTY( meta = (BindWidget))	
 	TObjectPtr<UWidgetSwitcher> Switcher;
+	UPROPERTY()
+	TObjectPtr<UTextBlock> laodingtitle;
+	UPROPERTY()
+	TObjectPtr<UTextBlock> percenttext;
 
 
 	virtual void NativeConstruct() override;

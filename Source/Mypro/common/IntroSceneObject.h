@@ -37,6 +37,9 @@ protected:
 	TObjectPtr<UMediaPlayer> MyMediaPlayer_intro;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Cutscene")
 	TObjectPtr <UMediaSoundComponent> SoundComp;
+	TSharedPtr<FStreamableHandle> Handle;
+	UPROPERTY()
+	TObjectPtr<UIntroMainUI> ui;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -50,4 +53,6 @@ public:
 	void PlaySceneLoad(const FName& PackageName, UPackage* LoadedPackage, EAsyncLoadingResult::Type Result);
 	// 플레이신 비동기 로드 
 	void PlaySceneLoadAsync();
+	void PlaySceneLoadAsync_stream();
+	void LevelLoadComplete();
 };
