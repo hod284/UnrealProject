@@ -53,6 +53,8 @@ public:
 	void PlaySceneLoad(const FName& PackageName, UPackage* LoadedPackage, EAsyncLoadingResult::Type Result);
 	// 플레이신 비동기 로드 
 	void PlaySceneLoadAsync();
+	// 비동기 레벨 로드 완료
 	void PlaySceneLoadAsync_stream();
+	// 래밸 로드
 	void LevelLoadComplete();
 };

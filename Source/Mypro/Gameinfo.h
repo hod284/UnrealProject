@@ -126,3 +126,33 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 Skill4_ATK; // 스킬4 공격력 
 };
+USTRUCT(BlueprintType)
+struct FPlayerAnimInfo : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+
+	UPROPERTY(EditAnywhere)
+	TMap<FName, TObjectPtr<UBlendSpace>>	BlendSpaceMap;
+
+	UPROPERTY(EditAnywhere)
+	TMap<FName, TObjectPtr<UAnimMontage>>	MontageMap;
+
+	UPROPERTY(EditAnywhere)
+	TArray<FName>							AttackSectionArray;
+	UPROPERTY(EditAnywhere)
+	TArray<FName>							SkillSectionArray;
+};
+USTRUCT(BlueprintType)
+struct FMonsterAnimInfo : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+
+	UPROPERTY(EditAnywhere)
+	TMap<FName, TObjectPtr<UAnimSequence>>	SequenceMap;
+	UPROPERTY(EditAnywhere)
+	TMap<FName, TObjectPtr<UAnimMontage>>	MontageMap;
+};

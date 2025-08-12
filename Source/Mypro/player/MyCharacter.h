@@ -18,7 +18,10 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	TObjectPtr<UCameraComponent> Camera;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USpringArmComponent> SpringArm;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
