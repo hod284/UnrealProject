@@ -4,6 +4,7 @@
 
 #include "../Gameinfo.h"
 #include  "../player/MainPlayerController.h"
+#include "../player/MyCharacter.h"
 #include  "../singleton/GameManager.h"
 #include  "../player/MyPlayerState.h"
 #include "GameFramework/GameModeBase.h"
@@ -19,4 +20,5 @@ class MYPRO_API APlay : public AGameModeBase
 protected:
 	APlay();
 	virtual void BeginPlay() override;
+	virtual void PostLogin(APlayerController* NewPlayer) override;
 };

@@ -2,10 +2,11 @@
 
 
 #include "MyPlayerAnimInstance.h"
-
+#include "MyCharacter.h"
 void UMyPlayerAnimInstance::PostInitProperties()
 {
 	Super::PostInitProperties();
+	AniInite();
 }
 
 void UMyPlayerAnimInstance::NativeBeginPlay()
@@ -21,7 +22,21 @@ void UMyPlayerAnimInstance::NativeInitializeAnimation()
 void UMyPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
+	AMyCharacter * PlayerCharacter =
+		Cast<AMyCharacter>(TryGetPawnOwner());
 
+	// 얻어온 객체가 유효하다면.
+	if (IsValid(PlayerCharacter))
+	{
+		UCharacterMovementComponent* Movement =
+			PlayerCharacter->GetCharacterMovement();
+
+		if (Movement)
+		{
+			MoveSpeed = Movement->Velocity.Size();
+			
+		}
+	}
 }
 
 void UMyPlayerAnimInstance::PlayAttack()
@@ -59,4 +74,54 @@ void UMyPlayerAnimInstance::AnimNotify_Skill3Play()
 void UMyPlayerAnimInstance::AnimNotify_Skill4Play()
 {
 
+}
+
+void UMyPlayerAnimInstance::AniInite()
+{
+	const  UAnimationObject* DataSystem = GetDefault<UAnimationObject>();
+	if (DataSystem)
+	{
+		switch (Ch)
+		{
+		case Characters::Guiden:
+			AnimInfo = DataSystem->GetAnimaDatainfo_G();
+			if (AnimInfo)
+			{
+				BlendSpaceMap = AnimInfo->BlendSpaceMap;
+				MontageMap = AnimInfo->MontageMap;
+				AttackSectionArray = AnimInfo->AttackSectionArray;
+				SkillSectionArray;
+				AttackMontage = *MontageMap.Find(TEXT("Attack"));
+				SkillMontage = *MontageMap.Find(TEXT("Skill"));
+				AttackUpMontage = nullptr;
+			}
+			break;
+		case Characters::Warrior:
+			AnimInfo = DataSystem->GetAnimaDatainfo_W();
+			if (AnimInfo)
+			{
+				BlendSpaceMap = AnimInfo->BlendSpaceMap;
+				MontageMap = AnimInfo->MontageMap;
+				AttackSectionArray = AnimInfo->AttackSectionArray;
+				SkillSectionArray;
+				AttackMontage = *MontageMap.Find(TEXT("Attack"));
+				SkillMontage = *MontageMap.Find(TEXT("Skill"));
+				AttackUpMontage = *MontageMap.Find(TEXT("AtttackUp"));
+			}
+			break;
+		case Characters::DarkMagion:
+			AnimInfo = DataSystem->GetAnimaDatainfo_D();
+			if (AnimInfo)
+			{
+				BlendSpaceMap = AnimInfo->BlendSpaceMap;
+				MontageMap = AnimInfo->MontageMap;
+				AttackSectionArray = AnimInfo->AttackSectionArray;
+				SkillSectionArray;
+				AttackMontage = *MontageMap.Find(TEXT("Attack"));
+				SkillMontage = *MontageMap.Find(TEXT("Skill"));
+				AttackUpMontage = nullptr;
+			}
+			break;
+		}
+	}
 }

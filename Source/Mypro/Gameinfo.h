@@ -16,6 +16,8 @@
 
 
 //
+#include "InputMappingContext.h"
+#include "InputAction.h"
 #include "MediaPlayer.h"
 #include "MediaSoundComponent.h"
 #include "NiagaraSystem.h"
@@ -28,6 +30,8 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/LevelStreaming.h"
 #include "Streaming/LevelStreamingDelegates.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
 // 이미지 헤더파일 모아놓은곳
 #include "Components/Button.h"
 #include "Components/TextBlock.h"

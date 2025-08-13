@@ -29,22 +29,9 @@ void UDataManager::Initialize(FSubsystemCollectionBase& Collection)
 			UDataTable* datatable = Cast<UDataTable>(data.GetAsset());
 			if (datatable)
 			{
-				Datainfo_W = datatable->FindRow<FCharacterInfo>("A", TEXT(""));
+				Datainfo_W = datatable->FindRow<FCharacterInfo>("W", TEXT(""));
 				Datainfo_G = datatable->FindRow<FCharacterInfo>("G", TEXT(""));
 				Datainfo_D = datatable->FindRow<FCharacterInfo>("D", TEXT(""));
-			}
-		}
-		if (name == "PlayerAnimation")
-		{
-			FAssetData data;
-			AssetManager.GetPrimaryAssetData(Assetid, data);
-			// 내가 정해진 프라이머 에셋 타입을 가져와서 대입시키기
-			UDataTable* datatable = Cast<UDataTable>(data.GetAsset());
-			if (datatable)
-			{
-				DataAnimainfo_W = datatable->FindRow<FPlayerAnimInfo>("Warrior", TEXT(""));
-				DataAnimainfo_G = datatable->FindRow<FPlayerAnimInfo>("Guidion", TEXT(""));
-				DataAnimainfo_D = datatable->FindRow<FPlayerAnimInfo>("DarkMagition", TEXT(""));
 			}
 		}
 		if (name == "Monster")
@@ -56,17 +43,6 @@ void UDataManager::Initialize(FSubsystemCollectionBase& Collection)
 			if (datatable)
 			{
 				Datainfo_Monster = datatable->FindRow<FCMonsterInfo>("steel", TEXT(""));
-			}
-		}
-		if (name == "MonsterAnimation")
-		{
-			FAssetData data;
-			AssetManager.GetPrimaryAssetData(Assetid, data);
-			// 내가 정해진 프라이머 에셋 타입을 가져와서 대입시키기
-			UDataTable* datatable = Cast<UDataTable>(data.GetAsset());
-			if (datatable)
-			{
-				DataAnimainfo_Monster = datatable->FindRow<FMonsterAnimInfo>("Steel", TEXT(""));
 			}
 		}
 	}

@@ -1,14 +1,38 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "MainPlayerController.h"
-
+#include "MyCharacter.h"
 AMainPlayerController::AMainPlayerController()
 {
 	// tick를 활성화 하기위한 줄
 	// 만약 tick를 비활성화 하고 싶으면 주석처릴를 하면 된다.
 	PrimaryActorTick.bCanEverTick = true;
 
+}
+
+TSubclassOf<APawn> AMainPlayerController::GetSelectCharactertClass()
+{
+	// 반환경로 보장을 위해 로드클래스 선언및 초기화
+	TSubclassOf<APawn> LoadedClass = NULL;
+	switch (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSelectedcharacter())
+	{
+	 case Characters::Guiden:
+		LoadedClass = StaticLoadClass(
+			AMyCharacter::StaticClass(), nullptr,
+			TEXT("/Script/Engine.Blueprint'/Game/bluePrint/PlayGudion.PlayGudion_C'")); // _C 꼭!
+		break;
+	case Characters::Warrior:
+		LoadedClass = StaticLoadClass(
+			AMyCharacter::StaticClass(), nullptr,
+			TEXT("/Script/Engine.Blueprint'/Game/bluePrint/PlayWarrior.PlayWarrior_C'")); // _C 꼭!
+		break;
+	case Characters::DarkMagion:
+	      LoadedClass = StaticLoadClass(
+			  AMyCharacter::StaticClass(), nullptr,
+			TEXT("/Script/Engine.Blueprint'/Game/bluePrint/PlayDark.PlayDark_C'")); // _C 꼭!
+		break;
+	}
+	return LoadedClass;
 }
 
 void AMainPlayerController::BeginPlay()
