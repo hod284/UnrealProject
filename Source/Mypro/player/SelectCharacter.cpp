@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SelectCharacter.h"
-
+#include  "../common/IntroSceneObject.h"
 // Sets default values
 ASelectCharacter::ASelectCharacter()
 {
@@ -44,7 +44,18 @@ void ASelectCharacter::Tick(float DeltaTime)
 	if (IsHover)
 	{
 		UE_LOG(	LogMypro, Warning, TEXT("HOVER"));
-		SkeletalMeshComponent->SetCustomDepthStencilValue(1);
+		/*
+		SetCustomDepthStencilValue(스텐실 = 번호표(마스크)
+		숫자에 따라 바꿀 수 있는 것들(예시)
+적용 여부: CustomStencil == 5인 픽셀만 효과 O
+
+색상: 1=빨강, 2=파랑, 3=금색 …
+
+외곽선 두께/밝기: 1=얇게, 2=두껍게
+
+글로우 강도/블룸/채도 등 모든 PP 파라미터
+		*/
+		SkeletalMeshComponent->SetCustomDepthStencilValue(3);
 	}
 	else
 		SkeletalMeshComponent->SetCustomDepthStencilValue(0);
@@ -62,7 +73,11 @@ void ASelectCharacter::NotifyActorEndCursorOver()
 
 void ASelectCharacter::NotifyActorOnClicked(FKey ButtonPressed)
 {
-	
+	AIntroSceneObject* IntroSceneObject = Cast<AIntroSceneObject>(UGameplayStatics::GetActorOfClass(GetWorld(), AIntroSceneObject::StaticClass()));
+	if (IntroSceneObject)
+	{
+		IntroSceneObject->CallthePlayCharacter(GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSelectedcharacter());
+	}
 }
 
 // Called to bind functionality to input
@@ -119,7 +134,6 @@ void ASelectCharacter::StartGame()
 	Niagara->SetVisibility(true);
 	Niagara->Activate();
 }
-
 
 
 
