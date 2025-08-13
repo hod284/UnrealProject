@@ -14,6 +14,10 @@ UInputManager::UInputManager()
 		Move_A(TEXT("/Script/EnhancedInput.InputAction'/Game/input/move.move'"));
 
 	Move = Move_A.Object;
+	static ConstructorHelpers::FObjectFinder<UInputAction>
+		back_A(TEXT("/Script/EnhancedInput.InputAction'/Game/input/Back.Back'"));
+
+	Back = back_A.Object;
 
 	static ConstructorHelpers::FObjectFinder<UInputAction>
 		Skill_A(TEXT("/Script/EnhancedInput.InputAction'/Game/input/Skill1.Skill1'"));

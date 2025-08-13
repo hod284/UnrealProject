@@ -34,6 +34,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	void MoveKey(const FInputActionValue& Value);
+	void BackKey(const FInputActionValue& Value);
 	void AttackKey(const FInputActionValue &Value);
 	void Skill1Key(const FInputActionValue & Value);
 	void Skill2Key(const FInputActionValue& Value);

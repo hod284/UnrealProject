@@ -43,6 +43,10 @@ void UMyPlayerAnimInstance::PlayAttack()
 {
 }
 
+void UMyPlayerAnimInstance::PlayBack()
+{
+}
+
 void UMyPlayerAnimInstance::PlaySkill(int32 index)
 {
 }
@@ -90,9 +94,10 @@ void UMyPlayerAnimInstance::AniInite()
 				BlendSpaceMap = AnimInfo->BlendSpaceMap;
 				MontageMap = AnimInfo->MontageMap;
 				AttackSectionArray = AnimInfo->AttackSectionArray;
-				SkillSectionArray;
+				SkillSectionArray= AnimInfo->SkillSectionArray;
 				AttackMontage = *MontageMap.Find(TEXT("Attack"));
 				SkillMontage = *MontageMap.Find(TEXT("Skill"));
+				BackMontage = *MontageMap.Find(TEXT("Back"));
 				AttackUpMontage = nullptr;
 			}
 			break;
@@ -103,9 +108,10 @@ void UMyPlayerAnimInstance::AniInite()
 				BlendSpaceMap = AnimInfo->BlendSpaceMap;
 				MontageMap = AnimInfo->MontageMap;
 				AttackSectionArray = AnimInfo->AttackSectionArray;
-				SkillSectionArray;
+				SkillSectionArray = AnimInfo->SkillSectionArray;
 				AttackMontage = *MontageMap.Find(TEXT("Attack"));
 				SkillMontage = *MontageMap.Find(TEXT("Skill"));
+				BackMontage = *MontageMap.Find(TEXT("Back"));
 				AttackUpMontage = *MontageMap.Find(TEXT("AtttackUp"));
 			}
 			break;
@@ -116,9 +122,10 @@ void UMyPlayerAnimInstance::AniInite()
 				BlendSpaceMap = AnimInfo->BlendSpaceMap;
 				MontageMap = AnimInfo->MontageMap;
 				AttackSectionArray = AnimInfo->AttackSectionArray;
-				SkillSectionArray;
+				SkillSectionArray=AnimInfo->SkillSectionArray;
 				AttackMontage = *MontageMap.Find(TEXT("Attack"));
 				SkillMontage = *MontageMap.Find(TEXT("Skill"));
+				BackMontage = *MontageMap.Find(TEXT("Back"));
 				AttackUpMontage = nullptr;
 			}
 			break;

@@ -37,10 +37,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UNiagaraComponent> Niagara; // 나이아가라 파티클
 
-
-public:	
-	// Called every frame
+	bool IsHover; // 마우스 커서가 오버되었는지 확인하는 변수
 	virtual void Tick(float DeltaTime) override;
+	virtual void NotifyActorBeginCursorOver() override;
+	virtual void NotifyActorEndCursorOver()   override;
+	virtual void NotifyActorOnClicked(FKey ButtonPressed)    override;
+public:	
+	
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

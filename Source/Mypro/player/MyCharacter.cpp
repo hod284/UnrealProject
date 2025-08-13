@@ -44,6 +44,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	{
 		const UInputManager* InputManager = GetWorld()->GetGameInstance()->GetSubsystem<UInputManager>();
 		EnhancedInputComponent->BindAction(InputManager->Move, ETriggerEvent::Triggered, this, &AMyCharacter::MoveKey);
+		EnhancedInputComponent->BindAction(InputManager->Back, ETriggerEvent::Triggered, this, &AMyCharacter::BackKey);
 		EnhancedInputComponent->BindAction(InputManager->Attack, ETriggerEvent::Triggered, this, &AMyCharacter::AttackKey);
 		EnhancedInputComponent->BindAction(InputManager->Skill1, ETriggerEvent::Triggered, this, &AMyCharacter::Skill1Key);
 		EnhancedInputComponent->BindAction(InputManager->Skill2, ETriggerEvent::Triggered, this, &AMyCharacter::Skill2Key);
@@ -106,7 +107,13 @@ void AMyCharacter::MoveKey(const FInputActionValue& Value)
 			GetMesh()->SetRelativeRotation(FRotator(0, -180.0f, 0));
 	}
 }
-
+void AMyCharacter::BackKey(const FInputActionValue& Value)
+{
+	
+	AddMovementInput(GetActorForwardVector(), -2.0f);
+	if (AnimInstance)
+		AnimInstance->PlayBack();
+}
 void AMyCharacter::AttackKey(const FInputActionValue& Value)
 {
 	if (AnimInstance)

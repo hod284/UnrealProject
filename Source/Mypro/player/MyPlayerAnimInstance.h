@@ -38,6 +38,8 @@ protected:
 	TObjectPtr<UAnimMontage>	AttackMontage;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UAnimMontage>	AttackUpMontage;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UAnimMontage>	BackMontage;
 	// 현재 어떤 섹션이 동작하고 있는지 저장할 인덱스.
 	int32		AttackSectionIndex = 0;
 
@@ -59,6 +61,7 @@ public:
 		Direction = Dir;
 	}
 	void PlayAttack();
+	void PlayBack();
 	void PlaySkill(int32 index);
 	UFUNCTION()
 	void AnimNotify_Attack();

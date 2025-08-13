@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "SelectCharacter.h"
 
 // Sets default values
@@ -28,6 +27,8 @@ ASelectCharacter::ASelectCharacter()
 		UNiagaraSystem* pa = GetParticle.Object;
 		Niagara->SetAsset(pa);
 	}
+	SkeletalMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	SkeletalMeshComponent->SetCollisionResponseToChannel(ECC_Visibility, ECollisionResponse::ECR_Block);
 }
 
 // Called when the game starts or when spawned
@@ -40,7 +41,28 @@ void ASelectCharacter::BeginPlay()
 void ASelectCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (IsHover)
+	{
+		UE_LOG(	LogMypro, Warning, TEXT("HOVER"));
+		SkeletalMeshComponent->SetCustomDepthStencilValue(1);
+	}
+	else
+		SkeletalMeshComponent->SetCustomDepthStencilValue(0);
+}
 
+void ASelectCharacter::NotifyActorBeginCursorOver()
+{
+	IsHover = true;
+}
+
+void ASelectCharacter::NotifyActorEndCursorOver()
+{
+	IsHover = false;
+}
+
+void ASelectCharacter::NotifyActorOnClicked(FKey ButtonPressed)
+{
+	
 }
 
 // Called to bind functionality to input
