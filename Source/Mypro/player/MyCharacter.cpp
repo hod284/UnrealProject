@@ -44,12 +44,12 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	{
 		const UInputManager* InputManager = GetWorld()->GetGameInstance()->GetSubsystem<UInputManager>();
 		EnhancedInputComponent->BindAction(InputManager->Move, ETriggerEvent::Triggered, this, &AMyCharacter::MoveKey);
-		EnhancedInputComponent->BindAction(InputManager->Back, ETriggerEvent::Triggered, this, &AMyCharacter::BackKey);
-		EnhancedInputComponent->BindAction(InputManager->Attack, ETriggerEvent::Triggered, this, &AMyCharacter::AttackKey);
-		EnhancedInputComponent->BindAction(InputManager->Skill1, ETriggerEvent::Triggered, this, &AMyCharacter::Skill1Key);
-		EnhancedInputComponent->BindAction(InputManager->Skill2, ETriggerEvent::Triggered, this, &AMyCharacter::Skill2Key);
-		EnhancedInputComponent->BindAction(InputManager->Skill3, ETriggerEvent::Triggered, this, &AMyCharacter::Skill3Key);
-		EnhancedInputComponent->BindAction(InputManager->Skill3, ETriggerEvent::Triggered, this, &AMyCharacter::Skill4Key);
+		EnhancedInputComponent->BindAction(InputManager->Back, ETriggerEvent::Started, this, &AMyCharacter::BackKey);
+		EnhancedInputComponent->BindAction(InputManager->Attack, ETriggerEvent::Started, this, &AMyCharacter::AttackKey);
+		EnhancedInputComponent->BindAction(InputManager->Skill1, ETriggerEvent::Started, this, &AMyCharacter::Skill1Key);
+		EnhancedInputComponent->BindAction(InputManager->Skill2, ETriggerEvent::Started, this, &AMyCharacter::Skill2Key);
+		EnhancedInputComponent->BindAction(InputManager->Skill3, ETriggerEvent::Started, this, &AMyCharacter::Skill3Key);
+		EnhancedInputComponent->BindAction(InputManager->Skill4, ETriggerEvent::Started, this, &AMyCharacter::Skill4Key);
 	}
 }
 
@@ -61,6 +61,7 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 void AMyCharacter::MoveKey(const FInputActionValue& Value)
 {
 	FVector Diret = Value.Get<FVector>();
+	// 캐릭터 무브먼트에게 이동한다고 신호 보내는 함수
 	AddMovementInput(GetActorForwardVector(), Diret.X);
 	AddMovementInput(GetActorRightVector(), Diret.Y);
 	// 앞, 뒤 둘중 한 방향으로 움직이도록 키를 눌렀을 경우
@@ -68,15 +69,18 @@ void AMyCharacter::MoveKey(const FInputActionValue& Value)
 	{
 		AnimInstance->SetDir(0.f);
 		GetMesh()->SetRelativeRotation(FRotator(0, -90.0f, 0));
+		SetActorRotation(FRotator(0, 0.0f, 0));
 		if (Diret.Y > 0.f)
 		{
 			GetMesh()->SetRelativeRotation(FRotator(0, -45.0f, 0));
+			SetActorRotation(FRotator(0, 45.0f, 0));
 			AnimInstance->SetDir(45.f);
 		}
 
 		else if (Diret.Y < 0.f)
 		{
 			GetMesh()->SetRelativeRotation(FRotator(0, -135.0f, 0));
+			SetActorRotation(FRotator(0, -45.0f, 0));
 			AnimInstance->SetDir(-45.f);
 		}
 	}
@@ -85,15 +89,18 @@ void AMyCharacter::MoveKey(const FInputActionValue& Value)
 	{
 		AnimInstance->SetDir(180.f);
 		GetMesh()->SetRelativeRotation(FRotator(0, -270.0f, 0));
+		SetActorRotation(FRotator(0, 180.0f, 0));
 		if (Diret.Y > 0.f)
 		{
 			GetMesh()->SetRelativeRotation(FRotator(0, -315.0f, 0));
+			SetActorRotation(FRotator(0, 135.0f, 0));
 			AnimInstance->SetDir(135.f);
 		}
 
 		else if (Diret.Y < 0.f)
 		{
 			GetMesh()->SetRelativeRotation(FRotator(0, -225.0f, 0));
+			SetActorRotation(FRotator(0, -135.0f, 0));
 			AnimInstance->SetDir(-135.f);
 		}
 	}
@@ -101,16 +108,29 @@ void AMyCharacter::MoveKey(const FInputActionValue& Value)
 	else
 	{
 		if (Diret.Y > 0.f)
+		{
+			SetActorRotation(FRotator(0, 90.0f, 0));
 			GetMesh()->SetRelativeRotation(FRotator(0 ,0.0f,0));
+		}
 
 		else if (Diret.Y < 0.f)
+		{
+			SetActorRotation(FRotator(0, -90.0f, 0));
 			GetMesh()->SetRelativeRotation(FRotator(0, -180.0f, 0));
+		}
 	}
+	//현재 속도(velocity) 벡터를 “안전하게” 정규화해서 방향만 뽑은 단위 벡터 구하는 함수
+	// GetVelocity().GetSafeNormal()  
+	//GetVelocity().GetSafeNormal() 이걸 이용해서 최신상태가 어디로 바로보고 있는지 저장
+	CurrentVelocity = GetVelocity().GetSafeNormal();
 }
 void AMyCharacter::BackKey(const FInputActionValue& Value)
 {
-	
-	AddMovementInput(GetActorForwardVector(), -2.0f);
+	// 단위 백터니까 방향만 가지고 있음 방향백터 x거리
+	FVector Backward = CurrentVelocity * -200.0f; // 뒤로 20만큼
+	FVector NewLocation = GetActorLocation() + Backward;
+	SetActorLocation(NewLocation);
+	CurrentVelocity = FVector::Zero();
 	if (AnimInstance)
 		AnimInstance->PlayBack();
 }

@@ -3,7 +3,6 @@
 #pragma once
 
 #include "../Gameinfo.h"
-#include "../player/MainPlayerController.h"
 #include "../singleton/DataManager.h"
 #include "../singleton/GameManager.h"
 #include "../singleton/UImanager.h"

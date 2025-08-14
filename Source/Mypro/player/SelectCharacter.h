@@ -39,8 +39,11 @@ protected:
 
 	bool IsHover; // 마우스 커서가 오버되었는지 확인하는 변수
 	virtual void Tick(float DeltaTime) override;
+	// 마우스가 폰위에 올라갔을때 실행되는 액터함수 오버로드
 	virtual void NotifyActorBeginCursorOver() override;
+	// 마우스가 폰 위에 올라갔다 내려갔을 경우 나오는함수
 	virtual void NotifyActorEndCursorOver()   override;
+	// 마우스가 클릭했을때
 	virtual void NotifyActorOnClicked(FKey ButtonPressed)    override;
 public:	
 	

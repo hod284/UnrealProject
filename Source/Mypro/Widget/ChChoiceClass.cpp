@@ -70,7 +70,7 @@ void UChChoiceClass::StartButtonClick()
 
 void UChChoiceClass::CharacterButtonChoice(Characters ch)
 {
-	AMainPlayerController* controller = Cast<AMainPlayerController>(GetWorld()->GetFirstPlayerController());
+
 	if (ch == Characters::DarkMagion)
 	{
 		skill1_MA->SetVisibility(ESlateVisibility::Visible);
@@ -93,24 +93,20 @@ void UChChoiceClass::CharacterButtonChoice(Characters ch)
 		skill3->SetVisibility(ESlateVisibility::Visible);
 		skill4->SetVisibility(ESlateVisibility::Visible);
 	}
-	if (controller)
-	{
-		AIntroSceneObject* levelob = Cast<AIntroSceneObject>(controller->GetLevelSceneObjectActor());
-		if (levelob)
-			levelob->CalltheSelectCharacter(ch);
-	}
+	AIntroSceneObject* IntroSceneObject = Cast<AIntroSceneObject>(UGameplayStatics::GetActorOfClass(GetWorld(), AIntroSceneObject::StaticClass()));
+		if (IntroSceneObject)
+			IntroSceneObject->CalltheSelectCharacter(ch);
+	
 }
 
 void UChChoiceClass::GameStart(Characters ch)
 {
-	AMainPlayerController* controller = Cast<AMainPlayerController>(GetWorld()->GetFirstPlayerController());
 	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSelectCharacter(ch);
-	if (controller)
-	{
-		AIntroSceneObject* levelob = Cast<AIntroSceneObject>(controller->GetLevelSceneObjectActor());
-		if (levelob)
-			levelob->CallthePlayCharacter(ch);
-	}
+	
+	AIntroSceneObject* IntroSceneObject = Cast<AIntroSceneObject>(UGameplayStatics::GetActorOfClass(GetWorld(), AIntroSceneObject::StaticClass()));
+		if (IntroSceneObject)
+			IntroSceneObject->CallthePlayCharacter(ch);
+	
 }
 
 void UChChoiceClass::Backclick()

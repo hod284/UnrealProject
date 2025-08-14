@@ -42,7 +42,6 @@ protected:
 	TObjectPtr<UAnimMontage>	BackMontage;
 	// 현재 어떤 섹션이 동작하고 있는지 저장할 인덱스.
 	int32		AttackSectionIndex = 0;
-
 	// 공격 중인지 판단한다.
 	bool		mAttackEnable = false;
 	const FPlayerAnimInfo* AnimInfo;

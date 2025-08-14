@@ -26,6 +26,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<USpringArmComponent> SpringArm;
 	TObjectPtr<UMyPlayerAnimInstance> AnimInstance;
+	FVector CurrentVelocity;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

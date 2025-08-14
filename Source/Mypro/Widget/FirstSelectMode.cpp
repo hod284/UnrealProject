@@ -22,16 +22,13 @@ void UFirstSelectMode::NativeConstruct()
 
 void UFirstSelectMode::FirstSelectCharacter()
 {
-	AMainPlayerController* controller = Cast<AMainPlayerController>(GetWorld()->GetFirstPlayerController());
-	if (controller)
-	{
-		AIntroSceneObject* levelob = Cast<AIntroSceneObject>(controller->GetLevelSceneObjectActor());
-		if (levelob)
+	AIntroSceneObject* IntroSceneObject = Cast<AIntroSceneObject>(UGameplayStatics::GetActorOfClass(GetWorld(), AIntroSceneObject::StaticClass()));
+		if (IntroSceneObject)
 		{
 			GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSelectCharacter(Characters::Warrior);
-			levelob->CalltheSelectCharacter(Characters::Warrior);
+			IntroSceneObject->CalltheSelectCharacter(Characters::Warrior);
 		}
-	}
+	
 }
 
 void UFirstSelectMode::HoverSingleButton()
