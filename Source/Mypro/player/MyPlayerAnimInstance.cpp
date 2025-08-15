@@ -12,6 +12,7 @@ void UMyPlayerAnimInstance::PostInitProperties()
 void UMyPlayerAnimInstance::NativeBeginPlay()
 {
 	Super::NativeBeginPlay();
+	OnMontageEnded.AddDynamic(this, &UMyPlayerAnimInstance::Attackend);
 }
 
 void UMyPlayerAnimInstance::NativeInitializeAnimation()
@@ -41,6 +42,16 @@ void UMyPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 void UMyPlayerAnimInstance::PlayAttack()
 {
+	if (!IsValid(AttackUpMontage))
+		return;
+	if (!Montage_IsPlaying(AttackMontage)&& AttackSectionIndex< AttackSectionArray.Num())
+	{
+		// 몽타주를 재생시킨다.
+		Montage_Play(AttackMontage);
+		Montage_JumpToSection(AttackSectionArray[AttackSectionIndex], AttackMontage);
+		UE_LOG(LogMypro, Warning, TEXT("%d"), AttackSectionIndex);
+		AttackSectionIndex += 1;
+	}
 }
 
 void UMyPlayerAnimInstance::PlayBack()
@@ -65,6 +76,15 @@ void UMyPlayerAnimInstance::PlaySkill(int32 index)
 		Montage_Play(SkillMontage,1.0f);
 		Montage_JumpToSection(SkillSectionArray[index], SkillMontage);
 		Montage_SetNextSection(SkillSectionArray[index],FName(""));
+	}
+}
+
+void UMyPlayerAnimInstance::Attackend(UAnimMontage* Montage, bool Interrupted)
+{
+	if (AttackMontage == Montage)
+	{
+		if(!Interrupted)
+		AttackSectionIndex = 0;
 	}
 }
 

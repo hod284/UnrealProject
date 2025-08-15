@@ -47,6 +47,7 @@ void ASelectCharacter::Tick(float DeltaTime)
 		/*
 		SetCustomDepthStencilValue(스텐실 = 번호표(마스크)
 		숫자에 따라 바꿀 수 있는 것들(예시)
+		SetCustomDepthStencilValue(0) = 스텐실 사용안한다는뜻; 
 적용 여부: CustomStencil == 5인 픽셀만 효과 O
 
 색상: 1=빨강, 2=파랑, 3=금색 …
