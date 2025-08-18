@@ -42,11 +42,8 @@ protected:
 	TObjectPtr<UAnimMontage>	BackMontage;
 	// 현재 어떤 어택 섹션이 동작하고 있는지 저장할 인덱스.
 	int32		AttackSectionIndex = 0;
-	// 공격 중인지 판단한다.
-	bool		mAttackEnable = false;
 	const FPlayerAnimInfo* AnimInfo;
-	// 공격 중인지 판단한다 콤보 할지 판단
-	bool		CanCombo;
+
 	//UObject 기반 클래스의 초기화 단계 중 하나로,객체의 프로퍼티가 생성자나 기본값 복사 이후에 메모리에 완전히 세팅된 직후 호출되는 가상 함수입니다.
 	virtual void PostInitProperties() override;
 	virtual void NativeBeginPlay() override;
@@ -66,8 +63,6 @@ public:
 	void Attackend(UAnimMontage* Montage, bool Interrupted);
 	UFUNCTION()
 	void AnimNotify_Attack();
-	UFUNCTION()
-	void AnimNotify_AttackCombo();
 	UFUNCTION()
 	void AnimNotify_Skill1Play();
 	UFUNCTION()

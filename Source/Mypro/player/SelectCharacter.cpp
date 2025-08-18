@@ -14,11 +14,20 @@ ASelectCharacter::ASelectCharacter()
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	Niagara = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Niagara"));
 	SetRootComponent(CapsulComponent);
+	//디터/게임에서 캡슐 콜라이더 모양을 디버그용으로 보이게 할지 말지
 	CapsulComponent->bVisualizeComponent = true;
 	SkeletalMeshComponent->SetupAttachment(CapsulComponent);
 	Niagara->SetupAttachment(CapsulComponent);
 	CameraComponent->SetupAttachment(SpringArm);
 	SpringArm->SetupAttachment(CapsulComponent);
+	/*
+	enum class EAnimationMode : uint8
+{
+    AnimationBlueprint,  // 애님 블루프린트 사용
+    AnimationSingleNode, // 단일 애니메이션(시퀀스)만 재생
+    AnimationCustomMode  // 직접 구현 (보통 잘 안 씀)
+};
+	*/
 	SkeletalMeshComponent->SetAnimationMode(EAnimationMode::AnimationSingleNode);
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> GetParticle(TEXT("/Script/Niagara.NiagaraSystem'/Game/material/magionaprticle.magionaprticle'"));
 	Niagara->SetAutoActivate(false);
@@ -27,8 +36,9 @@ ASelectCharacter::ASelectCharacter()
 		UNiagaraSystem* pa = GetParticle.Object;
 		Niagara->SetAsset(pa);
 	}
-	SkeletalMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	SkeletalMeshComponent->SetCollisionResponseToChannel(ECC_Visibility, ECollisionResponse::ECR_Block);
+	SkeletalMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	CapsulComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	CapsulComponent->SetCollisionResponseToChannel(ECC_Visibility, ECollisionResponse::ECR_Block);
 }
 
 // Called when the game starts or when spawned

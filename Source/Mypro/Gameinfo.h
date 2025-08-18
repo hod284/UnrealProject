@@ -16,6 +16,16 @@
 
 
 //
+#include "Perception/AIPerceptionComponent.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "Perception/AIPerceptionTypes.h"
+#include "Perception/AISenseConfig_Sight.h"
+#include "Perception/AISenseConfig_Hearing.h"
+#include "Perception/AISenseConfig_Damage.h"
+
+#include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "BehaviorTree/BlackboardData.h"
 #include "InputMappingContext.h"
 #include "InputAction.h"
 #include "MediaPlayer.h"
@@ -54,7 +64,10 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogMypro, Warning, All);
 
-
+// Team : 0 ~ 255 사이의 값
+#define	TeamNeutral	255
+#define	TeamMonster	30
+#define	TeamPlayer	1
 /*
   이넘 클래스와 이넘의 차이점
   이넘은 과 이넘클래스의 차이점은 전역스코프와 자신의 자식에 스코프를 두는냐의 차이와 타입을 안전성을 따질수 있다
@@ -159,4 +172,15 @@ public:
 	TMap<FName, TObjectPtr<UAnimSequence>>	SequenceMap;
 	UPROPERTY(EditAnywhere)
 	TMap<FName, TObjectPtr<UAnimMontage>>	MontageMap;
+};
+UENUM(BlueprintType)
+enum class EMonsterDefaultAnim : uint8
+{
+	Idle,
+	Stun,
+	Attack1,
+	Attack2,
+	Attack3,
+	Attack4,
+	Death
 };

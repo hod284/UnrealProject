@@ -92,10 +92,7 @@ void UMyPlayerAnimInstance::AnimNotify_Attack()
 {
 }
 
-void UMyPlayerAnimInstance::AnimNotify_AttackCombo()
-{
-	CanCombo = true;
-}
+
 
 void UMyPlayerAnimInstance::AnimNotify_Skill1Play()
 {
