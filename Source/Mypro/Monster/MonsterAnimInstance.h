@@ -54,4 +54,6 @@ public:
 	void AnimNotify_At4Play();
 	UFUNCTION()
 	void AnimNotify_Death();
+	UFUNCTION()
+	void AnimNotify_AtEnd();
 };

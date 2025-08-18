@@ -58,5 +58,8 @@ public:
 	{
 		return TeamID;
 	}
-
+	void SetGenericTeamId(const FGenericTeamId& mTeamID)
+	{
+		TeamID = mTeamID;
+	}
 };

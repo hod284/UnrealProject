@@ -2,7 +2,7 @@
 
 
 #include "MonsterAnimInstance.h"
-
+#include "Monster.h"
 void UMonsterAnimInstance::PostInitProperties()
 {
 	Super::PostInitProperties();
@@ -82,4 +82,17 @@ void UMonsterAnimInstance::AnimNotify_At4Play()
 
 void UMonsterAnimInstance::AnimNotify_Death()
 {
+}
+void UMonsterAnimInstance::AnimNotify_AtEnd()
+{
+	AMonster* monster = Cast<AMonster>(TryGetPawnOwner());
+	if (monster)
+	{
+		AAIController* AIController = Cast<AAIController>(monster->GetController());
+		if (AIController)
+		{
+			AIController->GetBlackboardComponent()->SetValueAsBool(TEXT("AttackEnd"), true);
+		}
+
+	}
 }

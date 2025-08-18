@@ -26,7 +26,7 @@ void AMyCharacter::BeginPlay()
 			ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
 		Subsystem->AddMappingContext(GetWorld()->GetGameInstance()->GetSubsystem<UInputManager>()->Context, 0);
 	}
-	TeamID = FGenericTeamId(TeamPlayer);
+	SetGenericTeamId(FGenericTeamId(TeamPlayer));
 }
 
 // Called every frame
