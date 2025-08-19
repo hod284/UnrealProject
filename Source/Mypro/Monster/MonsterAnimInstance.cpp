@@ -64,6 +64,14 @@ void UMonsterAnimInstance::StunAni()
 {
 	mAnimType = EMonsterDefaultAnim::Stun;
 }
+void UMonsterAnimInstance::RubAni()
+{
+	mAnimType = EMonsterDefaultAnim::Run;
+}
+void UMonsterAnimInstance::IdleAni()
+{
+	mAnimType = EMonsterDefaultAnim::Idle;
+}
 void UMonsterAnimInstance::AnimNotify_At1Play()
 {
 }

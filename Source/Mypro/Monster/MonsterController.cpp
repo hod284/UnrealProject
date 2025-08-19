@@ -9,15 +9,15 @@ AMonsterController::AMonsterController()
 	SetPerceptionComponent(*AIPerception);
 	//감각기관 생성
 	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("SightConfig"));
-	SightConfig->SightRadius = 2000.0f; //시야 반경
-	SightConfig->LoseSightRadius = 2200.0f; //시야 손실 반경
+	SightConfig->SightRadius = DetectiveRange; //시야 반경
+	SightConfig->LoseSightRadius = DetectiveRange+200.0f; //시야 손실 반경
 	SightConfig->PeripheralVisionAngleDegrees = 360.0f; //시야 각도
-	SightConfig->AutoSuccessRangeFromLastSeenLocation = 1000.0f; //마지막으로 본 위치에서 성공 범위
+	SightConfig->AutoSuccessRangeFromLastSeenLocation = DetectiveRange/2.0f; //마지막으로 본 위치에서 성공 범위
 	SightConfig->PointOfViewBackwardOffset = 0.0f; //시점 후방 오프셋
 	SightConfig->NearClippingRadius = 0.0f; //근접 클리핑 반경
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true; //적 감지 여부
 	SightConfig->DetectionByAffiliation.bDetectFriendlies = false; //아군 감지 여부
-	SightConfig->DetectionByAffiliation.bDetectNeutrals = false; //중립 감지 여부
+	SightConfig->DetectionByAffiliation.bDetectNeutrals = true; //중립 감지 여부
 	AIPerception->ConfigureSense(*SightConfig); //감각기관에 시각 감각 설정
 	DamageConfig = CreateDefaultSubobject<UAISenseConfig_Damage>(TEXT("DamageConfig"));
 	//여기서 말하는 Implementation 은 "이 설정이 어떤 실제 Sense 클래스를 쓸 건가" 를 리턴하는 함수
@@ -30,7 +30,8 @@ AMonsterController::AMonsterController()
 void AMonsterController::BeginPlay()
 {
 	Super::BeginPlay();
-	AIPerception->OnTargetPerceptionUpdated.AddDynamic(this, &AMonsterController::OnTarget);
+	AIPerception->OnTargetPerceptionUpdated.AddDynamic(this, &AMonsterController::OnTargetmethod);
+	AIPerception->RequestStimuliListenerUpdate(); // 선택적
 }
 void AMonsterController::OnConstruction(const FTransform& Transform)
 {
@@ -41,7 +42,7 @@ void AMonsterController::OnMoveCompleted(FAIRequestID RequestID, const FPathFoll
 	Super::OnMoveCompleted(RequestID, Result);
 }
 
-void AMonsterController::OnTarget(AActor* Target, FAIStimulus Stimulus)
+void AMonsterController::OnTargetmethod(AActor* Target, FAIStimulus Stimulus)
 {
 	TSubclassOf<UAISense> SenseClass = UAIPerceptionSystem::GetSenseClassForStimulus(this,Stimulus);
 	if(Stimulus.WasSuccessfullySensed())
@@ -57,5 +58,6 @@ ETeamAttitude::Type AMonsterController::GetTeamAttitudeTowards(const AActor& Oth
 	
 	if(OtherTeamAgent ->GetGenericTeamId().GetId()== TeamNeutral)
 		return ETeamAttitude::Neutral; // 중립 팀인 경우 중립으로 처리
-	return GetGenericTeamId() == OtherTeamAgent->GetGenericTeamId() ? ETeamAttitude::Friendly : ETeamAttitude::Hostile;
+	return GetGenericTeamId() == OtherTeamAgent->GetGenericTeamId() ?
+		ETeamAttitude::Friendly : ETeamAttitude::Hostile;
 }

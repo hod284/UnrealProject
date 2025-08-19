@@ -41,6 +41,8 @@ public:
 	void MonsterAttack4();
 	void DeathAni();
 	void StunAni();
+	void RubAni();
+	void IdleAni();
 
 	UFUNCTION()
 	void MonsterAttackend(UAnimMontage* Montage, bool Interrupted);

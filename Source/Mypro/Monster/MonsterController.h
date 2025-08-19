@@ -21,6 +21,7 @@ protected:
 	TObjectPtr<UAISenseConfig_Sight>	SightConfig;
 	TObjectPtr<UAISenseConfig_Damage>	DamageConfig;
 	AMonsterController();
+	float DetectiveRange =1500.0f;
 public:
 	virtual void OnConstruction(const FTransform& Transform) override;
 
@@ -30,7 +31,7 @@ public:
 	virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const;
 
 	UFUNCTION()
-	void OnTarget(AActor* Target, FAIStimulus Stimulus);
+	void OnTargetmethod(AActor* Target, FAIStimulus Stimulus);
 	
 
 	

@@ -10,7 +10,7 @@
 #include "MyCharacter.generated.h"
 
 UCLASS()
-class MYPRO_API AMyCharacter : public ACharacter
+class MYPRO_API AMyCharacter : public ACharacter, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -33,6 +33,12 @@ protected:
 	bool IsMoving = false;
 	float Time = 0.0f;
 	FGenericTeamId	TeamID;
+	float HP = 1.0F;
+	float MP = 1.0F;
+	int32 PlayerHp;
+	int32 PlayerMp;
+	UPROPERTY(VisibleAnywhere)
+	UAIPerceptionStimuliSourceComponent* Stimuli;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -54,12 +60,28 @@ public:
 	virtual void  Skill2();
 	virtual void  Skill3();
 	virtual void  Skill4();
-	FGenericTeamId GetGenericTeamId()	const
+	virtual FGenericTeamId GetGenericTeamId()	const override
 	{
 		return TeamID;
 	}
-	void SetGenericTeamId(const FGenericTeamId& mTeamID)
+    void SetGenericTeamId(const FGenericTeamId& mTeamID)
 	{
 		TeamID = mTeamID;
+	}
+	void SetHP(float NewHP)
+	{
+		HP = NewHP;
+	}
+	void SetMP(float NewMP)
+	{
+		MP = NewMP;
+	}
+	float GetHP() const
+	{
+		return HP;
+	}
+	float GetMP() const
+	{
+		return MP;
 	}
 };

@@ -9,13 +9,16 @@ AMonster::AMonster()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
-	RootComponent = CapsuleComponent;
+	SetRootComponent(CapsuleComponent);
 	MeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshComponent"));
+	MeshComponent->SetupAttachment(RootComponent);
 	MovementComponent = CreateDefaultSubobject<UMonsterPawnMovement>(TEXT("MOVMENT"));
 	CapsuleComponent->bVisualizeComponent = true;
 	const ConstructorHelpers::FObjectFinder<UBehaviorTree> BTree(TEXT("/Script/AIModule.BehaviorTree'/Game/BT/MonsterTREE.MonsterTREE'"));
     if(BTree.Succeeded())
 	    MonsterBehaviorTree = BTree.Object;
+	CapsuleComponent->SetCollisionProfileName("Monster");
+	MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	/*
 	enum class EAutoPossessAI : uint8
     {
@@ -28,7 +31,7 @@ AMonster::AMonster()
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	AIControllerClass = AMonsterController::StaticClass();
 	MovementComponent->SetUpdatedComponent(RootComponent);
-
+	SetGenericTeamId(FGenericTeamId(TeamMonster));
 	bUseControllerRotationYaw = true; // 컨트롤러의 Yaw 회전을 Pawn에 적용
 }
 
@@ -36,7 +39,6 @@ AMonster::AMonster()
 void AMonster::BeginPlay()
 {
 	Super::BeginPlay();
-	SetGenericTeamId(FGenericTeamId(TeamMonster));
 	AnimInstance = Cast<UMonsterAnimInstance>(MeshComponent ->GetAnimInstance());
 	AAIController* AIController = Cast<AAIController>(GetController());
 	if (AIController && MonsterBehaviorTree)

@@ -12,6 +12,8 @@ AMyCharacter::AMyCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	SpringArm->SetupAttachment(RootComponent);
 	Camera->SetupAttachment(SpringArm);
+	GetCapsuleComponent()->SetCollisionProfileName("player");
+	SetGenericTeamId(FGenericTeamId(TeamPlayer));
 }
 
 // Called when the game starts or when spawned
@@ -26,7 +28,7 @@ void AMyCharacter::BeginPlay()
 			ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
 		Subsystem->AddMappingContext(GetWorld()->GetGameInstance()->GetSubsystem<UInputManager>()->Context, 0);
 	}
-	SetGenericTeamId(FGenericTeamId(TeamPlayer));
+
 }
 
 // Called every frame

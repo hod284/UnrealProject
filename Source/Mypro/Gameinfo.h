@@ -16,13 +16,14 @@
 
 
 //
+#include "UObject/UnrealType.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AIPerceptionTypes.h"
 #include "Perception/AISenseConfig_Sight.h"
 #include "Perception/AISenseConfig_Hearing.h"
 #include "Perception/AISenseConfig_Damage.h"
-
+#include "Navigation/PathFollowingComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BlackboardData.h"
@@ -177,6 +178,7 @@ UENUM(BlueprintType)
 enum class EMonsterDefaultAnim : uint8
 {
 	Idle,
+	Run,
 	Stun,
 	Attack1,
 	Attack2,
