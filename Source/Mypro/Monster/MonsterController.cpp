@@ -62,6 +62,7 @@ void AMonsterController::ClearMovment()
 
 		if (MoveComp)
 		{
+			//pawn의 MovementComponent에서 현재 움직이는 방향을 벡터zero로 설정 움직임 정지
 			MoveComp->ClearAIMoveDir();
 		}
 	}
@@ -83,6 +84,7 @@ ETeamAttitude::Type AMonsterController::GetTeamAttitudeTowards(const AActor& Oth
 	
 	if(OtherTeamAgent ->GetGenericTeamId().GetId()== TeamNeutral)
 		return ETeamAttitude::Neutral; // 중립 팀인 경우 중립으로 처리
+	// GenericTeamAgentInterface를 구현한 다른 에이전트와 비교하여 팀 태도 결정
 	return GetGenericTeamId() == OtherTeamAgent->GetGenericTeamId() ?
 		ETeamAttitude::Friendly : ETeamAttitude::Hostile;
 }

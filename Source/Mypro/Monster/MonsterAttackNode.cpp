@@ -36,12 +36,12 @@ EBTNodeResult::Type UMonsterAttackNode:: ExecuteTask(UBehaviorTreeComponent& Own
 		return EBTNodeResult::Failed;
 	}
 	float Distance = Monster->DistanceToTarget(Monster, TargetActor);
-	if (Distance < BlackboardComp->GetValueAsFloat("NoramlAttackRange")+200.0F)
+	if (Distance < BlackboardComp->GetValueAsFloat("NoramlAttackRange")+ PlusAttackRange)
 	{
-		Random  =FMath::RandRange(0,0);
+		Random  =FMath::RandRange(0,1);
 		CurrentRandom = Random; // 현재 랜덤 값을 저장합니다.
 	}
-	else if (Distance > BlackboardComp->GetValueAsFloat("NoramlAttackRange") + 200.0F)
+	else if (Distance > BlackboardComp->GetValueAsFloat("NoramlAttackRange") + PlusAttackRange)
 	{
 		Random = FMath::RandRange(2, 3);
 		CurrentRandom = Random; // 현재 랜덤 값을 저장합니다.
@@ -116,7 +116,7 @@ void UMonsterAttackNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 			FRotator Rot = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
 			Monster->SetActorRotation(Rot);
 		}
-		if (Distance < BlackboardComp->GetValueAsFloat("NoramlAttackRange") + 200.0F)
+		if (Distance < BlackboardComp->GetValueAsFloat("NoramlAttackRange") + PlusAttackRange)
 		{
 			Random = FMath::RandRange(0, 1);
 			if (Random == CurrentRandom) // 현재 랜덤 값과 같다면 다시 랜덤을 생성합니다.
@@ -125,7 +125,7 @@ void UMonsterAttackNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 				CurrentRandom = Random; // 현재 랜덤 값을 저장합니다.
 			}
 		}
-		else if (Distance > BlackboardComp->GetValueAsFloat("NoramlAttackRange") + 200.0F)
+		else if (Distance > BlackboardComp->GetValueAsFloat("NoramlAttackRange") + PlusAttackRange)
 		{
 			Random = FMath::RandRange(2, 3);
 			if (Random == CurrentRandom) // 현재 랜덤 값과 같다면 다시 랜덤을 생성합니다.

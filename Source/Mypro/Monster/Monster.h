@@ -10,7 +10,9 @@
 #include "Monster.generated.h"
 
 UCLASS()
-class MYPRO_API AMonster : public APawn, public IGenericTeamAgentInterface
+class MYPRO_API AMonster : public APawn,
+	// IGenericTeamAgentInterface 라는 인터페이스 상속받아서 현재 자신의 소속이 어딘지설정
+	public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -26,9 +28,9 @@ protected:
 	FGenericTeamId	TeamID;
 	TObjectPtr<UBehaviorTree> MonsterBehaviorTree;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CusteomRange")
-	float NoramlAttackRange = 200.0f;
+	float NoramlAttackRange = 100.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CusteomRange")
-	float SpecialAttackRange = 600.0f;
+	float SpecialAttackRange = 500.0f;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
@@ -41,6 +43,7 @@ protected:
 public:	
 	TObjectPtr<UMonsterAnimInstance> AnimInstance;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser);
+	// IGenericTeamAgentInterface 라는 인터페이스 에서 구현해야할 함수
 	virtual FGenericTeamId GetGenericTeamId()	const  override
 	{
 		return TeamID;

@@ -10,8 +10,6 @@ void UMonsterAnimInstance::PostInitProperties()
 	const  UAnimationObject* DataSystem = GetDefault<UAnimationObject>();
 	const FMonsterAnimInfo* AnimInfo = DataSystem->GetDataAnimainfo_Monster();
 	SequenceMap = AnimInfo->SequenceMap;
-	MontageMap = AnimInfo->MontageMap;
-	AttackMontage = *MontageMap.Find(TEXT("At1"));
 }
 
 void UMonsterAnimInstance::NativeBeginPlay()
@@ -38,10 +36,7 @@ void UMonsterAnimInstance::MonsterAttackend(UAnimMontage* Montage, bool Interrup
 
 void UMonsterAnimInstance::MonsterAttack1()
 {
-	if (IsValid(AttackMontage))
-		return;
-	if (!Montage_IsPlaying(AttackMontage))
-		Montage_Play(AttackMontage);
+	mAnimType = EMonsterDefaultAnim::Attack1;
 }
 
 void UMonsterAnimInstance::MonsterAttack2()

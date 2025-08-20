@@ -171,8 +171,6 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	TMap<FName, TObjectPtr<UAnimSequence>>	SequenceMap;
-	UPROPERTY(EditAnywhere)
-	TMap<FName, TObjectPtr<UAnimMontage>>	MontageMap;
 };
 UENUM(BlueprintType)
 enum class EMonsterDefaultAnim : uint8

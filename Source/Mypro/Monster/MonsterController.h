@@ -35,6 +35,6 @@ public:
 	void OnTargetmethod(AActor* Target, FAIStimulus Stimulus);
 	
 	virtual void StopMovement() override;
-	void ClearMovment() ;
+	void ClearMovment();
 	
 };

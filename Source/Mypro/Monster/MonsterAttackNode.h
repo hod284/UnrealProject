@@ -15,6 +15,7 @@ class MYPRO_API UMonsterAttackNode : public UBTTaskNode
 {
 	GENERATED_BODY()
 protected:
+	float PlusAttackRange =200.0f;
 	UPROPERTY(EditAnywhere, Category = "AI")
 	FBlackboardKeySelector TargetKey;
 	int32 Random;

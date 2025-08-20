@@ -17,11 +17,6 @@ class MYPRO_API UMonsterAnimInstance : public UAnimInstance
 protected:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TMap<FName, TObjectPtr<UAnimSequence>> SequenceMap;
-
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	TMap<FName, TObjectPtr<UAnimMontage>>	MontageMap;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<UAnimMontage>	AttackMontage;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	EMonsterDefaultAnim	mAnimType = EMonsterDefaultAnim::Idle;
 
