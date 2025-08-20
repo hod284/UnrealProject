@@ -36,20 +36,17 @@ EBTNodeResult::Type UMonsterAttackNode:: ExecuteTask(UBehaviorTreeComponent& Own
 		return EBTNodeResult::Failed;
 	}
 	float Distance = Monster->DistanceToTarget(Monster, TargetActor);
-	if (Distance > BlackboardComp->GetValueAsFloat("SpecialAttackRange"))
+	if (Distance < BlackboardComp->GetValueAsFloat("NoramlAttackRange")+200.0F)
 	{
-		return EBTNodeResult::Failed;
-	}
-	if (Distance < BlackboardComp->GetValueAsFloat("NoramlAttackRange"))
-	{
-		Random  =FMath::RandRange(0,1);
+		Random  =FMath::RandRange(0,0);
 		CurrentRandom = Random; // 현재 랜덤 값을 저장합니다.
 	}
-	else  
+	else if (Distance > BlackboardComp->GetValueAsFloat("NoramlAttackRange") + 200.0F)
 	{
 		Random = FMath::RandRange(2, 3);
 		CurrentRandom = Random; // 현재 랜덤 값을 저장합니다.
 	}
+	UE_LOG(LogMypro, Warning, TEXT("RANDOM : %d"), Random);
 	switch (Random)
 	{
 	case 0:
@@ -97,7 +94,7 @@ void UMonsterAttackNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 	}
     if (Monster->GetStun() <= 0.0f)
 	{
-		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 		return;
 	}
 	if(BlackboardComp->GetValueAsBool("AttackEnd"))
@@ -110,7 +107,7 @@ void UMonsterAttackNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 			FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 			return;
 		}
-		else if (Distance < BlackboardComp->GetValueAsFloat("SpecialAttackRange")&& Distance > BlackboardComp->GetValueAsFloat("NoramlAttackRange")|| Distance < BlackboardComp->GetValueAsFloat("NoramlAttackRange"))
+		else if (Distance < BlackboardComp->GetValueAsFloat("SpecialAttackRange"))
 		{
 			FVector CurrentLocation = Monster->GetActorLocation();
 			CurrentLocation.Z = 0;
@@ -119,7 +116,7 @@ void UMonsterAttackNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 			FRotator Rot = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
 			Monster->SetActorRotation(Rot);
 		}
-		if (Distance < BlackboardComp->GetValueAsFloat("NoramlAttackRange"))
+		if (Distance < BlackboardComp->GetValueAsFloat("NoramlAttackRange") + 200.0F)
 		{
 			Random = FMath::RandRange(0, 1);
 			if (Random == CurrentRandom) // 현재 랜덤 값과 같다면 다시 랜덤을 생성합니다.
@@ -128,7 +125,7 @@ void UMonsterAttackNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 				CurrentRandom = Random; // 현재 랜덤 값을 저장합니다.
 			}
 		}
-		else
+		else if (Distance > BlackboardComp->GetValueAsFloat("NoramlAttackRange") + 200.0F)
 		{
 			Random = FMath::RandRange(2, 3);
 			if (Random == CurrentRandom) // 현재 랜덤 값과 같다면 다시 랜덤을 생성합니다.
@@ -137,6 +134,7 @@ void UMonsterAttackNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 				CurrentRandom = Random; // 현재 랜덤 값을 저장합니다.
 			}
 		}
+		UE_LOG(LogMypro, Warning, TEXT("RANDOM : %d"), Random);
 		switch (Random)
 		{
 		case 0:

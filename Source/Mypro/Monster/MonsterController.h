@@ -3,6 +3,7 @@
 #pragma once
 
 #include "../Gameinfo.h"
+#include "MonsterPawnMovement.h"
 #include "AIController.h"
 #include "MonsterController.generated.h"
 
@@ -33,6 +34,7 @@ public:
 	UFUNCTION()
 	void OnTargetmethod(AActor* Target, FAIStimulus Stimulus);
 	
-
+	virtual void StopMovement() override;
+	void ClearMovment() ;
 	
 };

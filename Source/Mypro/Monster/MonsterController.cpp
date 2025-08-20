@@ -40,6 +40,31 @@ void AMonsterController::OnConstruction(const FTransform& Transform)
 void AMonsterController::OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result)
 {
 	Super::OnMoveCompleted(RequestID, Result);
+	// 경로 이동이 성공했을 경우나 중단되었을 경우(Abort) 등등.
+	// 만약 stopMovement를 호출한다면 Result.Code == EPathFollowingResult::Aborted 이게 성립
+	if (Result.Code == EPathFollowingResult::Success|| Result.Code == EPathFollowingResult::Aborted)
+	{
+		ClearMovment();
+	}
+}
+void AMonsterController::StopMovement()
+{
+	Super::StopMovement();
+	ClearMovment();
+}
+
+void AMonsterController::ClearMovment()
+{
+	APawn* ControlPawn = GetPawn();
+	if (ControlPawn)
+	{
+		UMonsterPawnMovement* MoveComp = Cast<UMonsterPawnMovement>(ControlPawn->GetMovementComponent());
+
+		if (MoveComp)
+		{
+			MoveComp->ClearAIMoveDir();
+		}
+	}
 }
 
 void AMonsterController::OnTargetmethod(AActor* Target, FAIStimulus Stimulus)
