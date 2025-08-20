@@ -3,6 +3,7 @@
 #pragma once
 
 #include "../Gameinfo.h"
+#include  "../singleton/GameManager.h"
 #include "MyPlayerAnimInstance.h"
 #include "MaInPlayerController.h"
 #include "../singleton/InputManager.h"
@@ -26,19 +27,21 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<USpringArmComponent> SpringArm;
 	TObjectPtr<UMyPlayerAnimInstance> AnimInstance;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USceneComponent> CameraHead;
 	// 플레이어 급백 방향
 	FVector CurrentVelocity;
 	FVector NewLocation;
 	bool BackMoving = false;
 	bool IsMoving = false;
 	float Time = 0.0f;
+	bool LookAt = false;
 	FGenericTeamId	TeamID;
 	float HP = 1.0F;
 	float MP = 1.0F;
 	int32 PlayerHp;
 	int32 PlayerMp;
-	UPROPERTY(VisibleAnywhere)
-	UAIPerceptionStimuliSourceComponent* Stimuli;
+    APlaySceneObject* PlaySceneObject;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

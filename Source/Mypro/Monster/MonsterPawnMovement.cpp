@@ -43,6 +43,7 @@ void UMonsterPawnMovement::TickComponent(float DeltaTime, enum ELevelTick TickTy
 
 	if (Hit.IsValidBlockingHit())
 	{
+		// 이동 중 충돌이 발생한 경우, 충돌된 표면에 따라 슬라이딩을 처리한다.
 		SlideAlongSurface(MoveVelocity * DeltaTime, 1.f - Hit.Time, Hit.Normal, Hit);
 	}
 	Velocity = MoveVelocity;

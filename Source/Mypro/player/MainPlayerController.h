@@ -49,6 +49,7 @@ public:
 	   }
 	   return Choice;
     }
+	
 	// 캐릭터 선택한 클래스 정보를 반환하는 함수입니다.
 	TSubclassOf<APawn> GetSelectCharactertClass();
 	

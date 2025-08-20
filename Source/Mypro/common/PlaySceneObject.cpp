@@ -15,7 +15,7 @@ APlaySceneObject::APlaySceneObject()
 void APlaySceneObject::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMonster::StaticClass(), FoundActors_M);
 }
 
 // Called every frame

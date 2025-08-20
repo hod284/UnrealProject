@@ -10,7 +10,9 @@ AMyCharacter::AMyCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	SpringArm->SetupAttachment(RootComponent);
+	CameraHead = CreateDefaultSubobject<USceneComponent>(TEXT("CameraHead"));
+	CameraHead->SetupAttachment(RootComponent);
+	SpringArm->SetupAttachment(CameraHead);
 	Camera->SetupAttachment(SpringArm);
 	GetCapsuleComponent()->SetCollisionProfileName("player");
 	SetGenericTeamId(FGenericTeamId(TeamPlayer));
@@ -28,7 +30,7 @@ void AMyCharacter::BeginPlay()
 			ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
 		Subsystem->AddMappingContext(GetWorld()->GetGameInstance()->GetSubsystem<UInputManager>()->Context, 0);
 	}
-
+	PlaySceneObject = Cast<APlaySceneObject>(GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetPlayerLevelObject());
 }
 
 // Called every frame
@@ -48,6 +50,25 @@ void AMyCharacter::Tick(float DeltaTime)
 			BackMoving = false;
 			CurrentVelocity = FVector::Zero();
 			Time = 0.0f;
+		}
+	}
+	if (LookAt)
+	{
+		AActor* CameraTarget = PlaySceneObject->GetMonster(TEXT("Monster_BOSS"));
+		// 몬스터 로케이션
+		FVector TargetLocation = CameraTarget->GetActorLocation();
+		// 카메라 로케이션
+		FVector CameraLocation = Camera->GetComponentLocation();
+		// 카메라 타겟과 카메라 사이의 거리
+		FVector DIr = TargetLocation - CameraLocation;
+		// 수평으로 정규화하기 위해 제로
+		DIr.Z = 0.0f;
+		DIr.Normalize();
+		float Angle = DIr.Rotation().Yaw;
+		if (Angle < 45.0f && Angle>315.0f)
+		{
+			FRotator CameraRotation = FMath::RInterpTo(Camera->GetComponentRotation(), FRotator(0, Angle, 0), DeltaTime * 2.0f, 5.0f);
+			CameraHead->SetWorldRotation(CameraRotation);
 		}
 	}
 }
