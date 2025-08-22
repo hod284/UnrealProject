@@ -16,6 +16,8 @@ class MYPRO_API UInputManager : public UGameInstanceSubsystem
 public:
 	TObjectPtr<UInputMappingContext>	Context;
 	TObjectPtr<UInputAction>			Move;
+	TObjectPtr<UInputAction>			MouseMove;
+	TObjectPtr<UInputAction>			RightCusorDown;
 	TObjectPtr<UInputAction>			Back;
 	TObjectPtr<UInputAction>			Skill1;
 	TObjectPtr<UInputAction>			Skill2;

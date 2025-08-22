@@ -28,7 +28,7 @@ void APlay::PostLogin(APlayerController* NewPlayer)
 
     // 캐릭터 생성 및 Possess
     FVector SpawnLocation = FVector(310,-60,88);
-    FRotator SpawnRotation = FRotator::ZeroRotator;
+    FRotator SpawnRotation = FRotator(0,-90,0);
     APawn* NewPawn = GetWorld()->SpawnActor<APawn>(SelectedCharacterClass, SpawnLocation, SpawnRotation);
     MyPC->Possess(NewPawn);
 

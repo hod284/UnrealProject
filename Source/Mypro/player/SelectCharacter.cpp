@@ -84,7 +84,7 @@ void ASelectCharacter::NotifyActorEndCursorOver()
 
 void ASelectCharacter::NotifyActorOnClicked(FKey ButtonPressed)
 {
-	SkeletalMeshComponent->SetCustomDepthStencilValue(0);
+	CapsulComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	AIntroSceneObject* IntroSceneObject = Cast<AIntroSceneObject>(UGameplayStatics::GetActorOfClass(GetWorld(), AIntroSceneObject::StaticClass()));
 	if (IntroSceneObject)
 	{
