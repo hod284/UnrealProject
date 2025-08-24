@@ -31,21 +31,44 @@ protected:
 	TObjectPtr<USceneComponent> CameraHead;
 	// 플레이어 급백 방향
 	FVector CurrentVelocity;
-	FVector NewLocation;
-	bool BackMoving = false;
-	bool IsMoving = false;
-	float Time = 0.0f;
-	bool LookAt = false;
+	bool BackMoving = false;// 백기능
+	bool IsMoving = false;// 이동중인지 아닌지
+	bool LookAt = false;// 카메라 바라보기
 	FGenericTeamId	TeamID;
 	float HP = 1.0F;
 	float MP = 1.0F;
 	int32 PlayerHp;
 	int32 PlayerMp;
     APlaySceneObject* PlaySceneObject;
-public:	
+	FTimerHandle DashTimer;
+	float SavedGroundFriction = 8.f;
+	float SavedBrakingFriction = 8.f;
+	float SavedBrakingDecel = 2048.f;
+	// 충돌
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, FVector NormalImpulse,
+		const FHitResult& Hit);
+	// 오버랩
+	UFUNCTION()
+	void OnCapsuleBeginOverlap(
+		UPrimitiveComponent* OverlappedComp,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult);
+	// 오버랩 끝
+	UFUNCTION()
+	void OnCapsuleEndOverlap(
+		UPrimitiveComponent* OverlappedComp,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex);
+	// 대쉬 끝날때 호출
+	void EndDash();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
@@ -55,11 +78,13 @@ public:
 	void CameraRotation_Cancel(const FInputActionValue& Value);
 	void MoveStop(const FInputActionValue& Value);
 	void BackKey(const FInputActionValue& Value);
-	void AttackKey(const FInputActionValue &Value);
-	void Skill1Key(const FInputActionValue & Value);
+	void AttackKey(const FInputActionValue& Value);
+	void Skill1Key(const FInputActionValue& Value);
 	void Skill2Key(const FInputActionValue& Value);
 	void Skill3Key(const FInputActionValue& Value);
 	void Skill4Key(const FInputActionValue& Value);
+public:	
+	
 	// 가상함수 
 	virtual void NAttack();
 	virtual void  Skill1();

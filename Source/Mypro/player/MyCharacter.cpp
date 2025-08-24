@@ -15,6 +15,7 @@ AMyCharacter::AMyCharacter()
 	SpringArm->SetupAttachment(CameraHead);
 	Camera->SetupAttachment(SpringArm);
 	GetCapsuleComponent()->SetCollisionProfileName("player");
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	SetGenericTeamId(FGenericTeamId(TeamPlayer));
 }
 
@@ -32,27 +33,44 @@ void AMyCharacter::BeginPlay()
 	}
 	PlaySceneObject = Cast<APlaySceneObject>(GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetPlayerLevelObject());
 	LookAt = true;
+	UCapsuleComponent* Capsule = GetCapsuleComponent();
+	Capsule->OnComponentHit.AddDynamic(this, &AMyCharacter::OnHit);
+	Capsule->SetGenerateOverlapEvents(true); // 안전하게 켜두기
+	Capsule->OnComponentBeginOverlap.AddDynamic(this, &AMyCharacter::OnCapsuleBeginOverlap);
+	Capsule->OnComponentEndOverlap.AddDynamic(this, &AMyCharacter::OnCapsuleEndOverlap);
+	UCharacterMovementComponent* Move = GetCharacterMovement();
+	SavedGroundFriction = Move->GroundFriction;
+	SavedBrakingFriction = Move->BrakingFriction;
+	SavedBrakingDecel = Move->BrakingDecelerationWalking;
+}
+void AMyCharacter::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
+	const FHitResult& Hit)
+{
+
+}
+
+void AMyCharacter::OnCapsuleBeginOverlap(UPrimitiveComponent* Comp, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32, bool bFromSweep,
+	const FHitResult& Sweep)
+{
+
+	// TODO: 원하는 처리
+}
+void AMyCharacter::OnCapsuleEndOverlap(
+	UPrimitiveComponent* OverlappedComp,
+	AActor* OtherActor,
+	UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex)
+{
+	// TODO: 원하는 처리
 }
 
 // Called every frame
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (BackMoving)
-	{
-		Time += DeltaTime * 3.f;
-		FVector NewLoc = FMath::VInterpTo(GetActorLocation(), NewLocation, DeltaTime*3.f, 5.0f);
-		SetActorLocation(NewLoc);
-		FVector size = GetActorLocation() - NewLocation;
-		UE_LOG(LogMypro, Warning, TEXT("%f"), size.Size());
-		// 너무 가까우면 스냅 + 종료 처리(지터 방지)
-		if (Time >= 1.5f)
-		{
-			BackMoving = false;
-			CurrentVelocity = FVector::Zero();
-			Time = 0.0f;
-		}
-	}
+	
 	if (LookAt)
 	{
 		float radious = FMath::Cos(FMath::DegreesToRadians(45.0f));
@@ -116,7 +134,17 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 {
 	return 0.0f;
 }
-
+void AMyCharacter::EndDash()
+{
+	UCharacterMovementComponent* Move = GetCharacterMovement();
+	// 잠시 미끄러지게: 마찰/감속을 낮춤
+	Move->bUseSeparateBrakingFriction = false;
+	Move->GroundFriction = SavedGroundFriction;
+	Move->BrakingFriction = SavedBrakingFriction;
+	Move->BrakingDecelerationWalking = SavedBrakingDecel;
+	BackMoving = false;
+	CurrentVelocity = FVector::ZeroVector;
+}
 void AMyCharacter::MoveKey(const FInputActionValue& Value)
 {
 	if (!BackMoving)
@@ -222,10 +250,18 @@ void AMyCharacter::BackKey(const FInputActionValue& Value)
 {
 	if (!IsMoving)
 	{
+		UCharacterMovementComponent* Move = GetCharacterMovement();
+		// 잠시 미끄러지게: 마찰/감속을 낮춤
+		Move->bUseSeparateBrakingFriction = true;
+		Move->GroundFriction = 0.5f;
+		Move->BrakingFriction = 0.5f;
+		Move->BrakingDecelerationWalking = 250.f;
 		// 단위 백터니까 방향만 가지고 있음 방향백터 x거리
-		FVector Backward = CurrentVelocity * -600.0f; // 뒤로 20만큼
-		NewLocation = GetActorLocation() + Backward;
+	    FVector	NewLocation = -CurrentVelocity * 1200.0f; // 뒤로 20만큼
+		LaunchCharacter(NewLocation, true, false);
 		BackMoving = true;
+		GetWorldTimerManager().ClearTimer(DashTimer);
+		GetWorld()->GetTimerManager().SetTimer(DashTimer, this, &AMyCharacter::EndDash, 0.5, false);
 		if (AnimInstance)
 			AnimInstance->PlayBack();
 	}
