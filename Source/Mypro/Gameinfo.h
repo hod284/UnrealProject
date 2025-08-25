@@ -79,7 +79,13 @@ DECLARE_LOG_CATEGORY_EXTERN(LogMypro, Warning, All);
 UENUM()
 enum class  NowGameState: uint8
 {
-	None,Intro, playgame, gameover
+	None,Intro, playgame, gameover, pvp
+};
+//게임상태 정의
+UENUM()
+enum class  SingleORmulti : uint8
+{
+	None,single,Multi
 };
 
 //게임UI 인지 아니지 여부

@@ -3,7 +3,6 @@
 #pragma once
 
 #include "../Gameinfo.h"
-#include "../common/PlaySceneObject.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "GameManager.generated.h"
 
@@ -25,14 +24,7 @@ public:
 	UGameManager() =default;
 	// TSubclassOf 는 참조타입을 나타내는 언리얼 엔진의 템플릿 클래스입니다.
 	// 메모리 할당과 다른거임
-	APlaySceneObject* GetPlayerLevelObject()
-	{
-        APlaySceneObject* ob =Cast<APlaySceneObject>( UGameplayStatics::GetActorOfClass(GetWorld(), APlaySceneObject::StaticClass()));
-		if (ob == nullptr) {
-			UE_LOG(LogTemp, Warning, TEXT("Player character not found."));
-		}
-		return ob;
-	}
+	
 	void SetGameState(NowGameState newState) {
 		state = newState; 
 	}

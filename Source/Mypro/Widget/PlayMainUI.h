@@ -23,6 +23,16 @@ protected:
 	TObjectPtr<USkillStatus> Skill3;
 	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<USkillStatus> Skill4;
+	UPROPERTY(BlueprintReadWrite)
+	TObjectPtr<UProgressBar> PlayerHp;
+	UPROPERTY(BlueprintReadWrite)
+	TObjectPtr<UProgressBar> PlayerMp;
+	UPROPERTY(BlueprintReadWrite)
+	TObjectPtr<UProgressBar>  MonsterHp;
+	UPROPERTY(BlueprintReadWrite)
+	TObjectPtr<UProgressBar> MonsterStun;
+	UPROPERTY(BlueprintReadWrite)
+	TObjectPtr<UImage> PlayerImage;
 	virtual void NativeConstruct() override;
 public:
 

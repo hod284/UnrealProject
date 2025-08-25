@@ -3,6 +3,7 @@
 #pragma once
 
 #include "../Gameinfo.h"
+#include  "../singleton/GameManager.h"
 #include "Blueprint/UserWidget.h"
 #include "IntroMainUI.generated.h"
 
@@ -16,17 +17,20 @@ class MYPRO_API UIntroMainUI : public UUserWidget
 public:
 	UFUNCTION()
 	void SetSwitcherIndex(int32 Index);
-	UFUNCTION()
 	void SetPercenttext(float pe);
+	void VisuallyStart(ESlateVisibility visible);
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UButton> Start; // 게임 스타트
 	UPROPERTY( meta = (BindWidget))	
 	TObjectPtr<UWidgetSwitcher> Switcher;
 	UPROPERTY()
 	TObjectPtr<UTextBlock> laodingtitle;
 	UPROPERTY()
 	TObjectPtr<UTextBlock> percenttext;
-
-
+	UFUNCTION()
+	void StartButtonClick();
+	void GameStart(Characters ch); // 캐릭터 선택 함수
 	virtual void NativeConstruct() override;
 	virtual void NativeDestruct() override;
 };

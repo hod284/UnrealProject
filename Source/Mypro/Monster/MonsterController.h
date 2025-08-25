@@ -22,7 +22,7 @@ protected:
 	TObjectPtr<UAISenseConfig_Sight>	SightConfig;
 	TObjectPtr<UAISenseConfig_Damage>	DamageConfig;
 	AMonsterController();
-	float DetectiveRange =1500.0f;
+	float DetectiveRange =3000.0f;
 public:
 	virtual void OnConstruction(const FTransform& Transform) override;
 

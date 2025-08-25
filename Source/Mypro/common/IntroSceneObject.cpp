@@ -49,24 +49,10 @@ void AIntroSceneObject::CallthePlayCharacter(Characters choice)
 	character->StartGame();
 	GetWorldTimerManager().ClearTimer(Timerahbdle);
 	GetWorld()->GetTimerManager().SetTimer(Timerahbdle, this, &AIntroSceneObject::PlayloadingVideo, 2.0, false);
+	ui ->VisuallyStart(ESlateVisibility::Collapsed);
 }
 
-void AIntroSceneObject::PlaySequence()
-{  
-	if (CutsceneSequence)
-	{
-		FMovieSceneSequencePlaybackSettings PlaybackSettings;
-		PlaybackSettings.bAutoPlay = true;
-		PlaybackSettings.LoopCount.Value=0;
-		SequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer(
-			GetWorld(), CutsceneSequence, PlaybackSettings, SequenceActor);
-		 
-		if (SequencePlayer)
-		{
-			SequencePlayer->Play();
-		}
-	}
-}
+
 void AIntroSceneObject::PlayloadingVideo()
 {
 	if (ui)

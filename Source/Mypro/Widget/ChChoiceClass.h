@@ -46,8 +46,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UTextBlock> Titletext; // 캐릭터 타이틀
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UButton> Start; // 게임 스타트
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UProgressBar>  NormalAtk;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UProgressBar> 	skill1Atk;
@@ -68,10 +66,5 @@ public:
 	void Character2Click(); // 방패와 검을 들고 있는 남성 캐릭터  선택 버튼 클릭 이벤트
 	UFUNCTION()
 	void Character3Click(); // 아무것도 안들고 있는 남성 캐릭터 선택 버튼 클릭 이벤트
-	UFUNCTION()
-	void StartButtonClick();
-
 	void CharacterButtonChoice(Characters ch); // 캐릭터 선택 함수
-	void GameStart(Characters ch); // 캐릭터 선택 함수
-
 };

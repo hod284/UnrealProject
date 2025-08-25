@@ -77,19 +77,19 @@ void UMonsterTraceNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		return;
 	}
-	EPathFollowingStatus::Type PathStatus = AiController->GetMoveStatus();
-
-	// 도착인지 실패인지 판단한다.
-	if (PathStatus == EPathFollowingStatus::Idle)
-	{
-		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
-	}
 	AActor* TargetActor = Cast<AActor>(BlackboardComp->GetValueAsObject(TargetKey.SelectedKeyName));
 	if (!TargetActor)
 	{
 		// 타겟이 없다면 Task를 종료한다.
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		return;
+	}
+	EPathFollowingStatus::Type PathStatus = AiController->GetMoveStatus();
+
+	// 도착인지 실패인지 판단한다.
+	if (PathStatus == EPathFollowingStatus::Idle)
+	{
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 	}
 	if (Monster->GetStun() <= 0.0f)
 	{

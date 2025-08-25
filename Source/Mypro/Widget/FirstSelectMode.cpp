@@ -25,8 +25,15 @@ void UFirstSelectMode::FirstSelectCharacter()
 	AIntroSceneObject* IntroSceneObject = Cast<AIntroSceneObject>(UGameplayStatics::GetActorOfClass(GetWorld(), AIntroSceneObject::StaticClass()));
 		if (IntroSceneObject)
 		{
-			GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSelectCharacter(Characters::Warrior);
-			IntroSceneObject->CalltheSelectCharacter(Characters::Warrior);
+			if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSelectedcharacter() == Characters::None)
+			{
+				GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSelectCharacter(Characters::Warrior);
+				IntroSceneObject->CalltheSelectCharacter(Characters::Warrior);
+			}
+			else
+			{
+				IntroSceneObject->CalltheSelectCharacter(GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSelectedcharacter());
+			}
 		}
 	
 }

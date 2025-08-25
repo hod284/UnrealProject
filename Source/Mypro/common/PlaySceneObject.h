@@ -4,6 +4,7 @@
 
 #include "../Gameinfo.h"
 #include "../Monster/Monster.h"
+#include  "../player/MainPlayerController.h"
 #include "GameFramework/Actor.h"
 #include "PlaySceneObject.generated.h"
 
@@ -18,6 +19,16 @@ public:
 	APlaySceneObject();
 
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cutscene")
+	TObjectPtr<ULevelSequence> CutsceneSequence;
+	TObjectPtr <ULevelSequencePlayer> SequencePlayer;
+	ALevelSequenceActor* SequenceActor;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cutscene")
+	TObjectPtr<ACameraActor> CineCamera;
+	// 시퀀스 플레이
+	void PlaySequence();
+	UFUNCTION()
+	void OnSequenceFinished();
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	TArray<AActor*> FoundActors_M;

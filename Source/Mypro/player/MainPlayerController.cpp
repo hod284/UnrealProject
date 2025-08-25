@@ -57,10 +57,9 @@ void AMainPlayerController::BeginPlay()
 				 Settings->ApplySettings(true); // 즉시 적용
 			 }
 		}
-		else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+		else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
-			// Intro UI를 생성하고 뷰포트에 추가
-			GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPlayMainUI_widget() ->AddToViewport();
+			GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPlayMainUI_widget()->AddToViewport();
 		}
 	}
 }

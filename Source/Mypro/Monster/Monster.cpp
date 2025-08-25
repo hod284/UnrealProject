@@ -45,9 +45,18 @@ void AMonster::BeginPlay()
 	{
 		AIController->RunBehaviorTree(MonsterBehaviorTree);
 		AIController->GetBlackboardComponent()->SetValueAsFloat("NoramlAttackRange", NoramlAttackRange);
-		AIController->GetBlackboardComponent()->SetValueAsFloat("SpecialAttackRange", SpecialAttackRange);
 	}
+	Brain = AIController->BrainComponent;
+	if (Brain )
+		Brain->PauseLogic(TEXT("ManualStop")); // 브레인 정지
 }
+
+void AMonster::Start()
+{
+	if (Brain)
+		Brain->ResumeLogic(TEXT("ManualStopdf")); // 브레인 정지
+}
+
 
 // Called every frame
 void AMonster::Tick(float DeltaTime)

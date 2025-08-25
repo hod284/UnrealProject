@@ -4,6 +4,7 @@
 
 #include "../Gameinfo.h"
 #include  "../singleton/GameManager.h"
+#include "../common/PlaySceneObject.h"
 #include "MyPlayerAnimInstance.h"
 #include "MaInPlayerController.h"
 #include "../singleton/InputManager.h"
@@ -98,6 +99,10 @@ public:
     void SetGenericTeamId(const FGenericTeamId& mTeamID)
 	{
 		TeamID = mTeamID;
+	}
+	void SetBackMoving(bool moving)
+	{
+		BackMoving = moving;
 	}
 	void SetHP(float NewHP)
 	{

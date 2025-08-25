@@ -31,7 +31,8 @@ void AMyCharacter::BeginPlay()
 			ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
 		Subsystem->AddMappingContext(GetWorld()->GetGameInstance()->GetSubsystem<UInputManager>()->Context, 0);
 	}
-	PlaySceneObject = Cast<APlaySceneObject>(GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetPlayerLevelObject());
+
+	PlaySceneObject = Cast<APlaySceneObject>(UGameplayStatics::GetActorOfClass(GetWorld(), APlaySceneObject::StaticClass()));
 	LookAt = true;
 	UCapsuleComponent* Capsule = GetCapsuleComponent();
 	Capsule->OnComponentHit.AddDynamic(this, &AMyCharacter::OnHit);
@@ -80,8 +81,6 @@ void AMyCharacter::Tick(float DeltaTime)
 		// 캐릭터 월드로케이션
 		FVector CameraLocation = GetActorLocation();
 		float Angle = FVector::DotProduct(GetActorForwardVector(),(CameraLocation - TargetLocation).GetSafeNormal());
-		UE_LOG(LogMypro, Warning, TEXT("Angle : %f"), Angle);
-		UE_LOG(LogMypro, Warning, TEXT("RADIOUS : %f"), radious);
 		if (Angle > 0)
 		{
 			CameraHead->SetRelativeRotation(FRotator(0, 180, 0));
@@ -90,7 +89,7 @@ void AMyCharacter::Tick(float DeltaTime)
 		{
 			CameraHead->SetRelativeRotation(FRotator(0, 0, 0));
 		}
-		if ( Angle <= radious && Angle < 0)
+		if ( Angle <= radious || Angle >= -radious)
 		{
 			FVector To = CameraTarget->GetActorLocation();     // 타깃월드포지션
 			FVector From = Camera->GetComponentLocation(); // 카메라 월드 위치
@@ -201,6 +200,7 @@ void AMyCharacter::MoveKey(const FInputActionValue& Value)
 				GetMesh()->SetRelativeRotation(FRotator(0, -180.0f, 0));
 			}
 		}
+		
 		//현재 속도(velocity) 벡터를 “안전하게” 정규화해서 방향만 뽑은 단위 벡터 구하는 함수
 		// GetVelocity().GetSafeNormal()  
 		//GetVelocity().GetSafeNormal() 이걸 이용해서 최신상태가 어디로 바로보고 있는지 저장
@@ -268,31 +268,31 @@ void AMyCharacter::BackKey(const FInputActionValue& Value)
 }
 void AMyCharacter::AttackKey(const FInputActionValue& Value)
 {
-	if (AnimInstance&&!IsMoving)
+	if (AnimInstance&&!IsMoving&&!BackMoving)
 		AnimInstance->PlayAttack();
 }
 
 void AMyCharacter::Skill1Key(const FInputActionValue& Value)
 {
-	if (AnimInstance && !IsMoving)
+	if (AnimInstance && !IsMoving && !BackMoving)
 		AnimInstance->PlaySkill(0);
 }
 
 void AMyCharacter::Skill2Key(const FInputActionValue& Value)
 {
-	if (AnimInstance && !IsMoving)
+	if (AnimInstance && !IsMoving && !BackMoving)
 		AnimInstance->PlaySkill(1);
 }
 
 void AMyCharacter::Skill3Key(const FInputActionValue& Value)
 {
-	if (AnimInstance && !IsMoving)
+	if (AnimInstance && !IsMoving && !BackMoving)
 		AnimInstance->PlaySkill(2);
 }
 
 void AMyCharacter::Skill4Key(const FInputActionValue& Value)
 {
-	if (AnimInstance && !IsMoving)
+	if (AnimInstance && !IsMoving && !BackMoving)
 		AnimInstance->PlaySkill(3);
 }
 

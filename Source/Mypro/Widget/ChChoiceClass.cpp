@@ -10,7 +10,6 @@ void UChChoiceClass::NativeConstruct()
 	Character2 = Cast<UButton>(GetWidgetFromName("ch2"));
 	Character3 = Cast<UButton>(GetWidgetFromName("ch3"));
 	back = Cast<UButton>(GetWidgetFromName("backbutton"));
-	Start = Cast<UButton>(GetWidgetFromName("Startbutton"));
 	skill1 = Cast<UButton>(GetWidgetFromName("skill1b"));
 	skill2 = Cast<UButton>(GetWidgetFromName("skill2b"));
 	skill3 = Cast<UButton>(GetWidgetFromName("skill3b"));
@@ -28,7 +27,6 @@ void UChChoiceClass::NativeConstruct()
 	Character1->OnClicked.AddDynamic(this, &UChChoiceClass::Character1Click);
 	Character2->OnClicked.AddDynamic(this, &UChChoiceClass::Character2Click);
 	Character3->OnClicked.AddDynamic(this, &UChChoiceClass::Character3Click);
-	Start->OnClicked.AddDynamic(this, &UChChoiceClass::StartButtonClick);
 	SetDataValue(Characters::Warrior, GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_W());
 }
 
@@ -63,10 +61,7 @@ void UChChoiceClass::Character3Click()
 	SetDataValue(Characters::DarkMagion, GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_D());
 }
 
-void UChChoiceClass::StartButtonClick()
-{
-	GameStart(GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSelectedcharacter());
-}
+
 
 void UChChoiceClass::CharacterButtonChoice(Characters ch)
 {
@@ -99,22 +94,10 @@ void UChChoiceClass::CharacterButtonChoice(Characters ch)
 	
 }
 
-void UChChoiceClass::GameStart(Characters ch)
-{
-	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSelectCharacter(ch);
-	
-	AIntroSceneObject* IntroSceneObject = Cast<AIntroSceneObject>(UGameplayStatics::GetActorOfClass(GetWorld(), AIntroSceneObject::StaticClass()));
-		if (IntroSceneObject)
-			IntroSceneObject->CallthePlayCharacter(ch);
-	
-}
 
 void UChChoiceClass::Backclick()
 {
 	UIntroMainUI* ui = Cast<UIntroMainUI>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetIntroMainUI_widget());
-	FText text = FText::FromString(TEXT("Auora"));
-	SetDataValue(Characters::Warrior, GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_W());
-	Titletext->SetText(text);
 	if (ui)
 	{
 		ui->SetSwitcherIndex(0);

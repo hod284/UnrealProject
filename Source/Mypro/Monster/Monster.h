@@ -29,8 +29,6 @@ protected:
 	TObjectPtr<UBehaviorTree> MonsterBehaviorTree;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CusteomRange")
 	float NoramlAttackRange = 100.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CusteomRange")
-	float SpecialAttackRange = 500.0f;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
@@ -40,7 +38,9 @@ protected:
 	float Stun = 1.0F;
 	int32 MonsterHp;
 	int32 MonsterStun;
+	UBrainComponent* Brain;
 public:	
+	void Start();
 	TObjectPtr<UMonsterAnimInstance> AnimInstance;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser);
 	// IGenericTeamAgentInterface 라는 인터페이스 에서 구현해야할 함수
