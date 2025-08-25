@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Skill3_Actor.generated.h"
+#include "Action4_Monster.generated.h"
 
 UCLASS()
-class MYPRO_API ASkill3_Actor : public AActor
+class MYPRO_API AAction4_Monster : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ASkill3_Actor();
+	AAction4_Monster();
 
 protected:
 	// Called when the game starts or when spawned
