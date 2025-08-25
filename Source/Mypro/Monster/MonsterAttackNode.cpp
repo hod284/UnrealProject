@@ -35,7 +35,7 @@ EBTNodeResult::Type UMonsterAttackNode:: ExecuteTask(UBehaviorTreeComponent& Own
 	{
 		return EBTNodeResult::Failed;
 	}
-	float Distance = Monster->DistanceToTarget(Monster, TargetActor);
+	float Distance = Monster->DistanceToTarget(TargetActor);
 	if (Distance < BlackboardComp->GetValueAsFloat("NoramlAttackRange"))
 	{
 		Random  =FMath::RandRange(0,3);
@@ -95,7 +95,7 @@ void UMonsterAttackNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 	if(BlackboardComp->GetValueAsBool("AttackEnd"))
 	{
 		BlackboardComp->SetValueAsBool("AttackEnd", false);
-		float Distance = Monster->DistanceToTarget(Monster, TargetActor);
+		float Distance = Monster->DistanceToTarget(TargetActor);
 		if (Distance > BlackboardComp->GetValueAsFloat("SpecialAttackRange"))
 		{
 			// 공격이 끝났다면 Task를 종료한다.

@@ -96,7 +96,7 @@ void UMonsterTraceNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		return;
 	}
-	float Distance = Monster->DistanceToTarget(Monster, TargetActor);
+	float Distance = Monster->DistanceToTarget(TargetActor);
 	UE_LOG(LogMypro, Warning, TEXT("Distance : %f"), Distance);
 	UE_LOG(LogMypro, Warning, TEXT("Distance_n : %f"), BlackboardComp->GetValueAsFloat("NoramlAttackRange"));
 	if (Distance <= BlackboardComp->GetValueAsFloat("NoramlAttackRange"))

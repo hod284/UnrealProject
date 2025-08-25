@@ -42,7 +42,7 @@ void UMyPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 void UMyPlayerAnimInstance::PlayAttack()
 {
-	if (!IsValid(AttackUpMontage))
+	if (!IsValid(AttackMontage))
 		return;
 	if (!Montage_IsPlaying(AttackMontage)&& AttackSectionIndex< AttackSectionArray.Num())
 	{
