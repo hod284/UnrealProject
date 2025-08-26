@@ -16,6 +16,7 @@
 
 
 //
+#include "Components/SplineComponent.h"
 #include "UObject/UnrealType.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"

@@ -8,7 +8,11 @@ AAction2_Monster::AAction2_Monster()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	BoxColider = CreateDefaultSubobject<UBoxComponent>(TEXT("BOX"));
+	NiagaraParticle = CreateDefaultSubobject<UNiagaraComponent>(TEXT("PARTICLE"));
+	SetRootComponent(NiagaraParticle);
+	BoxColider->SetupAttachment(NiagaraParticle);
+	BoxColider->SetCollisionProfileName("Monsterskill");
 }
 
 // Called when the game starts or when spawned
@@ -17,7 +21,33 @@ void AAction2_Monster::BeginPlay()
 	Super::BeginPlay();
 	
 }
+void AAction2_Monster::OnHit_Action2_M(UPrimitiveComponent* HitComp, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
+	const FHitResult& Hit)
+{
 
+
+}
+void AAction2_Monster::OnCapsuleBeginOverlap_Action2_M(
+	UPrimitiveComponent* OverlappedComp,
+	AActor* OtherActor,
+	UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex,
+	bool bFromSweep,
+	const FHitResult& SweepResult)
+{
+
+
+}
+void AAction2_Monster::OnCapsuleEndOverlap_Action2_M(
+	UPrimitiveComponent* OverlappedComp,
+	AActor* OtherActor,
+	UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex)
+{
+
+
+}
 // Called every frame
 void AAction2_Monster::Tick(float DeltaTime)
 {

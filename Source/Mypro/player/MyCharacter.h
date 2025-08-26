@@ -66,7 +66,7 @@ protected:
 		AActor* OtherActor,
 		UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex);
-	// 대쉬 끝날때 호출
+	// 백대쉬 끝날때 호출
 	void EndDash();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

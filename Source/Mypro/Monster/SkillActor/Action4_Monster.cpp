@@ -8,7 +8,28 @@ AAction4_Monster::AAction4_Monster()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	Transform = CreateDefaultSubobject<USceneComponent>(TEXT("tr"));
+	BoxColider1 = CreateDefaultSubobject<UCapsuleComponent>(TEXT("BOX1"));
+	NiagaraParticle1 = CreateDefaultSubobject<UNiagaraComponent>(TEXT("PARTICLE1"));
+	BoxColider2 = CreateDefaultSubobject<UCapsuleComponent>(TEXT("BOX2"));
+	NiagaraParticle2 = CreateDefaultSubobject<UNiagaraComponent>(TEXT("PARTICLE2"));
+	BoxColider3 = CreateDefaultSubobject<UCapsuleComponent>(TEXT("BOX3"));
+	NiagaraParticle3 = CreateDefaultSubobject<UNiagaraComponent>(TEXT("PARTICLE3"));
+	BoxColider4 = CreateDefaultSubobject<UCapsuleComponent>(TEXT("BOX4"));
+	NiagaraParticle4 = CreateDefaultSubobject<UNiagaraComponent>(TEXT("PARTICLE4"));
+	SetRootComponent(Transform);
+	NiagaraParticle1->SetupAttachment(Transform);
+	NiagaraParticle2->SetupAttachment(Transform);
+	NiagaraParticle3->SetupAttachment(Transform);
+	NiagaraParticle4->SetupAttachment(Transform);
+	BoxColider1->SetupAttachment(NiagaraParticle1);
+	BoxColider1->SetCollisionProfileName("Monsterskill");
+	BoxColider2->SetupAttachment(NiagaraParticle2);
+	BoxColider2->SetCollisionProfileName("Monsterskill");
+	BoxColider3->SetupAttachment(NiagaraParticle3);
+	BoxColider3->SetCollisionProfileName("Monsterskill");
+	BoxColider4->SetupAttachment(NiagaraParticle4);
+	BoxColider4->SetCollisionProfileName("Monsterskill");
 }
 
 // Called when the game starts or when spawned
@@ -17,7 +38,33 @@ void AAction4_Monster::BeginPlay()
 	Super::BeginPlay();
 	
 }
+void AAction4_Monster::OnHit_Action4_M(UPrimitiveComponent* HitComp, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
+	const FHitResult& Hit)
+{
 
+
+}
+void AAction4_Monster::OnCapsuleBeginOverlap_Action4_M(
+	UPrimitiveComponent* OverlappedComp,
+	AActor* OtherActor,
+	UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex,
+	bool bFromSweep,
+	const FHitResult& SweepResult)
+{
+
+
+}
+void AAction4_Monster::OnCapsuleEndOverlap_Action4_M(
+	UPrimitiveComponent* OverlappedComp,
+	AActor* OtherActor,
+	UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex)
+{
+
+
+}
 // Called every frame
 void AAction4_Monster::Tick(float DeltaTime)
 {

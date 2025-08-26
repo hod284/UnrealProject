@@ -36,6 +36,7 @@ void AMyCharacter::BeginPlay()
 	LookAt = true;
 	UCapsuleComponent* Capsule = GetCapsuleComponent();
 	Capsule->OnComponentHit.AddDynamic(this, &AMyCharacter::OnHit);
+	// 오버랩 인벤트 활성화
 	Capsule->SetGenerateOverlapEvents(true); // 안전하게 켜두기
 	Capsule->OnComponentBeginOverlap.AddDynamic(this, &AMyCharacter::OnCapsuleBeginOverlap);
 	Capsule->OnComponentEndOverlap.AddDynamic(this, &AMyCharacter::OnCapsuleEndOverlap);
@@ -56,7 +57,7 @@ void AMyCharacter::OnCapsuleBeginOverlap(UPrimitiveComponent* Comp, AActor* Othe
 	const FHitResult& Sweep)
 {
 
-	// TODO: 원하는 처리
+
 }
 void AMyCharacter::OnCapsuleEndOverlap(
 	UPrimitiveComponent* OverlappedComp,
@@ -64,7 +65,7 @@ void AMyCharacter::OnCapsuleEndOverlap(
 	UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex)
 {
-	// TODO: 원하는 처리
+
 }
 
 // Called every frame
@@ -75,32 +76,35 @@ void AMyCharacter::Tick(float DeltaTime)
 	if (LookAt)
 	{
 		float radious = FMath::Cos(FMath::DegreesToRadians(45.0f));
-		AActor* CameraTarget = PlaySceneObject->GetMonster(TEXT("Monster_BOSS"));
-		// 몬스터월드 로케이션
-		FVector TargetLocation = CameraTarget->GetActorLocation();
-		// 캐릭터 월드로케이션
-		FVector CameraLocation = GetActorLocation();
-		float Angle = FVector::DotProduct(GetActorForwardVector(),(CameraLocation - TargetLocation).GetSafeNormal());
-		if (Angle > 0)
+		if (PlaySceneObject)
 		{
-			CameraHead->SetRelativeRotation(FRotator(0, 180, 0));
-		}
-		else
-		{
-			CameraHead->SetRelativeRotation(FRotator(0, 0, 0));
-		}
-		if ( Angle <= radious || Angle >= -radious)
-		{
-			FVector To = CameraTarget->GetActorLocation();     // 타깃월드포지션
-			FVector From = Camera->GetComponentLocation(); // 카메라 월드 위치
-			const FRotator Desired = UKismetMathLibrary::FindLookAtRotation(From, To);
-			const FRotator Smoothed = FMath::RInterpTo(Camera->GetComponentRotation(),
-				Desired, DeltaTime, 5 /*예:5~12*/);
-			Camera->SetWorldRotation(Smoothed);
-		}
-		else
-		{
-			Camera->SetRelativeRotation(FRotator(Camera->GetRelativeRotation().Pitch, 0, 0));
+		    AActor* CameraTarget = PlaySceneObject->GetMonster(TEXT("Monster_BOSS"));
+			// 몬스터월드 로케이션
+			FVector TargetLocation = CameraTarget->GetActorLocation();
+			// 캐릭터 월드로케이션
+			FVector CameraLocation = GetActorLocation();
+			float Angle = FVector::DotProduct(GetActorForwardVector(), (CameraLocation - TargetLocation).GetSafeNormal());
+			if (Angle > 0)
+			{
+				CameraHead->SetRelativeRotation(FRotator(0, 180, 0));
+			}
+			else
+			{
+				CameraHead->SetRelativeRotation(FRotator(0, 0, 0));
+			}
+			if (Angle <= radious || Angle >= -radious)
+			{
+				FVector To = CameraTarget->GetActorLocation();     // 타깃월드포지션
+				FVector From = Camera->GetComponentLocation(); // 카메라 월드 위치
+				const FRotator Desired = UKismetMathLibrary::FindLookAtRotation(From, To);
+				const FRotator Smoothed = FMath::RInterpTo(Camera->GetComponentRotation(),
+					Desired, DeltaTime, 5 /*예:5~12*/);
+				Camera->SetWorldRotation(Smoothed);
+			}
+			else
+			{
+				Camera->SetRelativeRotation(FRotator(Camera->GetRelativeRotation().Pitch, 0, 0));
+			}
 		}
 	}
 }

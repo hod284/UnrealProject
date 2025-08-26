@@ -8,7 +8,11 @@ ASkill4_Actor::ASkill4_Actor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	BoxColider = CreateDefaultSubobject<UCapsuleComponent>(TEXT("BOX"));
+	NiagaraParticle = CreateDefaultSubobject<UNiagaraComponent>(TEXT("PARTICLE"));
+	SetRootComponent(NiagaraParticle);
+	BoxColider->SetupAttachment(NiagaraParticle);
+	BoxColider->SetCollisionProfileName("PlayerSkill");
 }
 
 // Called when the game starts or when spawned
@@ -17,7 +21,36 @@ void ASkill4_Actor::BeginPlay()
 	Super::BeginPlay();
 	
 }
+void ASkill4_Actor::OnHit_Skil4(UPrimitiveComponent* HitComp, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
+	const FHitResult& Hit)
+{
 
+
+}
+
+
+void ASkill4_Actor::OnCapsuleBeginOverlap_Skil4(
+	UPrimitiveComponent* OverlappedComp,
+	AActor* OtherActor,
+	UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex,
+	bool bFromSweep,
+	const FHitResult& SweepResult)
+{
+
+
+}
+
+void ASkill4_Actor::OnCapsuleEndOverlap_Skil4(
+	UPrimitiveComponent* OverlappedComp,
+	AActor* OtherActor,
+	UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex)
+{
+
+
+}
 // Called every frame
 void ASkill4_Actor::Tick(float DeltaTime)
 {
