@@ -31,7 +31,7 @@ void ASkill2_Actor::OnHit_Skil2(UPrimitiveComponent* HitComp, AActor* OtherActor
 	const FHitResult& Hit)
 {
 	FString s = OtherActor->GetActorLabel();
-	UE_LOG(LogMypro, Warning, TEXT("%s"), *s);
+	UE_LOG(LogMypro, Warning, TEXT("skil2_hit:%s"), *s);
 
 }
 
@@ -45,7 +45,7 @@ void ASkill2_Actor::OnCapsuleBeginOverlap_Skil2(
 	const FHitResult& SweepResult)
 {
 	FString s = OtherActor->GetActorLabel();
-	UE_LOG(LogMypro, Warning, TEXT("%s"), *s);
+	UE_LOG(LogMypro, Warning, TEXT("skil2_overlap:%s"), *s);
 
 }
 
@@ -56,7 +56,7 @@ void ASkill2_Actor::OnCapsuleEndOverlap_Skil2(
 	int32 OtherBodyIndex)
 {
 	FString s = OtherActor->GetActorLabel();
-	UE_LOG(LogMypro, Warning, TEXT("%s"), *s);
+	UE_LOG(LogMypro, Warning, TEXT("skil2_pverlapend:%s"), *s);
 
 }
 // Called every frame

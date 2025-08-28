@@ -32,7 +32,7 @@ void ASkill1_Actor::OnHit_Skill(UPrimitiveComponent* HitComp, AActor* OtherActor
 	const FHitResult& Hit)
 {
 	FString s = OtherActor->GetActorLabel();
-	UE_LOG(LogMypro, Warning, TEXT("%s"), *s);
+	UE_LOG(LogMypro, Warning, TEXT("skill_hit:%s"), *s);
 
 }
 
@@ -47,7 +47,7 @@ void ASkill1_Actor::OnCapsuleBeginOverlap_Skill(
 {
 
 	FString s = OtherActor->GetActorLabel();
-	UE_LOG(LogMypro, Warning, TEXT("%s"), *s);
+	UE_LOG(LogMypro, Warning, TEXT("skill_overlap:%s"), *s);
 }
 
 void ASkill1_Actor::OnCapsuleEndOverlap_Skill(
@@ -57,7 +57,7 @@ void ASkill1_Actor::OnCapsuleEndOverlap_Skill(
 	int32 OtherBodyIndex)
 {
 	FString s = OtherActor->GetActorLabel();
-	UE_LOG(LogMypro, Warning, TEXT("%s"), *s);
+	UE_LOG(LogMypro, Warning, TEXT("skill_pverlapend:%s"), *s);
 
 }
 
