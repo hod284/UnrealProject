@@ -14,13 +14,33 @@ void ADarkMagition::BeginPlay()
     Info = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_D();
     PlayerHp = Info->HP;
     PlayerMp = Info->MP;
-    AttackDamage = Info->ATK;
+    AttackDamage = 0;
     AttackDamageUp = 0;
 }
 
 void ADarkMagition::NAttack()
 {
- 
+    if (Atn > 2)
+        Atn = 0;
+    float pitch = 0;
+    switch (Atn)
+    {
+    case 0:
+        pitch = 30;
+        break;
+    case 1:
+        pitch = 60;
+        break;
+    case 2:
+        pitch =300;
+        break;
+    }
+    FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 90);
+    FRotator SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw,pitch);
+    AActor* A = GetWorld()->SpawnActor<AActor>(Attack, SpawnLocation, SpawnRotation);
+    ASlashAttack_Magition* S = Cast<ASlashAttack_Magition>(A);
+    S->SetAttAckDamage(Info->ATK);
+    Atn += 1;
 }
 
 void ADarkMagition::Skill1()
@@ -41,6 +61,7 @@ void ADarkMagition::Skill2()
     AActor* A = GetWorld()->SpawnActor<AActor>(Sk2, SpawnLocation, SpawnRotation);
     ASkill2_Magition* S = Cast<ASkill2_Magition>(A);
     S->SetAttAckDamage(Info->Skill2_ATK);
+    S->SetTagetLocation(TargetLocation);
 }
 
 void ADarkMagition::Skill3()

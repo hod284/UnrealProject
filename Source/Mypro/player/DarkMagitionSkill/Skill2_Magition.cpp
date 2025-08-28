@@ -18,7 +18,7 @@ ASkill2_Magition::ASkill2_Magition()
 	Movement->InitialSpeed = 1000.0f;
 	Movement->ProjectileGravityScale = 0.0f;
 	Movement->OnProjectileStop.AddDynamic(this,&ASkill2_Magition::ProjectileStop);
-	BoxColider->SetCollisionProfileName("PlayerSkill");
+	BoxColider->SetCollisionProfileName("PlayerObject");
 }
 void ASkill2_Magition::OnHit_Skil2_Magition(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,

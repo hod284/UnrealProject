@@ -7,6 +7,7 @@
 #include "DarkMagitionSkill/Skill2_Magition.h"
 #include "DarkMagitionSkill/Skill3_Magition.h"
 #include "DarkMagitionSkill/Skill4_Magition.h"
+#include "DarkMagitionSkill/SlashAttack_Magition.h"
 #include "DarkMagition.generated.h"
 
 /**
@@ -26,7 +27,11 @@ protected:
 	TSubclassOf<ASkill3_Magition> Sk3;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
 	TSubclassOf<ASkill4_Magition> Sk4;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
+	TSubclassOf<ASlashAttack_Magition > Attack;
 	virtual void BeginPlay() override;
+	int32 Atn = 0;
+     
 public:
 
 	ADarkMagition();

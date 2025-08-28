@@ -50,7 +50,6 @@ void UMyPlayerAnimInstance::PlayAttack()
 			// 몽타주를 재생시킨다.
 			Montage_Play(AttackUpMontage);
 			Montage_JumpToSection(AttackSectionArray[AttackSectionIndex], AttackUpMontage);
-			UE_LOG(LogMypro, Warning, TEXT("%d"), AttackSectionIndex);
 			AttackSectionIndex += 1;
 		}
 	}
@@ -63,7 +62,6 @@ void UMyPlayerAnimInstance::PlayAttack()
 			// 몽타주를 재생시킨다.
 			Montage_Play(AttackMontage);
 			Montage_JumpToSection(AttackSectionArray[AttackSectionIndex], AttackMontage);
-			UE_LOG(LogMypro, Warning, TEXT("%d"), AttackSectionIndex);
 			AttackSectionIndex += 1;
 		}
 	}
@@ -110,6 +108,9 @@ void UMyPlayerAnimInstance::Attackend(UAnimMontage* Montage, bool Interrupted)
 
 void UMyPlayerAnimInstance::AnimNotify_Attack()
 {
+	AMyCharacter* ch = Cast<AMyCharacter>(TryGetPawnOwner());
+	if (IsValid(ch))
+		ch->NAttack();
 }
 
 

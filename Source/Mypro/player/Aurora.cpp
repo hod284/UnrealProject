@@ -37,7 +37,7 @@ void AAurora::Skill2()
     FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 0);
     FRotator SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
     AActor* A = GetWorld()->SpawnActor<AActor>(Sk2, SpawnLocation, SpawnRotation);
-    ASkill1_Actor* S = Cast<ASkill1_Actor>(A);
+    ASkill2_Actor* S = Cast<ASkill2_Actor>(A);
     S->SetAttAckDamage(Info->Skill2_ATK);
 }
 
@@ -55,6 +55,6 @@ void AAurora::Skill4()
     FVector SpawnLocation = FVector(TargetLocation.X, TargetLocation.Y, 0);
     FRotator SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
     AActor* A = GetWorld()->SpawnActor<AActor>(Sk4, SpawnLocation, SpawnRotation);
-    ASkill1_Actor* S = Cast<ASkill1_Actor>(A);
+    ASkill4_Actor* S = Cast<ASkill4_Actor>(A);
     S->SetAttAckDamage(Info->Skill4_ATK);
 }
