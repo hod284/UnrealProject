@@ -37,7 +37,13 @@ void ADarkMagition::NAttack()
     }
     FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 90);
     FRotator SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw,pitch);
-    GetWorld()->SpawnActor<AActor>(Attack, SpawnLocation, SpawnRotation);
+    FVector  Loc = SpawnLocation;
+    FRotator Rot = SpawnRotation;
+    FVector  Scl = FVector(1, 1, 1);
+    FTransform Xform(Rot, Loc, Scl);
+    ASlashAttack_Magition* A = GetWorld()->SpawnActorDeferred<ASlashAttack_Magition>(Attack, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+    A->SetAttAckDamage(Info->Skill1_ATK);
+    UGameplayStatics::FinishSpawningActor(A, Xform);
     Atn += 1;
 }
 
@@ -46,20 +52,28 @@ void ADarkMagition::Skill1()
     Skill1coolTime(0.5f);
     FVector SpawnLocation = FVector(TargetLocation.X, TargetLocation.Y, 0);
     FRotator SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
-    AActor* A = GetWorld()->SpawnActor<AActor>(Sk1, SpawnLocation, SpawnRotation);
-    ASkill1_Magition* S = Cast<ASkill1_Magition>(A);
-    S->SetAttAckDamage(Info->Skill1_ATK);
+    FVector  Loc = SpawnLocation;
+    FRotator Rot = SpawnRotation;
+    FVector  Scl = FVector(1, 1, 1);
+    FTransform Xform(Rot, Loc, Scl);
+    ASkill1_Magition* A = GetWorld()->SpawnActorDeferred<ASkill1_Magition>(Sk1, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+    A->SetAttAckDamage(Info->Skill1_ATK);
+    UGameplayStatics::FinishSpawningActor(A, Xform);
 }
 
 void ADarkMagition::Skill2()
 {
     Skill2coolTime(0.5f);
-    FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 0);
+    FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 120);
     FRotator SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
-    AActor* A = GetWorld()->SpawnActor<AActor>(Sk2, SpawnLocation, SpawnRotation);
-    ASkill2_Magition* S = Cast<ASkill2_Magition>(A);
-    S->SetAttAckDamage(Info->Skill2_ATK);
-    S->SetTagetLocation(TargetLocation);
+    FVector  Loc = SpawnLocation;
+    FRotator Rot = SpawnRotation;
+    FVector  Scl = FVector(1, 1, 1);
+    FTransform Xform(Rot, Loc, Scl);
+    ASkill2_Magition* A = GetWorld()->SpawnActorDeferred<ASkill2_Magition>(Sk2, Xform, this,GetInstigator(),ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+    A->SetTagetTransform(TargetTransform);
+    A->SetAttAckDamage(Info->Skill2_ATK);
+    UGameplayStatics::FinishSpawningActor(A, Xform);
 }
 
 void ADarkMagition::Skill3()
@@ -67,9 +81,13 @@ void ADarkMagition::Skill3()
     Skill3coolTime(0.5f);
     FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 80);
     FRotator SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
-    AActor* A = GetWorld()->SpawnActor<AActor>(Sk3, SpawnLocation, SpawnRotation);
-    ASkill3_Magition* S = Cast<ASkill3_Magition>(A);
-    S->SetAttAckDamage(Info->Skill3_ATK);
+    FVector  Loc = SpawnLocation;
+    FRotator Rot = SpawnRotation;
+    FVector  Scl = FVector(1, 1, 1);
+    FTransform Xform(Rot, Loc, Scl);
+    ASkill3_Magition* A = GetWorld()->SpawnActorDeferred<ASkill3_Magition>(Sk3, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+    A->SetAttAckDamage(Info->Skill3_ATK);
+    UGameplayStatics::FinishSpawningActor(A, Xform);
 }
 
 void ADarkMagition::Skill4()
@@ -77,7 +95,11 @@ void ADarkMagition::Skill4()
     Skill4coolTime(0.5f);
     FVector SpawnLocation = FVector(TargetLocation.X, TargetLocation.Y, 0);
     FRotator SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
-    AActor* A = GetWorld()->SpawnActor<AActor>(Sk4, SpawnLocation, SpawnRotation);
-    ASkill4_Magition* S = Cast<ASkill4_Magition>(A);
-    S->SetAttAckDamage(Info->Skill4_ATK);
+    FVector  Loc = SpawnLocation;
+    FRotator Rot = SpawnRotation;
+    FVector  Scl = FVector(1, 1, 1);
+    FTransform Xform(Rot, Loc, Scl);
+    ASkill4_Magition* A = GetWorld()->SpawnActorDeferred<ASkill4_Magition>(Sk4, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+    A->SetAttAckDamage(Info->Skill4_ATK);
+    UGameplayStatics::FinishSpawningActor(A, Xform);
 }

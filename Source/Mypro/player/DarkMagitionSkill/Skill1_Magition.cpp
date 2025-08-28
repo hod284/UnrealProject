@@ -2,7 +2,6 @@
 
 
 #include "Skill1_Magition.h"
-#include "../../singleton/DataManager.h"
 
 // Sets default values
 ASkill1_Magition::ASkill1_Magition()
@@ -25,8 +24,6 @@ ASkill1_Magition::ASkill1_Magition()
 void ASkill1_Magition::BeginPlay()
 {
 	Super::BeginPlay();
-	const FCharacterInfo* Infog = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_D();
-	AttAckDamage = Infog->Skill1_ATK;
 }
 void ASkill1_Magition::OnHit_Skil1_Magition(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,

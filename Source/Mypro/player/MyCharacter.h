@@ -57,6 +57,7 @@ protected:
 	float Skill4cool = 1.0F;
 	float Skill4Speed = 0.0F;
 	FVector TargetLocation;
+	USceneComponent* TargetTransform;
 	float AttackDamage;
 	float AttackDamageUp;
 	// Ãæµ¹

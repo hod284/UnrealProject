@@ -84,7 +84,6 @@ void UMyPlayerAnimInstance::PlaySkill(int32 index)
 		return;
 	if (!Montage_IsPlaying(SkillMontage))
 	{
-		UE_LOG(LogMypro, Warning, TEXT("%d"),index);
 		// 몽타주를 재생시킨다.
 		Montage_Play(SkillMontage,1.0f);
 		Montage_JumpToSection(SkillSectionArray[index], SkillMontage);

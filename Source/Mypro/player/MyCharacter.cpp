@@ -131,6 +131,7 @@ void AMyCharacter::Tick(float DeltaTime)
 		if (PlaySceneObject)
 		{
 		    AActor* CameraTarget = PlaySceneObject->GetMonster(TEXT("Monster_BOSS"));
+			TargetTransform = CameraTarget->GetRootComponent();
 			if (CameraTarget != NULL)
 			{
 				// 몬스터월드 로케이션

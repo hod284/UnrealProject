@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Skill3_Magition.h"
-#include "../../singleton/DataManager.h"
 // Sets default values
 ASkill3_Magition::ASkill3_Magition()
 {
@@ -23,8 +22,6 @@ ASkill3_Magition::ASkill3_Magition()
 void ASkill3_Magition::BeginPlay()
 {
 	Super::BeginPlay();
-	const FCharacterInfo* Infog = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_D();
-	AttAckDamage = Infog->Skill3_ATK;
 }
 
 // Called every frame
