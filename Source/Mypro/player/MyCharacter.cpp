@@ -11,9 +11,11 @@ AMyCharacter::AMyCharacter()
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	CameraHead = CreateDefaultSubobject<USceneComponent>(TEXT("CameraHead"));
+	Niagara = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Particle"));
 	CameraHead->SetupAttachment(RootComponent);
 	SpringArm->SetupAttachment(CameraHead);
 	Camera->SetupAttachment(SpringArm);
+	Niagara->SetupAttachment(GetMesh());
 	GetCapsuleComponent()->SetCollisionProfileName("player");
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	SetGenericTeamId(FGenericTeamId(TeamPlayer));
@@ -33,7 +35,6 @@ void AMyCharacter::BeginPlay()
 	}
 
 	PlaySceneObject = Cast<APlaySceneObject>(UGameplayStatics::GetActorOfClass(GetWorld(), APlaySceneObject::StaticClass()));
-	LookAt = true;
 	UCapsuleComponent* Capsule = GetCapsuleComponent();
 	Capsule->OnComponentHit.AddDynamic(this, &AMyCharacter::OnHit);
 	// 오버랩 인벤트 활성화
@@ -45,6 +46,7 @@ void AMyCharacter::BeginPlay()
 	SavedBrakingFriction = Move->BrakingFriction;
 	SavedBrakingDecel = Move->BrakingDecelerationWalking;
 	ui = Cast<UPlayMainUI>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPlayMainUI_widget());
+	Niagara->SetVisibility(false);
 }
 void AMyCharacter::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
@@ -73,37 +75,90 @@ void AMyCharacter::OnCapsuleEndOverlap(
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (ui)
+	{
+		if (!Canskill1)
+		{
+			Skill1cool -= DeltaTime * Skill1Speed;
+			ui->SetPercent1(Skill1cool);
+		}
+		if (!Canskill2)
+		{
+			Skill2cool -= DeltaTime * Skill2Speed;
+			ui->SetPercent2(Skill2cool);
+		}
+		if (!Canskill3)
+		{
+			Skill3cool -= DeltaTime * Skill3Speed;
+			ui->SetPercent3(Skill3cool);
+		}
+		if (!Canskill4)
+		{
+			Skill4cool -= DeltaTime * Skill4Speed;
+			ui->SetPercent4(Skill3cool);
+		}
+		if (Skill1cool < 0.0f)
+		{
+			Skill1cool = 1.0f;
+			Canskill1 = true;
+			ui->SetPercent1(1.0f);
+		}
+		if (Skill2cool < 0.0f)
+		{
+			Skill2cool = 1.0f;
+			Canskill2 = true;
+			ui->SetPercent2(1.0f);
+		}
+		if (Skill3cool < 0.0f)
+		{
+			Skill3cool = 1.0f;
+			Canskill3 = true;
+			ui->SetPercent3(1.0f);
+			GetMesh()->SetOverlayMaterial(nullptr);
+			AttackDamage -= AttackDamageUp;
+			Niagara->SetVisibility(false);
+		}
+		if (Skill4cool < 0.0f)
+		{
+			Skill4cool = 1.0f;
+			Canskill4 = true;
+			ui->SetPercent4(1.0f);
+		}
+	}
 	if (LookAt)
 	{
 		float radious = FMath::Cos(FMath::DegreesToRadians(45.0f));
 		if (PlaySceneObject)
 		{
 		    AActor* CameraTarget = PlaySceneObject->GetMonster(TEXT("Monster_BOSS"));
-			// 몬스터월드 로케이션
-			TargetLocation = CameraTarget->GetActorLocation();
-			// 캐릭터 월드로케이션
-			FVector CameraLocation = GetActorLocation();
-			float Angle = FVector::DotProduct(GetActorForwardVector(), (CameraLocation - TargetLocation).GetSafeNormal());
-			if (Angle > 0)
+			if (CameraTarget != NULL)
 			{
-				CameraHead->SetRelativeRotation(FRotator(0, 180, 0));
-			}
-			else
-			{
-				CameraHead->SetRelativeRotation(FRotator(0, 0, 0));
-			}
-			if (Angle <= radious || Angle >= -radious)
-			{
-				FVector To = CameraTarget->GetActorLocation();     // 타깃월드포지션
-				FVector From = Camera->GetComponentLocation(); // 카메라 월드 위치
-				const FRotator Desired = UKismetMathLibrary::FindLookAtRotation(From, To);
-				const FRotator Smoothed = FMath::RInterpTo(Camera->GetComponentRotation(),
-					Desired, DeltaTime, 5 /*예:5~12*/);
-				Camera->SetWorldRotation(Smoothed);
-			}
-			else
-			{
-				Camera->SetRelativeRotation(FRotator(Camera->GetRelativeRotation().Pitch, 0, 0));
+				// 몬스터월드 로케이션
+				TargetLocation = CameraTarget->GetActorLocation();
+				// 캐릭터 월드로케이션
+				FVector CameraLocation = GetActorLocation();
+				float Angle = FVector::DotProduct(GetActorForwardVector(), (CameraLocation - TargetLocation).GetSafeNormal());
+				if (Angle > 0)
+				{
+					CameraHead->SetRelativeRotation(FRotator(0, 180, 0));
+				}
+				else
+				{
+					CameraHead->SetRelativeRotation(FRotator(0, 0, 0));
+				}
+				if (Angle <= radious || Angle >= -radious)
+				{
+					FVector To = CameraTarget->GetActorLocation();     // 타깃월드포지션
+					FVector From = Camera->GetComponentLocation(); // 카메라 월드 위치
+					const FRotator Desired = UKismetMathLibrary::FindLookAtRotation(From, To);
+					const FRotator Smoothed = FMath::RInterpTo(Camera->GetComponentRotation(),
+						Desired, DeltaTime, 5 /*예:5~12*/);
+					Camera->SetWorldRotation(Smoothed);
+				}
+				else
+				{
+					Camera->SetRelativeRotation(FRotator(Camera->GetRelativeRotation().Pitch, 0, 0));
+				}
 			}
 		}
 	}
@@ -302,79 +357,26 @@ void AMyCharacter::Skill4Key(const FInputActionValue& Value)
 void AMyCharacter::Skill1coolTime(float speed)
 {
 	Canskill1 = false;
-	Async(EAsyncExecution::ThreadPool, [this, speed]()
-	{
-			float cool = 1.0f;
-			while (cool > 0.0f)
-			{
-				cool -= 0.01 * speed;
-				FPlatformProcess::Sleep(0.01f);
-				AsyncTask(ENamedThreads::GameThread, [this,cool]()
-				{
-						UE_LOG(LogMypro, Warning, TEXT("%f"), cool);
-						if (ui)
-							ui->SetPercent1(cool);
-				});
-			}
-		    Canskill1 = true;
-	});
+	Skill1cool = 1.0F;
+	Skill1Speed = speed;
 }
 void AMyCharacter::Skill2coolTime(float speed)
 {
 	Canskill2 = false;
-	Async(EAsyncExecution::ThreadPool, [this, speed]()
-		{
-			float cool = 1.0f;
-			while (cool > 0.0f)
-			{
-				cool -=0.01 * speed;
-				FPlatformProcess::Sleep(0.01f);
-				AsyncTask(ENamedThreads::GameThread, [this, cool]()
-				{
-						if (ui)
-							ui->SetPercent2(cool);
-				});
-			}
-			Canskill2 = true;
-		});
+	Skill2cool = 1.0F;
+	Skill2Speed = speed;
 }
 void AMyCharacter::Skill3coolTime(float speed)
 {
 	Canskill3 = false;
-	Async(EAsyncExecution::ThreadPool, [this, speed]()
-		{
-			float cool = 1.0f;
-			while (cool > 0.0f)
-			{
-				cool -= 0.01 * speed;
-				FPlatformProcess::Sleep(0.01f);
-				AsyncTask(ENamedThreads::GameThread, [this, cool]()
-				{
-						if (ui)
-							ui->SetPercent3(cool);
-				});
-			}
-			Canskill3 = true;
-		});
+	Skill3cool = 1.0F;
+	Skill3Speed = speed;
 }
 void AMyCharacter::Skill4coolTime(float speed)
 {
 	Canskill4 = false;
-	Async(EAsyncExecution::ThreadPool, [this,speed]()
-	{
-			float cool = 1.0f;
-			while (cool > 0.0f)
-			{
-				cool -= 0.01 * speed;
-				FPlatformProcess::Sleep(0.01f);
-				AsyncTask(ENamedThreads::GameThread, [this, cool]()
-					{
-						if (ui)
-							ui->SetPercent4(cool);
-					});
-			}
-			Canskill4 = true;
-	});
+	Skill4cool = 1.0F;
+	Skill4Speed = speed;
 }
 
 

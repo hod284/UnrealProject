@@ -22,6 +22,8 @@ protected:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TObjectPtr<UCameraComponent> Camera;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UNiagaraComponent> Niagara;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<USpringArmComponent> SpringArm;
 	TObjectPtr<UMyPlayerAnimInstance> AnimInstance;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -30,7 +32,7 @@ protected:
 	FVector CurrentVelocity;
 	bool BackMoving = false;// 백기능
 	bool IsMoving = false;// 이동중인지 아닌지
-	bool LookAt = false;// 카메라 바라보기
+	bool LookAt = true;// 카메라 바라보기
 	FGenericTeamId	TeamID;
 	float HP = 1.0F;
 	float MP = 1.0F;
@@ -43,10 +45,20 @@ protected:
 	float SavedBrakingDecel = 2048.f;
 	UPlayMainUI* ui;
 	bool Canskill1 = true;
+	float Skill1cool = 1.0F;
+	float Skill1Speed = 0.0F;
 	bool Canskill2 =true;
+	float Skill2cool = 1.0F;
+	float Skill2Speed = 0.0F;
 	bool Canskill3 =true;
+	float Skill3cool = 1.0F;
+	float Skill3Speed = 0.0F;
 	bool Canskill4 =true;
+	float Skill4cool = 1.0F;
+	float Skill4Speed = 0.0F;
 	FVector TargetLocation;
+	float AttackDamage;
+	float AttackDamageUp;
 	// 충돌
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
@@ -112,13 +124,9 @@ public:
 	{
 		BackMoving = moving;
 	}
-	void SetHP(float NewHP)
+	bool GetCanskill3()
 	{
-		HP = NewHP;
-	}
-	void SetMP(float NewMP)
-	{
-		MP = NewMP;
+		return Canskill3;
 	}
 	float GetHP() const
 	{

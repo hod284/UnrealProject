@@ -28,14 +28,6 @@ void UPlayMainUI::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	Skill2-> SetTIme(Percent2);
 	Skill3->SetTIme(Percent3); 
 	Skill4 -> SetTIme(Percent4);
-	if (Percent1 < 0.0)
-		Percent1 = 1.0f;
-	if (Percent2 < 0.0)
-		Percent2 = 1.0f;
-	if (Percent3 < 0.0)
-		Percent3 = 1.0f;
-	if (Percent4 < 0.0)
-		Percent4 = 1.0f;
 }
 void UPlayMainUI::SetSkill1Inite(FString Path)
 {

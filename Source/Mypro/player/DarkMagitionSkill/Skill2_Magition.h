@@ -24,6 +24,8 @@ protected:
 	TObjectPtr<UProjectileMovementComponent> Movement;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float AttAckDamage;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector TargetLocation;
 	// Ãæµ¹
 	UFUNCTION()
 	void OnHit_Skil2_Magition(UPrimitiveComponent* HitComp, AActor* OtherActor,
@@ -59,5 +61,9 @@ public:
 	void SetAttAckDamage(float da)
 	{
 		AttAckDamage = da;
+	}
+	void SetTagetLocation(FVector ta)
+	{
+		TargetLocation = ta;
 	}
 };

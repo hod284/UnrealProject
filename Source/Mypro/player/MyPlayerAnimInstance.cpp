@@ -42,15 +42,30 @@ void UMyPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 void UMyPlayerAnimInstance::PlayAttack()
 {
-	if (!IsValid(AttackMontage))
-		return;
-	if (!Montage_IsPlaying(AttackMontage)&& AttackSectionIndex< AttackSectionArray.Num())
+	AMyCharacter* PlayerCharacter =	Cast<AMyCharacter>(TryGetPawnOwner());
+	if (!PlayerCharacter->GetCanskill3() && IsValid(AttackUpMontage))
 	{
-		// 몽타주를 재생시킨다.
-		Montage_Play(AttackMontage);
-		Montage_JumpToSection(AttackSectionArray[AttackSectionIndex], AttackMontage);
-		UE_LOG(LogMypro, Warning, TEXT("%d"), AttackSectionIndex);
-		AttackSectionIndex += 1;
+		if (!Montage_IsPlaying(AttackUpMontage) && AttackSectionIndex < AttackSectionArray.Num())
+		{
+			// 몽타주를 재생시킨다.
+			Montage_Play(AttackUpMontage);
+			Montage_JumpToSection(AttackSectionArray[AttackSectionIndex], AttackUpMontage);
+			UE_LOG(LogMypro, Warning, TEXT("%d"), AttackSectionIndex);
+			AttackSectionIndex += 1;
+		}
+	}
+	else
+	{
+		if (!IsValid(AttackMontage))
+			return;
+		if (!Montage_IsPlaying(AttackMontage) && AttackSectionIndex < AttackSectionArray.Num())
+		{
+			// 몽타주를 재생시킨다.
+			Montage_Play(AttackMontage);
+			Montage_JumpToSection(AttackSectionArray[AttackSectionIndex], AttackMontage);
+			UE_LOG(LogMypro, Warning, TEXT("%d"), AttackSectionIndex);
+			AttackSectionIndex += 1;
+		}
 	}
 }
 
@@ -85,6 +100,11 @@ void UMyPlayerAnimInstance::Attackend(UAnimMontage* Montage, bool Interrupted)
 	{
 		if(!Interrupted)
 		AttackSectionIndex = 0;
+	}
+	if (AttackUpMontage == Montage)
+	{
+		if (!Interrupted)
+			AttackSectionIndex = 0;
 	}
 }
 

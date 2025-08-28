@@ -13,6 +13,11 @@ ASlashAttack_Magition::ASlashAttack_Magition()
 	SetRootComponent(NiagaraParticle);
 	BoxColider->SetupAttachment(NiagaraParticle);
 	BoxColider->SetCollisionProfileName("PlayerSkill");
+	BoxColider->OnComponentHit.AddDynamic(this, &ASlashAttack_Magition::OnHit_Slash_Magition);
+	// 오버랩 인벤트 활성화
+	BoxColider->SetGenerateOverlapEvents(true); // 안전하게 켜두기
+	BoxColider->OnComponentBeginOverlap.AddDynamic(this, &ASlashAttack_Magition::OnCapsuleBeginOverlap_Slash_Magition);
+	BoxColider->OnComponentEndOverlap.AddDynamic(this, &ASlashAttack_Magition::OnCapsuleEndOverlap_Slash_Magition);
 }
 
 // Called when the game starts or when spawned

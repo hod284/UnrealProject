@@ -24,7 +24,9 @@ void ASkill2_Magition::OnHit_Skil2_Magition(UPrimitiveComponent* HitComp, AActor
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
 	const FHitResult& Hit)
 {
-
+	FString s = OtherActor->GetActorLabel();
+	UE_LOG(LogMypro, Warning, TEXT("skill2_hit:%s"), *s);
+	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
 
 }
 void ASkill2_Magition::OnCapsuleBeginOverlap_Skil2_Magition(
@@ -35,7 +37,9 @@ void ASkill2_Magition::OnCapsuleBeginOverlap_Skil2_Magition(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
-
+	FString s = OtherActor->GetActorLabel();
+	UE_LOG(LogMypro, Warning, TEXT("skil2_overlap:%s"), *s);
+	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
 
 }
 void ASkill2_Magition::OnCapsuleEndOverlap_Skil2_Magition(
@@ -44,7 +48,9 @@ void ASkill2_Magition::OnCapsuleEndOverlap_Skil2_Magition(
 	UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex)
 {
-
+	FString s = OtherActor->GetActorLabel();
+	UE_LOG(LogMypro, Warning, TEXT("skil2_overlap:%s"), *s);
+	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
 
 }
 

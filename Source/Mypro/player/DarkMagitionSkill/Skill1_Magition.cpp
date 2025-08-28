@@ -7,12 +7,17 @@
 ASkill1_Magition::ASkill1_Magition()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	BoxColider = CreateDefaultSubobject<UBoxComponent>(TEXT("BOX"));
 	NiagaraParticle = CreateDefaultSubobject<UNiagaraComponent>(TEXT("PARTICLE"));
 	SetRootComponent(NiagaraParticle);
 	BoxColider->SetupAttachment(NiagaraParticle);
 	BoxColider->SetCollisionProfileName("PlayerSkill");
+	BoxColider->OnComponentHit.AddDynamic(this, &ASkill1_Magition::OnHit_Skil1_Magition);
+	// 오버랩 인벤트 활성화
+	BoxColider->SetGenerateOverlapEvents(true); // 안전하게 켜두기
+	BoxColider->OnComponentBeginOverlap.AddDynamic(this, &ASkill1_Magition::OnCapsuleBeginOverlap_Skil1_Magition);
+	BoxColider->OnComponentEndOverlap.AddDynamic(this, &ASkill1_Magition::OnCapsuleEndOverlap_Skil1_Magition);
 }
 
 // Called when the game starts or when spawned
@@ -25,7 +30,9 @@ void ASkill1_Magition::OnHit_Skil1_Magition(UPrimitiveComponent* HitComp, AActor
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
 	const FHitResult& Hit)
 {
-
+	FString s = OtherActor->GetActorLabel();
+	UE_LOG(LogMypro, Warning, TEXT("skill_hit:%s"), *s);
+	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
 
 }
 void ASkill1_Magition::OnCapsuleBeginOverlap_Skil1_Magition(
@@ -36,7 +43,9 @@ void ASkill1_Magition::OnCapsuleBeginOverlap_Skil1_Magition(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
-
+	FString s = OtherActor->GetActorLabel();
+	UE_LOG(LogMypro, Warning, TEXT("skil1_overlap:%s"), *s);
+	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
 
 }
 void ASkill1_Magition::OnCapsuleEndOverlap_Skil1_Magition(
@@ -45,6 +54,9 @@ void ASkill1_Magition::OnCapsuleEndOverlap_Skil1_Magition(
 	UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex)
 {
+	FString s = OtherActor->GetActorLabel();
+	UE_LOG(LogMypro, Warning, TEXT("skil1_pverlapend:%s"), *s);
+	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
 
 
 }

@@ -7,7 +7,7 @@
 ASkill1_Actor::ASkill1_Actor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	BoxColider = CreateDefaultSubobject<UBoxComponent>(TEXT("BOX"));
 	NiagaraParticle = CreateDefaultSubobject<UNiagaraComponent>(TEXT("PARTICLE"));
 	SetRootComponent(NiagaraParticle);
@@ -33,6 +33,7 @@ void ASkill1_Actor::OnHit_Skill(UPrimitiveComponent* HitComp, AActor* OtherActor
 {
 	FString s = OtherActor->GetActorLabel();
 	UE_LOG(LogMypro, Warning, TEXT("skill_hit:%s"), *s);
+	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
 
 }
 
@@ -48,6 +49,7 @@ void ASkill1_Actor::OnCapsuleBeginOverlap_Skill(
 
 	FString s = OtherActor->GetActorLabel();
 	UE_LOG(LogMypro, Warning, TEXT("skill_overlap:%s"), *s);
+	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
 }
 
 void ASkill1_Actor::OnCapsuleEndOverlap_Skill(
@@ -58,6 +60,7 @@ void ASkill1_Actor::OnCapsuleEndOverlap_Skill(
 {
 	FString s = OtherActor->GetActorLabel();
 	UE_LOG(LogMypro, Warning, TEXT("skill_pverlapend:%s"), *s);
+	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
 
 }
 
