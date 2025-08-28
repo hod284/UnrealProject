@@ -135,31 +135,31 @@ void AMyCharacter::Tick(float DeltaTime)
 			{
 				// 몬스터월드 로케이션
 				TargetLocation = CameraTarget->GetActorLocation();
-				// 캐릭터 월드로케이션
-				FVector CameraLocation = GetActorLocation();
-				float Angle = FVector::DotProduct(GetActorForwardVector(), (CameraLocation - TargetLocation).GetSafeNormal());
-				if (Angle > 0)
-				{
-					CameraHead->SetRelativeRotation(FRotator(0, 180, 0));
-				}
-				else
-				{
-					CameraHead->SetRelativeRotation(FRotator(0, 0, 0));
-				}
-				if (Angle <= radious || Angle >= -radious)
-				{
-					FVector To = CameraTarget->GetActorLocation();     // 타깃월드포지션
-					FVector From = Camera->GetComponentLocation(); // 카메라 월드 위치
-					const FRotator Desired = UKismetMathLibrary::FindLookAtRotation(From, To);
-					const FRotator Smoothed = FMath::RInterpTo(Camera->GetComponentRotation(),
-						Desired, DeltaTime, 5 /*예:5~12*/);
-					Camera->SetWorldRotation(Smoothed);
-				}
-				else
-				{
-					Camera->SetRelativeRotation(FRotator(Camera->GetRelativeRotation().Pitch, 0, 0));
-				}
 			}
+				// 캐릭터 월드로케이션
+			FVector CameraLocation = GetActorLocation();
+			float Angle = FVector::DotProduct(GetActorForwardVector(), (CameraLocation - TargetLocation).GetSafeNormal());
+			if (Angle > 0)
+			{
+				CameraHead->SetRelativeRotation(FRotator(0, 180, 0));
+			}
+			else
+			{
+				CameraHead->SetRelativeRotation(FRotator(0, 0, 0));
+			}
+			if (Angle <= radious || Angle >= -radious)
+			{
+				FVector To = CameraTarget->GetActorLocation();     // 타깃월드포지션
+				FVector From = Camera->GetComponentLocation(); // 카메라 월드 위치
+				const FRotator Desired = UKismetMathLibrary::FindLookAtRotation(From, To);
+				const FRotator Smoothed = FMath::RInterpTo(Camera->GetComponentRotation(),
+					Desired, DeltaTime, 5 /*예:5~12*/);
+				Camera->SetWorldRotation(Smoothed);
+			}
+			else
+			{
+				Camera->SetRelativeRotation(FRotator(Camera->GetRelativeRotation().Pitch, 0, 0));
+			}	
 		}
 	}
 }

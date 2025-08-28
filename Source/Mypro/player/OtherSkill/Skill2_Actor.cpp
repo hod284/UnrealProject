@@ -2,7 +2,8 @@
 
 
 #include "Skill2_Actor.h"
-
+#include "../../singleton/DataManager.h"
+#include "../../singleton/GameManager.h"
 // Sets default values
 ASkill2_Actor::ASkill2_Actor()
 {
@@ -24,6 +25,17 @@ ASkill2_Actor::ASkill2_Actor()
 void ASkill2_Actor::BeginPlay()
 {
 	Super::BeginPlay();
+	const FCharacterInfo* Infog = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_G();
+	const FCharacterInfo* Infow = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_W();
+	switch (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSelectedcharacter())
+	{
+	case Characters::Warrior:
+		AttAckDamage = Infow->Skill2_ATK;
+		break;
+	case Characters::Guiden:
+		AttAckDamage = Infog->Skill2_ATK;
+		break;
+	}
 	
 }
 void ASkill2_Actor::OnHit_Skil2(UPrimitiveComponent* HitComp, AActor* OtherActor,

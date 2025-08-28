@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Skill4_Actor.h"
-
+#include "../../singleton/DataManager.h"
+#include "../../singleton/GameManager.h"
 // Sets default values
 ASkill4_Actor::ASkill4_Actor()
 {
@@ -24,6 +24,17 @@ ASkill4_Actor::ASkill4_Actor()
 void ASkill4_Actor::BeginPlay()
 {
 	Super::BeginPlay();
+	const FCharacterInfo* Infow = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_W();
+	const FCharacterInfo* Infog = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_G();
+	switch (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSelectedcharacter())
+	{
+	case Characters::Warrior:
+		AttAckDamage = Infow->Skill4_ATK;
+		break;
+	case Characters::Guiden:
+		AttAckDamage = Infog->Skill4_ATK;
+		break;
+	}
 	
 }
 void ASkill4_Actor::OnHit_Skil4(UPrimitiveComponent* HitComp, AActor* OtherActor,

@@ -1,8 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "SlashAttack_Magition.h"
 
+#include "SlashAttack_Magition.h"
+#include "../../singleton/DataManager.h"
 // Sets default values
 ASlashAttack_Magition::ASlashAttack_Magition()
 {
@@ -24,7 +25,8 @@ ASlashAttack_Magition::ASlashAttack_Magition()
 void ASlashAttack_Magition::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	const FCharacterInfo* Infog = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_D();
+	AttAckDamage = Infog->ATK;
 }
 
 // Called every frame

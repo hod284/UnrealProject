@@ -1,7 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
+
 #include "Skill1_Actor.h"
+#include "../../singleton/DataManager.h"
+#include "../../singleton/GameManager.h"
 
 // Sets default values
 ASkill1_Actor::ASkill1_Actor()
@@ -24,6 +27,17 @@ ASkill1_Actor::ASkill1_Actor()
 void ASkill1_Actor::BeginPlay()
 {
 	Super::BeginPlay();
+	const FCharacterInfo* Infow = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_W();
+	const FCharacterInfo* Infog = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_G();
+	switch (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSelectedcharacter())
+	{
+	case Characters::Warrior:
+		AttAckDamage = Infow->Skill1_ATK;
+		break;
+	case Characters::Guiden:
+		AttAckDamage = Infog->Skill1_ATK;
+		break;
+	}
 	
 }
 

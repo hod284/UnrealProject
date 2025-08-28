@@ -37,9 +37,7 @@ void ADarkMagition::NAttack()
     }
     FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 90);
     FRotator SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw,pitch);
-    AActor* A = GetWorld()->SpawnActor<AActor>(Attack, SpawnLocation, SpawnRotation);
-    ASlashAttack_Magition* S = Cast<ASlashAttack_Magition>(A);
-    S->SetAttAckDamage(Info->ATK);
+    GetWorld()->SpawnActor<AActor>(Attack, SpawnLocation, SpawnRotation);
     Atn += 1;
 }
 

@@ -2,7 +2,7 @@
 
 
 #include "Skill2_Magition.h"
-
+#include "../../singleton/DataManager.h"
 // Sets default values
 ASkill2_Magition::ASkill2_Magition()
 {
@@ -58,7 +58,8 @@ void ASkill2_Magition::OnCapsuleEndOverlap_Skil2_Magition(
 void ASkill2_Magition::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	const FCharacterInfo* Infog = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_D();
+	AttAckDamage = Infog->Skill2_ATK;
 }
 
 // Called every frame
