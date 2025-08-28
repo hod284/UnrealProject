@@ -4,6 +4,8 @@
 
 #include "../Gameinfo.h"
 #include "../Monster/Monster.h"
+#include "../singleton/UImanager.h"
+#include "../singleton/GameManager.h"
 #include  "../player/MainPlayerController.h"
 #include "GameFramework/Actor.h"
 #include "PlaySceneObject.generated.h"

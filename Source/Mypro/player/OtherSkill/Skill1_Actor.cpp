@@ -13,6 +13,11 @@ ASkill1_Actor::ASkill1_Actor()
 	SetRootComponent(NiagaraParticle);
 	BoxColider->SetupAttachment(NiagaraParticle);
 	BoxColider->SetCollisionProfileName("PlayerSkill"); 
+	BoxColider->OnComponentHit.AddDynamic(this, &ASkill1_Actor::OnHit_Skill);
+	// 오버랩 인벤트 활성화
+	BoxColider->SetGenerateOverlapEvents(true); // 안전하게 켜두기
+	BoxColider->OnComponentBeginOverlap.AddDynamic(this, &ASkill1_Actor::OnCapsuleBeginOverlap_Skill);
+	BoxColider->OnComponentEndOverlap.AddDynamic(this, &ASkill1_Actor::OnCapsuleEndOverlap_Skill);
 }
 
 // Called when the game starts or when spawned
@@ -26,7 +31,8 @@ void ASkill1_Actor::OnHit_Skill(UPrimitiveComponent* HitComp, AActor* OtherActor
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
 	const FHitResult& Hit)
 {
-	
+	FString s = OtherActor->GetActorLabel();
+	UE_LOG(LogMypro, Warning, TEXT("%s"), *s);
 
 }
 
@@ -40,7 +46,8 @@ void ASkill1_Actor::OnCapsuleBeginOverlap_Skill(
 	const FHitResult& SweepResult)
 {
 
-
+	FString s = OtherActor->GetActorLabel();
+	UE_LOG(LogMypro, Warning, TEXT("%s"), *s);
 }
 
 void ASkill1_Actor::OnCapsuleEndOverlap_Skill(
@@ -49,7 +56,8 @@ void ASkill1_Actor::OnCapsuleEndOverlap_Skill(
 	UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex)
 {
-
+	FString s = OtherActor->GetActorLabel();
+	UE_LOG(LogMypro, Warning, TEXT("%s"), *s);
 
 }
 

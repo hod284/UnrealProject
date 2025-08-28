@@ -3,6 +3,9 @@
 #pragma once
 
 #include "MyCharacter.h"
+#include "OtherSkill/Skill1_Actor.h"
+#include "OtherSkill/Skill2_Actor.h"
+#include "OtherSkill/Skill4_Actor.h"
 #include "Aurora.generated.h"
 
 /**
@@ -13,6 +16,14 @@ class MYPRO_API AAurora : public AMyCharacter
 {
 	GENERATED_BODY()
 	
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
+	TSubclassOf<ASkill1_Actor> Sk1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
+	TSubclassOf<ASkill2_Actor> Sk2;
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "sk")
+	TSubclassOf<ASkill4_Actor> Sk4;
+
 public:
 
 	AAurora();

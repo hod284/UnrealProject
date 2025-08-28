@@ -96,22 +96,30 @@ void UMyPlayerAnimInstance::AnimNotify_Attack()
 
 void UMyPlayerAnimInstance::AnimNotify_Skill1Play()
 {
-
+	AMyCharacter* ch = Cast<AMyCharacter>(TryGetPawnOwner());
+	if (IsValid(ch))
+		ch->Skill1();
 }
 
 void UMyPlayerAnimInstance::AnimNotify_Skill2Play()
 {
-
+	AMyCharacter* ch = Cast<AMyCharacter>(TryGetPawnOwner());
+	if (IsValid(ch))
+		ch->Skill2();
 }
 
 void UMyPlayerAnimInstance::AnimNotify_Skill3Play()
 {
-
+	AMyCharacter* ch = Cast<AMyCharacter>(TryGetPawnOwner());
+	if (IsValid(ch))
+		ch->Skill3();
 }
 
 void UMyPlayerAnimInstance::AnimNotify_Skill4Play()
 {
-
+	AMyCharacter* ch = Cast<AMyCharacter>(TryGetPawnOwner());
+	if (IsValid(ch))
+		ch->Skill4();
 }
 
 void UMyPlayerAnimInstance::AniInite()

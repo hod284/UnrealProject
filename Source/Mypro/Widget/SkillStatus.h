@@ -22,7 +22,7 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<UMaterialInstanceDynamic> MyMat;
 	
-	void Setinit(FName path, float timer); 
+	void Setinit(FString path, float timer); 
 	void SetTIme(float timer);
 
 	

@@ -44,6 +44,7 @@ void AMyCharacter::BeginPlay()
 	SavedGroundFriction = Move->GroundFriction;
 	SavedBrakingFriction = Move->BrakingFriction;
 	SavedBrakingDecel = Move->BrakingDecelerationWalking;
+	ui = Cast<UPlayMainUI>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPlayMainUI_widget());
 }
 void AMyCharacter::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
@@ -72,7 +73,6 @@ void AMyCharacter::OnCapsuleEndOverlap(
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
 	if (LookAt)
 	{
 		float radious = FMath::Cos(FMath::DegreesToRadians(45.0f));
@@ -80,7 +80,7 @@ void AMyCharacter::Tick(float DeltaTime)
 		{
 		    AActor* CameraTarget = PlaySceneObject->GetMonster(TEXT("Monster_BOSS"));
 			// 몬스터월드 로케이션
-			FVector TargetLocation = CameraTarget->GetActorLocation();
+			TargetLocation = CameraTarget->GetActorLocation();
 			// 캐릭터 월드로케이션
 			FVector CameraLocation = GetActorLocation();
 			float Angle = FVector::DotProduct(GetActorForwardVector(), (CameraLocation - TargetLocation).GetSafeNormal());
@@ -278,27 +278,105 @@ void AMyCharacter::AttackKey(const FInputActionValue& Value)
 
 void AMyCharacter::Skill1Key(const FInputActionValue& Value)
 {
-	if (AnimInstance && !IsMoving && !BackMoving)
+	if (AnimInstance && !IsMoving && !BackMoving && Canskill1)
 		AnimInstance->PlaySkill(0);
 }
 
 void AMyCharacter::Skill2Key(const FInputActionValue& Value)
 {
-	if (AnimInstance && !IsMoving && !BackMoving)
+	if (AnimInstance && !IsMoving && !BackMoving && Canskill2)
 		AnimInstance->PlaySkill(1);
 }
 
 void AMyCharacter::Skill3Key(const FInputActionValue& Value)
 {
-	if (AnimInstance && !IsMoving && !BackMoving)
+	if (AnimInstance && !IsMoving && !BackMoving&& Canskill3)
 		AnimInstance->PlaySkill(2);
 }
 
 void AMyCharacter::Skill4Key(const FInputActionValue& Value)
 {
-	if (AnimInstance && !IsMoving && !BackMoving)
+	if (AnimInstance && !IsMoving && !BackMoving && Canskill4)
 		AnimInstance->PlaySkill(3);
 }
+void AMyCharacter::Skill1coolTime(float speed)
+{
+	Canskill1 = false;
+	Async(EAsyncExecution::ThreadPool, [this, speed]()
+	{
+			float cool = 1.0f;
+			while (cool > 0.0f)
+			{
+				cool -= 0.01 * speed;
+				FPlatformProcess::Sleep(0.01f);
+				AsyncTask(ENamedThreads::GameThread, [this,cool]()
+				{
+						UE_LOG(LogMypro, Warning, TEXT("%f"), cool);
+						if (ui)
+							ui->SetPercent1(cool);
+				});
+			}
+		    Canskill1 = true;
+	});
+}
+void AMyCharacter::Skill2coolTime(float speed)
+{
+	Canskill2 = false;
+	Async(EAsyncExecution::ThreadPool, [this, speed]()
+		{
+			float cool = 1.0f;
+			while (cool > 0.0f)
+			{
+				cool -=0.01 * speed;
+				FPlatformProcess::Sleep(0.01f);
+				AsyncTask(ENamedThreads::GameThread, [this, cool]()
+				{
+						if (ui)
+							ui->SetPercent2(cool);
+				});
+			}
+			Canskill2 = true;
+		});
+}
+void AMyCharacter::Skill3coolTime(float speed)
+{
+	Canskill3 = false;
+	Async(EAsyncExecution::ThreadPool, [this, speed]()
+		{
+			float cool = 1.0f;
+			while (cool > 0.0f)
+			{
+				cool -= 0.01 * speed;
+				FPlatformProcess::Sleep(0.01f);
+				AsyncTask(ENamedThreads::GameThread, [this, cool]()
+				{
+						if (ui)
+							ui->SetPercent3(cool);
+				});
+			}
+			Canskill3 = true;
+		});
+}
+void AMyCharacter::Skill4coolTime(float speed)
+{
+	Canskill4 = false;
+	Async(EAsyncExecution::ThreadPool, [this,speed]()
+	{
+			float cool = 1.0f;
+			while (cool > 0.0f)
+			{
+				cool -= 0.01 * speed;
+				FPlatformProcess::Sleep(0.01f);
+				AsyncTask(ENamedThreads::GameThread, [this, cool]()
+					{
+						if (ui)
+							ui->SetPercent4(cool);
+					});
+			}
+			Canskill4 = true;
+	});
+}
+
 
 void AMyCharacter::NAttack()
 {

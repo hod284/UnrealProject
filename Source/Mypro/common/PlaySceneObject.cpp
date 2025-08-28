@@ -51,7 +51,37 @@ void APlaySceneObject::PlaySequence()
 } 
 void APlaySceneObject::OnSequenceFinished()
 {
-	GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPlayMainUI_widget()->AddToViewport();
+	UPlayMainUI* ui = Cast<UPlayMainUI>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPlayMainUI_widget());
+	if (ui)
+	{
+		ui->AddToViewport();
+		switch (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSelectedcharacter())
+		{
+		case Characters::DarkMagion:
+			ui->SetSkill1Inite(TEXT("/Game/image/m1.m1"));
+			ui->SetSkill2Inite(TEXT("/Game/image/m2.m2"));
+			ui->SetSkill3Inite(TEXT("/Game/image/m3.m3"));
+			ui->SetSkill4Inite(TEXT("/Game/image/m4.m4"));
+			ui->SetPlayerImage(TEXT("/Game/Virtual_Studio_Kit/Textures/Paragon/Heros_1024/giden.giden"));
+			break;
+		case Characters::Guiden:
+			ui->SetSkill1Inite(TEXT("/Game/image/1.1"));
+			ui->SetSkill2Inite(TEXT("/Game/image/2.2"));
+			ui->SetSkill3Inite(TEXT("/Game/image/3.3"));
+			ui->SetSkill4Inite(TEXT("/Game/image/4.4"));
+			ui->SetPlayerImage(TEXT("/Game/Virtual_Studio_Kit/Textures/Paragon/Heros_1024/greyston.greyston"));
+			break;
+		case Characters::Warrior:
+			ui->SetSkill1Inite(TEXT("/Game/image/1.1"));
+			ui->SetSkill2Inite(TEXT("/Game/image/2.2"));
+			ui->SetSkill3Inite(TEXT("/Game/image/3.3"));
+			ui->SetSkill4Inite(TEXT("/Game/image/4.4"));
+			ui->SetPlayerImage(TEXT("/Game/Virtual_Studio_Kit/Textures/Paragon/Heros_1024/Auraura.Auraura"));
+			break;
+		default:
+			break;
+		}
+	}
 	AMonster* monster = Cast<AMonster>(UGameplayStatics::GetActorOfClass(GetWorld(), AMonster::StaticClass()));
 	AMainPlayerController* PC = Cast<AMainPlayerController>( UGameplayStatics::GetPlayerController(this, 0));
 	if (PC)

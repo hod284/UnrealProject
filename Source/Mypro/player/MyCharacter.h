@@ -15,11 +15,7 @@ UCLASS()
 class MYPRO_API AMyCharacter : public ACharacter, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
-
-public:
-	// Sets default values for this character's properties
-	AMyCharacter();
-
+private:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -45,6 +41,12 @@ protected:
 	float SavedGroundFriction = 8.f;
 	float SavedBrakingFriction = 8.f;
 	float SavedBrakingDecel = 2048.f;
+	UPlayMainUI* ui;
+	bool Canskill1 = true;
+	bool Canskill2 =true;
+	bool Canskill3 =true;
+	bool Canskill4 =true;
+	FVector TargetLocation;
 	// 충돌
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
@@ -84,6 +86,12 @@ protected:
 	void Skill2Key(const FInputActionValue& Value);
 	void Skill3Key(const FInputActionValue& Value);
 	void Skill4Key(const FInputActionValue& Value);
+	void Skill1coolTime(float speed);
+	void Skill2coolTime(float speed);
+	void Skill3coolTime(float speed);
+	void Skill4coolTime(float speed);
+	// Sets default values for this character's properties
+	AMyCharacter();
 public:	
 	
 	// 가상함수 
