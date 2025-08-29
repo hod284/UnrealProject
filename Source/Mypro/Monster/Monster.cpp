@@ -39,6 +39,9 @@ AMonster::AMonster()
 void AMonster::BeginPlay()
 {
 	Super::BeginPlay();
+	Info = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_Monster();
+	MonsterHp = Info->HP;
+	MonsterStun = Info->StunGage;
 	AnimInstance = Cast<UMonsterAnimInstance>(MeshComponent ->GetAnimInstance());
 	AAIController* AIController = Cast<AAIController>(GetController());
 	if (AIController && MonsterBehaviorTree)
@@ -55,6 +58,49 @@ void AMonster::Start()
 {
 	if (Brain)
 		Brain->ResumeLogic(TEXT("ManualStopdf")); // 브레인 정지
+}
+void AMonster::Attack1()
+{
+	
+}
+
+void AMonster::Attack2()
+{
+	FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 0);
+	FRotator SpawnRotation = FRotator(0, MeshComponent->GetRelativeRotation().Yaw, 0);
+	FVector  Loc = SpawnLocation;
+	FRotator Rot = SpawnRotation;
+	FVector  Scl = FVector(1, 1, 1);
+	FTransform Xform(Rot, Loc, Scl);
+	AAction2_Monster* A = GetWorld()->SpawnActorDeferred<AAction2_Monster>(Sk2, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+	A->SetAttAckDamage(Info->Skill2_ATK);
+	UGameplayStatics::FinishSpawningActor(A, Xform);
+}
+
+void AMonster::Attack3()
+{
+	FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 0);
+	FRotator SpawnRotation = FRotator(0, MeshComponent->GetRelativeRotation().Yaw, 0);
+	FVector  Loc = SpawnLocation;
+	FRotator Rot = SpawnRotation;
+	FVector  Scl = FVector(1, 1, 1);
+	FTransform Xform(Rot, Loc, Scl);
+	AAction3_Monster* A = GetWorld()->SpawnActorDeferred<AAction3_Monster>(Sk3, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+	A->SetAttAckDamage(Info->Skill3_ATK);
+	UGameplayStatics::FinishSpawningActor(A, Xform);
+}
+
+void AMonster::Attack4()
+{
+	FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 0);
+	FRotator SpawnRotation = FRotator(0, MeshComponent->GetRelativeRotation().Yaw, 0);
+	FVector  Loc = SpawnLocation;
+	FRotator Rot = SpawnRotation;
+	FVector  Scl = FVector(1, 1, 1);
+	FTransform Xform(Rot, Loc, Scl);
+	AAction4_Monster* A = GetWorld()->SpawnActorDeferred<AAction4_Monster>(Sk4, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+	A->SetAttAckDamage(Info->Skill4_ATK);
+	UGameplayStatics::FinishSpawningActor(A, Xform);
 }
 
 

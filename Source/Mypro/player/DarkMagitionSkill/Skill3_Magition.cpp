@@ -22,6 +22,10 @@ ASkill3_Magition::ASkill3_Magition()
 void ASkill3_Magition::BeginPlay()
 {
 	Super::BeginPlay();
+	GetWorldTimerManager().ClearTimer(Time);
+	GetWorld()->GetTimerManager().SetTimer(Time, FTimerDelegate::CreateLambda([this]() {
+		Destroy();
+		}), 3.0, false);
 }
 
 // Called every frame
@@ -36,7 +40,7 @@ void ASkill3_Magition::OnHit_Skil3_Magition(UPrimitiveComponent* HitComp, AActor
 {
 	FString s = OtherActor->GetActorLabel();
 	UE_LOG(LogMypro, Warning, TEXT("skil3_hit:%s"), *s);
-	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
+
 
 }
 void ASkill3_Magition::OnCapsuleBeginOverlap_Skil3_Magition(
@@ -49,7 +53,7 @@ void ASkill3_Magition::OnCapsuleBeginOverlap_Skil3_Magition(
 {
 	FString s = OtherActor->GetActorLabel();
 	UE_LOG(LogMypro, Warning, TEXT("skil3_overlap:%s"), *s);
-	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
+
 
 }
 void ASkill3_Magition::OnCapsuleEndOverlap_Skil3_Magition(
@@ -60,6 +64,6 @@ void ASkill3_Magition::OnCapsuleEndOverlap_Skil3_Magition(
 {
 	FString s = OtherActor->GetActorLabel();
 	UE_LOG(LogMypro, Warning, TEXT("skil3_overlap:%s"), *s);
-	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
+
 
 }

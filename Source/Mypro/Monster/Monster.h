@@ -7,6 +7,10 @@
 #include "MonsterController.h"
 #include "MonsterPawnMovement.h"
 #include "MonsterAnimInstance.h"
+#include "../singleton/DataManager.h"
+#include "SkillActor/Action2_Monster.h"
+#include "SkillActor/Action3_Monster.h"
+#include "SkillActor/Action4_Monster.h"
 #include "Monster.generated.h"
 
 UCLASS()
@@ -39,8 +43,19 @@ protected:
 	int32 MonsterHp;
 	int32 MonsterStun;
 	UBrainComponent* Brain;
+	const FCMonsterInfo* Info;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
+	TSubclassOf<AAction2_Monster> Sk2;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
+	TSubclassOf<AAction3_Monster> Sk3;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
+	TSubclassOf<AAction4_Monster> Sk4;
 public:	
 	void Start();
+	void Attack1();
+	void Attack2();
+	void Attack3();
+	void Attack4();
 	TObjectPtr<UMonsterAnimInstance> AnimInstance;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser);
 	// IGenericTeamAgentInterface 라는 인터페이스 에서 구현해야할 함수

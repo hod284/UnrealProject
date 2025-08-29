@@ -28,12 +28,6 @@ void UMonsterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	Super::NativeUpdateAnimation(DeltaSeconds);
 }
 
-
-void UMonsterAnimInstance::MonsterAttackend(UAnimMontage* Montage, bool Interrupted)
-{
-}
-
-
 void UMonsterAnimInstance::MonsterAttack1()
 {
 	mAnimType = EMonsterDefaultAnim::Attack1;

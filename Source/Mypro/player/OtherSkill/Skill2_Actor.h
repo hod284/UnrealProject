@@ -16,12 +16,13 @@ public:
 	ASkill2_Actor();
 
 protected:
+	FTimerHandle Time;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TObjectPtr<UNiagaraComponent> NiagaraParticle;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TObjectPtr<UBoxComponent> BoxColider;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float AttAckDamage;
+	int32 AttAckDamage;
 	// Ãæµ¹
 	UFUNCTION()
 	void OnHit_Skil2(UPrimitiveComponent* HitComp, AActor* OtherActor,
@@ -50,11 +51,11 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	float GetAttAckDamage() const
+	int32 GetAttAckDamage() const
 	{
 		return AttAckDamage;
 	}
-	void SetAttAckDamage(float da)
+	void SetAttAckDamage(int32 da)
 	{
 		AttAckDamage = da;
 	}

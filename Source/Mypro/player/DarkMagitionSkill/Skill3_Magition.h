@@ -12,6 +12,7 @@ class MYPRO_API ASkill3_Magition : public AActor
 	GENERATED_BODY()
 	
 protected:
+	FTimerHandle Time;
 	// Sets default values for this actor's properties
 	ASkill3_Magition();
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
@@ -19,7 +20,7 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TObjectPtr<UCapsuleComponent> BoxColider;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float AttAckDamage;
+	int32 AttAckDamage;
 	// Ãæµ¹
 	UFUNCTION()
 	void OnHit_Skil3_Magition(UPrimitiveComponent* HitComp, AActor* OtherActor,
@@ -47,11 +48,11 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	float GetAttAckDamage() const
+	int32 GetAttAckDamage() const
 	{
 		return AttAckDamage;
 	}
-	void SetAttAckDamage(float da)
+	void SetAttAckDamage(int32 da)
 	{
 		AttAckDamage = da;
 	}

@@ -2,8 +2,6 @@
 
 
 #include "Skill2_Actor.h"
-#include "../../singleton/DataManager.h"
-#include "../../singleton/GameManager.h"
 // Sets default values
 ASkill2_Actor::ASkill2_Actor()
 {
@@ -25,18 +23,10 @@ ASkill2_Actor::ASkill2_Actor()
 void ASkill2_Actor::BeginPlay()
 {
 	Super::BeginPlay();
-	const FCharacterInfo* Infog = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_G();
-	const FCharacterInfo* Infow = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_W();
-	switch (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSelectedcharacter())
-	{
-	case Characters::Warrior:
-		AttAckDamage = Infow->Skill2_ATK;
-		break;
-	case Characters::Guiden:
-		AttAckDamage = Infog->Skill2_ATK;
-		break;
-	}
-	
+	GetWorldTimerManager().ClearTimer(Time);
+	GetWorld()->GetTimerManager().SetTimer(Time, FTimerDelegate::CreateLambda([this]() {
+		Destroy();
+		}), 3.0, false);
 }
 void ASkill2_Actor::OnHit_Skil2(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
@@ -44,7 +34,7 @@ void ASkill2_Actor::OnHit_Skil2(UPrimitiveComponent* HitComp, AActor* OtherActor
 {
 	FString s = OtherActor->GetActorLabel();
 	UE_LOG(LogMypro, Warning, TEXT("skil2_hit:%s"), *s);
-	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
+
 
 }
 
@@ -59,7 +49,7 @@ void ASkill2_Actor::OnCapsuleBeginOverlap_Skil2(
 {
 	FString s = OtherActor->GetActorLabel();
 	UE_LOG(LogMypro, Warning, TEXT("skil2_overlap:%s"), *s);
-	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
+
 
 }
 
@@ -71,7 +61,7 @@ void ASkill2_Actor::OnCapsuleEndOverlap_Skil2(
 {
 	FString s = OtherActor->GetActorLabel();
 	UE_LOG(LogMypro, Warning, TEXT("skil2_pverlapend:%s"), *s);
-	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
+
 
 }
 // Called every frame

@@ -20,7 +20,13 @@ void AGreyStone::Skill1()
     Skill1coolTime(0.5f);
     FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 0);
     FRotator SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
-    GetWorld()->SpawnActor<AActor>(Sk1, SpawnLocation, SpawnRotation);
+    FVector  Loc = SpawnLocation;
+    FRotator Rot = SpawnRotation;
+    FVector  Scl = FVector(1, 1, 1);
+    FTransform Xform(Rot, Loc, Scl);
+    ASkill1_Actor* A = GetWorld()->SpawnActorDeferred<ASkill1_Actor>(Sk1, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+    A->SetAttAckDamage(Info->Skill1_ATK);
+    UGameplayStatics::FinishSpawningActor(A, Xform);
 }
 
 void AGreyStone::Skill2()
@@ -28,7 +34,13 @@ void AGreyStone::Skill2()
     Skill2coolTime(0.4f);
     FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 0);
     FRotator SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
-    GetWorld()->SpawnActor<AActor>(Sk2, SpawnLocation, SpawnRotation);
+    FVector  Loc = SpawnLocation;
+    FRotator Rot = SpawnRotation;
+    FVector  Scl = FVector(1, 1, 1);
+    FTransform Xform(Rot, Loc, Scl);
+    ASkill2_Actor* A = GetWorld()->SpawnActorDeferred<ASkill2_Actor>(Sk2, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+    A->SetAttAckDamage(Info->Skill2_ATK);
+    UGameplayStatics::FinishSpawningActor(A, Xform);
 }
 
 void AGreyStone::Skill3()
@@ -44,7 +56,13 @@ void AGreyStone::Skill4()
     Skill4coolTime(0.1f);
     FVector SpawnLocation = FVector(TargetLocation.X, TargetLocation.Y, 0);
     FRotator SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
-    GetWorld()->SpawnActor<AActor>(Sk4, SpawnLocation, SpawnRotation);
+    FVector  Loc = SpawnLocation;
+    FRotator Rot = SpawnRotation;
+    FVector  Scl = FVector(1, 1, 1);
+    FTransform Xform(Rot, Loc, Scl);
+    ASkill4_Actor* A = GetWorld()->SpawnActorDeferred<ASkill4_Actor>(Sk4, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+    A->SetAttAckDamage(Info->Skill4_ATK);
+    UGameplayStatics::FinishSpawningActor(A, Xform);
 }
 
 AGreyStone::AGreyStone()

@@ -58,8 +58,8 @@ protected:
 	float Skill4Speed = 0.0F;
 	FVector TargetLocation;
 	USceneComponent* TargetTransform;
-	float AttackDamage;
-	float AttackDamageUp;
+	int32 AttackDamage;
+	int32 AttackDamageUp;
 	// Ãæµ¹
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,

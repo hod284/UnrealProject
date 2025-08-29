@@ -24,6 +24,10 @@ ASlashAttack_Magition::ASlashAttack_Magition()
 void ASlashAttack_Magition::BeginPlay()
 {
 	Super::BeginPlay();
+	GetWorldTimerManager().ClearTimer(Time);
+	GetWorld()->GetTimerManager().SetTimer(Time, FTimerDelegate::CreateLambda([this]() {
+		Destroy();
+		}), 3.0, false);
 }
 
 // Called every frame

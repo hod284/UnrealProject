@@ -160,7 +160,7 @@ void UMyPlayerAnimInstance::AniInite()
 				AttackMontage = *MontageMap.Find(TEXT("Attack"));
 				SkillMontage = *MontageMap.Find(TEXT("Skill"));
 				BackMontage = *MontageMap.Find(TEXT("Back"));
-				AttackUpMontage = nullptr;
+				AttackUpMontage = *MontageMap.Find(TEXT("AtttackUp"));
 			}
 			break;
 		case Characters::Warrior:

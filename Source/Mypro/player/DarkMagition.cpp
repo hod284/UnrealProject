@@ -42,7 +42,7 @@ void ADarkMagition::NAttack()
     FVector  Scl = FVector(1, 1, 1);
     FTransform Xform(Rot, Loc, Scl);
     ASlashAttack_Magition* A = GetWorld()->SpawnActorDeferred<ASlashAttack_Magition>(Attack, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-    A->SetAttAckDamage(Info->Skill1_ATK);
+    A->SetAttAckDamage(Info->ATK);
     UGameplayStatics::FinishSpawningActor(A, Xform);
     Atn += 1;
 }

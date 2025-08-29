@@ -40,8 +40,6 @@ public:
 	void IdleAni();
 
 	UFUNCTION()
-	void MonsterAttackend(UAnimMontage* Montage, bool Interrupted);
-	UFUNCTION()
 	void AnimNotify_At1Play();
 	UFUNCTION()
 	void AnimNotify_At2Play();

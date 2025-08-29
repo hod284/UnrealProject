@@ -21,7 +21,7 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TObjectPtr<UProjectileMovementComponent> Movement;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float AttAckDamage;
+	int32 AttAckDamage;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	USceneComponent* UScene;
 
@@ -65,11 +65,11 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	float GetAttAckDamage() const
+	int32 GetAttAckDamage() const
 	{
 		return AttAckDamage;
 	}
-	void SetAttAckDamage(float da)
+	void SetAttAckDamage(int32 da)
 	{
 		AttAckDamage = da;
 	}

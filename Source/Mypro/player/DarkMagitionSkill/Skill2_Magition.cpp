@@ -18,8 +18,8 @@ ASkill2_Magition::ASkill2_Magition()
 	Movement->InitialSpeed = TravelSpeed;
 	Movement->MaxSpeed = TravelSpeed;
 	Movement->ProjectileGravityScale = 0.f;
-	Movement->bRotationFollowsVelocity = true;
-	Movement->bAutoActivate = true;
+	Movement->bRotationFollowsVelocity = true;// 현재속가 향하는 방향으로 자동 회전
+	Movement->bAutoActivate = true;// 무브 컴포넌트 켤지여부
 	Movement->bForceSubStepping = true; // 고속/저FPS 안정
 	Movement ->ProjectileGravityScale = 0.f;
 	Movement->OnProjectileStop.AddDynamic(this,&ASkill2_Magition::ProjectileStop);
@@ -31,7 +31,7 @@ void ASkill2_Magition::OnHit_Skil2_Magition(UPrimitiveComponent* HitComp, AActor
 {
 	FString s = OtherActor->GetActorLabel();
 	UE_LOG(LogMypro, Warning, TEXT("skill2_hit:%s"), *s);
-	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
+
 
 }
 void ASkill2_Magition::OnCapsuleBeginOverlap_Skil2_Magition(
@@ -44,7 +44,7 @@ void ASkill2_Magition::OnCapsuleBeginOverlap_Skil2_Magition(
 {
 	FString s = OtherActor->GetActorLabel();
 	UE_LOG(LogMypro, Warning, TEXT("skil2_overlap:%s"), *s);
-	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
+
 
 }
 void ASkill2_Magition::OnCapsuleEndOverlap_Skil2_Magition(
@@ -55,7 +55,7 @@ void ASkill2_Magition::OnCapsuleEndOverlap_Skil2_Magition(
 {
 	FString s = OtherActor->GetActorLabel();
 	UE_LOG(LogMypro, Warning, TEXT("skil2_overlap:%s"), *s);
-	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
+
 
 }
 
@@ -63,6 +63,7 @@ void ASkill2_Magition::OnCapsuleEndOverlap_Skil2_Magition(
 void ASkill2_Magition::BeginPlay()
 {
 	Super::BeginPlay();
+	// 호밍은 언리얼에서 만드는 유도 탄 을 만들 때 사용하는것으로 타겟컴포넌트를 대입해 타겟을 설정한다
 	Movement->bIsHomingProjectile = true;
 	Movement->HomingTargetComponent = UScene;
 	Movement->HomingAccelerationMagnitude = StartAccel;
@@ -101,6 +102,7 @@ void ASkill2_Magition::ApplyInitialSideKick()
 
 void ASkill2_Magition::UpdateAccel(float dt)
 {
+	// KINDA_SMALL_NUMBER :부동 소수점을 방지하기 위해 0.0을 비교하기 위한 언리얼 메크로
 	if (AccelRampTime <= KINDA_SMALL_NUMBER)
 	{
 		Movement->HomingAccelerationMagnitude = 8000.0f; 

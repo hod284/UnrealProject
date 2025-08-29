@@ -23,6 +23,10 @@ ASkill4_Magition::ASkill4_Magition()
 void ASkill4_Magition::BeginPlay()
 {
 	Super::BeginPlay();
+	GetWorldTimerManager().ClearTimer(Time);
+	GetWorld()->GetTimerManager().SetTimer(Time, FTimerDelegate::CreateLambda([this]() {
+		Destroy();
+		}), 3.0, false);
 }
 void ASkill4_Magition::OnHit_Skil4_Magition(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
@@ -30,7 +34,7 @@ void ASkill4_Magition::OnHit_Skil4_Magition(UPrimitiveComponent* HitComp, AActor
 {
 	FString s = OtherActor->GetActorLabel();
 	UE_LOG(LogMypro, Warning, TEXT("skil4_hit:%s"), *s);
-	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
+
 
 }
 void ASkill4_Magition::OnCapsuleBeginOverlap_Skil4_Magition(
@@ -43,7 +47,7 @@ void ASkill4_Magition::OnCapsuleBeginOverlap_Skil4_Magition(
 {
 	FString s = OtherActor->GetActorLabel();
 	UE_LOG(LogMypro, Warning, TEXT("skil4_overlap:%s"), *s);
-	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
+
 
 }
 void ASkill4_Magition::OnCapsuleEndOverlap_Skil4_Magition(
@@ -54,7 +58,7 @@ void ASkill4_Magition::OnCapsuleEndOverlap_Skil4_Magition(
 {
 	FString s = OtherActor->GetActorLabel();
 	UE_LOG(LogMypro, Warning, TEXT("skil4_overlap:%s"), *s);
-	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
+
 
 }
 // Called every frame

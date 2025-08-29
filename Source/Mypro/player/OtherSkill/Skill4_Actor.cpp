@@ -1,8 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Skill4_Actor.h"
-#include "../../singleton/DataManager.h"
-#include "../../singleton/GameManager.h"
+
 // Sets default values
 ASkill4_Actor::ASkill4_Actor()
 {
@@ -24,18 +23,10 @@ ASkill4_Actor::ASkill4_Actor()
 void ASkill4_Actor::BeginPlay()
 {
 	Super::BeginPlay();
-	const FCharacterInfo* Infow = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_W();
-	const FCharacterInfo* Infog = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_G();
-	switch (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSelectedcharacter())
-	{
-	case Characters::Warrior:
-		AttAckDamage = Infow->Skill4_ATK;
-		break;
-	case Characters::Guiden:
-		AttAckDamage = Infog->Skill4_ATK;
-		break;
-	}
-	
+	GetWorldTimerManager().ClearTimer(Time);
+	GetWorld()->GetTimerManager().SetTimer(Time, FTimerDelegate::CreateLambda([this]() {
+		Destroy();
+		}),3.0,false);
 }
 void ASkill4_Actor::OnHit_Skil4(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
@@ -44,7 +35,7 @@ void ASkill4_Actor::OnHit_Skil4(UPrimitiveComponent* HitComp, AActor* OtherActor
 
 	FString s = OtherActor->GetActorLabel();
 	UE_LOG(LogMypro, Warning, TEXT("skil4_hit:%s"), *s);
-	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
+
 }
 
 
@@ -59,7 +50,7 @@ void ASkill4_Actor::OnCapsuleBeginOverlap_Skil4(
 
 	FString s = OtherActor->GetActorLabel();
 	UE_LOG(LogMypro, Warning, TEXT("skil4_overlap:%s"), *s);
-	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
+
 }
 
 void ASkill4_Actor::OnCapsuleEndOverlap_Skil4(
@@ -70,7 +61,7 @@ void ASkill4_Actor::OnCapsuleEndOverlap_Skil4(
 {
 	FString s = OtherActor->GetActorLabel();
 	UE_LOG(LogMypro, Warning, TEXT("skil4_pverlapend:%s"), *s);
-	UE_LOG(LogMypro, Warning, TEXT("ATTACKDAMAGE:%f"), AttAckDamage);
+
 
 }
 // Called every frame
