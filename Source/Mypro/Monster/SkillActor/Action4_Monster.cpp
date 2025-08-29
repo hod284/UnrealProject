@@ -30,6 +30,26 @@ AAction4_Monster::AAction4_Monster()
 	BoxColider3->SetCollisionProfileName("Monsterskill");
 	BoxColider4->SetupAttachment(NiagaraParticle4);
 	BoxColider4->SetCollisionProfileName("Monsterskill");
+	BoxColider1->OnComponentHit.AddDynamic(this, &AAction4_Monster::OnHit_Action4_M);
+	// 오버랩 인벤트 활성화
+	BoxColider1->SetGenerateOverlapEvents(true); // 안전하게 켜두기
+	BoxColider1->OnComponentBeginOverlap.AddDynamic(this, &AAction4_Monster::OnCapsuleBeginOverlap_Action4_M);
+	BoxColider1->OnComponentEndOverlap.AddDynamic(this, &AAction4_Monster::OnCapsuleEndOverlap_Action4_M);
+	BoxColider2->OnComponentHit.AddDynamic(this, &AAction4_Monster::OnHit_Action4_M);
+	// 오버랩 인벤트 활성화
+	BoxColider2->SetGenerateOverlapEvents(true); // 안전하게 켜두기
+	BoxColider2->OnComponentBeginOverlap.AddDynamic(this, &AAction4_Monster::OnCapsuleBeginOverlap_Action4_M);
+	BoxColider2->OnComponentEndOverlap.AddDynamic(this, &AAction4_Monster::OnCapsuleEndOverlap_Action4_M);
+	BoxColider3->OnComponentHit.AddDynamic(this, &AAction4_Monster::OnHit_Action4_M);
+	// 오버랩 인벤트 활성화
+	BoxColider3->SetGenerateOverlapEvents(true); // 안전하게 켜두기
+	BoxColider3->OnComponentBeginOverlap.AddDynamic(this, &AAction4_Monster::OnCapsuleBeginOverlap_Action4_M);
+	BoxColider3->OnComponentEndOverlap.AddDynamic(this, &AAction4_Monster::OnCapsuleEndOverlap_Action4_M);
+	BoxColider4->OnComponentHit.AddDynamic(this, &AAction4_Monster::OnHit_Action4_M);
+	// 오버랩 인벤트 활성화
+	BoxColider4->SetGenerateOverlapEvents(true); // 안전하게 켜두기
+	BoxColider4->OnComponentBeginOverlap.AddDynamic(this, &AAction4_Monster::OnCapsuleBeginOverlap_Action4_M);
+	BoxColider4->OnComponentEndOverlap.AddDynamic(this, &AAction4_Monster::OnCapsuleEndOverlap_Action4_M);
 }
 
 // Called when the game starts or when spawned

@@ -13,6 +13,11 @@ AAction3_Monster::AAction3_Monster()
 	SetRootComponent(NiagaraParticle);
 	BoxColider->SetupAttachment(NiagaraParticle);
 	BoxColider->SetCollisionProfileName("Monsterskill");
+	BoxColider->OnComponentHit.AddDynamic(this, &AAction3_Monster::OnHit_Action3_M);
+	// 오버랩 인벤트 활성화
+	BoxColider->SetGenerateOverlapEvents(true); // 안전하게 켜두기
+	BoxColider->OnComponentBeginOverlap.AddDynamic(this, &AAction3_Monster::OnCapsuleBeginOverlap_Action3_M);
+	BoxColider->OnComponentEndOverlap.AddDynamic(this, &AAction3_Monster::OnCapsuleEndOverlap_Action3_M);
 }
 
 // Called when the game starts or when spawned
@@ -34,6 +39,7 @@ void AAction3_Monster::BeginPlay()
 
 		NiagaraParticle->SetVariableFloat(TEXT("BeamLength"), result.Distance);
 		BoxColider->SetCapsuleHalfHeight(result.Distance);
+		BoxColider->SetRelativeLocation(FVector( 0, 0, result.Distance));
 	}
 }
 
