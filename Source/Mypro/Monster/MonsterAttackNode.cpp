@@ -37,9 +37,8 @@ EBTNodeResult::Type UMonsterAttackNode:: ExecuteTask(UBehaviorTreeComponent& Own
 	}
 	float Distance = Monster->DistanceToTarget(TargetActor);
 
-		//Random  =FMath::RandRange(0,3);
-		Random = 1;
-		CurrentRandom = Random; // 현재 랜덤 값을 저장합니다.
+	Random  =FMath::RandRange(0,3);
+	CurrentRandom = Random; // 현재 랜덤 값을 저장합니다.
 	
 	UE_LOG(LogMypro, Warning, TEXT("RANDOM : %d"), Random);
 	switch (Random)
@@ -111,12 +110,10 @@ void UMonsterAttackNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 			FRotator Rot = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
 			Monster->SetActorRotation(Rot);
 		}
-		//Random = FMath::RandRange(0, 3);
-		Random = 1;
+		Random = FMath::RandRange(0, 3);
 		if (Random == CurrentRandom) // 현재 랜덤 값과 같다면 다시 랜덤을 생성합니다.
 		{
-				//Random = FMath::RandRange(0, 3);
-				Random = 1;
+				Random = FMath::RandRange(0, 3);
 				CurrentRandom = Random; // 현재 랜덤 값을 저장합니다.
 		}
 		
