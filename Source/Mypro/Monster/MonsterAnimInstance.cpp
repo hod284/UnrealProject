@@ -67,14 +67,20 @@ void UMonsterAnimInstance::AnimNotify_At1Play()
 
 void UMonsterAnimInstance::AnimNotify_At2Play()
 {
+	AMonster* monster = Cast<AMonster>(TryGetPawnOwner());
+	monster->Attack2();
 }
 
 void UMonsterAnimInstance::AnimNotify_At3Play()
 {
+	AMonster* monster = Cast<AMonster>(TryGetPawnOwner());
+	monster->Attack3();
 }
 
 void UMonsterAnimInstance::AnimNotify_At4Play()
 {
+	AMonster* monster = Cast<AMonster>(TryGetPawnOwner());
+	monster->Attack4();
 }
 
 void UMonsterAnimInstance::AnimNotify_Death()

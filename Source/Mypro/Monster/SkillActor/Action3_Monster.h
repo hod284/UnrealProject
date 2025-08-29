@@ -19,9 +19,7 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TObjectPtr<UNiagaraComponent> NiagaraParticle;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TObjectPtr<USphereComponent> BoxColider;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TObjectPtr<USceneComponent> Transform;
+	TObjectPtr<UCapsuleComponent> BoxColider;
 	float AttAckDamage;
 	// Ãæµ¹
 	UFUNCTION()

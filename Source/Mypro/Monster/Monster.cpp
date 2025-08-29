@@ -67,9 +67,8 @@ void AMonster::Attack1()
 void AMonster::Attack2()
 {
 	FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 0);
-	FRotator SpawnRotation = FRotator(0, MeshComponent->GetRelativeRotation().Yaw, 0);
 	FVector  Loc = SpawnLocation;
-	FRotator Rot = SpawnRotation;
+	FRotator Rot = GetActorRotation();
 	FVector  Scl = FVector(1, 1, 1);
 	FTransform Xform(Rot, Loc, Scl);
 	AAction2_Monster* A = GetWorld()->SpawnActorDeferred<AAction2_Monster>(Sk2, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
@@ -79,10 +78,9 @@ void AMonster::Attack2()
 
 void AMonster::Attack3()
 {
-	FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 0);
-	FRotator SpawnRotation = FRotator(0, MeshComponent->GetRelativeRotation().Yaw, 0);
+	FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 90);
 	FVector  Loc = SpawnLocation;
-	FRotator Rot = SpawnRotation;
+	FRotator Rot = GetActorRotation();
 	FVector  Scl = FVector(1, 1, 1);
 	FTransform Xform(Rot, Loc, Scl);
 	AAction3_Monster* A = GetWorld()->SpawnActorDeferred<AAction3_Monster>(Sk3, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
@@ -93,9 +91,8 @@ void AMonster::Attack3()
 void AMonster::Attack4()
 {
 	FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 0);
-	FRotator SpawnRotation = FRotator(0, MeshComponent->GetRelativeRotation().Yaw, 0);
 	FVector  Loc = SpawnLocation;
-	FRotator Rot = SpawnRotation;
+	FRotator Rot = GetActorRotation();
 	FVector  Scl = FVector(1, 1, 1);
 	FTransform Xform(Rot, Loc, Scl);
 	AAction4_Monster* A = GetWorld()->SpawnActorDeferred<AAction4_Monster>(Sk4, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
