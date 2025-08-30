@@ -61,7 +61,16 @@ void AMonster::Start()
 }
 void AMonster::Attack1()
 {
-	
+	AMonsterController* controller = Cast<AMonsterController>(GetController());
+	FVector lo = controller->GetTarget()->GetActorLocation();
+	FVector SpawnLocation = FVector(lo.X, lo.Y, 0);
+	FVector  Loc = SpawnLocation;
+	FRotator Rot = GetActorRotation();
+	FVector  Scl = FVector(1, 1, 1);
+	FTransform Xform(Rot, Loc, Scl);
+	AAction1_Monster* A = GetWorld()->SpawnActorDeferred<AAction1_Monster>(Sk1, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+	A->SetAttAckDamage(Info->Skill1_ATK);
+	UGameplayStatics::FinishSpawningActor(A, Xform);
 }
 
 void AMonster::Attack2()

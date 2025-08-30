@@ -95,7 +95,7 @@ void AMyCharacter::Tick(float DeltaTime)
 		if (!Canskill4)
 		{
 			Skill4cool -= DeltaTime * Skill4Speed;
-			ui->SetPercent4(Skill3cool);
+			ui->SetPercent4(Skill4cool);
 		}
 		if (Skill1cool < 0.0f)
 		{

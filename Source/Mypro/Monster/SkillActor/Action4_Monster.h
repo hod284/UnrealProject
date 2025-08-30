@@ -16,6 +16,7 @@ public:
 	AAction4_Monster();
 
 protected:
+	FTimerHandle Time;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TObjectPtr<UNiagaraComponent> NiagaraParticle1;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)

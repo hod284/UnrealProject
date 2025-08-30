@@ -26,7 +26,7 @@ void ASkill4_Magition::BeginPlay()
 	GetWorldTimerManager().ClearTimer(Time);
 	GetWorld()->GetTimerManager().SetTimer(Time, FTimerDelegate::CreateLambda([this]() {
 		Destroy();
-		}), 3.0, false);
+		}), 2.0, false);
 }
 void ASkill4_Magition::OnHit_Skil4_Magition(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,

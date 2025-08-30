@@ -63,6 +63,8 @@ void UMonsterAnimInstance::IdleAni()
 }
 void UMonsterAnimInstance::AnimNotify_At1Play()
 {
+	AMonster* monster = Cast<AMonster>(TryGetPawnOwner());
+	monster->Attack1();
 }
 
 void UMonsterAnimInstance::AnimNotify_At2Play()

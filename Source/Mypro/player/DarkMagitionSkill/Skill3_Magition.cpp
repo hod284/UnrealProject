@@ -25,7 +25,7 @@ void ASkill3_Magition::BeginPlay()
 	GetWorldTimerManager().ClearTimer(Time);
 	GetWorld()->GetTimerManager().SetTimer(Time, FTimerDelegate::CreateLambda([this]() {
 		Destroy();
-		}), 3.0, false);
+		}), ActorDestroyTime, false);
 }
 
 // Called every frame

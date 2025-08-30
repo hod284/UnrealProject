@@ -41,6 +41,10 @@ void AAction3_Monster::BeginPlay()
 		BoxColider->SetCapsuleHalfHeight(result.Distance);
 		BoxColider->SetRelativeLocation(FVector( 0, 0, result.Distance));
 	}
+	GetWorldTimerManager().ClearTimer(Time);
+	GetWorld()->GetTimerManager().SetTimer(Time, FTimerDelegate::CreateLambda([this]() {
+		Destroy();
+		}), ActorDestroyTime, false);
 }
 
 

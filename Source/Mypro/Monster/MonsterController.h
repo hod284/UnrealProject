@@ -23,6 +23,7 @@ protected:
 	TObjectPtr<UAISenseConfig_Damage>	DamageConfig;
 	AMonsterController();
 	float DetectiveRange =3000.0f;
+	AActor* TargetActor;
 public:
 	virtual void OnConstruction(const FTransform& Transform) override;
 
@@ -37,4 +38,8 @@ public:
 	virtual void StopMovement() override;
 	void ClearMovment();
 	
+	AActor* GetTarget()
+	{
+		return TargetActor;
+	}
 };

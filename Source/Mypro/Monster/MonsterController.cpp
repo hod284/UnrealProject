@@ -71,8 +71,11 @@ void AMonsterController::ClearMovment()
 void AMonsterController::OnTargetmethod(AActor* Target, FAIStimulus Stimulus)
 {
 	TSubclassOf<UAISense> SenseClass = UAIPerceptionSystem::GetSenseClassForStimulus(this,Stimulus);
-	if(Stimulus.WasSuccessfullySensed())
+	if (Stimulus.WasSuccessfullySensed())
+	{
+		TargetActor =Target;
 		Blackboard->SetValueAsObject(TEXT("Target"), Target); // 성공적으로 감지된 경우 타겟 액터를 블랙보드에 설정
+	}
 	else
 		Blackboard->SetValueAsObject(TEXT("Target"), nullptr); // 감지되지 않은 경우 타겟 액터를 nullptr로 설정
 }

@@ -8,6 +8,7 @@
 #include "MonsterPawnMovement.h"
 #include "MonsterAnimInstance.h"
 #include "../singleton/DataManager.h"
+#include "SkillActor/Action1_Monster.h"
 #include "SkillActor/Action2_Monster.h"
 #include "SkillActor/Action3_Monster.h"
 #include "SkillActor/Action4_Monster.h"
@@ -44,6 +45,8 @@ protected:
 	int32 MonsterStun;
 	UBrainComponent* Brain;
 	const FCMonsterInfo* Info;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
+	TSubclassOf<AAction1_Monster> Sk1;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
 	TSubclassOf<AAction2_Monster> Sk2;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")

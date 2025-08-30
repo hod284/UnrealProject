@@ -26,7 +26,7 @@ void ASkill4_Actor::BeginPlay()
 	GetWorldTimerManager().ClearTimer(Time);
 	GetWorld()->GetTimerManager().SetTimer(Time, FTimerDelegate::CreateLambda([this]() {
 		Destroy();
-		}),2.0,false);
+		}), 2.0f,false);
 }
 void ASkill4_Actor::OnHit_Skil4(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,

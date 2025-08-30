@@ -56,6 +56,10 @@ AAction4_Monster::AAction4_Monster()
 void AAction4_Monster::BeginPlay()
 {
 	Super::BeginPlay();
+	GetWorldTimerManager().ClearTimer(Time);
+	GetWorld()->GetTimerManager().SetTimer(Time, FTimerDelegate::CreateLambda([this]() {
+		Destroy();
+		}), 2.0f, false);
 	
 }
 void AAction4_Monster::OnHit_Action4_M(UPrimitiveComponent* HitComp, AActor* OtherActor,

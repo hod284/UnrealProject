@@ -24,6 +24,10 @@ AAction2_Monster::AAction2_Monster()
 void AAction2_Monster::BeginPlay()
 {
 	Super::BeginPlay();
+	GetWorldTimerManager().ClearTimer(Time);
+	GetWorld()->GetTimerManager().SetTimer(Time, FTimerDelegate::CreateLambda([this]() {
+		Destroy();
+		}), ActorDestroyTime, false);
 }
 void AAction2_Monster::OnHit_Action2_M(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
