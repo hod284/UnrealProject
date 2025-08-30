@@ -37,8 +37,7 @@ EBTNodeResult::Type UMonsterAttackNode:: ExecuteTask(UBehaviorTreeComponent& Own
 	}
 	float Distance = Monster->DistanceToTarget(TargetActor);
 
-	//Random  =FMath::RandRange(0,3);
-	Random = 0;
+	Random  =FMath::RandRange(0,3);
 	CurrentRandom = Random; // 현재 랜덤 값을 저장합니다.
 	
 	UE_LOG(LogMypro, Warning, TEXT("RANDOM : %d"), Random);
@@ -115,9 +114,8 @@ void UMonsterAttackNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 		Random = 0;
 		if (Random == CurrentRandom) // 현재 랜덤 값과 같다면 다시 랜덤을 생성합니다.
 		{
-				//Random = FMath::RandRange(0, 3);
-				Random = 0;
-				CurrentRandom = Random; // 현재 랜덤 값을 저장합니다.
+			Random = FMath::RandRange(0, 3);
+			CurrentRandom = Random; // 현재 랜덤 값을 저장합니다.
 		}
 		
 		UE_LOG(LogMypro, Warning, TEXT("RANDOM : %d"), Random);

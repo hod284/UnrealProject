@@ -11,12 +11,11 @@ AAction1_Monster::AAction1_Monster()
 	NiagaraParticle_mark= CreateDefaultSubobject<UNiagaraComponent>(TEXT("gr"));
 	NiagaraParticle= CreateDefaultSubobject<UNiagaraComponent>(TEXT("ni"));
     BoxColider = CreateDefaultSubobject<UCapsuleComponent>(TEXT("box"));
-	SetRootComponent(NiagaraParticle_mark);
-	NiagaraParticle->SetupAttachment(NiagaraParticle_mark);
-	BoxColider->SetupAttachment(NiagaraParticle_mark);
+	SetRootComponent(NiagaraParticle);
+	NiagaraParticle_mark->SetupAttachment(NiagaraParticle);
+	BoxColider->SetupAttachment(NiagaraParticle);
 	BoxColider->SetCollisionProfileName("Monsterskill");
 	BoxColider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	NiagaraParticle->SetActive(false);
 	BoxColider->OnComponentHit.AddDynamic(this, &AAction1_Monster::OnHit_Action1_M);
 	// 오버랩 인벤트 활성화
 	BoxColider->SetGenerateOverlapEvents(true); // 안전하게 켜두기
@@ -28,8 +27,9 @@ AAction1_Monster::AAction1_Monster()
 void AAction1_Monster::BeginPlay()
 {
 	Super::BeginPlay();
+	NiagaraParticle->SetActive(false);
 	GetWorldTimerManager().ClearTimer(Time);
-	GetWorld()->GetTimerManager().SetTimer(Time, this,&AAction1_Monster::ShowingtheColider, 0.7, false);
+	GetWorld()->GetTimerManager().SetTimer(Time, this,&AAction1_Monster::ShowingtheColider, 1.5, false);
 	
 }
 void AAction1_Monster::OnHit_Action1_M(UPrimitiveComponent* HitComp, AActor* OtherActor,
@@ -70,6 +70,7 @@ void AAction1_Monster::ShowingtheColider()
 {
 	BoxColider->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	NiagaraParticle->SetActive(true);
+	NiagaraParticle_mark->DeactivateImmediate();
 	GetWorldTimerManager().ClearTimer(Time);
 	GetWorld()->GetTimerManager().SetTimer(Time, FTimerDelegate::CreateLambda([this]() {
 		Destroy();

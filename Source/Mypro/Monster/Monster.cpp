@@ -65,7 +65,7 @@ void AMonster::Attack1()
 	FVector lo = controller->GetTarget()->GetActorLocation();
 	FVector SpawnLocation = FVector(lo.X, lo.Y, 0);
 	FVector  Loc = SpawnLocation;
-	FRotator Rot = GetActorRotation();
+	FRotator Rot = FRotator::ZeroRotator;
 	FVector  Scl = FVector(1, 1, 1);
 	FTransform Xform(Rot, Loc, Scl);
 	AAction1_Monster* A = GetWorld()->SpawnActorDeferred<AAction1_Monster>(Sk1, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
