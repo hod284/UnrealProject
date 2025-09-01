@@ -41,7 +41,8 @@ void ASlashAttack_Magition::OnHit_Slash_Magition(UPrimitiveComponent* HitComp, A
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
 	const FHitResult& Hit)
 {
-
+	FString s = OtherActor->GetActorLabel();
+	UE_LOG(LogMypro, Warning, TEXT("slash_hit_m:%s"), *s);
 
 }
 void ASlashAttack_Magition::OnCapsuleBeginOverlap_Slash_Magition(
@@ -52,8 +53,11 @@ void ASlashAttack_Magition::OnCapsuleBeginOverlap_Slash_Magition(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
-
-
+	FString s = OtherActor->GetActorLabel();
+	UE_LOG(LogMypro, Warning, TEXT("slash_overlap_m:%s"), *s);
+	float pe = static_cast<float>(AttackDamage);
+	UGameplayStatics::ApplyDamage(OtherActor, pe, GetInstigatorController(), this, UDamageType::StaticClass());
+	SomeHit = true;
 }
 void ASlashAttack_Magition::OnCapsuleEndOverlap_Slash_Magition(
 	UPrimitiveComponent* OverlappedComp,
@@ -61,6 +65,7 @@ void ASlashAttack_Magition::OnCapsuleEndOverlap_Slash_Magition(
 	UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex)
 {
-
+	FString s = OtherActor->GetActorLabel();
+	UE_LOG(LogMypro, Warning, TEXT("slash_overlapend_m:%s"), *s);
 
 }

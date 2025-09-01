@@ -6,7 +6,10 @@
 #include "SkillStatus.h"
 #include "Blueprint/UserWidget.h"
 #include "PlayMainUI.generated.h"
-
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnDamage_M, float);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnStun, float);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnDamage_P, float);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnMp_P, float);
 /**
  * 
  */
@@ -43,8 +46,19 @@ protected:
 	float Percent4 = 1.0f;
 	virtual void NativeConstruct() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+	UFUNCTION()
+	void SetStunBar(float da);
+	UFUNCTION()
+	void SetMHpBar(float da);
+	UFUNCTION()
+	void SetPHpBar(float da);
+	UFUNCTION()
+	void SetPMpBar(float da);
 public:
-
+	FOnDamage_M OnDamage_M;
+	FOnStun OnStunDamage;
+	FOnDamage_P OnDamage_P;
+	FOnMp_P OnSyncMp_P;
 	UPlayMainUI(const FObjectInitializer& ObjectInitializer);
 	void SetSkill1Inite(FString Path);
 	void SetSkill2Inite(FString Path);

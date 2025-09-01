@@ -47,7 +47,10 @@ void AAction1_Monster::OnCapsuleBeginOverlap_Action1_M(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
-
+	FString s = OtherActor->GetActorLabel();
+	UE_LOG(LogMypro, Warning, TEXT("AC1_overlap:%s"), *s);
+	float pe = static_cast<float>(AttackDamage);
+	UGameplayStatics::ApplyDamage(OtherActor, pe, GetInstigatorController(), this, UDamageType::StaticClass());
 
 }
 void AAction1_Monster::OnCapsuleEndOverlap_Action1_M(

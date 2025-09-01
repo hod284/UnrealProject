@@ -53,7 +53,8 @@ void ASkill1_Actor::OnCapsuleBeginOverlap_Skill(
 
 	FString s = OtherActor->GetActorLabel();
 	UE_LOG(LogMypro, Warning, TEXT("skill_overlap:%s"), *s);
-
+	float pe = static_cast<float>(AttackDamage);
+	UGameplayStatics::ApplyDamage(OtherActor,pe, GetInstigatorController(), this, UDamageType::StaticClass());
 }
 
 void ASkill1_Actor::OnCapsuleEndOverlap_Skill(
@@ -64,8 +65,6 @@ void ASkill1_Actor::OnCapsuleEndOverlap_Skill(
 {
 	FString s = OtherActor->GetActorLabel();
 	UE_LOG(LogMypro, Warning, TEXT("skill_pverlapend:%s"), *s);
-
-
 }
 
 // Called every frame

@@ -22,7 +22,7 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TObjectPtr<UBoxComponent> BoxColider;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	int32 AttAckDamage;
+	int32 AttackDamage;
 	// Ãæµ¹
 	UFUNCTION()
 	void OnHit_Skil2(UPrimitiveComponent* HitComp, AActor* OtherActor,
@@ -51,12 +51,12 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	int32 GetAttAckDamage() const
+	int32 GetAttackDamage() const
 	{
-		return AttAckDamage;
+		return AttackDamage;
 	}
-	void SetAttAckDamage(int32 da)
+	void SetAttackDamage(int32 da)
 	{
-		AttAckDamage = da;
+		AttackDamage = da;
 	}
 };

@@ -35,7 +35,6 @@ void ASkill4_Actor::OnHit_Skil4(UPrimitiveComponent* HitComp, AActor* OtherActor
 
 	FString s = OtherActor->GetActorLabel();
 	UE_LOG(LogMypro, Warning, TEXT("skil4_hit:%s"), *s);
-
 }
 
 
@@ -50,7 +49,8 @@ void ASkill4_Actor::OnCapsuleBeginOverlap_Skil4(
 
 	FString s = OtherActor->GetActorLabel();
 	UE_LOG(LogMypro, Warning, TEXT("skil4_overlap:%s"), *s);
-
+	float pe = static_cast<float>(AttackDamage);
+	UGameplayStatics::ApplyDamage(OtherActor, pe, GetInstigatorController(), this, UDamageType::StaticClass());
 }
 
 void ASkill4_Actor::OnCapsuleEndOverlap_Skil4(
@@ -61,7 +61,6 @@ void ASkill4_Actor::OnCapsuleEndOverlap_Skil4(
 {
 	FString s = OtherActor->GetActorLabel();
 	UE_LOG(LogMypro, Warning, TEXT("skil4_pverlapend:%s"), *s);
-
 
 }
 // Called every frame

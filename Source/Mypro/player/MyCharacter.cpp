@@ -192,7 +192,16 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	return 0.0f;
+	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	PlayerHp -= DamageAmount;
+	UE_LOG(LogMypro, Warning, TEXT("PHP:%f"), PlayerHp);
+	float HpTemp = (PlayerHp / PlayerHp_Const) * 100;
+	UE_LOG(LogMypro, Warning, TEXT("pHp:%f"), HpTemp);
+	HP = HpTemp / 100;
+	UE_LOG(LogMypro, Warning, TEXT("PMP:%f"), HP);
+	ui->OnDamage_P.Broadcast(HP);
+	return  DamageAmount;
 }
 void AMyCharacter::EndDash()
 {
@@ -384,6 +393,7 @@ void AMyCharacter::Skill4Key(const FInputActionValue& Value)
 }
 void AMyCharacter::Skill1coolTime(float speed)
 {
+	PlayerMp -=10.0f;
 	Canskill1 = false;
 	Skill1cool = 1.0F;
 	Skill1Speed = speed;
@@ -410,6 +420,8 @@ void AMyCharacter::Skill4coolTime(float speed)
 
 void AMyCharacter::NAttack()
 {
+
+
 }
 
 void AMyCharacter::Skill1()
@@ -427,4 +439,22 @@ void AMyCharacter::Skill3()
 void AMyCharacter::Skill4()
 {
 }
-
+void AMyCharacter::MpbarSync(float cost)
+{
+	PlayerMp -= cost;
+	UE_LOG(LogMypro, Warning, TEXT("PMP:%f"), PlayerMp);
+	float mpTemp = (PlayerMp / PlayerMp_Const) * 100;
+	UE_LOG(LogMypro, Warning, TEXT("pmp:%f"), mpTemp);
+	MP = mpTemp / 100;
+	UE_LOG(LogMypro, Warning, TEXT("PMP:%f"), MP);
+	ui->OnSyncMp_P.Broadcast(MP);
+}
+void AMyCharacter::AddMpbar(float cost)
+{
+  PlayerMp = PlayerMp < PlayerMp_Const? PlayerMp + cost: PlayerMp_Const;
+  float mpTemp = (PlayerMp / PlayerMp_Const) * 100;
+  UE_LOG(LogMypro, Warning, TEXT("addpmp:%f"), mpTemp);
+  MP = mpTemp / 100;
+  UE_LOG(LogMypro, Warning, TEXT("addPMP:%f"), MP);
+  ui->OnSyncMp_P.Broadcast(MP);
+}

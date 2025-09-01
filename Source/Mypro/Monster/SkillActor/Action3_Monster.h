@@ -20,7 +20,7 @@ protected:
 	TObjectPtr<UNiagaraComponent> NiagaraParticle;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TObjectPtr<UCapsuleComponent> BoxColider;
-	float AttAckDamage;
+	int32 AttackDamage;
 	// Ãæµ¹
 	UFUNCTION()
 	void OnHit_Action3_M(UPrimitiveComponent* HitComp, AActor* OtherActor,
@@ -49,13 +49,13 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	float GetAttAckDamage() const
+	int32 GetAttAckDamage() const
 	{
-		return AttAckDamage;
+		return AttackDamage;
 	}
-	void SetAttAckDamage(float da)
+	void SetAttackDamage(int32 da)
 	{
-		AttAckDamage = da;
+		AttackDamage = da;
 	}
 	void Init();
 	void Reset();

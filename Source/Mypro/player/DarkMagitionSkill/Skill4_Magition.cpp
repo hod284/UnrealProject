@@ -33,7 +33,7 @@ void ASkill4_Magition::OnHit_Skil4_Magition(UPrimitiveComponent* HitComp, AActor
 	const FHitResult& Hit)
 {
 	FString s = OtherActor->GetActorLabel();
-	UE_LOG(LogMypro, Warning, TEXT("skil4_hit:%s"), *s);
+	UE_LOG(LogMypro, Warning, TEXT("skil4_hit_m:%s"), *s);
 
 
 }
@@ -46,7 +46,9 @@ void ASkill4_Magition::OnCapsuleBeginOverlap_Skil4_Magition(
 	const FHitResult& SweepResult)
 {
 	FString s = OtherActor->GetActorLabel();
-	UE_LOG(LogMypro, Warning, TEXT("skil4_overlap:%s"), *s);
+	UE_LOG(LogMypro, Warning, TEXT("skil4_overlap_m:%s"), *s);
+	float pe = static_cast<float>(AttackDamage);
+	UGameplayStatics::ApplyDamage(OtherActor, pe, GetInstigatorController(), this, UDamageType::StaticClass());
 
 
 }
@@ -57,7 +59,7 @@ void ASkill4_Magition::OnCapsuleEndOverlap_Skil4_Magition(
 	int32 OtherBodyIndex)
 {
 	FString s = OtherActor->GetActorLabel();
-	UE_LOG(LogMypro, Warning, TEXT("skil4_overlap:%s"), *s);
+	UE_LOG(LogMypro, Warning, TEXT("skil4_overlap_m:%s"), *s);
 
 
 }

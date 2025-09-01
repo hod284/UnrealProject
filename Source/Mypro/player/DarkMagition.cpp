@@ -12,8 +12,10 @@ void ADarkMagition::BeginPlay()
 {
 	Super::BeginPlay();
     Info = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_D();
-    PlayerHp = Info->HP;
-    PlayerMp = Info->MP;
+    PlayerHp = static_cast<float>(Info->HP);
+    PlayerMp = static_cast<float>(Info->MP);
+    PlayerHp_Const = PlayerHp;
+    PlayerMp_Const = PlayerMp;
     AttackDamage = 0;
     AttackDamageUp = 0;
 }
@@ -42,8 +44,10 @@ void ADarkMagition::NAttack()
     FVector  Scl = FVector(1, 1, 1);
     FTransform Xform(Rot, Loc, Scl);
     ASlashAttack_Magition* A = GetWorld()->SpawnActorDeferred<ASlashAttack_Magition>(Attack, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-    A->SetAttAckDamage(Info->ATK);
+    A->SetAttackDamage(Info->ATK);
     UGameplayStatics::FinishSpawningActor(A, Xform);
+    if(A ->SomeHit)
+    AddMpbar(10);
     Atn += 1;
 }
 
@@ -57,8 +61,9 @@ void ADarkMagition::Skill1()
     FVector  Scl = FVector(1, 1, 1);
     FTransform Xform(Rot, Loc, Scl);
     ASkill1_Magition* A = GetWorld()->SpawnActorDeferred<ASkill1_Magition>(Sk1, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-    A->SetAttAckDamage(Info->Skill1_ATK);
+    A->SetAttackDamage(Info->Skill1_ATK);
     UGameplayStatics::FinishSpawningActor(A, Xform);
+    MpbarSync(10.0F);
 }
 
 void ADarkMagition::Skill2()
@@ -72,8 +77,9 @@ void ADarkMagition::Skill2()
     FTransform Xform(Rot, Loc, Scl);
     ASkill2_Magition* A = GetWorld()->SpawnActorDeferred<ASkill2_Magition>(Sk2, Xform, this,GetInstigator(),ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
     A->SetTagetTransform(TargetTransform);
-    A->SetAttAckDamage(Info->Skill2_ATK);
+    A->SetAttackDamage(Info->Skill2_ATK);
     UGameplayStatics::FinishSpawningActor(A, Xform);
+    MpbarSync(10.0F);
 }
 
 void ADarkMagition::Skill3()
@@ -86,8 +92,9 @@ void ADarkMagition::Skill3()
     FVector  Scl = FVector(1, 1, 1);
     FTransform Xform(Rot, Loc, Scl);
     ASkill3_Magition* A = GetWorld()->SpawnActorDeferred<ASkill3_Magition>(Sk3, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-    A->SetAttAckDamage(Info->Skill3_ATK);
+    A->SetAttackDamage(Info->Skill3_ATK);
     UGameplayStatics::FinishSpawningActor(A, Xform);
+    MpbarSync(10.0F);
 }
 
 void ADarkMagition::Skill4()
@@ -100,6 +107,7 @@ void ADarkMagition::Skill4()
     FVector  Scl = FVector(1, 1, 1);
     FTransform Xform(Rot, Loc, Scl);
     ASkill4_Magition* A = GetWorld()->SpawnActorDeferred<ASkill4_Magition>(Sk4, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-    A->SetAttAckDamage(Info->Skill4_ATK);
+    A->SetAttackDamage(Info->Skill4_ATK);
     UGameplayStatics::FinishSpawningActor(A, Xform);
+    MpbarSync(10.0F);
 }

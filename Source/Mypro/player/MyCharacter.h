@@ -37,8 +37,10 @@ protected:
 	FGenericTeamId	TeamID;
 	float HP = 1.0F;
 	float MP = 1.0F;
-	int32 PlayerHp;
-	int32 PlayerMp;
+	float PlayerHp_Const;
+	float PlayerHp;
+	float PlayerMp_Const;
+	float PlayerMp;
     APlaySceneObject* PlaySceneObject;
 	FTimerHandle DashTimer;
 	float SavedGroundFriction = 8.f;
@@ -105,6 +107,8 @@ protected:
 	void Skill2coolTime(float speed);
 	void Skill3coolTime(float speed);
 	void Skill4coolTime(float speed);
+	void MpbarSync(float cost);
+	void AddMpbar(float cost);
 	// Sets default values for this character's properties
 	AMyCharacter();
 public:	

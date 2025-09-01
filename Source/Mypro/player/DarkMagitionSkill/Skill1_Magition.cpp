@@ -47,8 +47,9 @@ void ASkill1_Magition::OnCapsuleBeginOverlap_Skil1_Magition(
 	const FHitResult& SweepResult)
 {
 	FString s = OtherActor->GetActorLabel();
-	UE_LOG(LogMypro, Warning, TEXT("skil1_overlap:%s"), *s);
-
+	UE_LOG(LogMypro, Warning, TEXT("skil1_overlap_m :%s"), *s);
+	float pe = static_cast<float>(AttackDamage);
+	UGameplayStatics::ApplyDamage(OtherActor, pe, GetInstigatorController(), this, UDamageType::StaticClass());
 
 }
 void ASkill1_Magition::OnCapsuleEndOverlap_Skil1_Magition(

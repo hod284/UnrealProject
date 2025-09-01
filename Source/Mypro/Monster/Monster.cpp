@@ -40,8 +40,8 @@ void AMonster::BeginPlay()
 {
 	Super::BeginPlay();
 	Info = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_Monster();
-	MonsterHp = Info->HP;
-	MonsterStun = Info->StunGage;
+	MonsterHp = static_cast <float>(Info->HP);
+	MonsterStun = static_cast <float>(Info->StunGage);
 	AnimInstance = Cast<UMonsterAnimInstance>(MeshComponent ->GetAnimInstance());
 	AAIController* AIController = Cast<AAIController>(GetController());
 	if (AIController && MonsterBehaviorTree)
@@ -58,26 +58,27 @@ void AMonster::BeginPlay()
 	FTransform Xform(Rot, Loc, Scl);
 	AActor* VI = Cast<AActor>(Ac1);
 	Ac2 = GetWorld()->SpawnActorDeferred<AAction2_Monster>(Sk2, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-	Ac2->SetAttAckDamage(Info->Skill2_ATK);
+	Ac2->SetAttackDamage(Info->Skill2_ATK);
 	UGameplayStatics::FinishSpawningActor(Ac2, Xform);
 	VI = Cast<AActor>(Ac2);
 	VI->SetActorEnableCollision(false);
 	VI->SetActorHiddenInGame(true);
 	VI->SetActorTickEnabled(false);
 	Ac3 = GetWorld()->SpawnActorDeferred<AAction3_Monster>(Sk3, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-	Ac3->SetAttAckDamage(Info->Skill3_ATK);
+	Ac3->SetAttackDamage(Info->Skill3_ATK);
 	UGameplayStatics::FinishSpawningActor(Ac3, Xform);
 	VI = Cast<AActor>(Ac3);
 	VI->SetActorEnableCollision(false);
 	VI->SetActorHiddenInGame(true);
 	VI->SetActorTickEnabled(false);
 	Ac4 = GetWorld()->SpawnActorDeferred<AAction4_Monster>(Sk4, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-	Ac4->SetAttAckDamage(Info->Skill4_ATK);
+	Ac4->SetAttackDamage(Info->Skill4_ATK);
 	UGameplayStatics::FinishSpawningActor(Ac4, Xform);
 	VI = Cast<AActor>(Ac4);
 	VI->SetActorEnableCollision(false);
 	VI->SetActorHiddenInGame(true);
 	VI->SetActorTickEnabled(false);
+	UI = Cast<UPlayMainUI>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPlayMainUI_widget());
 }
 
 void AMonster::Start()
@@ -95,7 +96,7 @@ void AMonster::Attack1()
 	FVector  Scl = FVector(1, 1, 1);
 	FTransform Xform(Rot, Loc, Scl);
 	Ac1 = GetWorld()->SpawnActorDeferred<AAction1_Monster>(Sk1, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-	Ac1->SetAttAckDamage(Info->Skill1_ATK);
+	Ac1->SetAttackDamage(Info->Skill1_ATK);
 	UGameplayStatics::FinishSpawningActor(Ac1, Xform);
 	UE_LOG(LogMypro, Warning, TEXT("at1"));
 }
@@ -152,9 +153,40 @@ void AMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+
 }
 float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
-	return 0;
+	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	if (CanStun)
+	{
+		MonsterStun -= DamageAmount;
+		UE_LOG(LogMypro, Warning, TEXT("mst:%f"), MonsterStun);
+		float StunTemp  =(MonsterStun/ static_cast<float>(Info->StunGage)) * 100;
+		UE_LOG(LogMypro, Warning, TEXT("mst:%f"), StunTemp);
+		Stun = StunTemp/100;
+		UE_LOG(LogMypro, Warning, TEXT("mst:%f"),Stun);
+		UI ->OnStunDamage.Broadcast(Stun);
+	}
+	else
+	{
+		MonsterHp -= DamageAmount;
+		UE_LOG(LogMypro, Warning, TEXT("mhp:%f"), MonsterHp);
+		float hptemp = (MonsterHp  /static_cast<float>(Info->HP)) * 100;
+		UE_LOG(LogMypro, Warning, TEXT("mhp:%f"), hptemp);
+		HP =hptemp/100.0f;
+		UE_LOG(LogMypro, Warning, TEXT("mhp:%f"), HP);
+		UI->OnDamage_M.Broadcast(HP);
+	}
+	if (MonsterStun <= KINDA_SMALL_NUMBER)
+		CanStun = false;
+	if (MonsterHp <= KINDA_SMALL_NUMBER)
+	{
+		AnimInstance->DeathAni();
+		if (Brain)
+			Brain->PauseLogic(TEXT("Death")); // 브레인 정지
+	}
+
+	return DamageAmount;
 }
 

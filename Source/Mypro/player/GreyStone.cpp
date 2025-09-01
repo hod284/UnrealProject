@@ -5,13 +5,39 @@
 
 void AGreyStone::NAttack()
 {
+    TArray<FHitResult>	result;
+    float Radious = 100.0f;
+    FCollisionQueryParams	param;
+    param.AddIgnoredActor(this);
+    param.bTraceComplex = false;
+    FVector center = GetActorLocation() + CurrentVelocity * 150;
+    DrawDebugCapsule(GetWorld(), center, 200, Radious, FQuat::Identity, FColor::Green, false, 2.f);
+    bool Collision = GetWorld()->SweepMultiByChannel(result, center, center,
+        FQuat::Identity, ECollisionChannel::ECC_GameTraceChannel2,
+        FCollisionShape::MakeCapsule(Radious, 200), param);
+
+    //DrawDebugAltCone
+
+    if (Collision)
+    {
+        float	Origin = FMath::Cos(FMath::DegreesToRadians(45.f));
+
+        for (auto& Hit : result)
+        {
+            if(Hit.GetActor()->IsA<APawn>())
+            AddMpbar(10);
+            UGameplayStatics::ApplyDamage(Hit.GetActor(), AttackDamage, GetInstigatorController(), this, UDamageType::StaticClass());
+        }
+    }
 }
 void AGreyStone::BeginPlay()
 {
     Super::BeginPlay();
     Info = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_G();
-    PlayerHp = Info->HP;
-    PlayerMp = Info->MP;
+    PlayerHp = static_cast<float>(Info->HP);
+    PlayerMp = static_cast<float>(Info->MP);
+    PlayerHp_Const = PlayerHp;
+    PlayerMp_Const = PlayerMp;
     AttackDamage = Info->ATK;
     AttackDamageUp = Info->Skill3_ATK;
 }
@@ -25,8 +51,9 @@ void AGreyStone::Skill1()
     FVector  Scl = FVector(1, 1, 1);
     FTransform Xform(Rot, Loc, Scl);
     ASkill1_Actor* A = GetWorld()->SpawnActorDeferred<ASkill1_Actor>(Sk1, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-    A->SetAttAckDamage(Info->Skill1_ATK);
+    A->SetAttackDamage(Info->Skill1_ATK);
     UGameplayStatics::FinishSpawningActor(A, Xform);
+    MpbarSync(10.0F);
 }
 
 void AGreyStone::Skill2()
@@ -39,8 +66,9 @@ void AGreyStone::Skill2()
     FVector  Scl = FVector(1, 1, 1);
     FTransform Xform(Rot, Loc, Scl);
     ASkill2_Actor* A = GetWorld()->SpawnActorDeferred<ASkill2_Actor>(Sk2, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-    A->SetAttAckDamage(Info->Skill2_ATK);
+    A->SetAttackDamage(Info->Skill2_ATK);
     UGameplayStatics::FinishSpawningActor(A, Xform);
+    MpbarSync(10.0F);
 }
 
 void AGreyStone::Skill3()
@@ -49,6 +77,7 @@ void AGreyStone::Skill3()
     GetMesh()->SetOverlayMaterial(Mat);
     AttackDamage += AttackDamageUp;
     Niagara->SetVisibility(true);
+    MpbarSync(10.0F);
 }
 
 void AGreyStone::Skill4()
@@ -61,8 +90,9 @@ void AGreyStone::Skill4()
     FVector  Scl = FVector(1, 1, 1);
     FTransform Xform(Rot, Loc, Scl);
     ASkill4_Actor* A = GetWorld()->SpawnActorDeferred<ASkill4_Actor>(Sk4, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-    A->SetAttAckDamage(Info->Skill4_ATK);
+    A->SetAttackDamage(Info->Skill4_ATK);
     UGameplayStatics::FinishSpawningActor(A, Xform);
+    MpbarSync(10.0F);
 }
 
 AGreyStone::AGreyStone()

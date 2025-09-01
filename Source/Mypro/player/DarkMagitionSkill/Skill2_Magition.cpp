@@ -79,7 +79,10 @@ void ASkill2_Magition::Tick(float DeltaTime)
 void ASkill2_Magition::ProjectileStop(const FHitResult& rersult)
 {
 	Destroy();
-
+	FString s = rersult.GetActor()->GetActorLabel();
+	UE_LOG(LogMypro, Warning, TEXT("skil2_Stop :%s"), *s);
+	float pe = static_cast<float>(AttackDamage);
+	UGameplayStatics::ApplyDamage(rersult.GetActor(), pe, GetInstigatorController(), this, UDamageType::StaticClass());
 }
 
 void ASkill2_Magition::ApplyInitialSideKick()

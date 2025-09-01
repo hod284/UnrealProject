@@ -71,6 +71,9 @@ DECLARE_LOG_CATEGORY_EXTERN(LogMypro, Warning, All);
 #define	TeamMonster	30
 #define	TeamPlayer	1
 #define	ActorDestroyTime 2.0f	
+
+
+
 /*
   이넘 클래스와 이넘의 차이점
   이넘은 과 이넘클래스의 차이점은 전역스코프와 자신의 자식에 스코프를 두는냐의 차이와 타입을 안전성을 따질수 있다
@@ -141,8 +144,6 @@ public:
 	int32 HP; // 체력
 	UPROPERTY(EditAnywhere)
 	int32 StunGage; // 스턴게이지
-	UPROPERTY(EditAnywhere)
-	int32 ATK; // 공격력
 	UPROPERTY(EditAnywhere)
 	int32 Skill1_ATK; // 스킬1 공격력 
 	UPROPERTY(EditAnywhere)

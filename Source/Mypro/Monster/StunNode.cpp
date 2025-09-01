@@ -68,6 +68,8 @@ void UStunNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, f
 	}
 	if (Monster->GetStun() >= 1.0f)
 	{
+		Monster->SetMonsterStun();
+		Monster->SetCanStun(true);
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		return;
 	}

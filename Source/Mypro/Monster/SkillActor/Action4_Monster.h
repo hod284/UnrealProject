@@ -33,7 +33,7 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TObjectPtr<UCapsuleComponent> BoxColider4;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float AttAckDamage;
+	int32 AttackDamage;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TObjectPtr<USceneComponent> Transform;
 	// Ãæµ¹
@@ -64,13 +64,13 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	float GetAttAckDamage() const
+	int32 GetAttackDamage() const
 	{
-		return AttAckDamage;
+		return AttackDamage;
 	}
-	void SetAttAckDamage(float da)
+	void SetAttackDamage(int32 da)
 	{
-		AttAckDamage = da;
+		AttackDamage = da;
 	}
 	void Init();
 	void Reset();

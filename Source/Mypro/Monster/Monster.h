@@ -7,6 +7,7 @@
 #include "MonsterController.h"
 #include "MonsterPawnMovement.h"
 #include "MonsterAnimInstance.h"
+#include "../singleton/UImanager.h"
 #include "../singleton/DataManager.h"
 #include "SkillActor/Action1_Monster.h"
 #include "SkillActor/Action2_Monster.h"
@@ -42,8 +43,9 @@ protected:
 	FTimerHandle TimeSkill;
 	float HP = 1.0F;
 	float Stun = 1.0F;
-	int32 MonsterHp;
-	int32 MonsterStun;
+	float MonsterHp;
+	float MonsterStun;
+	bool CanStun=false;
 	UBrainComponent* Brain;
 	const FCMonsterInfo* Info;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
@@ -54,6 +56,7 @@ protected:
 	TSubclassOf<AAction3_Monster> Sk3;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
 	TSubclassOf<AAction4_Monster> Sk4;
+	UPlayMainUI* UI;
 public:	
 	void Start();
 	void Attack1();
@@ -96,6 +99,16 @@ public:
 	void SetStun(float NewStun)
 	{
 		Stun = NewStun;
+	}
+	void SetMonsterStun()
+	{
+		MonsterStun = Info->StunGage;
+	}
+	void SetCanStun(bool bo)
+	{
+		CanStun =bo;
+		if(bo)
+		UI->OnStunDamage.Broadcast(1.0);
 	}
 	float GetHP() const
 	{

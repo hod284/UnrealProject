@@ -19,7 +19,6 @@ class MYPRO_API APlaySceneObject : public AActor
 public:	
 	// Sets default values for this actor's properties
 	APlaySceneObject();
-
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cutscene")
 	TObjectPtr<ULevelSequence> CutsceneSequence;
