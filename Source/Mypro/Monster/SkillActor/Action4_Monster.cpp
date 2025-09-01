@@ -2,7 +2,6 @@
 
 
 #include "Action4_Monster.h"
-
 // Sets default values
 AAction4_Monster::AAction4_Monster()
 {
@@ -60,6 +59,10 @@ void AAction4_Monster::BeginPlay()
 	NiagaraParticle2->SetActive(false);
 	NiagaraParticle3->SetActive(false);
 	NiagaraParticle4->SetActive(false);
+	BoxColider1->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	BoxColider2->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	BoxColider3->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	BoxColider4->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 void AAction4_Monster::OnHit_Action4_M(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
@@ -80,7 +83,10 @@ void AAction4_Monster::OnCapsuleBeginOverlap_Action4_M(
 	UE_LOG(LogMypro, Warning, TEXT("AC4_overlap:%s"), *s);
 	float pe = static_cast<float>(AttackDamage);
 	UGameplayStatics::ApplyDamage(OtherActor, pe, GetInstigatorController(), this, UDamageType::StaticClass());
-
+	BoxColider1->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	BoxColider2->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	BoxColider3->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	BoxColider4->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 void AAction4_Monster::OnCapsuleEndOverlap_Action4_M(
 	UPrimitiveComponent* OverlappedComp,
@@ -104,6 +110,10 @@ void AAction4_Monster::Init()
 	NiagaraParticle2->SetActive(true);
 	NiagaraParticle3->SetActive(true);
 	NiagaraParticle4->SetActive(true);
+	BoxColider1->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	BoxColider2->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	BoxColider3->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	BoxColider4->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 }
 void AAction4_Monster::Reset()
 {
@@ -111,5 +121,9 @@ void AAction4_Monster::Reset()
 	NiagaraParticle2->SetActive(false);
 	NiagaraParticle3->SetActive(false);
 	NiagaraParticle4->SetActive(false);
+	BoxColider1->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	BoxColider2->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	BoxColider3->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	BoxColider4->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 

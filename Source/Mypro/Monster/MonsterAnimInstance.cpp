@@ -112,13 +112,6 @@ void UMonsterAnimInstance::AnimNotify_AtEnd()
 		if (AIController)
 		{
 				AIController->GetBlackboardComponent()->SetValueAsBool(TEXT("AttackEnd"), true);
-				AActor *AC =  monster->GetOffAc();
-				if (AC)
-				{
-					AC->SetActorEnableCollision(false);
-					AC->SetActorHiddenInGame(true);
-					AC->SetActorTickEnabled(false);
-				}
 				IdleAni();
 		}
 

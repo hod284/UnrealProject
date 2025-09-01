@@ -2,7 +2,6 @@
 
 
 #include "Action2_Monster.h"
-
 // Sets default values
 AAction2_Monster::AAction2_Monster()
 {
@@ -25,6 +24,7 @@ void AAction2_Monster::BeginPlay()
 {
 	Super::BeginPlay();
 	NiagaraParticle->SetActive(false);
+	BoxColider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 void AAction2_Monster::OnHit_Action2_M(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
@@ -45,7 +45,7 @@ void AAction2_Monster::OnCapsuleBeginOverlap_Action2_M(
 	UE_LOG(LogMypro, Warning, TEXT("AC2_overlap:%s"), *s);
 	float pe = static_cast<float>(AttackDamage);
 	UGameplayStatics::ApplyDamage(OtherActor, pe, GetInstigatorController(), this, UDamageType::StaticClass());
-
+	BoxColider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 void AAction2_Monster::OnCapsuleEndOverlap_Action2_M(
 	UPrimitiveComponent* OverlappedComp,
@@ -65,8 +65,10 @@ void AAction2_Monster::Tick(float DeltaTime)
 void AAction2_Monster::Init()
 {
 	NiagaraParticle->SetActive(true);
+	BoxColider->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 }
 void AAction2_Monster::Reset()
 {
 	NiagaraParticle->SetActive(false);
+	BoxColider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }

@@ -45,7 +45,7 @@ protected:
 	float Stun = 1.0F;
 	float MonsterHp;
 	float MonsterStun;
-	bool CanStun=false;
+	bool CanStun=true;
 	UBrainComponent* Brain;
 	const FCMonsterInfo* Info;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
@@ -67,7 +67,6 @@ public:
 	AAction2_Monster* Ac2;
 	AAction3_Monster* Ac3;
 	AAction4_Monster* Ac4;
-	AActor* OffAC;
 	TObjectPtr<UMonsterAnimInstance> AnimInstance;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser);
 	// IGenericTeamAgentInterface 라는 인터페이스 에서 구현해야할 함수
@@ -92,18 +91,11 @@ public:
 		dis = FVector::Dist(TargetLocation, MonsterLocation);
 		return dis;
 	}
-	void SetHP(float NewHP)
+	void SetMonsterHP(float NewHP)
 	{
-		HP = NewHP;
+		MonsterHp = NewHP;
 	}
-	void SetStun(float NewStun)
-	{
-		Stun = NewStun;
-	}
-	void SetMonsterStun()
-	{
-		MonsterStun = Info->StunGage;
-	}
+	void SetMonsterStun(float st);
 	void SetCanStun(bool bo)
 	{
 		CanStun =bo;
@@ -117,10 +109,6 @@ public:
 	float GetStun() const
 	{
 		return Stun;
-	}
-	AActor* GetOffAc()const
-	{
-		return OffAC;
 	}
 	AAction1_Monster* GetAAction1_Monster()const
 	{

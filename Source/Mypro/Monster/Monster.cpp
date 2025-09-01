@@ -61,23 +61,14 @@ void AMonster::BeginPlay()
 	Ac2->SetAttackDamage(Info->Skill2_ATK);
 	UGameplayStatics::FinishSpawningActor(Ac2, Xform);
 	VI = Cast<AActor>(Ac2);
-	VI->SetActorEnableCollision(false);
-	VI->SetActorHiddenInGame(true);
-	VI->SetActorTickEnabled(false);
 	Ac3 = GetWorld()->SpawnActorDeferred<AAction3_Monster>(Sk3, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
 	Ac3->SetAttackDamage(Info->Skill3_ATK);
 	UGameplayStatics::FinishSpawningActor(Ac3, Xform);
 	VI = Cast<AActor>(Ac3);
-	VI->SetActorEnableCollision(false);
-	VI->SetActorHiddenInGame(true);
-	VI->SetActorTickEnabled(false);
 	Ac4 = GetWorld()->SpawnActorDeferred<AAction4_Monster>(Sk4, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
 	Ac4->SetAttackDamage(Info->Skill4_ATK);
 	UGameplayStatics::FinishSpawningActor(Ac4, Xform);
 	VI = Cast<AActor>(Ac4);
-	VI->SetActorEnableCollision(false);
-	VI->SetActorHiddenInGame(true);
-	VI->SetActorTickEnabled(false);
 	UI = Cast<UPlayMainUI>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPlayMainUI_widget());
 }
 
@@ -104,12 +95,8 @@ void AMonster::Attack2()
 {
 	FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 0);
 	AActor* VI = Cast<AActor>(Ac2);
-	VI->SetActorEnableCollision(true);
-	VI->SetActorHiddenInGame(false);
-	VI->SetActorTickEnabled(true);
 	VI->SetActorLocationAndRotation(SpawnLocation, GetActorRotation());
 	Ac2->Init();
-	OffAC = VI;
 	UE_LOG(LogMypro, Warning, TEXT("at2"));
 }
 
@@ -118,12 +105,8 @@ void AMonster::Attack3()
 	FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 90);
 	FRotator SpawnRotation = FRotator(90, -GetActorRotation().Yaw, 0);
 	AActor* VI = Cast<AActor>(Ac3);
-	VI->SetActorEnableCollision(true);
-	VI->SetActorHiddenInGame(false);
-	VI->SetActorTickEnabled(true);
 	VI->SetActorLocationAndRotation(SpawnLocation, SpawnRotation);
 	Ac3->Init();
-	OffAC = VI;
 	UE_LOG(LogMypro, Warning, TEXT("at3"));
 }
 
@@ -131,15 +114,27 @@ void AMonster::Attack4()
 {
 	FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y,-10);
 	AActor* VI = Cast<AActor>(Ac4);
-	VI->SetActorEnableCollision(true);
-	VI->SetActorHiddenInGame(false);
-	VI->SetActorTickEnabled(true);
 	VI->SetActorLocationAndRotation(SpawnLocation, FRotator::ZeroRotator);
 	Ac4->Init();
-	OffAC = VI;
 	UE_LOG(LogMypro, Warning, TEXT("at4"));
 }
 
+void AMonster::SetMonsterStun(float st)
+{
+	float conststun = static_cast<float>(Info->StunGage);
+	MonsterStun = st;
+	UE_LOG(LogMypro, Warning, TEXT("mst:%f"), MonsterStun);
+	float StunTemp = (MonsterStun / conststun) * 100;
+	UE_LOG(LogMypro, Warning, TEXT("mst:%f"), StunTemp);
+	Stun = StunTemp / 100;
+	UE_LOG(LogMypro, Warning, TEXT("mst:%f"), Stun);
+	if (MonsterStun > conststun)
+	{
+		MonsterStun = conststun;
+		Stun = 1.0f;
+	}
+	UI->OnStunDamage.Broadcast(Stun);
+}
 
 // Called every frame
 void AMonster::Tick(float DeltaTime)

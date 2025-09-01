@@ -133,7 +133,7 @@ public:
 	}
 	bool GetBackMoving() const
 	{
-		return BackMoving ;
+		return BackMoving;
 	}
    bool GetDashMoving() const
 	{

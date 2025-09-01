@@ -2,7 +2,6 @@
 
 
 #include "Action3_Monster.h"
-
 // Sets default values
 AAction3_Monster::AAction3_Monster()
 {
@@ -25,6 +24,7 @@ void AAction3_Monster::BeginPlay()
 {
 	Super::BeginPlay();
 	NiagaraParticle->SetActive(false);
+	BoxColider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 
@@ -47,7 +47,7 @@ void AAction3_Monster::OnCapsuleBeginOverlap_Action3_M(
 	UE_LOG(LogMypro, Warning, TEXT("AC3_overlap:%s"), *s);
 	float pe = static_cast<float>(AttackDamage);
 	UGameplayStatics::ApplyDamage(OtherActor, pe, GetInstigatorController(), this, UDamageType::StaticClass());
-
+	BoxColider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 void AAction3_Monster::OnCapsuleEndOverlap_Action3_M(
 	UPrimitiveComponent* OverlappedComp,
@@ -85,11 +85,12 @@ void AAction3_Monster::Init()
 		BoxColider->SetRelativeLocation(FVector(0, 0, result.Distance));
 	}
 	NiagaraParticle->SetActive(true);
+	BoxColider->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 }
 
 void AAction3_Monster::Reset()
 {
-	
+	BoxColider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	NiagaraParticle->SetActive(false);
 }
 
