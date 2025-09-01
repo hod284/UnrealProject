@@ -30,6 +30,7 @@ protected:
 	TObjectPtr<USceneComponent> CameraHead;
 	// 플레이어 급백 방향
 	FVector CurrentVelocity;
+	bool DashMoving = false;// 대쉬기능
 	bool BackMoving = false;// 백기능
 	bool IsMoving = false;// 이동중인지 아닌지
 	bool LookAt = true;// 카메라 바라보기
@@ -99,6 +100,7 @@ protected:
 	void Skill2Key(const FInputActionValue& Value);
 	void Skill3Key(const FInputActionValue& Value);
 	void Skill4Key(const FInputActionValue& Value);
+	void DashKey(const FInputActionValue& Value);
 	void Skill1coolTime(float speed);
 	void Skill2coolTime(float speed);
 	void Skill3coolTime(float speed);
@@ -124,6 +126,14 @@ public:
 	void SetBackMoving(bool moving)
 	{
 		BackMoving = moving;
+	}
+	bool GetBackMoving() const
+	{
+		return BackMoving ;
+	}
+   bool GetDashMoving() const
+	{
+	   return DashMoving;
 	}
 	bool GetCanskill3()
 	{

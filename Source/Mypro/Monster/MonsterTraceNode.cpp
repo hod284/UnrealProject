@@ -22,6 +22,8 @@ EBTNodeResult::Type UMonsterTraceNode::ExecuteTask(UBehaviorTreeComponent& Owner
 	}
 	AActor* TargetActor = Cast<AActor>(BlackboardComp->GetValueAsObject(TargetKey.SelectedKeyName));
 	// 타겟이 이동했을때 어디에서 멈출지를 AceeptRadius로 설정한다.
+	//AcceptanceRadius + 캡슐 크기 합산 거리 이내 라서 내가 설정한 AttackRange보다 더 앞에서 멈출수 있으니 몇미터 오차를 생각하고 해야함
+	// 만약 정확이 해야한다면 MoveToLocation(Target - Dir*50)
 	EPathFollowingRequestResult::Type Result = AIController->MoveToActor(TargetActor, BlackboardComp->GetValueAsFloat("NoramlAttackRange"));
 	// 길찾기에 성공했는지 판단한다.
 	if (Result == EPathFollowingRequestResult::Failed)
@@ -87,6 +89,7 @@ void UMonsterTraceNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	EPathFollowingStatus::Type PathStatus = AiController->GetMoveStatus();
 
 	// 도착인지 실패인지 판단한다.
+	// mopvetoactor영향으로 멈춤
 	if (PathStatus == EPathFollowingStatus::Idle)
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);

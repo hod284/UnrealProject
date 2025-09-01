@@ -84,6 +84,21 @@ void UMonsterAnimInstance::AnimNotify_At4Play()
 	AMonster* monster = Cast<AMonster>(TryGetPawnOwner());
 	monster->Attack4();
 }
+void UMonsterAnimInstance::AnimNotify_At2Reset()
+{
+	AMonster* monster = Cast<AMonster>(TryGetPawnOwner());
+	monster->GetAAction2_Monster()->Reset();
+}
+void UMonsterAnimInstance::AnimNotify_At3Reset()
+{
+	AMonster* monster = Cast<AMonster>(TryGetPawnOwner());
+	monster->GetAAction3_Monster()->Reset();
+}
+void UMonsterAnimInstance::AnimNotify_At4Reset()
+{
+	AMonster* monster = Cast<AMonster>(TryGetPawnOwner());
+	monster->GetAAction4_Monster()->Reset();
+}
 
 void UMonsterAnimInstance::AnimNotify_Death()
 {
@@ -96,7 +111,15 @@ void UMonsterAnimInstance::AnimNotify_AtEnd()
 		AAIController* AIController = Cast<AAIController>(monster->GetController());
 		if (AIController)
 		{
-			AIController->GetBlackboardComponent()->SetValueAsBool(TEXT("AttackEnd"), true);
+				AIController->GetBlackboardComponent()->SetValueAsBool(TEXT("AttackEnd"), true);
+				AActor *AC =  monster->GetOffAc();
+				if (AC)
+				{
+					AC->SetActorEnableCollision(false);
+					AC->SetActorHiddenInGame(true);
+					AC->SetActorTickEnabled(false);
+				}
+				IdleAni();
 		}
 
 	}

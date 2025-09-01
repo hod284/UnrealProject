@@ -55,12 +55,11 @@ AAction4_Monster::AAction4_Monster()
 // Called when the game starts or when spawned
 void AAction4_Monster::BeginPlay()
 {
-	Super::BeginPlay();
-	GetWorldTimerManager().ClearTimer(Time);
-	GetWorld()->GetTimerManager().SetTimer(Time, FTimerDelegate::CreateLambda([this]() {
-		Destroy();
-		}), 2.0f, false);
-	
+	Super::BeginPlay();	
+	NiagaraParticle1->SetActive(false);
+	NiagaraParticle2->SetActive(false);
+	NiagaraParticle3->SetActive(false);
+	NiagaraParticle4->SetActive(false);
 }
 void AAction4_Monster::OnHit_Action4_M(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
@@ -94,5 +93,20 @@ void AAction4_Monster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AAction4_Monster::Init()
+{
+	NiagaraParticle1->SetActive(true);
+	NiagaraParticle2->SetActive(true);
+	NiagaraParticle3->SetActive(true);
+	NiagaraParticle4->SetActive(true);
+}
+void AAction4_Monster::Reset()
+{
+	NiagaraParticle1->SetActive(false);
+	NiagaraParticle2->SetActive(false);
+	NiagaraParticle3->SetActive(false);
+	NiagaraParticle4->SetActive(false);
 }
 

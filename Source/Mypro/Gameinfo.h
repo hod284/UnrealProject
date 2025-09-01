@@ -70,7 +70,7 @@ DECLARE_LOG_CATEGORY_EXTERN(LogMypro, Warning, All);
 #define	TeamNeutral	255
 #define	TeamMonster	30
 #define	TeamPlayer	1
-#define	ActorDestroyTime 1.5f	
+#define	ActorDestroyTime 2.0f	
 /*
   이넘 클래스와 이넘의 차이점
   이넘은 과 이넘클래스의 차이점은 전역스코프와 자신의 자식에 스코프를 두는냐의 차이와 타입을 안전성을 따질수 있다

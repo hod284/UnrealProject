@@ -52,6 +52,32 @@ void AMonster::BeginPlay()
 	Brain = AIController->BrainComponent;
 	if (Brain )
 		Brain->PauseLogic(TEXT("ManualStop")); // 브레인 정지
+	FVector  Loc = FVector::ZeroVector;
+	FRotator Rot = FRotator::ZeroRotator;
+	FVector  Scl = FVector(1, 1, 1);
+	FTransform Xform(Rot, Loc, Scl);
+	AActor* VI = Cast<AActor>(Ac1);
+	Ac2 = GetWorld()->SpawnActorDeferred<AAction2_Monster>(Sk2, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+	Ac2->SetAttAckDamage(Info->Skill2_ATK);
+	UGameplayStatics::FinishSpawningActor(Ac2, Xform);
+	VI = Cast<AActor>(Ac2);
+	VI->SetActorEnableCollision(false);
+	VI->SetActorHiddenInGame(true);
+	VI->SetActorTickEnabled(false);
+	Ac3 = GetWorld()->SpawnActorDeferred<AAction3_Monster>(Sk3, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+	Ac3->SetAttAckDamage(Info->Skill3_ATK);
+	UGameplayStatics::FinishSpawningActor(Ac3, Xform);
+	VI = Cast<AActor>(Ac3);
+	VI->SetActorEnableCollision(false);
+	VI->SetActorHiddenInGame(true);
+	VI->SetActorTickEnabled(false);
+	Ac4 = GetWorld()->SpawnActorDeferred<AAction4_Monster>(Sk4, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+	Ac4->SetAttAckDamage(Info->Skill4_ATK);
+	UGameplayStatics::FinishSpawningActor(Ac4, Xform);
+	VI = Cast<AActor>(Ac4);
+	VI->SetActorEnableCollision(false);
+	VI->SetActorHiddenInGame(true);
+	VI->SetActorTickEnabled(false);
 }
 
 void AMonster::Start()
@@ -68,45 +94,49 @@ void AMonster::Attack1()
 	FRotator Rot = FRotator::ZeroRotator;
 	FVector  Scl = FVector(1, 1, 1);
 	FTransform Xform(Rot, Loc, Scl);
-	AAction1_Monster* A = GetWorld()->SpawnActorDeferred<AAction1_Monster>(Sk1, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-	A->SetAttAckDamage(Info->Skill1_ATK);
-	UGameplayStatics::FinishSpawningActor(A, Xform);
+	Ac1 = GetWorld()->SpawnActorDeferred<AAction1_Monster>(Sk1, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+	Ac1->SetAttAckDamage(Info->Skill1_ATK);
+	UGameplayStatics::FinishSpawningActor(Ac1, Xform);
+	UE_LOG(LogMypro, Warning, TEXT("at1"));
 }
-
 void AMonster::Attack2()
 {
 	FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 0);
-	FVector  Loc = SpawnLocation;
-	FRotator Rot = GetActorRotation();
-	FVector  Scl = FVector(1, 1, 1);
-	FTransform Xform(Rot, Loc, Scl);
-	AAction2_Monster* A = GetWorld()->SpawnActorDeferred<AAction2_Monster>(Sk2, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-	A->SetAttAckDamage(Info->Skill2_ATK);
-	UGameplayStatics::FinishSpawningActor(A, Xform);
+	AActor* VI = Cast<AActor>(Ac2);
+	VI->SetActorEnableCollision(true);
+	VI->SetActorHiddenInGame(false);
+	VI->SetActorTickEnabled(true);
+	VI->SetActorLocationAndRotation(SpawnLocation, GetActorRotation());
+	Ac2->Init();
+	OffAC = VI;
+	UE_LOG(LogMypro, Warning, TEXT("at2"));
 }
 
 void AMonster::Attack3()
 {
 	FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 90);
-	FVector  Loc = SpawnLocation;
-	FRotator Rot = GetActorRotation();
-	FVector  Scl = FVector(1, 1, 1);
-	FTransform Xform(Rot, Loc, Scl);
-	AAction3_Monster* A = GetWorld()->SpawnActorDeferred<AAction3_Monster>(Sk3, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-	A->SetAttAckDamage(Info->Skill3_ATK);
-	UGameplayStatics::FinishSpawningActor(A, Xform);
+	FRotator SpawnRotation = FRotator(90, -GetActorRotation().Yaw, 0);
+	AActor* VI = Cast<AActor>(Ac3);
+	VI->SetActorEnableCollision(true);
+	VI->SetActorHiddenInGame(false);
+	VI->SetActorTickEnabled(true);
+	VI->SetActorLocationAndRotation(SpawnLocation, SpawnRotation);
+	Ac3->Init();
+	OffAC = VI;
+	UE_LOG(LogMypro, Warning, TEXT("at3"));
 }
 
 void AMonster::Attack4()
 {
-	FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 0);
-	FVector  Loc = SpawnLocation;
-	FRotator Rot = GetActorRotation();
-	FVector  Scl = FVector(1, 1, 1);
-	FTransform Xform(Rot, Loc, Scl);
-	AAction4_Monster* A = GetWorld()->SpawnActorDeferred<AAction4_Monster>(Sk4, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-	A->SetAttAckDamage(Info->Skill4_ATK);
-	UGameplayStatics::FinishSpawningActor(A, Xform);
+	FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y,-10);
+	AActor* VI = Cast<AActor>(Ac4);
+	VI->SetActorEnableCollision(true);
+	VI->SetActorHiddenInGame(false);
+	VI->SetActorTickEnabled(true);
+	VI->SetActorLocationAndRotation(SpawnLocation, FRotator::ZeroRotator);
+	Ac4->Init();
+	OffAC = VI;
+	UE_LOG(LogMypro, Warning, TEXT("at4"));
 }
 
 

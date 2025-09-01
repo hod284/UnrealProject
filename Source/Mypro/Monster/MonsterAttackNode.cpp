@@ -36,10 +36,8 @@ EBTNodeResult::Type UMonsterAttackNode:: ExecuteTask(UBehaviorTreeComponent& Own
 		return EBTNodeResult::Failed;
 	}
 	float Distance = Monster->DistanceToTarget(TargetActor);
-
-	Random  =FMath::RandRange(0,3);
+	Random = FMath::RandBool() ? 1 : 3;
 	CurrentRandom = Random; // 현재 랜덤 값을 저장합니다.
-	
 	UE_LOG(LogMypro, Warning, TEXT("RANDOM : %d"), Random);
 	switch (Random)
 	{
@@ -95,13 +93,13 @@ void UMonsterAttackNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 	{
 		BlackboardComp->SetValueAsBool("AttackEnd", false);
 		float Distance = Monster->DistanceToTarget(TargetActor);
-		if (Distance > BlackboardComp->GetValueAsFloat("SpecialAttackRange"))
+		if (Distance > BlackboardComp->GetValueAsFloat("NoramlAttackRange")+AddRange)
 		{
 			// 공격이 끝났다면 Task를 종료한다.
 			FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 			return;
 		}
-		else if (Distance < BlackboardComp->GetValueAsFloat("SpecialAttackRange"))
+		else
 		{
 			FVector CurrentLocation = Monster->GetActorLocation();
 			CurrentLocation.Z = 0;
@@ -110,14 +108,19 @@ void UMonsterAttackNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 			FRotator Rot = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
 			Monster->SetActorRotation(Rot);
 		}
-		//Random = FMath::RandRange(0, 3);
-		Random = 0;
-		if (Random == CurrentRandom) // 현재 랜덤 값과 같다면 다시 랜덤을 생성합니다.
+		if (Distance <= BlackboardComp->GetValueAsFloat("NoramlAttackRange"))
 		{
-			Random = FMath::RandRange(0, 3);
-			CurrentRandom = Random; // 현재 랜덤 값을 저장합니다.
+			Random = FMath::RandBool() ? 1 : 3;
+			if (Random == CurrentRandom) // 현재 랜덤 값과 같다면 다시 랜덤을 생성합니다.
+			{
+				Random = Random = FMath::RandBool() ? 1 : 3;
+				CurrentRandom = Random; // 현재 랜덤 값을 저장합니다.
+			}
 		}
-		
+		else if (Distance > BlackboardComp->GetValueAsFloat("NoramlAttackRange") && Distance < BlackboardComp->GetValueAsFloat("NoramlAttackRange") + AddRange)
+		{
+			Random = 0;
+		}	
 		UE_LOG(LogMypro, Warning, TEXT("RANDOM : %d"), Random);
 		switch (Random)
 		{

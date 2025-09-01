@@ -186,6 +186,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		EnhancedInputComponent->BindAction(InputManager->Skill2, ETriggerEvent::Started, this, &AMyCharacter::Skill2Key);
 		EnhancedInputComponent->BindAction(InputManager->Skill3, ETriggerEvent::Started, this, &AMyCharacter::Skill3Key);
 		EnhancedInputComponent->BindAction(InputManager->Skill4, ETriggerEvent::Started, this, &AMyCharacter::Skill4Key);
+		EnhancedInputComponent->BindAction(InputManager->Dash, ETriggerEvent::Started, this, &AMyCharacter::DashKey);
 	}
 }
 
@@ -201,12 +202,16 @@ void AMyCharacter::EndDash()
 	Move->GroundFriction = SavedGroundFriction;
 	Move->BrakingFriction = SavedBrakingFriction;
 	Move->BrakingDecelerationWalking = SavedBrakingDecel;
-	BackMoving = false;
+	Move->StopMovementImmediately();
+	if(BackMoving)
+	BackMoving =false;
+	if (DashMoving)
+		DashMoving = false;
 	CurrentVelocity = FVector::ZeroVector;
 }
 void AMyCharacter::MoveKey(const FInputActionValue& Value)
 {
-	if (!BackMoving)
+	if (!BackMoving&& !DashMoving)
 	{
 		FVector Diret = Value.Get<FVector>();
 		// 캐릭터 무브먼트에게 이동한다고 신호 보내는 함수
@@ -308,7 +313,7 @@ void AMyCharacter::CameraRotation_Cancel(const FInputActionValue& Value)
 
 void AMyCharacter::BackKey(const FInputActionValue& Value)
 {
-	if (!IsMoving)
+	if (!BackMoving && !DashMoving)
 	{
 		UCharacterMovementComponent* Move = GetCharacterMovement();
 		// 잠시 미끄러지게: 마찰/감속을 낮춤
@@ -317,8 +322,30 @@ void AMyCharacter::BackKey(const FInputActionValue& Value)
 		Move->BrakingFriction = 0.5f;
 		Move->BrakingDecelerationWalking = 250.f;
 		// 단위 백터니까 방향만 가지고 있음 방향백터 x거리
-	    FVector	NewLocation = -CurrentVelocity * 1200.0f; // 뒤로 20만큼
+	    FVector	NewLocation = -CurrentVelocity * 1500.0f; // 뒤로 20만큼
 		LaunchCharacter(NewLocation, true, false);
+		BackMoving = true;
+		DashMoving = true;
+		GetWorldTimerManager().ClearTimer(DashTimer);
+		GetWorld()->GetTimerManager().SetTimer(DashTimer, this, &AMyCharacter::EndDash, 0.5, false);
+		if (AnimInstance)
+			AnimInstance->PlayBack();
+	}
+}
+void AMyCharacter::DashKey(const FInputActionValue& Value)
+{
+	if (!BackMoving && !DashMoving)
+	{
+		UCharacterMovementComponent* Move = GetCharacterMovement();
+		// 잠시 미끄러지게: 마찰/감속을 낮춤
+		Move->bUseSeparateBrakingFriction = true;
+		Move->GroundFriction = 0.5f;
+		Move->BrakingFriction = 0.5f;
+		Move->BrakingDecelerationWalking = 250.f;
+		// 단위 백터니까 방향만 가지고 있음 방향백터 x거리
+		FVector	NewLocation = CurrentVelocity * 2000.0f; // 뒤로 20만큼
+		LaunchCharacter(NewLocation, true, false);
+		DashMoving = true;
 		BackMoving = true;
 		GetWorldTimerManager().ClearTimer(DashTimer);
 		GetWorld()->GetTimerManager().SetTimer(DashTimer, this, &AMyCharacter::EndDash, 0.5, false);
@@ -328,31 +355,31 @@ void AMyCharacter::BackKey(const FInputActionValue& Value)
 }
 void AMyCharacter::AttackKey(const FInputActionValue& Value)
 {
-	if (AnimInstance&&!IsMoving&&!BackMoving)
+	if (AnimInstance&&!IsMoving&&!BackMoving && !DashMoving)
 		AnimInstance->PlayAttack();
 }
 
 void AMyCharacter::Skill1Key(const FInputActionValue& Value)
 {
-	if (AnimInstance && !IsMoving && !BackMoving && Canskill1)
+	if (AnimInstance && !IsMoving && !BackMoving && Canskill1 && !DashMoving)
 		AnimInstance->PlaySkill(0);
 }
 
 void AMyCharacter::Skill2Key(const FInputActionValue& Value)
 {
-	if (AnimInstance && !IsMoving && !BackMoving && Canskill2)
+	if (AnimInstance && !IsMoving && !BackMoving && Canskill2 && !DashMoving)
 		AnimInstance->PlaySkill(1);
 }
 
 void AMyCharacter::Skill3Key(const FInputActionValue& Value)
 {
-	if (AnimInstance && !IsMoving && !BackMoving&& Canskill3)
+	if (AnimInstance && !IsMoving && !BackMoving&& Canskill3 && !DashMoving)
 		AnimInstance->PlaySkill(2);
 }
 
 void AMyCharacter::Skill4Key(const FInputActionValue& Value)
 {
-	if (AnimInstance && !IsMoving && !BackMoving && Canskill4)
+	if (AnimInstance && !IsMoving && !BackMoving && Canskill4 && !DashMoving)
 		AnimInstance->PlaySkill(3);
 }
 void AMyCharacter::Skill1coolTime(float speed)

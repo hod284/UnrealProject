@@ -27,8 +27,6 @@ protected:
 	virtual void NativeInitializeAnimation() override;
 	// 게임 스레드에서 호출.
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
-
-
 public:
 	void MonsterAttack1();
 	void MonsterAttack2();
@@ -51,4 +49,10 @@ public:
 	void AnimNotify_Death();
 	UFUNCTION()
 	void AnimNotify_AtEnd();
+	UFUNCTION()
+	void AnimNotify_At2Reset();
+	UFUNCTION()
+	void AnimNotify_At3Reset();
+	UFUNCTION()
+	void AnimNotify_At4Reset();
 };

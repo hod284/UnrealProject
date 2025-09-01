@@ -16,7 +16,6 @@ public:
 	AAction2_Monster();
 
 protected:
-	FTimerHandle Time;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TObjectPtr<UNiagaraComponent> NiagaraParticle;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
@@ -59,4 +58,6 @@ public:
 	{
 		AttAckDamage = da;
 	}
+	void Init();
+	void Reset();
 };

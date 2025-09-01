@@ -31,8 +31,11 @@ void UMyPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	{
 		UCharacterMovementComponent* Movement =
 			PlayerCharacter->GetCharacterMovement();
-
-		if (Movement)
+		if (PlayerCharacter->GetBackMoving()|| PlayerCharacter->GetDashMoving())
+		{
+			MoveSpeed = 0;
+		}
+		else if (Movement)
 		{
 			MoveSpeed = Movement->Velocity.Size();
 			

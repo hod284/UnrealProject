@@ -33,12 +33,13 @@ protected:
 	FGenericTeamId	TeamID;
 	TObjectPtr<UBehaviorTree> MonsterBehaviorTree;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CusteomRange")
-	float NoramlAttackRange = 300.0f;
+	float NoramlAttackRange = 200.0f;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	FTimerHandle TimeSkill;
 	float HP = 1.0F;
 	float Stun = 1.0F;
 	int32 MonsterHp;
@@ -59,6 +60,11 @@ public:
 	void Attack2();
 	void Attack3();
 	void Attack4();
+	AAction1_Monster* Ac1;
+	AAction2_Monster* Ac2;
+	AAction3_Monster* Ac3;
+	AAction4_Monster* Ac4;
+	AActor* OffAC;
 	TObjectPtr<UMonsterAnimInstance> AnimInstance;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser);
 	// IGenericTeamAgentInterface 라는 인터페이스 에서 구현해야할 함수
@@ -99,5 +105,24 @@ public:
 	{
 		return Stun;
 	}
-
+	AActor* GetOffAc()const
+	{
+		return OffAC;
+	}
+	AAction1_Monster* GetAAction1_Monster()const
+	{
+		return  Ac1;
+	}
+	AAction2_Monster* GetAAction2_Monster()const
+	{
+		return  Ac2;
+	}
+	AAction3_Monster* GetAAction3_Monster()const
+	{
+		return  Ac3;
+	}
+	AAction4_Monster* GetAAction4_Monster()const
+	{
+		return  Ac4;
+	}
 };

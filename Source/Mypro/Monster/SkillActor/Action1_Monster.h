@@ -48,7 +48,6 @@ protected:
 		AActor* OtherActor,
 		UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex);
-	void ShowingtheColider();
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -60,4 +59,5 @@ public:
 	{
 		AttAckDamage = da;
 	}
+	void ShowingtheColider();
 };

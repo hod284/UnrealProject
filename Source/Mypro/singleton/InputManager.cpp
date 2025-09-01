@@ -44,4 +44,8 @@ UInputManager::UInputManager()
 	static ConstructorHelpers::FObjectFinder<UInputAction>
 		RightCusor(TEXT("/Script/EnhancedInput.InputAction'/Game/input/RightbuttonDown.RightbuttonDown'"));
 	RightCusorDown = RightCusor.Object;
+
+	static ConstructorHelpers::FObjectFinder<UInputAction>
+		Dashob(TEXT("/Script/EnhancedInput.InputAction'/Game/input/Dash.Dash'"));
+	Dash = Dashob.Object;
 }
