@@ -193,7 +193,10 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	if (!BackMoving && !DashMoving)
 		PlayerHp -= DamageAmount;
+	else
+		PlayerHp -= 0;
 		UE_LOG(LogMypro, Warning, TEXT("PHP:%f"), PlayerHp);
 		float HpTemp = (PlayerHp / PlayerHp_Const) * 100;
 		UE_LOG(LogMypro, Warning, TEXT("pHp:%f"), HpTemp);
@@ -204,8 +207,6 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 }
 void AMyCharacter::EndDash()
 {
-	// 캐릭터 applydamage를 무시하는 메서드 단 아군이 버프도 막을수 있으니 조심해야함
-	SetCanBeDamaged(true);
 	UCharacterMovementComponent* Move = GetCharacterMovement();
 	// 잠시 미끄러지게: 마찰/감속을 낮춤
 	Move->bUseSeparateBrakingFriction = false;
@@ -325,8 +326,6 @@ void AMyCharacter::BackKey(const FInputActionValue& Value)
 {
 	if (!BackMoving && !DashMoving)
 	{
-		// 캐릭터 applydamage를 무시하는 메서드 단 아군이 버프도 막을수 있으니 조심해야함
-		SetCanBeDamaged(false);
 		UCharacterMovementComponent* Move = GetCharacterMovement();
 		// 잠시 미끄러지게: 마찰/감속을 낮춤
 		Move->bUseSeparateBrakingFriction = true;
@@ -348,8 +347,6 @@ void AMyCharacter::DashKey(const FInputActionValue& Value)
 {
 	if (!BackMoving && !DashMoving)
 	{
-		// 캐릭터 applydamage를 무시하는 메서드 단 아군이 버프도 막을수 있으니 조심해야함
-		SetCanBeDamaged(false);
 		UCharacterMovementComponent* Move = GetCharacterMovement();
 		// 잠시 미끄러지게: 마찰/감속을 낮춤
 		Move->bUseSeparateBrakingFriction = true;
