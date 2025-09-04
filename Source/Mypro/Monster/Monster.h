@@ -46,6 +46,7 @@ protected:
 	float MonsterHp;
 	float MonsterStun;
 	bool CanStun=true;
+	bool Death = false;
 	UBrainComponent* Brain;
 	const FCMonsterInfo* Info;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
@@ -109,6 +110,10 @@ public:
 	float GetStun() const
 	{
 		return Stun;
+	}
+	float GetDeath() const
+	{
+		return Death;
 	}
 	AAction1_Monster* GetAAction1_Monster()const
 	{

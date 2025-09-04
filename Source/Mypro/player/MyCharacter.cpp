@@ -52,7 +52,14 @@ void AMyCharacter::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
 	const FHitResult& Hit)
 {
-
+	AMonster* m = Cast<AMonster>(OtherActor);
+	if ( m && m->GetDeath())
+	{
+		if (AMyPlayerState* PS = GetPlayerState<AMyPlayerState>())
+		{
+		     PS->Inventoryco->Itemadd.Broadcast("Portal");
+		}
+	}
 }
 
 void AMyCharacter::OnCapsuleBeginOverlap(UPrimitiveComponent* Comp, AActor* OtherActor,
@@ -131,9 +138,9 @@ void AMyCharacter::Tick(float DeltaTime)
 		if (PlaySceneObject)
 		{
 		    AActor* CameraTarget = PlaySceneObject->GetMonster(TEXT("Monster_BOSS"));
-			TargetTransform = CameraTarget->GetRootComponent();
 			if (CameraTarget != NULL)
 			{
+			    TargetTransform = CameraTarget->GetRootComponent();
 				// 몬스터월드 로케이션
 				TargetLocation = CameraTarget->GetActorLocation();
 			}
@@ -187,6 +194,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		EnhancedInputComponent->BindAction(InputManager->Skill3, ETriggerEvent::Started, this, &AMyCharacter::Skill3Key);
 		EnhancedInputComponent->BindAction(InputManager->Skill4, ETriggerEvent::Started, this, &AMyCharacter::Skill4Key);
 		EnhancedInputComponent->BindAction(InputManager->Dash, ETriggerEvent::Started, this, &AMyCharacter::DashKey);
+		EnhancedInputComponent->BindAction(InputManager->Inventory, ETriggerEvent::Started, this, &AMyCharacter::InventoryKey);
 	}
 }
 
@@ -362,6 +370,24 @@ void AMyCharacter::DashKey(const FInputActionValue& Value)
 		GetWorld()->GetTimerManager().SetTimer(DashTimer, this, &AMyCharacter::EndDash, 0.5, false);
 		if (AnimInstance)
 			AnimInstance->PlayBack();
+	}
+}
+void AMyCharacter::InventoryKey(const FInputActionValue& Value)
+{
+	if (!BackMoving && !DashMoving)
+	{
+		if (AMyPlayerState* PS = GetPlayerState<AMyPlayerState>())
+		{
+			if (ui->GetInventory())
+		        ui->GetInventory()->SetItemInventory(PS->Inventoryco);
+		}
+		AMainPlayerController* controller = Cast<AMainPlayerController>(GetController());
+		// 커서/입력 전환 (게임+UI)
+		controller ->bShowMouseCursor = true;
+		FInputModeGameAndUI Mode;
+			Mode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+			Mode.SetWidgetToFocus(ui->GetInventory()->GetCachedWidget());
+			ui->GetInventory()->SetVisibility(ESlateVisibility::Visible);
 	}
 }
 void AMyCharacter::AttackKey(const FInputActionValue& Value)

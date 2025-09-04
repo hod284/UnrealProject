@@ -72,4 +72,6 @@ public:
 	UFUNCTION()
 	void AnimNotify_Skill4Play();
 	void AniInite();
+	UFUNCTION()
+	void AnimNotify_AttackArrayReset();
 };

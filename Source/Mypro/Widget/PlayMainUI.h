@@ -3,6 +3,7 @@
 #pragma once
 
 #include "../Gameinfo.h"
+#include "Inventory.h"
 #include "SkillStatus.h"
 #include "Blueprint/UserWidget.h"
 #include "PlayMainUI.generated.h"
@@ -36,6 +37,8 @@ protected:
 	TObjectPtr<UProgressBar> MonsterStun;
 	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<UImage> PlayerImage;
+	UPROPERTY(BlueprintReadWrite)
+	TObjectPtr<UInventory> Inventory;
 
 	float Percent1 = 1.0f;
 
@@ -96,5 +99,9 @@ public:
 	float GetPercent4()
 	{
 		return Percent4;
+	}
+	TObjectPtr<UInventory> GetInventory()
+	{
+		return  Inventory;
 	}
 };

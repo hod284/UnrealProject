@@ -10,7 +10,7 @@ void AGreyStone::NAttack()
     FCollisionQueryParams	param;
     param.AddIgnoredActor(this);
     param.bTraceComplex = false;
-    FVector center = GetActorLocation() + CurrentVelocity * 150;
+    FVector center = GetActorLocation() + CurrentVelocity * 50;
     DrawDebugCapsule(GetWorld(), center, 200, Radious, FQuat::Identity, FColor::Green, false, 2.f);
     bool Collision = GetWorld()->SweepMultiByChannel(result, center, center,
         FQuat::Identity, ECollisionChannel::ECC_GameTraceChannel2,

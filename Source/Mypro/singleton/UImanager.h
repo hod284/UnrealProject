@@ -16,7 +16,7 @@ class MYPRO_API UUImanager : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 	
-public:
+protected:
 	UPROPERTY()
 	TSubclassOf<UPlayMainUI> PlayMainUI; // 플레이 메인클래스
 	UPROPERTY()
@@ -34,6 +34,7 @@ public:
 	//	PlayMainUI_widget = IntroMainUI_widget; 멤버변수를 수정할수 없으므로 에러가 납니다
 	//	return PlayMainUI_widget;
 	//}
+public:
 	const TObjectPtr<UUserWidget> GetPlayMainUI_widget() const
 	{
 		
@@ -44,7 +45,6 @@ public:
 	{
 		return IntroMainUI_widget;
 	}
-
 
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	

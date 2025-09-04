@@ -48,4 +48,8 @@ UInputManager::UInputManager()
 	static ConstructorHelpers::FObjectFinder<UInputAction>
 		Dashob(TEXT("/Script/EnhancedInput.InputAction'/Game/input/Dash.Dash'"));
 	Dash = Dashob.Object;
+
+	static ConstructorHelpers::FObjectFinder<UInputAction>
+		in(TEXT("/Script/EnhancedInput.InputAction'/Game/input/Inventory.Inventory'"));
+	Inventory = in.Object;
 }

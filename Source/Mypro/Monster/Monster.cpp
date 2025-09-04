@@ -163,7 +163,7 @@ float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 		UE_LOG(LogMypro, Warning, TEXT("mst:%f"),Stun);
 		UI ->OnStunDamage.Broadcast(Stun);
 	}
-	else
+	else 
 	{
 		MonsterHp -= DamageAmount;
 		UE_LOG(LogMypro, Warning, TEXT("mhp:%f"), MonsterHp);
@@ -180,6 +180,7 @@ float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 		AnimInstance->DeathAni();
 		if (Brain)
 			Brain->PauseLogic(TEXT("Death")); // 브레인 정지
+		Death = true;
 	}
 
 	return DamageAmount;

@@ -25,6 +25,8 @@ protected:
 		const FCharacterInfo* Datainfo_D;
 		// 몬스터 정보
 		const FCMonsterInfo* Datainfo_Monster;
+		const FItmeTexturAndMeshInfo* TextureInfo;
+		const FItemtableInfo* ItemInfo;
 		
 public:
 	const FCharacterInfo* GetDatainfo_W() const
@@ -42,6 +44,14 @@ public:
 	const FCMonsterInfo* GetDatainfo_Monster() const
 	{
 		return Datainfo_Monster;
+	}
+	const FItemtableInfo* GetItemInfo() const
+	{
+		return ItemInfo;
+	}
+	const FItmeTexturAndMeshInfo* GetTextureInfo() const
+	{
+		return TextureInfo;
 	}
 	UDataManager() = default;
 };

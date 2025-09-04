@@ -11,4 +11,11 @@ void AMyPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
     DOREPLIFETIME(AMyPlayerState, MyCharacter);
+    DOREPLIFETIME(AMyPlayerState, Inventoryco);
+}
+
+AMyPlayerState::AMyPlayerState()
+{
+    Inventoryco = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inve"));
+    SetReplicates(true);
 }

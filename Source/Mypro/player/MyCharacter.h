@@ -7,6 +7,7 @@
 #include "../common/PlaySceneObject.h"
 #include "MyPlayerAnimInstance.h"
 #include "MaInPlayerController.h"
+#include "MyPlayerState.h"
 #include "../singleton/InputManager.h"
 #include "GameFramework/Character.h"
 #include "MyCharacter.generated.h"
@@ -103,6 +104,7 @@ protected:
 	void Skill3Key(const FInputActionValue& Value);
 	void Skill4Key(const FInputActionValue& Value);
 	void DashKey(const FInputActionValue& Value);
+	void InventoryKey(const FInputActionValue& Value);
 	void Skill1coolTime(float speed);
 	void Skill2coolTime(float speed);
 	void Skill3coolTime(float speed);

@@ -25,5 +25,6 @@ public:
 	TObjectPtr<UInputAction>			Skill4;
 	TObjectPtr<UInputAction>			Attack;
 	TObjectPtr<UInputAction>			Dash;
+	TObjectPtr<UInputAction>			Inventory;
 	UInputManager();
 };

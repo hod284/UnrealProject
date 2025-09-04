@@ -27,7 +27,7 @@ void AAurora::NAttack()
     param.AddIgnoredActor(this);
     param.bTraceComplex = false;
     float Radious = 100.0f;
-    FVector center = GetActorLocation()+CurrentVelocity * 150;
+    FVector center = GetActorLocation()+CurrentVelocity * 50;
     bool Collision = GetWorld()->SweepMultiByChannel(result, center, center,
         FQuat::Identity, ECollisionChannel::ECC_GameTraceChannel2,
         FCollisionShape::MakeCapsule(Radious,200), param);

@@ -1,0 +1,84 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "Inventory.h"
+
+void UInventory::NativeConstruct()
+{
+	for (int32 i = 0; i < 4; ++i)
+	{
+		FString s = FString::FromInt(i);
+		UInventorySlot* InventorySlot = Cast<UInventorySlot>(GetWidgetFromName(*s));
+	    SlotArray.Add(InventorySlot);
+	}
+	Closebu = Cast<UButton>(GetWidgetFromName(TEXT("clo")));
+	Closebu->OnClicked.AddDynamic(this,&UInventory::Close);
+}
+
+void UInventory::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+{
+	
+}
+
+void UInventory::AddInventory(FString name)
+{
+	const FItmeTexturAndMeshInfo* Texture = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetTextureInfo();
+	if (Texture->textureMap.Contains(FName(*name)))
+	{
+		if (!ItemArray.Contains(name))
+		{
+			ItemArray.Add(name, 1);
+			for (UInventorySlot* sl : SlotArray)
+			{
+				if (!sl->GetNotEmpty())
+				{
+					sl->SetTexture(Texture->textureMap[FName(*name)]);
+					sl->Settext("1");
+					sl->SetName(name);
+					break;
+				}
+			}
+		}
+		else
+		{
+			ItemArray[name] += 1;
+			for (UInventorySlot* sl : SlotArray)
+			{
+				if (sl->GetName() == name)
+				{
+					sl->Settext(FString::FromInt(ItemArray[name]));
+				}
+			}
+		}
+	}
+}
+
+void UInventory::MinusInventory(FString name)
+{
+	if (ItemArray.Contains(name))
+		ItemArray[name] -= 1;
+	if (ItemArray[name] == 0)
+		ItemArray.Remove(name);
+	for (UInventorySlot* sl : SlotArray)
+	{
+		if (sl->GetName() == name)
+		{
+			sl->Settext(FString::FromInt(ItemArray[name]));
+		}
+	}
+}
+
+void UInventory::SetItemInventory(UInventoryComponent* compnent)
+{
+	InventoryComponent = compnent;
+
+	if (IsValid(InventoryComponent))
+	{
+		FDelegateHandle Handle1 = compnent->Itemadd.AddUObject(this, &UInventory::AddInventory);
+		FDelegateHandle Handle2 = compnent->ItemMinus.AddUObject(this, &UInventory::MinusInventory);
+	}
+}
+void UInventory::Close()
+{
+	SetVisibility(ESlateVisibility::Collapsed);
+}

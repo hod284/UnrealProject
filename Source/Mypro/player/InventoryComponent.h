@@ -4,21 +4,20 @@
 
 #include "../Gameinfo.h"
 #include "Components/ActorComponent.h"
-#include "Mylayercomponent.generated.h"
+#include "InventoryComponent.generated.h"
 
-/*
-유니티에있는 오브젝트레이어를 액터컴포넌트로 구현한것
-*/
+DECLARE_MULTICAST_DELEGATE_OneParam(PluseItme, FString);
+DECLARE_MULTICAST_DELEGATE_OneParam(Mninusitem, FString);
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class MYPRO_API UMylayercomponent : public UActorComponent
+class MYPRO_API UInventoryComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UMylayercomponent();
-	UPROPERTY(EditAnywhere, Category = "Layer")
-	ObjestLayer LayerType;
+	UInventoryComponent();
+	PluseItme Itemadd;
+	Mninusitem ItemMinus;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

@@ -15,7 +15,8 @@ void UPlayMainUI::NativeConstruct()
 	PlayerMp = Cast<UProgressBar>(GetWidgetFromName("PlayerMP"));
 	MonsterHp = Cast<UProgressBar>(GetWidgetFromName("MHP"));
 	MonsterStun = Cast<UProgressBar>(GetWidgetFromName("MST"));
-
+	Inventory = Cast<UInventory>(GetWidgetFromName("Inven"));
+	Inventory->SetVisibility(ESlateVisibility::Collapsed);
 	FDelegateHandle Handle1 =  OnDamage_M.AddUObject(this,&UPlayMainUI::SetMHpBar);
 	FDelegateHandle Handle2  = OnStunDamage.AddUObject(this,&UPlayMainUI::SetStunBar);
 	FDelegateHandle Handle3 =  OnDamage_P.AddUObject(this,&UPlayMainUI::SetPHpBar);

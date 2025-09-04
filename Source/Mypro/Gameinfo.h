@@ -15,7 +15,10 @@
 #include "Engine/AssetManager.h"
 
 
+
 //
+#include "Blueprint/WidgetBlueprintLibrary.h"
+#include "Fonts/FontMeasure.h"
 #include "Components/SplineComponent.h"
 #include "UObject/UnrealType.h"
 #include "Perception/AIPerceptionComponent.h"
@@ -154,6 +157,24 @@ public:
 	int32 Skill4_ATK; // 스킬4 공격력 
 };
 USTRUCT(BlueprintType)
+struct FItemtableInfo :public FTableRowBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere)
+	FString Name;// 아이템 네임
+	UPROPERTY(EditAnywhere)
+	int32 AddAttack; // 추가 공격력
+	UPROPERTY(EditAnywhere)
+	int32 AddMoveSpeed;// 추가 회피력 
+	UPROPERTY(EditAnywhere)
+	int32 AddDefence; //추가 방어력  
+	UPROPERTY(EditAnywhere)
+	int32 AddMp; // 추가 mp 
+	UPROPERTY(EditAnywhere)
+	int32 AddHp; //추가 hp
+};
+USTRUCT(BlueprintType)
 struct FPlayerAnimInfo : public FTableRowBase
 {
 	GENERATED_BODY()
@@ -180,6 +201,19 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	TMap<FName, TObjectPtr<UAnimSequence>>	SequenceMap;
+};
+USTRUCT(BlueprintType)
+struct FItmeTexturAndMeshInfo : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+
+	UPROPERTY(EditAnywhere)
+	TMap<FName, TObjectPtr<UTexture2D>>	textureMap;
+	UPROPERTY(EditAnywhere)
+	TMap<FName, TObjectPtr<UStaticMesh>> MeshMap;
+
 };
 UENUM(BlueprintType)
 enum class EMonsterDefaultAnim : uint8

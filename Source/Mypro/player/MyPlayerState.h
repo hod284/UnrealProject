@@ -3,6 +3,7 @@
 #pragma once
 
 #include "../Gameinfo.h"
+#include "InventoryComponent.h"
 #include "GameFramework/PlayerState.h"
 #include "MyPlayerState.generated.h"
 
@@ -16,10 +17,15 @@ class MYPRO_API AMyPlayerState : public APlayerState
 public:
 	UFUNCTION(Server, Reliable)
 	void SetMyCharacter(Characters character);
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
+	TObjectPtr<UInventoryComponent> Inventoryco;
 
 	UPROPERTY(Replicated)
 	Characters MyCharacter;
 
+
+
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps)  const override;
+
+	AMyPlayerState();
 };

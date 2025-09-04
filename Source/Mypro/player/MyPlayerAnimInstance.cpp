@@ -107,6 +107,10 @@ void UMyPlayerAnimInstance::Attackend(UAnimMontage* Montage, bool Interrupted)
 			AttackSectionIndex = 0;
 	}
 }
+void UMyPlayerAnimInstance::AnimNotify_AttackArrayReset()
+{
+		AttackSectionIndex = 0;
+}
 
 void UMyPlayerAnimInstance::AnimNotify_Attack()
 {

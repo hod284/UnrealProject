@@ -45,6 +45,28 @@ void UDataManager::Initialize(FSubsystemCollectionBase& Collection)
 				Datainfo_Monster = datatable->FindRow<FCMonsterInfo>("steel", TEXT(""));
 			}
 		}
+		if (name == "itemtable")
+		{
+			FAssetData data;
+			AssetManager.GetPrimaryAssetData(Assetid, data);
+			// 내가 정해진 프라이머 에셋 타입을 가져와서 대입시키기
+			UDataTable* datatable = Cast<UDataTable>(data.GetAsset());
+			if (datatable)
+			{
+				ItemInfo = datatable->FindRow<FItemtableInfo>("common", TEXT(""));
+			}
+		}
+		if (name == "ItemMeshandTexture")
+		{
+			FAssetData data;
+			AssetManager.GetPrimaryAssetData(Assetid, data);
+			// 내가 정해진 프라이머 에셋 타입을 가져와서 대입시키기
+			UDataTable* datatable = Cast<UDataTable>(data.GetAsset());
+			if (datatable)
+			{
+				TextureInfo = datatable->FindRow<FItmeTexturAndMeshInfo>("commont", TEXT(""));
+			}
+		}
 	}
 
 }
