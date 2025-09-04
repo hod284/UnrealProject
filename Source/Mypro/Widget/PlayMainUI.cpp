@@ -2,6 +2,7 @@
 
 
 #include "PlayMainUI.h"
+#include"../player/MyPlayerState.h"
 #include "../common/PlaySceneObject.h"
 void UPlayMainUI::NativeConstruct()
 {
@@ -46,6 +47,46 @@ void UPlayMainUI::SetMHpBar(float da)
 void UPlayMainUI::SetPMpBar(float da)
 {
 	PlayerMp->SetPercent(da);
+}
+bool UPlayMainUI::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
+{
+	if (UMyDragDropOperation* Op = Cast<UMyDragDropOperation>(InOperation))
+	{
+		// 예: 실제 인벤토리 로직에 반영
+		FString co = Op->Count;
+		Op->SourceSlot->SetTexture(NULL);
+		Op->SourceSlot->Settext("0");
+		Op->SourceSlot->SetNotEmpty(false);
+		// GetOwningPlayer()는 createwidget할때 owner를 안정해 질경우 null로 나온다 그래서 만약 사용해야 할경우 무조건 소유주지정
+		APlayerController* PC = Cast<AMainPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+		AMyPlayerState* PS  = Cast<AMyPlayerState>(PC->PlayerState);
+		if (IsValid( PS) )
+			PS->Inventoryco->ItemMinus.Broadcast(Op->SourceSlot->GetName());
+		Op->SourceSlot->SetName("");
+		// 스크린포지션 지정
+		FVector2D screenposition = InDragDropEvent.GetScreenSpacePosition();
+		FHitResult hit;
+		// 스크린화면에서 레이를 쏴서 히트 했는지 안했는지 확인
+		bool bHit = PC->GetHitResultAtScreenPosition(
+			screenposition, ECollisionChannel::ECC_Visibility, /*bTraceComplex=*/true, hit);
+		if (!bHit) return false;
+
+		const FVector SpawnLoc = hit.Location;
+		const FRotator SpawnRot = FRotator::ZeroRotator;
+		AStaticMeshActor* MeshActor = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), SpawnLoc, SpawnRot);
+		MeshActor->SetActorLabel("Portal");
+		if (MeshActor)
+		{
+			MeshActor->SetMobility(EComponentMobility::Movable);
+			const FItmeTexturAndMeshInfo* Texture = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetTextureInfo();
+			UStaticMesh* Mesh = Texture->MeshMap["Portal"];
+			MeshActor->GetStaticMeshComponent()->SetStaticMesh(Mesh);
+			MeshActor->SetActorScale3D(FVector(1.0f)); // 크기 조절
+		}
+
+		return true;
+	}
+	return false;
 }
 void UPlayMainUI::SetPHpBar(float da)
 {

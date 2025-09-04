@@ -18,7 +18,7 @@ protected:
 	virtual void NativeConstruct() override;
 	virtual void NativeDestruct()override ;
     UPROPERTY(BlueprintReadWrite,EditAnywhere)
-	TObjectPtr<UImage> Image;
+	TObjectPtr<UImage> Image;// 드래그할때 나올 이미지
 public:	
 	void Inite(UTexture2D *im);
 };

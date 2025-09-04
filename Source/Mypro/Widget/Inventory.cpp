@@ -60,11 +60,14 @@ void UInventory::MinusInventory(FString name)
 		ItemArray[name] -= 1;
 	if (ItemArray[name] == 0)
 		ItemArray.Remove(name);
-	for (UInventorySlot* sl : SlotArray)
+	if (!ItemArray.IsEmpty())
 	{
-		if (sl->GetName() == name)
+		for (UInventorySlot* sl : SlotArray)
 		{
-			sl->Settext(FString::FromInt(ItemArray[name]));
+			if (sl->GetName() == name)
+			{
+				sl->Settext(FString::FromInt(ItemArray[name]));
+			}
 		}
 	}
 }

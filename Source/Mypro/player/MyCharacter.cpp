@@ -148,7 +148,10 @@ void AMyCharacter::Tick(float DeltaTime)
 				TargetLocation = CameraTarget->GetActorLocation();
 				AMonster* m = Cast<AMonster>(CameraTarget);
 				if (m->GetDeath())
+				{
 					LookAt = false;
+					CameraHead->SetRelativeRotation(FRotator(0, 180, 0));
+				}
 			}
 				// 캐릭터 월드로케이션
 			FVector CameraLocation = GetActorLocation();
@@ -236,7 +239,7 @@ void AMyCharacter::EndDash()
 }
 void AMyCharacter::MoveKey(const FInputActionValue& Value)
 {
-	if (!BackMoving&& !DashMoving)
+	if (!BackMoving&& !DashMoving && !DashMoving && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetCusorVisual() == UIORNOT::UINot)
 	{
 		FVector Diret = Value.Get<FVector>();
 		// 캐릭터 무브먼트에게 이동한다고 신호 보내는 함수
@@ -335,12 +338,12 @@ void AMyCharacter::CameraRotation_Cancel(const FInputActionValue& Value)
 {
 	LookAt = true;
 	CameraRo = false;
-	Camera->SetRelativeRotation(FRotator(Camera->GetRelativeRotation().Pitch, 0, 0));
+	Camera->SetRelativeRotation(FRotator(30, 0, 0));
 }
 
 void AMyCharacter::BackKey(const FInputActionValue& Value)
 {
-	if (!BackMoving && !DashMoving)
+	if (!BackMoving && !DashMoving && !DashMoving && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetCusorVisual() == UIORNOT::UINot)
 	{
 		UCharacterMovementComponent* Move = GetCharacterMovement();
 		// 잠시 미끄러지게: 마찰/감속을 낮춤
@@ -361,7 +364,7 @@ void AMyCharacter::BackKey(const FInputActionValue& Value)
 }
 void AMyCharacter::DashKey(const FInputActionValue& Value)
 {
-	if (!BackMoving && !DashMoving)
+	if (!BackMoving && !DashMoving && !DashMoving && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetCusorVisual() == UIORNOT::UINot)
 	{
 		UCharacterMovementComponent* Move = GetCharacterMovement();
 		// 잠시 미끄러지게: 마찰/감속을 낮춤
@@ -383,10 +386,9 @@ void AMyCharacter::DashKey(const FInputActionValue& Value)
 void AMyCharacter::InventoryKey(const FInputActionValue& Value)
 {
 	if (!BackMoving && !DashMoving)
-	{
-		
-			ui->GetInventory()->SetVisibility(ESlateVisibility::Visible);
-			GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UI);
+	{	
+		ui->GetInventory()->SetVisibility(ESlateVisibility::Visible);
+		GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UI);
 	}
 }
 void AMyCharacter::AttackKey(const FInputActionValue& Value)

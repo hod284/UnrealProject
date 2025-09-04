@@ -58,10 +58,11 @@ protected:
 	UFUNCTION()
 	void SetPMpBar(float da);
 public:
-	FOnDamage_M OnDamage_M;
-	FOnStun OnStunDamage;
-	FOnDamage_P OnDamage_P;
-	FOnMp_P OnSyncMp_P;
+	virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)override;
+	FOnDamage_M OnDamage_M;// 몬스터 데미지 델리게이트
+	FOnStun OnStunDamage; //몬스터 스턴데미지 델리게이트
+	FOnDamage_P OnDamage_P;// 데미지 플레이어 델리게이트
+	FOnMp_P OnSyncMp_P;// 플레이어 MP소모 델리게이트
 	UPlayMainUI(const FObjectInitializer& ObjectInitializer);
 	void SetSkill1Inite(FString Path);
 	void SetSkill2Inite(FString Path);

@@ -33,4 +33,8 @@ protected:
 	void MinusInventory(FString name);
 public:
 	void SetItemInventory(UInventoryComponent *compnent);
+	UInventoryComponent* GetItemInventory() const
+	{
+		return 	InventoryComponent;
+	}
 };

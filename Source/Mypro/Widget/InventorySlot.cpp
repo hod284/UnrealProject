@@ -26,6 +26,7 @@ void UInventorySlot::NativeOnDragDetected(const FGeometry& InGeometry, const FPo
     USlot* Visual = CreateWidget<USlot>(GetWorld(), SlotClass);
     Visual->TakeWidget();
     Visual->Inite(Cast<UTexture2D>(Icon->GetBrush().GetResourceObject()));
+    Visual->SetRenderScale(FVector2D(5, 5));
     UMyDragDropOperation* DragOp = Cast<UMyDragDropOperation>(
         UWidgetBlueprintLibrary::CreateDragDropOperation(UMyDragDropOperation::StaticClass()));
     FString str = Countst->GetText().ToString();
@@ -46,9 +47,11 @@ bool UInventorySlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEv
         SetTexture(Op->Texture);
         Settext(co);
         SetNotEmpty(true);
+        SetName(Op->Itemname);
         Op->SourceSlot->SetTexture(NULL);
         Op->SourceSlot->Settext("0");
         Op->SourceSlot->SetNotEmpty(false);
+        Op->SourceSlot->SetName("");
         return true;
     }
 	return false;
