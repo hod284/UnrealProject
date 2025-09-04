@@ -35,6 +35,7 @@ void UInventory::AddInventory(FString name)
 					sl->SetTexture(Texture->textureMap[FName(*name)]);
 					sl->Settext("1");
 					sl->SetName(name);
+					sl->SetNotEmpty(true);
 					break;
 				}
 			}
@@ -70,15 +71,15 @@ void UInventory::MinusInventory(FString name)
 
 void UInventory::SetItemInventory(UInventoryComponent* compnent)
 {
-	InventoryComponent = compnent;
-
-	if (IsValid(InventoryComponent))
+	if (!IsValid(InventoryComponent))
 	{
-		FDelegateHandle Handle1 = compnent->Itemadd.AddUObject(this, &UInventory::AddInventory);
-		FDelegateHandle Handle2 = compnent->ItemMinus.AddUObject(this, &UInventory::MinusInventory);
+	    InventoryComponent = compnent;
+		FDelegateHandle Handle1 = InventoryComponent->Itemadd.AddUObject(this, &UInventory::AddInventory);
+		FDelegateHandle Handle2 = InventoryComponent->ItemMinus.AddUObject(this, &UInventory::MinusInventory);
 	}
 }
 void UInventory::Close()
 {
+	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UINot);
 	SetVisibility(ESlateVisibility::Collapsed);
 }

@@ -180,6 +180,20 @@ float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 		AnimInstance->DeathAni();
 		if (Brain)
 			Brain->PauseLogic(TEXT("Death")); // 브레인 정지
+		FVector SpawnLocation(0, 0, 100);
+		FRotator SpawnRotation(0, 0, 0);
+
+		AStaticMeshActor* MeshActor = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), SpawnLocation, SpawnRotation);
+		MeshActor->SetActorLabel("Portal");
+		if (MeshActor)
+		{
+			MeshActor->SetMobility(EComponentMobility::Movable);
+			const FItmeTexturAndMeshInfo* Texture = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetTextureInfo();
+			UStaticMesh* Mesh = Texture->MeshMap["Portal"];
+			MeshActor->GetStaticMeshComponent()->SetStaticMesh(Mesh);
+			MeshActor->SetActorScale3D(FVector(1.0f)); // 크기 조절
+			CapsuleComponent->SetCollisionProfileName("PlayerSkill");
+		}
 		Death = true;
 	}
 

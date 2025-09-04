@@ -23,6 +23,7 @@ protected:
 	TSubclassOf<USlot>  SlotClass;
 	FString Itemname;
 	bool NotEmpty;
+
 	virtual void NativeConstruct() override;
 	virtual void NativeDestruct() override;
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)override;
@@ -41,8 +42,14 @@ public:
 	{
 		return  NotEmpty;
 	}
+	void SetNotEmpty(bool bo)
+	{
+		 NotEmpty =bo;
+	}
 	void SetName(FString na)
 	{
 		Itemname =na;
 	}
+
+	UInventorySlot(const FObjectInitializer& ObjectInitializer);
 };

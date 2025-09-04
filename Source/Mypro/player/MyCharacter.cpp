@@ -52,13 +52,16 @@ void AMyCharacter::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
 	const FHitResult& Hit)
 {
-	AMonster* m = Cast<AMonster>(OtherActor);
-	if ( m && m->GetDeath())
+	FString s = OtherActor->GetActorLabel();
+	UE_LOG(LogMypro, Warning, TEXT("hit:%s"), *s);
+	const FItemtableInfo* itemlist = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetItemInfo();
+	if (itemlist->Name == OtherActor->GetActorLabel())
 	{
 		if (AMyPlayerState* PS = GetPlayerState<AMyPlayerState>())
 		{
-		     PS->Inventoryco->Itemadd.Broadcast("Portal");
+			PS->Inventoryco->Itemadd.Broadcast("Portal");
 		}
+		OtherActor->Destroy();
 	}
 }
 
@@ -143,6 +146,9 @@ void AMyCharacter::Tick(float DeltaTime)
 			    TargetTransform = CameraTarget->GetRootComponent();
 				// 몬스터월드 로케이션
 				TargetLocation = CameraTarget->GetActorLocation();
+				AMonster* m = Cast<AMonster>(CameraTarget);
+				if (m->GetDeath())
+					LookAt = false;
 			}
 				// 캐릭터 월드로케이션
 			FVector CameraLocation = GetActorLocation();
@@ -298,7 +304,7 @@ void AMyCharacter::MoveStop(const FInputActionValue& Value)
 void AMyCharacter::CameraRotation(const FInputActionValue& Value)
 {
 	FVector Diret = Value.Get<FVector>();
-	if (!LookAt)
+	if (CameraRo)
 	{
 		float	Pitch = Diret.Y * 90.f * GetWorld()->GetDeltaSeconds();
 		float	Yaw = Diret.X * 90.f * GetWorld()->GetDeltaSeconds();
@@ -322,11 +328,13 @@ void AMyCharacter::CameraRotation(const FInputActionValue& Value)
 void AMyCharacter::CameraRotation_Allow(const FInputActionValue& Value)
 {
 	LookAt=false;
+	CameraRo = true;
 }
 
 void AMyCharacter::CameraRotation_Cancel(const FInputActionValue& Value)
 {
 	LookAt = true;
+	CameraRo = false;
 	Camera->SetRelativeRotation(FRotator(Camera->GetRelativeRotation().Pitch, 0, 0));
 }
 
@@ -376,47 +384,38 @@ void AMyCharacter::InventoryKey(const FInputActionValue& Value)
 {
 	if (!BackMoving && !DashMoving)
 	{
-		if (AMyPlayerState* PS = GetPlayerState<AMyPlayerState>())
-		{
-			if (ui->GetInventory())
-		        ui->GetInventory()->SetItemInventory(PS->Inventoryco);
-		}
-		AMainPlayerController* controller = Cast<AMainPlayerController>(GetController());
-		// 커서/입력 전환 (게임+UI)
-		controller ->bShowMouseCursor = true;
-		FInputModeGameAndUI Mode;
-			Mode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-			Mode.SetWidgetToFocus(ui->GetInventory()->GetCachedWidget());
+		
 			ui->GetInventory()->SetVisibility(ESlateVisibility::Visible);
+			GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UI);
 	}
 }
 void AMyCharacter::AttackKey(const FInputActionValue& Value)
 {
-	if (AnimInstance&&!IsMoving&&!BackMoving && !DashMoving)
+	if (AnimInstance&&!IsMoving&&!BackMoving && !DashMoving&& GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetCusorVisual() ==UIORNOT::UINot)
 		AnimInstance->PlayAttack();
 }
 
 void AMyCharacter::Skill1Key(const FInputActionValue& Value)
 {
-	if (AnimInstance && !IsMoving && !BackMoving && Canskill1 && !DashMoving)
+	if (AnimInstance && !IsMoving && !BackMoving && Canskill1 && !DashMoving && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetCusorVisual() == UIORNOT::UINot)
 		AnimInstance->PlaySkill(0);
 }
 
 void AMyCharacter::Skill2Key(const FInputActionValue& Value)
 {
-	if (AnimInstance && !IsMoving && !BackMoving && Canskill2 && !DashMoving)
+	if (AnimInstance && !IsMoving && !BackMoving && Canskill2 && !DashMoving && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetCusorVisual() == UIORNOT::UINot)
 		AnimInstance->PlaySkill(1);
 }
 
 void AMyCharacter::Skill3Key(const FInputActionValue& Value)
 {
-	if (AnimInstance && !IsMoving && !BackMoving&& Canskill3 && !DashMoving)
+	if (AnimInstance && !IsMoving && !BackMoving&& Canskill3 && !DashMoving && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetCusorVisual() == UIORNOT::UINot)
 		AnimInstance->PlaySkill(2);
 }
 
 void AMyCharacter::Skill4Key(const FInputActionValue& Value)
 {
-	if (AnimInstance && !IsMoving && !BackMoving && Canskill4 && !DashMoving)
+	if (AnimInstance && !IsMoving && !BackMoving && Canskill4 && !DashMoving && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetCusorVisual() == UIORNOT::UINot)
 		AnimInstance->PlaySkill(3);
 }
 void AMyCharacter::Skill1coolTime(float speed)

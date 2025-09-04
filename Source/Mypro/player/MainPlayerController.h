@@ -26,6 +26,7 @@ protected:
 	virtual void BeginPlay() override;
 	TArray<AActor*>SceneActorList;
 	AMainPlayerController();
+	virtual void Tick(float DeltaTime) override;
 public:
     /// <summary>
     /// 레벨에 있는 인트로씬 옵브젝트 찾기위해 만든 함수

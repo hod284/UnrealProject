@@ -94,5 +94,11 @@ void APlaySceneObject::OnSequenceFinished()
 			pawn->SetBackMoving(false);
 		}
 	}
+	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UINot);
+	if (AMyPlayerState* PS = Cast<AMyPlayerState>( PC->PlayerState))
+	{
+		if (ui->GetInventory())
+			ui->GetInventory()->SetItemInventory(PS->Inventoryco);
+	}
 	monster->Start();
 }

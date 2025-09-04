@@ -6,7 +6,7 @@
 void USlot::NativeConstruct()
 {
 	Super::NativeConstruct();
-	Image = Cast<UImage>(GetWidgetFromName(TEXT("Im")));
+	Image = Cast<UImage>(GetWidgetFromName(TEXT("Ima")));
 	
 }
 void USlot::NativeOnInitialized()

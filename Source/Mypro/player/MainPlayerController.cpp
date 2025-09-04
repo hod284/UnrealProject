@@ -10,6 +10,11 @@ AMainPlayerController::AMainPlayerController()
 
 }
 
+void AMainPlayerController::Tick(float DeltaTime)
+{
+	bShowMouseCursor = GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetCusorVisual() == UIORNOT::UI ? true : false;
+}
+
 TSubclassOf<APawn> AMainPlayerController::GetSelectCharactertClass()
 {
 	// 반환경로 보장을 위해 로드클래스 선언및 초기화
@@ -38,13 +43,12 @@ TSubclassOf<APawn> AMainPlayerController::GetSelectCharactertClass()
 void AMainPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	// 마우스 커서 보이기
-	bShowMouseCursor = GetWorld()->GetGameInstance() ->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Intro ? true : false;
 	// 클라이언트 확인
 	if (IsLocalController())
 	{
 		if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Intro)
 		{
+			GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UI);
 			bEnableMouseOverEvents = true;
 			bEnableClickEvents = true;
 			// 현재 레벨에서 모든 액터들을 들고 오는 로직

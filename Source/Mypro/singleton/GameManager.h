@@ -18,6 +18,8 @@ private:
 	NowGameState  state = NowGameState ::None;
 	// 게임 메니저에서 플레이 캐릭터 선택
 	Characters character = Characters::None;
+	// 게임 메니저에서 플레이 캐릭터 선택
+	UIORNOT  CusorVisual = UIORNOT::UINot;
 public:
 	// 기본 생성자
 	// 생성자에 초기화하지 않겠다는뜻
@@ -36,5 +38,11 @@ public:
 	}
 	const Characters  GetSelectedcharacter() const {
 		return character;
+	}
+	const UIORNOT  GetCusorVisual() const {
+		return CusorVisual;
+	}
+	void SetCusorVisual(UIORNOT  ch) {
+		CusorVisual = ch;
 	}
 };

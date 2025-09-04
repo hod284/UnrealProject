@@ -3,6 +3,7 @@
 #pragma once
 
 #include "../Gameinfo.h"
+#include "../singleton/GameManager.h"
 #include "../player/InventoryComponent.h"
 #include "../singleton/DataManager.h"
 #include "InventorySlot.h"

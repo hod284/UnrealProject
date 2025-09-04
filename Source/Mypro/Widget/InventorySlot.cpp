@@ -24,6 +24,7 @@ FReply UInventorySlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, cons
 void UInventorySlot::NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation)
 {
     USlot* Visual = CreateWidget<USlot>(GetWorld(), SlotClass);
+    Visual->TakeWidget();
     Visual->Inite(Cast<UTexture2D>(Icon->GetBrush().GetResourceObject()));
     UMyDragDropOperation* DragOp = Cast<UMyDragDropOperation>(
         UWidgetBlueprintLibrary::CreateDragDropOperation(UMyDragDropOperation::StaticClass()));
@@ -44,8 +45,10 @@ bool UInventorySlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEv
         FString co = Op->Count;
         SetTexture(Op->Texture);
         Settext(co);
+        SetNotEmpty(true);
         Op->SourceSlot->SetTexture(NULL);
         Op->SourceSlot->Settext("0");
+        Op->SourceSlot->SetNotEmpty(false);
         return true;
     }
 	return false;
@@ -76,4 +79,12 @@ void UInventorySlot::Settext(FString Count)
     }
     else
     Countst->SetText(FText::FromString(Count));
+}
+
+UInventorySlot::UInventorySlot(const FObjectInitializer& ObjectInitializer):
+    UUserWidget(ObjectInitializer)
+{
+    static ConstructorHelpers::FClassFinder<UUserWidget> slotc(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/widget/slotwidget.slotwidget_C'"));
+    if (slotc.Succeeded())
+        SlotClass = slotc.Class;
 }
