@@ -2,31 +2,42 @@
 
 #pragma once
 
-#include "../../Gameinfo.h"
+#include "../Gameinfo.h"
 #include "GameFramework/Actor.h"
-#include "Skill4_Magition.generated.h"
+#include "PortalClass.generated.h"
 
 UCLASS()
-class MYPRO_API ASkill4_Magition : public AActor
+class MYPRO_API APortalClass : public AActor
 {
 	GENERATED_BODY()
 	
+public:	
+	// Sets default values for this actor's properties
+	APortalClass();
+
 protected:
-	FTimerHandle Time;
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+	UPROPERTY(BlueprintReadWrite,EditAnywhere)
+	TObjectPtr<USphereComponent> Sphere;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TObjectPtr<UNiagaraComponent> NiagaraParticle;
+	TObjectPtr<UNiagaraComponent> Niagara1;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TObjectPtr<UCapsuleComponent> BoxColider;
+	TObjectPtr<UNiagaraComponent> Niagara2;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	int32 AttackDamage;
+	TObjectPtr<UNiagaraComponent> Niagara3;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TObjectPtr<UNiagaraComponent> Niagara4;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TObjectPtr<UStaticMeshComponent> StaticMesh;
 	// Ãæµ¹
 	UFUNCTION()
-	void OnHit_Skil4_Magition(UPrimitiveComponent* HitComp, AActor* OtherActor,
+	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, FVector NormalImpulse,
 		const FHitResult& Hit);
 	// ¿À¹ö·¦
 	UFUNCTION()
-	void OnCapsuleBeginOverlap_Skil4_Magition(
+	void OnCapsuleBeginOverlap(
 		UPrimitiveComponent* OverlappedComp,
 		AActor* OtherActor,
 		UPrimitiveComponent* OtherComp,
@@ -35,29 +46,13 @@ protected:
 		const FHitResult& SweepResult);
 	// ¿À¹ö·¦ ³¡
 	UFUNCTION()
-	void OnCapsuleEndOverlap_Skil4_Magition(
+	void OnCapsuleEndOverlap(
 		UPrimitiveComponent* OverlappedComp,
 		AActor* OtherActor,
 		UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex);
-	// Sets default values for this actor's properties
-	ASkill4_Magition();
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	int32 GetAttackDamage() const
-	{
-		return AttackDamage;
-	}
-	void SetAttackDamage(int32 da)
-	{
-		AttackDamage = da;
-	}
-	void SetAttackDamage(FString cporfile)
-	{
-		BoxColider->SetCollisionProfileName(FName(*cporfile));
-	}
+
 };

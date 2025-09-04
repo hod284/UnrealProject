@@ -28,9 +28,14 @@ protected:
 	TObjectPtr<UTextBlock> laodingtitle;
 	UPROPERTY()
 	TObjectPtr<UTextBlock> percenttext;
+	UPROPERTY()
+	TObjectPtr<UButton> EscBu;
 	UFUNCTION()
 	void StartButtonClick();
+	UFUNCTION()
+	void EscClick();
 	void GameStart(Characters ch); // 캐릭터 선택 함수
 	virtual void NativeConstruct() override;
 	virtual void NativeDestruct() override;
+	virtual void NativeOnInitialized() override;
 };

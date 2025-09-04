@@ -77,4 +77,8 @@ public:
 	{
 		UScene = ta;
 	}
+	void SetAttackDamage(FString cporfile)
+	{
+		BoxColider->SetCollisionProfileName(FName(*cporfile));
+	}
 };

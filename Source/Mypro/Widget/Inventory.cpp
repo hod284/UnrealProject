@@ -12,6 +12,7 @@ void UInventory::NativeConstruct()
 	    SlotArray.Add(InventorySlot);
 	}
 	Closebu = Cast<UButton>(GetWidgetFromName(TEXT("clo")));
+	if(!Closebu->OnClicked.IsBound())
 	Closebu->OnClicked.AddDynamic(this,&UInventory::Close);
 }
 

@@ -32,7 +32,16 @@ void UIntroMainUI::NativeConstruct()
 	laodingtitle = Cast<UTextBlock>(GetWidgetFromName(TEXT("loadingtitle")));
 	percenttext = Cast<UTextBlock>(GetWidgetFromName(TEXT("percent")));
 	Start = Cast<UButton>(GetWidgetFromName("Startbutton"));
+	EscBu = Cast<UButton>(GetWidgetFromName("Esc"));
+	Switcher->SetActiveWidgetIndex(0);
+	laodingtitle->SetVisibility(ESlateVisibility::Collapsed);
+	percenttext->SetVisibility(ESlateVisibility::Collapsed);
+	Start->SetVisibility(ESlateVisibility::Collapsed);
+	percenttext->SetText(FText::FromString("0"));
+	if(!Start->OnClicked.IsBound())
 	Start->OnClicked.AddDynamic(this, &UIntroMainUI::StartButtonClick);
+	if (!EscBu->OnClicked.IsBound())
+		EscBu->OnClicked.AddDynamic(this, &UIntroMainUI::EscClick);
 }
 
 void UIntroMainUI::NativeDestruct()
@@ -40,9 +49,24 @@ void UIntroMainUI::NativeDestruct()
 	Super::NativeDestruct();
 
 }
+void UIntroMainUI::NativeOnInitialized()
+{
+	Super::NativeOnInitialized();
+
+}
 void UIntroMainUI::StartButtonClick()
 {
 	GameStart(GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSelectedcharacter());
+}
+
+void UIntroMainUI::EscClick()
+{
+	UKismetSystemLibrary::QuitGame(
+		GetWorld(),
+		GetWorld()->GetFirstPlayerController(),
+		EQuitPreference::Quit,
+		false   // bIgnorePlatformRestrictions
+	);
 }
 
 void UIntroMainUI::GameStart(Characters ch)

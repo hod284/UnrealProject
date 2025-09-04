@@ -36,6 +36,7 @@ protected:
 	bool IsMoving = false;// 이동중인지 아닌지
 	bool LookAt = true;// 카메라 바라보기
 	bool CameraRo = false;// 카메라 돌리기
+	bool CanPortal = false;// 카메라 돌리기
 	FGenericTeamId	TeamID;
 	float HP = 1.0F;
 	float MP = 1.0F;
@@ -153,5 +154,19 @@ public:
 	float GetMP() const
 	{
 		return MP;
+	}
+	bool GetCanPortal() const
+	{
+		return CanPortal;
+	}
+	void SetAddCanPortal(FString name)
+	{
+		if (name == "Portal")
+			CanPortal = true;
+	}
+	void SetMinusCanPortal(FString name)
+	{
+		if (name == "Portal")
+			CanPortal = false;
 	}
 };

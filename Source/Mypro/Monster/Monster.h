@@ -9,6 +9,7 @@
 #include "MonsterAnimInstance.h"
 #include "../singleton/UImanager.h"
 #include "../singleton/DataManager.h"
+#include "../common/PortalClass.h"
 #include "SkillActor/Action1_Monster.h"
 #include "SkillActor/Action2_Monster.h"
 #include "SkillActor/Action3_Monster.h"
@@ -57,6 +58,8 @@ protected:
 	TSubclassOf<AAction3_Monster> Sk3;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
 	TSubclassOf<AAction4_Monster> Sk4;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "portal")
+	TSubclassOf<APortalClass> Portal;
 	UPlayMainUI* UI;
 public:	
 	void Start();

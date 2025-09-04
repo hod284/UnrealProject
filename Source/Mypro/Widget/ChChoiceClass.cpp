@@ -5,6 +5,7 @@
 
 void UChChoiceClass::NativeConstruct()
 {
+	Super::NativeConstruct();
 	Titletext = Cast<UTextBlock>(GetWidgetFromName("Title"));
 	Character1 = Cast<UButton>(GetWidgetFromName("ch1"));
 	Character2 = Cast<UButton>(GetWidgetFromName("ch2"));
@@ -23,11 +24,21 @@ void UChChoiceClass::NativeConstruct()
 	skill2Atk = Cast<UProgressBar>(GetWidgetFromName("sk2"));
 	skill3Atk = Cast<UProgressBar>(GetWidgetFromName("sk3"));
 	skill4Atk = Cast<UProgressBar>(GetWidgetFromName("sk4"));
+	if(!back ->OnClicked.IsBound())
 	back->OnClicked.AddDynamic(this, &UChChoiceClass::Backclick);
+	if (!Character1->OnClicked.IsBound())
 	Character1->OnClicked.AddDynamic(this, &UChChoiceClass::Character1Click);
+	if (!Character2->OnClicked.IsBound())
 	Character2->OnClicked.AddDynamic(this, &UChChoiceClass::Character2Click);
+	if (!Character3->OnClicked.IsBound())
 	Character3->OnClicked.AddDynamic(this, &UChChoiceClass::Character3Click);
 	SetDataValue(Characters::Warrior, GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_W());
+}
+
+void UChChoiceClass::NativeOnInitialized()
+{
+	Super::NativeOnInitialized();
+
 }
 
 

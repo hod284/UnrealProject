@@ -46,6 +46,8 @@ void UMyPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 void UMyPlayerAnimInstance::PlayAttack()
 {
 	AMyCharacter* PlayerCharacter =	Cast<AMyCharacter>(TryGetPawnOwner());
+	if (AttackSectionIndex >= AttackSectionArray.Num())
+		AttackSectionIndex = 0;
 	if (!PlayerCharacter->GetCanskill3() && IsValid(AttackUpMontage))
 	{
 		if (!Montage_IsPlaying(AttackUpMontage) && AttackSectionIndex < AttackSectionArray.Num())

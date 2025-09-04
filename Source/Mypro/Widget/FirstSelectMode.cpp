@@ -7,16 +7,22 @@ void UFirstSelectMode::NativeConstruct()
 {
 	Super::NativeConstruct();
 	// 싱글버튼 호버 이벤트 연결
+	if(!SingleButton->OnHovered.IsBound())
 	SingleButton->OnHovered.AddDynamic(this, &UFirstSelectMode::HoverSingleButton);
 	// 싱글버튼 언호버 이벤트 연결
+	if (!SingleButton->OnUnhovered.IsBound())
 	SingleButton->OnUnhovered.AddDynamic(this, &UFirstSelectMode::UnHoverSingleButton);
 	// 싱글버튼 클릭 이벤트 연결
+	if (!SingleButton->OnClicked.IsBound())
 	SingleButton->OnClicked.AddDynamic(this, &UFirstSelectMode::ClickSingleButton);
 	// 멀티버튼 호버 이벤트 연결
+	if (!MultiButton->OnHovered.IsBound())
 	MultiButton->OnHovered.AddDynamic(this, &UFirstSelectMode::HoverMultiButton);
 	// 멀티버튼 언호버 이벤트 연결
+	if (!MultiButton->OnUnhovered.IsBound())
 	MultiButton->OnUnhovered.AddDynamic(this, &UFirstSelectMode::UnHoverMultiButton);
 	// 멀티버튼 클릭 이벤트 연결
+	if (!MultiButton->OnClicked.IsBound())
 	MultiButton->OnClicked.AddDynamic(this, &UFirstSelectMode::ClickMultiButton);
 }
 
@@ -36,6 +42,12 @@ void UFirstSelectMode::FirstSelectCharacter()
 			}
 		}
 	
+}
+
+void UFirstSelectMode::NativeOnInitialized()
+{
+	Super::NativeOnInitialized();
+
 }
 
 void UFirstSelectMode::HoverSingleButton()

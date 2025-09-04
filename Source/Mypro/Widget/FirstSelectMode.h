@@ -41,4 +41,5 @@ protected:
 	// Called when the game starts
 	virtual void NativeConstruct() override;
 	void FirstSelectCharacter(); // 버튼을 누르고 난뒤 처음 캐릭터 선택
+	virtual void NativeOnInitialized() override;
 };

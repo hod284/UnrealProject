@@ -42,6 +42,8 @@ void AMonster::BeginPlay()
 	Info = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_Monster();
 	MonsterHp = static_cast <float>(Info->HP);
 	MonsterStun = static_cast <float>(Info->StunGage);
+	HP = 1.0f;
+	Stun = 1.0f;
 	AnimInstance = Cast<UMonsterAnimInstance>(MeshComponent ->GetAnimInstance());
 	AAIController* AIController = Cast<AAIController>(GetController());
 	if (AIController && MonsterBehaviorTree)
@@ -194,6 +196,10 @@ float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 			MeshActor->SetActorScale3D(FVector(1.0f)); // 크기 조절
 			CapsuleComponent->SetCollisionProfileName("PlayerSkill");
 		}
+		FActorSpawnParameters param;
+		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+		GetWorld()->SpawnActor<AActor>(Portal, FVector(0, -200, 10), FRotator::ZeroRotator, param);
+		
 		Death = true;
 	}
 

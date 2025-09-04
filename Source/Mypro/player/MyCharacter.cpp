@@ -47,6 +47,11 @@ void AMyCharacter::BeginPlay()
 	SavedBrakingDecel = Move->BrakingDecelerationWalking;
 	ui = Cast<UPlayMainUI>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPlayMainUI_widget());
 	Niagara->SetVisibility(false);
+	if (AMyPlayerState* PS = GetPlayerState<AMyPlayerState>())
+	{
+		PS->Inventoryco->Itemadd.AddUObject(this, &AMyCharacter::SetAddCanPortal);
+		PS->Inventoryco->ItemMinus.AddUObject(this,& AMyCharacter::SetMinusCanPortal);
+	}
 }
 void AMyCharacter::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
@@ -352,7 +357,7 @@ void AMyCharacter::BackKey(const FInputActionValue& Value)
 		Move->BrakingFriction = 0.5f;
 		Move->BrakingDecelerationWalking = 250.f;
 		// 단위 백터니까 방향만 가지고 있음 방향백터 x거리
-	    FVector	NewLocation = -CurrentVelocity * 1500.0f; // 뒤로 20만큼
+	    FVector	NewLocation = -CurrentVelocity * 1000.0f; // 뒤로 20만큼
 		LaunchCharacter(NewLocation, true, false);
 		BackMoving = true;
 		DashMoving = true;
@@ -373,7 +378,7 @@ void AMyCharacter::DashKey(const FInputActionValue& Value)
 		Move->BrakingFriction = 0.5f;
 		Move->BrakingDecelerationWalking = 250.f;
 		// 단위 백터니까 방향만 가지고 있음 방향백터 x거리
-		FVector	NewLocation = CurrentVelocity * 2000.0f; // 뒤로 20만큼
+		FVector	NewLocation = CurrentVelocity * 1000.0f; // 뒤로 20만큼
 		LaunchCharacter(NewLocation, true, false);
 		DashMoving = true;
 		BackMoving = true;

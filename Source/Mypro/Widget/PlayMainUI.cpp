@@ -18,10 +18,18 @@ void UPlayMainUI::NativeConstruct()
 	MonsterStun = Cast<UProgressBar>(GetWidgetFromName("MST"));
 	Inventory = Cast<UInventory>(GetWidgetFromName("Inven"));
 	Inventory->SetVisibility(ESlateVisibility::Collapsed);
+	if(!OnDamage_M.IsBound())
 	FDelegateHandle Handle1 =  OnDamage_M.AddUObject(this,&UPlayMainUI::SetMHpBar);
+	if (!OnStunDamage.IsBound())
 	FDelegateHandle Handle2  = OnStunDamage.AddUObject(this,&UPlayMainUI::SetStunBar);
+	if (!OnDamage_P.IsBound())
 	FDelegateHandle Handle3 =  OnDamage_P.AddUObject(this,&UPlayMainUI::SetPHpBar);
+	if (!OnSyncMp_P.IsBound())
 	FDelegateHandle Handle4 = OnSyncMp_P.AddUObject(this, &UPlayMainUI::SetPMpBar);
+	PlayerHp->SetPercent(1.0);
+	MonsterStun->SetPercent(1.0);
+	MonsterHp->SetPercent(1.0);
+	PlayerMp->SetPercent(1.0);
 }
 
 UPlayMainUI::UPlayMainUI(const FObjectInitializer& ObjectInitializer):

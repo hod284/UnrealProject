@@ -56,4 +56,8 @@ public:
 	{
 		AttackDamage = da;
 	}
+	void SetAttackDamage(FString cporfile)
+	{
+		BoxColider->SetCollisionProfileName(FName(*cporfile));
+	}
 };

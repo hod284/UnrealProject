@@ -24,7 +24,7 @@ void APlaySceneObject::BeginPlay()
 void APlaySceneObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 }
 
 void APlaySceneObject::PlaySequence()

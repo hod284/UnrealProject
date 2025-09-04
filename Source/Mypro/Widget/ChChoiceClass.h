@@ -57,6 +57,7 @@ protected:
 	TObjectPtr<UProgressBar> 	skill4Atk;
 	void SetDataValue(Characters ch, const FCharacterInfo* daInfo);
 	virtual void NativeConstruct() override;
+	virtual void NativeOnInitialized() override;
 public:
 	UFUNCTION()
 	void Backclick();
