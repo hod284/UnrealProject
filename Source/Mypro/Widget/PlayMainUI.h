@@ -105,4 +105,5 @@ public:
 	{
 		return  Inventory;
 	}
+	void SkillInite();
 };

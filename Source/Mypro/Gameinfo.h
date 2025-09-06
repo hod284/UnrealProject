@@ -17,6 +17,12 @@
 
 
 //
+#include "Interfaces/OnlineSessionInterface.h"
+#include "OnlineSubsystem.h"
+#include "Online/OnlineSessionNames.h"
+#include "Blueprint/WidgetLayoutLibrary.h"
+#include "OnlineSessionSettings.h"      
+#include "OnlineSubsystemTypes.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Fonts/FontMeasure.h"
 #include "Components/SplineComponent.h"

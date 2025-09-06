@@ -177,7 +177,7 @@ float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 		FRotator SpawnRotation(0, 0, 0);
 
 		AStaticMeshActor* MeshActor = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), SpawnLocation, SpawnRotation);
-		MeshActor ->Rename(TEXT("Portal"));
+		MeshActor ->Rename(TEXT("Portal1"));
 		if (MeshActor)
 		{
 			MeshActor->SetMobility(EComponentMobility::Movable);

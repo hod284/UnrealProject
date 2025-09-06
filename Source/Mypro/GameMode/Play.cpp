@@ -18,15 +18,12 @@ void APlay::BeginPlay()
 void APlay::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
-	// defaultpawn�� �⺻������ �����Ǵµ� ���ʹ� �̰��� Ÿ���� ��� ��찡 ���� ���� �׸���  defalutpawn�� ��ó�� �ۿ��Ͽ� �����̴µ� ���صǾ 
 	// defaultpawn ���� ������ ���� ���� ������� �����Ǵ°Ŵϱ� �÷��̾�� �õ������� ������ ���� ĳ���͸� �����ؼ� �����ϴ°Ŷ� �ʷ� ����
 	if (APawn* Old = NewPlayer->GetPawn())
 		Old->Destroy();
-	// �÷��̾� ��Ʈ�ѷ� ĳ����
 	if (!NewPlayer) 
 		return;
 	AMainPlayerController* MyPC = Cast<AMainPlayerController>(NewPlayer);
-    // Ŭ���̾�Ʈ�� ������ ĳ���� ���� �޾ƿ���
 	TSubclassOf<APawn> SelectedCharacterClass = MyPC->GetSelectCharactertClass();
 
     // ĳ���� ���� �� Possess

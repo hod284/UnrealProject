@@ -36,6 +36,8 @@ protected:
 	TSharedPtr<FStreamableHandle> Handle;
 	UPROPERTY()
 	TObjectPtr<UIntroMainUI> ui;
+	TSharedPtr<FOnlineSessionSearch> Search;
+	IOnlineSessionPtr Session;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -51,4 +53,7 @@ public:
 	void PlaySceneLoadAsync_stream();
 	// ·¡¹ë ·Îµå
 	void LevelLoadComplete();
+	void FinishedSession(bool ok);
+	void CreateSessionComplete(FName, bool ok);
+	void JoinSessionComplete(FName, EOnJoinSessionCompleteResult::Type res);
 };

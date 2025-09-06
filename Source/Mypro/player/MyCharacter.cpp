@@ -61,7 +61,7 @@ void AMyCharacter::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UE_LOG(LogMypro, Warning, TEXT("hit:%s"), *s);
 	UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
 	const FItemtableInfo* itemlist = GI->GetItemInfo();
-	if (itemlist->Name == OtherActor->GetName())
+	if (s.Contains(GI->GetItemInfo()->Name))
 	{
 		if (AMyPlayerState* PS = GetPlayerState<AMyPlayerState>())
 		{

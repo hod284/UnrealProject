@@ -41,7 +41,13 @@ void APortalClass::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	if (ch)
 	{
 		if (ch->GetCanPortal())
+		{
+			APlayerController* PC = Cast<AMainPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+			AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
+			if (IsValid(PS))
+				PS->Inventoryco->ItemMinus.Broadcast("Portal");
 			UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
+		}
 	}
 }
 void APortalClass::OnCapsuleBeginOverlap(

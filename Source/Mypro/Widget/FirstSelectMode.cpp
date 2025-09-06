@@ -86,6 +86,7 @@ void UFirstSelectMode::ClickSingleButton()
 	{
 		FirstSelectCharacter();
 		ui->SetSwitcherIndex(1);
+		GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSingorMulti(SingleORmulti::single);
 	}
 }
 
@@ -97,6 +98,7 @@ void UFirstSelectMode::ClickMultiButton()
 	{
 		FirstSelectCharacter();
 		ui->SetSwitcherIndex(1);
+		GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSingorMulti(SingleORmulti::Multi);
 	}
 }
 

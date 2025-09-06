@@ -20,6 +20,7 @@ private:
 	Characters character = Characters::None;
 	// 게임 메니저에서 플레이 캐릭터 선택
 	UIORNOT  CusorVisual = UIORNOT::UINot;
+	SingleORmulti   SingleOrMulti = SingleORmulti::None;
 public:
 	// 기본 생성자
 	// 생성자에 초기화하지 않겠다는뜻
@@ -44,5 +45,11 @@ public:
 	}
 	void SetCusorVisual(UIORNOT  ch) {
 		CusorVisual = ch;
+	}
+	const 	SingleORmulti  GetSingorMulti() const {
+		return SingleOrMulti;
+	}
+	void SetSingorMulti(SingleORmulti  ch) {
+		SingleOrMulti = ch;
 	}
 };

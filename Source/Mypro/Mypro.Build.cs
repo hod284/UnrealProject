@@ -13,9 +13,12 @@ public class Mypro : ModuleRules
 			"UMG", 
 			"LevelSequence",
 			"MovieScene", 
-			"MediaAssets" });
+			"MediaAssets",
+           "OnlineSubsystem",
+            "OnlineSubsystemUtils"});
 
-		PrivateDependencyModuleNames.AddRange(new string[] {  });
+
+        PrivateDependencyModuleNames.AddRange(new string[] {  });
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

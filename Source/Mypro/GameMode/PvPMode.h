@@ -3,21 +3,24 @@
 #pragma once
 
 #include "../Gameinfo.h"
-#include  "../player/MyPlayerState.h"
 #include  "../player/MainPlayerController.h"
+#include "../player/MyCharacter.h"
 #include  "../singleton/GameManager.h"
+#include  "../player/MyPlayerState.h"
 #include "GameFramework/GameModeBase.h"
-#include "Intro.generated.h"
+#include "PvPMode.generated.h"
 
-
+/**
+ * 
+ */
 UCLASS()
-class MYPRO_API AIntro : public AGameModeBase
+class MYPRO_API APvPMode : public AGameModeBase
 {
 	GENERATED_BODY()
 	
-public:
-	
+protected:
+
+	APvPMode();
 	virtual void BeginPlay() override;
-	AIntro();
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 };

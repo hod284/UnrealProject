@@ -101,10 +101,71 @@ void AIntroSceneObject::LevelLoadComplete()
 		GetWorld()->GetTimerManager().SetTimer(Timerahbdle, this, &AIntroSceneObject::PlaySceneLoadAsync_stream, 0.5, false);
 	}
 }
+
+void AIntroSceneObject::FinishedSession(bool ok)
+{
+	Session->OnFindSessionsCompleteDelegates.RemoveAll(this);
+	//LocalId는 “누가 검색을 요청했는가”를 나타내는 계정/플레이어 식별자
+	auto localid = GEngine->GetFirstGamePlayer(GetWorld())->GetPreferredUniqueNetId();
+	if (ok && Search.IsValid() && Search->SearchResults.Num() > 0)
+	{
+		// 있으면참가
+		Session->OnJoinSessionCompleteDelegates.AddUObject(this, &AIntroSceneObject::JoinSessionComplete);
+		Session->JoinSession(*localid, NAME_GameSession, Search->SearchResults[0]);
+		return;
+	}
+	// 없으면 호스트로 생성
+	FOnlineSessionSettings s;
+	s.bIsLANMatch = Search->bIsLanQuery;//LAN 매치 여부
+	s.bShouldAdvertise = true;//세션이 다른 플레이어들이 아수 있도록하는것
+	s.NumPublicConnections = 8;// 참가수
+	s.bUsesPresence = true;//친구목록으로 세션참가할수 있도록하는것
+	s.bAllowJoinInProgress = false; // 진행중참가 여부
+	Session->OnCreateSessionCompleteDelegates.AddUObject(this, &AIntroSceneObject::CreateSessionComplete);
+	Session->DestroySession(NAME_GameSession);
+	Session->CreateSession(*localid, NAME_GameSession, s);
+}
+
+void AIntroSceneObject::CreateSessionComplete(FName, bool ok)
+{
+	Session->OnCreateSessionCompleteDelegates.RemoveAll(this);
+	if (!ok)
+		return;
+	UGameplayStatics::OpenLevel(GetWorld(), FName(TEXT("/Game/Virtual_Studio_Kit/Maps/StudioB")), false, TEXT("listen"));
+}
+void AIntroSceneObject::JoinSessionComplete(FName, EOnJoinSessionCompleteResult::Type res)
+{
+	Session->OnJoinSessionCompleteDelegates.RemoveAll(this);
+	if (res != EOnJoinSessionCompleteResult::Success)
+		return;
+	FString add;
+	if (Session->GetResolvedConnectString(NAME_GameSession, add))
+	{
+		if (APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0))
+		{
+			PC->ClientTravel(add, TRAVEL_Absolute);
+		}
+	}
+}
 void AIntroSceneObject::PlaySceneLoadAsync_stream()
 {
 	GetWorldTimerManager().ClearTimer(Timerahbdle);
-   GetWorld()->ServerTravel("/Game/Virtual_Studio_Kit/Maps/Studio_D?listen'");
+	if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSingorMulti() == SingleORmulti::single)
+		UGameplayStatics::OpenLevel(GetWorld(), FName(TEXT("/Game/Virtual_Studio_Kit/Maps/Studio_D")));
+	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSingorMulti() == SingleORmulti::Multi)
+	{
+		if (IOnlineSubsystem* oss = IOnlineSubsystem::Get())
+			Session = oss ? oss->GetSessionInterface() : nullptr;
+		if (!Session.IsValid())
+			return;
+		// 먼저찾기
+		Search = MakeShared<FOnlineSessionSearch>();
+		Search->bIsLanQuery = true;
+		Search->MaxSearchResults = 50;
+		Search->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
+		//FindSessions는 “세션 목록을 비동기로 검색해서 SearchResults에 채워 넣는 것”
+		Session->OnFindSessionsCompleteDelegates.AddUObject(this, &AIntroSceneObject::FinishedSession);
+		auto localid = GEngine->GetFirstGamePlayer(GetWorld())->GetPreferredUniqueNetId();
+		Session->FindSessions(*localid, Search.ToSharedRef());
+	}
 }
-
-

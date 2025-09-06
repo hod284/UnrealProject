@@ -72,6 +72,18 @@ void UInventory::MinusInventory(FString name)
 			}
 		}
 	}
+	else
+	{
+		for (UInventorySlot* sl : SlotArray)
+		{
+				sl->SetTexture(NULL);
+				sl->Settext("0");
+				sl->SetName("");
+				sl->SetNotEmpty(false);
+				break;
+			
+		}
+	}
 }
 
 void UInventory::SetItemInventory(UInventoryComponent* compnent)

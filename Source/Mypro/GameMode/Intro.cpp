@@ -19,7 +19,14 @@ void AIntro::BeginPlay()
 
 AIntro::AIntro()
 {
-	
+	DefaultPawnClass = NULL;
+	SpectatorClass = NULL;
 	PlayerControllerClass = AMainPlayerController::StaticClass();
 	PlayerStateClass = AMyPlayerState::StaticClass();
+}
+
+void AIntro::PostLogin(APlayerController* NewPlayer)
+{
+	if (APawn* Old = NewPlayer->GetPawn())
+		Old->Destroy();
 }

@@ -60,30 +60,60 @@ bool UPlayMainUI::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent
 {
 	if (UMyDragDropOperation* Op = Cast<UMyDragDropOperation>(InOperation))
 	{
-		// ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ ï¿½Îºï¿½ï¿½ä¸® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ý¿ï¿½
 		FString co = Op->Count;
 		Op->SourceSlot->SetTexture(NULL);
 		Op->SourceSlot->Settext("0");
 		Op->SourceSlot->SetNotEmpty(false);
-		// GetOwningPlayer()ï¿½ï¿½ createwidgetï¿½Ò¶ï¿½ ownerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ nullï¿½ï¿½ ï¿½ï¿½ï¿½Â´ï¿½ ï¿½×·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ ï¿½Ò°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		APlayerController* PC = Cast<AMainPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
 		AMyPlayerState* PS  = Cast<AMyPlayerState>(PC->PlayerState);
 		if (IsValid( PS) )
 			PS->Inventoryco->ItemMinus.Broadcast(Op->SourceSlot->GetName());
 		Op->SourceSlot->SetName("");
-		// ï¿½ï¿½Å©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-		FVector2D screenposition = InDragDropEvent.GetScreenSpacePosition();
-		FHitResult hit;
-		// ï¿½ï¿½Å©ï¿½ï¿½È­ï¿½é¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ® ï¿½ß´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
-		// ï¿½ï¿½Å©ï¿½ï¿½È­ï¿½é¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ® ï¿½ß´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
-		bool bHit = PC->GetHitResultAtScreenPosition(
-			screenposition, ECollisionChannel::ECC_Visibility, /*bTraceComplex=*/true, hit);
-		if (!bHit) return false;
+		// 1) Àý´ë ½ºÅ©¸°ÁÂÇ¥ ¡æ ºäÆ÷Æ® ÁÂÇ¥
+		FVector2D Abs = InDragDropEvent.GetScreenSpacePosition();
+		FGeometry ViewGeom = UWidgetLayoutLibrary::GetViewportWidgetGeometry(this);
+		FVector2D ViewPos = ViewGeom.AbsoluteToLocal(Abs);
 
-		const FVector SpawnLoc = hit.Location;
-		const FRotator SpawnRot = FRotator::ZeroRotator;
-		AStaticMeshActor* MeshActor = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), SpawnLoc, SpawnRot);
-		MeshActor->Rename(TEXT("Portal"));
+		// 2) ºäÆ÷Æ® ÁÂÇ¥ ¡æ ¿ùµå ½ÃÀÛÁ¡/¹æÇâ
+		FVector Origin, Dir;
+		PC->DeprojectScreenPositionToWorld(ViewPos.X, ViewPos.Y, Origin, Dir);
+
+		// 3) »ç¼±(´ë°¢)À¸·Î °¢µµ ±â¿ïÀÌ±â
+		//    ¿¹: ¿ìÃøÀ¸·Î Yaw +20¡Æ, À§·Î Pitch +10¡Æ µé¾î¿Ã¸®±â
+		 float YawDeg = -40.f;  // ÁÂ(-) / ¿ì(+)
+		 float PitchDeg = -10.f;  // À§(-) / ¾Æ·¡(+), Rotator ±ÔÄ¢ ÁÖÀÇ
+		 FRotator DeltaRot(PitchDeg, YawDeg, 0.f);
+		 FVector  DiagDir = DeltaRot.RotateVector(Dir).GetSafeNormal();
+
+		// 4) Æ®·¹ÀÌ½º(¶¥¸¸ ¸ÂÃß°í ½ÍÀ¸¸é Ã¤³Î/¿ÀºêÁ§Æ® Å¸ÀÔ Á¶Á¤)
+		 float MaxDist = 200000.f;
+		 FVector Start = Origin;
+		 FVector End = Start + DiagDir * MaxDist;
+
+		FHitResult Hit;
+		FCollisionQueryParams Params(SCENE_QUERY_STAT(DropDiagTrace), /*bTraceComplex=*/true);
+		if (APawn* Pawn = PC->GetPawn()) Params.AddIgnoredActor(Pawn);
+
+		// (A) °¡º±°Ô: °¡½Ã¼º Ã¤³Î
+		bool bHit = GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params);
+
+		// (B) Áö¸é¸¸: ¿ùµå½ºÅÂÆ½¸¸ ¸ÂÃß±â
+		// FCollisionObjectQueryParams Obj;
+		// Obj.AddObjectTypesToQuery(ECC_WorldStatic);
+		// bool bHit = GetWorld()->LineTraceSingleByObjectType(Hit, Start, End, Obj, Params);
+
+		// µð¹ö±×
+		DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 2.f, 0, 1.f);
+
+		if (!bHit) 
+			return false;
+
+		FVector SpawnLoc =  Hit.Location;
+		FRotator SpawnRot = FRotator::ZeroRotator;
+		FActorSpawnParameters param;
+		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+		AStaticMeshActor* MeshActor = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), SpawnLoc, SpawnRot,param);
+		MeshActor->Rename(TEXT("Portal2"));
 		if (MeshActor)
 		{
 			MeshActor->SetMobility(EComponentMobility::Movable);
@@ -91,7 +121,7 @@ bool UPlayMainUI::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent
 			const FItmeTexturAndMeshInfo* Texture = GI->GetTextureInfo();
 			UStaticMesh* Mesh = Texture->MeshMap["Portal"];
 			MeshActor->GetStaticMeshComponent()->SetStaticMesh(Mesh);
-			MeshActor->SetActorScale3D(FVector(1.0f)); // Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+			MeshActor->SetActorScale3D(FVector(1.0f)); 
 		}
 
 		return true;
@@ -122,4 +152,33 @@ void UPlayMainUI::SetPlayerImage(FString Path)
 {
 	TSoftObjectPtr<UTexture2D> SoftTexture = TSoftObjectPtr<UTexture2D>(Path);
 	PlayerImage->SetBrushFromSoftTexture(SoftTexture);
+}
+void UPlayMainUI::SkillInite()
+{
+	switch (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSelectedcharacter())
+	{
+	case Characters::DarkMagion:
+		SetSkill1Inite(TEXT("/Game/image/m1.m1"));
+		SetSkill2Inite(TEXT("/Game/image/m2.m2"));
+		SetSkill3Inite(TEXT("/Game/image/m3.m3"));
+		SetSkill4Inite(TEXT("/Game/image/m4.m4"));
+		SetPlayerImage(TEXT("/Game/Virtual_Studio_Kit/Textures/Paragon/Heros_1024/giden.giden"));
+		break;
+	case Characters::Guiden:
+		SetSkill1Inite(TEXT("/Game/image/1.1"));
+		SetSkill2Inite(TEXT("/Game/image/2.2"));
+		SetSkill3Inite(TEXT("/Game/image/3.3"));
+		SetSkill4Inite(TEXT("/Game/image/4.4"));
+		SetPlayerImage(TEXT("/Game/Virtual_Studio_Kit/Textures/Paragon/Heros_1024/greyston.greyston"));
+		break;
+	case Characters::Warrior:
+		SetSkill1Inite(TEXT("/Game/image/1.1"));
+		SetSkill2Inite(TEXT("/Game/image/2.2"));
+		SetSkill3Inite(TEXT("/Game/image/3.3"));
+		SetSkill4Inite(TEXT("/Game/image/4.4"));
+		SetPlayerImage(TEXT("/Game/Virtual_Studio_Kit/Textures/Paragon/Heros_1024/Auraura.Auraura"));
+		break;
+	default:
+		break;
+	}
 }
