@@ -23,7 +23,8 @@ void UInventory::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 
 void UInventory::AddInventory(FString name)
 {
-	const FItmeTexturAndMeshInfo* Texture = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetTextureInfo();
+    UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
+	const FItmeTexturAndMeshInfo* Texture = GI->GetTextureInfo();
 	if (Texture->textureMap.Contains(FName(*name)))
 	{
 		if (!ItemArray.Contains(name))

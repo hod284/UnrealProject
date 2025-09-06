@@ -3,7 +3,7 @@
 #pragma once
 
 #include "../Gameinfo.h"
-#include "../singleton/DataManager.h"
+#include "../common/MySingleton.h"
 #include "../singleton/GameManager.h"
 #include "../singleton/UImanager.h"
 #include "../common/IntroSceneObject.h"
@@ -11,7 +11,7 @@
 #include "ChChoiceClass.generated.h"
 
 /**
-  Ä³¸¯ÅÍ ¼±ÅÃÈ­¸é À§Á¬ Å¬·¡½º
+  Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
  */
 UCLASS()
 class MYPRO_API UChChoiceClass : public UUserWidget
@@ -22,29 +22,29 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UButton> back;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UButton> Character1; //  °Ëµé°í ÀÖ´Â ¿©¼ºÄ³¸¯ÅÍ ¼±ÅÃ ¹öÆ°
+	TObjectPtr<UButton> Character1; //  ï¿½Ëµï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UButton>	Character2;// ¹æÆÐ¿Í °ËÀ» µé°í ÀÖ´Â ³²¼º Ä³¸¯ÅÍ ¼±ÅÃ ¹öÆ°
+	TObjectPtr<UButton>	Character2;// ï¿½ï¿½ï¿½Ð¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UButton>	Character3;// ¾Æ¹«°Íµµ ¾Èµé°í ÀÖ´Â ³²¼º Ä³¸¯ÅÍ ¼±ÅÃ ¹öÆ°
+	TObjectPtr<UButton>	Character3;// ï¿½Æ¹ï¿½ï¿½Íµï¿½ ï¿½Èµï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UButton> skill1; //  skill1 ¼±ÅÃ ¹öÆ°
+	TObjectPtr<UButton> skill1; //  skill1 ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UButton>	skill2;// skill2 ¼±ÅÃ ¹öÆ°
+	TObjectPtr<UButton>	skill2;// skill2 ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UButton>	skill3;// skill3 ¼±ÅÃ ¹öÆ°
+	TObjectPtr<UButton>	skill3;// skill3 ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UButton>	skill4;// skill4 ¼±ÅÃ ¹öÆ°
+	TObjectPtr<UButton>	skill4;// skill4 ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UButton> skill1_MA; //  skill1 ¸ÅÁö¼Ç ¼±ÅÃ ¹öÆ°
+	TObjectPtr<UButton> skill1_MA; //  skill1 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UButton>	skill2_MA;// skill2 ¸ÅÁö¼Ç ¼±ÅÃ ¹öÆ°
+	TObjectPtr<UButton>	skill2_MA;// skill2 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UButton>	skill3_MA;// skill3 ¸ÅÁö¼Ç ¼±ÅÃ ¹öÆ°
+	TObjectPtr<UButton>	skill3_MA;// skill3 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UButton>	skill4_MA;// skill4 ¸ÅÁö¼Ç ¼±ÅÃ ¹öÆ°
+	TObjectPtr<UButton>	skill4_MA;// skill4 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UTextBlock> Titletext; // Ä³¸¯ÅÍ Å¸ÀÌÆ²
+	TObjectPtr<UTextBlock> Titletext; // Ä³ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½Æ²
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UProgressBar>  NormalAtk;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -62,10 +62,10 @@ public:
 	UFUNCTION()
 	void Backclick();
 	UFUNCTION()
-	void Character1Click(); // °Ëµé°í ÀÖ´Â ¿©¼ºÄ³¸¯ÅÍ ¼±ÅÃ ¹öÆ° Å¬¸¯ ÀÌº¥Æ®
+	void Character1Click(); // ï¿½Ëµï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° Å¬ï¿½ï¿½ ï¿½Ìºï¿½Æ®
 	UFUNCTION()
-	void Character2Click(); // ¹æÆÐ¿Í °ËÀ» µé°í ÀÖ´Â ³²¼º Ä³¸¯ÅÍ  ¼±ÅÃ ¹öÆ° Å¬¸¯ ÀÌº¥Æ®
+	void Character2Click(); // ï¿½ï¿½ï¿½Ð¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° Å¬ï¿½ï¿½ ï¿½Ìºï¿½Æ®
 	UFUNCTION()
-	void Character3Click(); // ¾Æ¹«°Íµµ ¾Èµé°í ÀÖ´Â ³²¼º Ä³¸¯ÅÍ ¼±ÅÃ ¹öÆ° Å¬¸¯ ÀÌº¥Æ®
-	void CharacterButtonChoice(Characters ch); // Ä³¸¯ÅÍ ¼±ÅÃ ÇÔ¼ö
+	void Character3Click(); // ï¿½Æ¹ï¿½ï¿½Íµï¿½ ï¿½Èµï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° Å¬ï¿½ï¿½ ï¿½Ìºï¿½Æ®
+	void CharacterButtonChoice(Characters ch); // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 };

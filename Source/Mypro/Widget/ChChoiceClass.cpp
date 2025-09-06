@@ -32,7 +32,8 @@ void UChChoiceClass::NativeConstruct()
 	Character2->OnClicked.AddDynamic(this, &UChChoiceClass::Character2Click);
 	if (!Character3->OnClicked.IsBound())
 	Character3->OnClicked.AddDynamic(this, &UChChoiceClass::Character3Click);
-	SetDataValue(Characters::Warrior, GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_W());
+    UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
+	SetDataValue(Characters::Warrior, GI->GetDatainfo_W());
 }
 
 void UChChoiceClass::NativeOnInitialized()
@@ -50,7 +51,8 @@ void UChChoiceClass::Character1Click()
 	Titletext->SetText(text);
 	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSelectCharacter(Characters::Warrior);
 	CharacterButtonChoice(Characters::Warrior);
-	SetDataValue(Characters::Warrior, GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_W());
+	UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
+	SetDataValue(Characters::Warrior, GI->GetDatainfo_W());
 }
 
 void UChChoiceClass::Character2Click()
@@ -59,7 +61,8 @@ void UChChoiceClass::Character2Click()
 	Titletext->SetText(text);
 	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSelectCharacter(Characters::Guiden);
 	CharacterButtonChoice(Characters::Guiden);
-	SetDataValue(Characters::Guiden, GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_G());
+	UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
+	SetDataValue(Characters::Guiden, GI->GetDatainfo_G());
 }
 
 void UChChoiceClass::Character3Click()
@@ -68,8 +71,8 @@ void UChChoiceClass::Character3Click()
 	Titletext->SetText(text);
 	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSelectCharacter(Characters::DarkMagion);
 	CharacterButtonChoice(Characters::DarkMagion);
-	UDataTable* MyTablechda = LoadObject<UDataTable>(nullptr, TEXT("/Game/Data/Character.Character"));
-	SetDataValue(Characters::DarkMagion, GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_D());
+	UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
+	SetDataValue(Characters::DarkMagion, GI->GetDatainfo_D());
 }
 
 

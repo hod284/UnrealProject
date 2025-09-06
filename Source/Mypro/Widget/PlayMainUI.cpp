@@ -60,21 +60,22 @@ bool UPlayMainUI::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent
 {
 	if (UMyDragDropOperation* Op = Cast<UMyDragDropOperation>(InOperation))
 	{
-		// ¿¹: ½ÇÁ¦ ÀÎº¥Åä¸® ·ÎÁ÷¿¡ ¹Ý¿µ
+		// ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ ï¿½Îºï¿½ï¿½ä¸® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ý¿ï¿½
 		FString co = Op->Count;
 		Op->SourceSlot->SetTexture(NULL);
 		Op->SourceSlot->Settext("0");
 		Op->SourceSlot->SetNotEmpty(false);
-		// GetOwningPlayer()´Â createwidgetÇÒ¶§ owner¸¦ ¾ÈÁ¤ÇØ Áú°æ¿ì null·Î ³ª¿Â´Ù ±×·¡¼­ ¸¸¾à »ç¿ëÇØ¾ß ÇÒ°æ¿ì ¹«Á¶°Ç ¼ÒÀ¯ÁÖÁöÁ¤
+		// GetOwningPlayer()ï¿½ï¿½ createwidgetï¿½Ò¶ï¿½ ownerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ nullï¿½ï¿½ ï¿½ï¿½ï¿½Â´ï¿½ ï¿½×·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ ï¿½Ò°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		APlayerController* PC = Cast<AMainPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
 		AMyPlayerState* PS  = Cast<AMyPlayerState>(PC->PlayerState);
 		if (IsValid( PS) )
 			PS->Inventoryco->ItemMinus.Broadcast(Op->SourceSlot->GetName());
 		Op->SourceSlot->SetName("");
-		// ½ºÅ©¸°Æ÷Áö¼Ç ÁöÁ¤
+		// ï¿½ï¿½Å©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		FVector2D screenposition = InDragDropEvent.GetScreenSpacePosition();
 		FHitResult hit;
-		// ½ºÅ©¸°È­¸é¿¡¼­ ·¹ÀÌ¸¦ ½÷¼­ È÷Æ® Çß´ÂÁö ¾ÈÇß´ÂÁö È®ÀÎ
+		// ï¿½ï¿½Å©ï¿½ï¿½È­ï¿½é¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ® ï¿½ß´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
+		// ï¿½ï¿½Å©ï¿½ï¿½È­ï¿½é¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ® ï¿½ß´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 		bool bHit = PC->GetHitResultAtScreenPosition(
 			screenposition, ECollisionChannel::ECC_Visibility, /*bTraceComplex=*/true, hit);
 		if (!bHit) return false;
@@ -82,14 +83,15 @@ bool UPlayMainUI::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent
 		const FVector SpawnLoc = hit.Location;
 		const FRotator SpawnRot = FRotator::ZeroRotator;
 		AStaticMeshActor* MeshActor = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), SpawnLoc, SpawnRot);
-		MeshActor->SetActorLabel("Portal");
+		MeshActor->Rename(TEXT("Portal"));
 		if (MeshActor)
 		{
 			MeshActor->SetMobility(EComponentMobility::Movable);
-			const FItmeTexturAndMeshInfo* Texture = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetTextureInfo();
+			UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
+			const FItmeTexturAndMeshInfo* Texture = GI->GetTextureInfo();
 			UStaticMesh* Mesh = Texture->MeshMap["Portal"];
 			MeshActor->GetStaticMeshComponent()->SetStaticMesh(Mesh);
-			MeshActor->SetActorScale3D(FVector(1.0f)); // Å©±â Á¶Àý
+			MeshActor->SetActorScale3D(FVector(1.0f)); // Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		}
 
 		return true;
