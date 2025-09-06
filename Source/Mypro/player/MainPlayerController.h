@@ -10,10 +10,6 @@
 #include "MainPlayerController.generated.h"
 
 /**
- Ŭ���̾�Ʈ �÷��̾� ��Ʈ�ѷ� Ŭ�����Դϴ�.
- ���⼭ ��Ʈ�� ����Ŭ������ ����Ʈ�� �߰��ϴ� ������ ������ ��ž��� Ŭ���̾�Ʈ�� ���̰� �ϱ� �����Դϴ�
- ���Ӹ��� ������ ����� �ϱ� ������ ������ ����� �Ͼ�� ��Ʈ�� ������ Ŭ���̾�Ʈ�ʿ� �Ⱥ��̰� �ɼ� �־ ���⿡ ��Ʈ�� ������ ������ ����Ʈ�� �߰��մϴ�
- �ɸ��� ��Ʈ�ѷ� ��������
  gameinstance ->gamesubinstance ->levelload -> gamemode ->playercontroller ->charactercontroller
  */
 UCLASS()
