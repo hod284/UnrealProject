@@ -26,7 +26,7 @@ void UMyPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	AMyCharacter * PlayerCharacter =
 		Cast<AMyCharacter>(TryGetPawnOwner());
 
-	// ¾ò¾î¿Â °´Ã¼°¡ À¯È¿ÇÏ´Ù¸é.
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½È¿ï¿½Ï´Ù¸ï¿½.
 	if (IsValid(PlayerCharacter))
 	{
 		UCharacterMovementComponent* Movement =
@@ -52,7 +52,7 @@ void UMyPlayerAnimInstance::PlayAttack()
 	{
 		if (!Montage_IsPlaying(AttackUpMontage) && AttackSectionIndex < AttackSectionArray.Num())
 		{
-			// ¸ùÅ¸ÁÖ¸¦ Àç»ý½ÃÅ²´Ù.
+			// ï¿½ï¿½Å¸ï¿½Ö¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Å²ï¿½ï¿½.
 			Montage_Play(AttackUpMontage);
 			Montage_JumpToSection(AttackSectionArray[AttackSectionIndex], AttackUpMontage);
 			AttackSectionIndex += 1;
@@ -64,7 +64,7 @@ void UMyPlayerAnimInstance::PlayAttack()
 			return;
 		if (!Montage_IsPlaying(AttackMontage) && AttackSectionIndex < AttackSectionArray.Num())
 		{
-			// ¸ùÅ¸ÁÖ¸¦ Àç»ý½ÃÅ²´Ù.
+			// ï¿½ï¿½Å¸ï¿½Ö¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Å²ï¿½ï¿½.
 			Montage_Play(AttackMontage);
 			Montage_JumpToSection(AttackSectionArray[AttackSectionIndex], AttackMontage);
 			AttackSectionIndex += 1;
@@ -78,7 +78,7 @@ void UMyPlayerAnimInstance::PlayBack()
 		return;
 	if (!Montage_IsPlaying(BackMontage))
 	{
-		// ¸ùÅ¸ÁÖ¸¦ Àç»ý½ÃÅ²´Ù.
+		// ï¿½ï¿½Å¸ï¿½Ö¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Å²ï¿½ï¿½.
 		Montage_Play(BackMontage);
 	}
 }
@@ -89,7 +89,7 @@ void UMyPlayerAnimInstance::PlaySkill(int32 index)
 		return;
 	if (!Montage_IsPlaying(SkillMontage))
 	{
-		// ¸ùÅ¸ÁÖ¸¦ Àç»ý½ÃÅ²´Ù.
+		// ï¿½ï¿½Å¸ï¿½Ö¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Å²ï¿½ï¿½.
 		Montage_Play(SkillMontage,1.0f);
 		Montage_JumpToSection(SkillSectionArray[index], SkillMontage);
 		Montage_SetNextSection(SkillSectionArray[index],FName(""));

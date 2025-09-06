@@ -13,8 +13,8 @@ ASkill2_Actor::ASkill2_Actor()
 	BoxColider->SetupAttachment(NiagaraParticle);
 	BoxColider->SetCollisionProfileName("PlayerSkill");
 	BoxColider->OnComponentHit.AddDynamic(this, &ASkill2_Actor::OnHit_Skil2);
-	// ¿À¹ö·¦ ÀÎº¥Æ® È°¼ºÈ­
-	BoxColider->SetGenerateOverlapEvents(true); // ¾ÈÀüÇÏ°Ô ÄÑµÎ±â
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îºï¿½Æ® È°ï¿½ï¿½È­
+	BoxColider->SetGenerateOverlapEvents(true); // ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ÑµÎ±ï¿½
 	BoxColider->OnComponentBeginOverlap.AddDynamic(this, &ASkill2_Actor::OnCapsuleBeginOverlap_Skil2);
 	BoxColider->OnComponentEndOverlap.AddDynamic(this, &ASkill2_Actor::OnCapsuleEndOverlap_Skil2);
 }
@@ -32,7 +32,7 @@ void ASkill2_Actor::OnHit_Skil2(UPrimitiveComponent* HitComp, AActor* OtherActor
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
 	const FHitResult& Hit)
 {
-	FString s = OtherActor->GetActorLabel();
+	FString s = OtherActor->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("skil2_hit:%s"), *s);
 
 
@@ -47,7 +47,7 @@ void ASkill2_Actor::OnCapsuleBeginOverlap_Skil2(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
-	FString s = OtherActor->GetActorLabel();
+	FString s = OtherActor->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("skil2_overlap:%s"), *s);
 	float pe = static_cast<float>(AttackDamage);
 	UGameplayStatics::ApplyDamage(OtherActor, pe, GetInstigatorController(), this, UDamageType::StaticClass());
@@ -60,7 +60,7 @@ void ASkill2_Actor::OnCapsuleEndOverlap_Skil2(
 	UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex)
 {
-	FString s = OtherActor->GetActorLabel();
+	FString s = OtherActor->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("skil2_pverlapend:%s"), *s);
 
 }

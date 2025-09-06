@@ -4,10 +4,11 @@
 #include "MyCharacter.h"
 AMainPlayerController::AMainPlayerController()
 {
-	// tick¸¦ È°¼ºÈ­ ÇÏ±âÀ§ÇÑ ÁÙ
-	// ¸¸¾à tick¸¦ ºñÈ°¼ºÈ­ ÇÏ°í ½ÍÀ¸¸é ÁÖ¼®Ã³¸±¸¦ ÇÏ¸é µÈ´Ù.
+	// tickï¿½ï¿½ È°ï¿½ï¿½È­ ï¿½Ï±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+	// ï¿½ï¿½ï¿½ï¿½ tickï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­ ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¼ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ ï¿½Ï¸ï¿½ ï¿½È´ï¿½.
 	PrimaryActorTick.bCanEverTick = true;
-
+	bEnableMouseOverEvents = true;
+	bEnableClickEvents = true;
 }
 
 void AMainPlayerController::Tick(float DeltaTime)
@@ -17,24 +18,24 @@ void AMainPlayerController::Tick(float DeltaTime)
 
 TSubclassOf<APawn> AMainPlayerController::GetSelectCharactertClass()
 {
-	// ¹ÝÈ¯°æ·Î º¸ÀåÀ» À§ÇØ ·ÎµåÅ¬·¡½º ¼±¾ð¹× ÃÊ±âÈ­
+	// ï¿½ï¿½È¯ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
 	TSubclassOf<APawn> LoadedClass = NULL;
 	switch (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSelectedcharacter())
 	{
 	 case Characters::Guiden:
 		LoadedClass = StaticLoadClass(
 			AMyCharacter::StaticClass(), nullptr,
-			TEXT("/Script/Engine.Blueprint'/Game/bluePrint/PlayGudion.PlayGudion_C'")); // _C ²À!
+			TEXT("/Script/Engine.Blueprint'/Game/bluePrint/PlayGudion.PlayGudion_C'")); // _C ï¿½ï¿½!
 		break;
 	case Characters::Warrior:
 		LoadedClass = StaticLoadClass(
 			AMyCharacter::StaticClass(), nullptr,
-			TEXT("/Script/Engine.Blueprint'/Game/bluePrint/PlayWarrior.PlayWarrior_C'")); // _C ²À!
+			TEXT("/Script/Engine.Blueprint'/Game/bluePrint/PlayWarrior.PlayWarrior_C'")); // _C ï¿½ï¿½!
 		break;
 	case Characters::DarkMagion:
 	      LoadedClass = StaticLoadClass(
 			  AMyCharacter::StaticClass(), nullptr,
-			TEXT("/Script/Engine.Blueprint'/Game/bluePrint/PlayDark.PlayDark_C'")); // _C ²À!
+			TEXT("/Script/Engine.Blueprint'/Game/bluePrint/PlayDark.PlayDark_C'")); // _C ï¿½ï¿½!
 		break;
 	}
 	return LoadedClass;
@@ -43,23 +44,14 @@ TSubclassOf<APawn> AMainPlayerController::GetSelectCharactertClass()
 void AMainPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	// Å¬¶óÀÌ¾ðÆ® È®ÀÎ
+	// Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ® È®ï¿½ï¿½
 	if (IsLocalController())
 	{
 		if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Intro)
 		{
 			GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UI);
-			bEnableMouseOverEvents = true;
-			bEnableClickEvents = true;
-			// ÇöÀç ·¹º§¿¡¼­ ¸ðµç ¾×ÅÍµéÀ» µé°í ¿À´Â ·ÎÁ÷
+			// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActor::StaticClass(), SceneActorList);
-			// Intro UI¸¦ »ý¼ºÇÏ°í ºäÆ÷Æ®¿¡ Ãß°¡
-			 GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetIntroMainUI_widget()->AddToViewport();
-			 if (UGameUserSettings* Settings = GEngine->GetGameUserSettings())
-			 {
-				 Settings->SetScreenResolution(FIntPoint(1920, 1080));
-				 Settings->ApplySettings(true); // Áï½Ã Àû¿ë
-			 }
 		}
 		else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{

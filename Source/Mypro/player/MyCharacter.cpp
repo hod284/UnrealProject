@@ -37,8 +37,8 @@ void AMyCharacter::BeginPlay()
 	PlaySceneObject = Cast<APlaySceneObject>(UGameplayStatics::GetActorOfClass(GetWorld(), APlaySceneObject::StaticClass()));
 	UCapsuleComponent* Capsule = GetCapsuleComponent();
 	Capsule->OnComponentHit.AddDynamic(this, &AMyCharacter::OnHit);
-	// ¿À¹ö·¦ ÀÎº¥Æ® È°¼ºÈ­
-	Capsule->SetGenerateOverlapEvents(true); // ¾ÈÀüÇÏ°Ô ÄÑµÎ±â
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îºï¿½Æ® È°ï¿½ï¿½È­
+	Capsule->SetGenerateOverlapEvents(true); // ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ÑµÎ±ï¿½
 	Capsule->OnComponentBeginOverlap.AddDynamic(this, &AMyCharacter::OnCapsuleBeginOverlap);
 	Capsule->OnComponentEndOverlap.AddDynamic(this, &AMyCharacter::OnCapsuleEndOverlap);
 	UCharacterMovementComponent* Move = GetCharacterMovement();
@@ -57,10 +57,11 @@ void AMyCharacter::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
 	const FHitResult& Hit)
 {
-	FString s = OtherActor->GetActorLabel();
+	FString s = OtherActor->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("hit:%s"), *s);
-	const FItemtableInfo* itemlist = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetItemInfo();
-	if (itemlist->Name == OtherActor->GetActorLabel())
+	UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
+	const FItemtableInfo* itemlist = GI->GetItemInfo();
+	if (itemlist->Name == OtherActor->GetName())
 	{
 		if (AMyPlayerState* PS = GetPlayerState<AMyPlayerState>())
 		{
@@ -145,11 +146,11 @@ void AMyCharacter::Tick(float DeltaTime)
 		float radious = FMath::Cos(FMath::DegreesToRadians(45.0f));
 		if (PlaySceneObject)
 		{
-		    AActor* CameraTarget = PlaySceneObject->GetMonster(TEXT("Monster_BOSS"));
+		    AActor* CameraTarget = PlaySceneObject->GetMonster(TEXT("Monster_C_1"));
 			if (CameraTarget != NULL)
 			{
 			    TargetTransform = CameraTarget->GetRootComponent();
-				// ¸ó½ºÅÍ¿ùµå ·ÎÄÉÀÌ¼Ç
+				// ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì¼ï¿½
 				TargetLocation = CameraTarget->GetActorLocation();
 				AMonster* m = Cast<AMonster>(CameraTarget);
 				if (m->GetDeath())
@@ -158,7 +159,7 @@ void AMyCharacter::Tick(float DeltaTime)
 					CameraHead->SetRelativeRotation(FRotator(0, 180, 0));
 				}
 			}
-				// Ä³¸¯ÅÍ ¿ùµå·ÎÄÉÀÌ¼Ç
+				// Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¼ï¿½
 			FVector CameraLocation = GetActorLocation();
 			float Angle = FVector::DotProduct(GetActorForwardVector(), (CameraLocation - TargetLocation).GetSafeNormal());
 			if (Angle > 0)
@@ -171,11 +172,11 @@ void AMyCharacter::Tick(float DeltaTime)
 			}
 			if (Angle <= radious || Angle >= -radious)
 			{
-				FVector To = CameraTarget->GetActorLocation();     // Å¸±ê¿ùµåÆ÷Áö¼Ç
-				FVector From = Camera->GetComponentLocation(); // Ä«¸Þ¶ó ¿ùµå À§Ä¡
+				FVector To = CameraTarget->GetActorLocation();     // Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				FVector From = Camera->GetComponentLocation(); // Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
 				const FRotator Desired = UKismetMathLibrary::FindLookAtRotation(From, To);
 				const FRotator Smoothed = FMath::RInterpTo(Camera->GetComponentRotation(),
-					Desired, DeltaTime, 5 /*¿¹:5~12*/);
+					Desired, DeltaTime, 5 /*ï¿½ï¿½:5~12*/);
 				Camera->SetWorldRotation(Smoothed);
 			}
 			else
@@ -230,7 +231,7 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 void AMyCharacter::EndDash()
 {
 	UCharacterMovementComponent* Move = GetCharacterMovement();
-	// Àá½Ã ¹Ì²ô·¯Áö°Ô: ¸¶Âû/°¨¼ÓÀ» ³·Ãã
+	// ï¿½ï¿½ï¿½ ï¿½Ì²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	Move->bUseSeparateBrakingFriction = false;
 	Move->GroundFriction = SavedGroundFriction;
 	Move->BrakingFriction = SavedBrakingFriction;
@@ -247,11 +248,11 @@ void AMyCharacter::MoveKey(const FInputActionValue& Value)
 	if (!BackMoving&& !DashMoving && !DashMoving && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetCusorVisual() == UIORNOT::UINot)
 	{
 		FVector Diret = Value.Get<FVector>();
-		// Ä³¸¯ÅÍ ¹«ºê¸ÕÆ®¿¡°Ô ÀÌµ¿ÇÑ´Ù°í ½ÅÈ£ º¸³»´Â ÇÔ¼ö
+		// Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ñ´Ù°ï¿½ ï¿½ï¿½È£ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 		AddMovementInput(GetActorForwardVector(),  Diret.X);
 		AddMovementInput(GetActorRightVector(), Diret.Y);
 		IsMoving = true;
-		// ¾Õ, µÚ µÑÁß ÇÑ ¹æÇâÀ¸·Î ¿òÁ÷ÀÌµµ·Ï Å°¸¦ ´­·¶À» °æ¿ì
+		// ï¿½ï¿½, ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½ï¿½ï¿½ Å°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 		if (Diret.X > 0.f)
 		{
 			AnimInstance->SetDir(0.f);
@@ -299,9 +300,9 @@ void AMyCharacter::MoveKey(const FInputActionValue& Value)
 			}
 		}
 		
-		//ÇöÀç ¼Óµµ(velocity) º¤ÅÍ¸¦ ¡°¾ÈÀüÇÏ°Ô¡± Á¤±ÔÈ­ÇØ¼­ ¹æÇâ¸¸ »ÌÀº ´ÜÀ§ º¤ÅÍ ±¸ÇÏ´Â ÇÔ¼ö
+		//ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½(velocity) ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï°Ô¡ï¿½ ï¿½ï¿½ï¿½ï¿½È­ï¿½Ø¼ï¿½ ï¿½ï¿½ï¿½â¸¸ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
 		// GetVelocity().GetSafeNormal()  
-		//GetVelocity().GetSafeNormal() ÀÌ°É ÀÌ¿ëÇØ¼­ ÃÖ½Å»óÅÂ°¡ ¾îµð·Î ¹Ù·Îº¸°í ÀÖ´ÂÁö ÀúÀå
+		//GetVelocity().GetSafeNormal() ï¿½Ì°ï¿½ ï¿½Ì¿ï¿½ï¿½Ø¼ï¿½ ï¿½Ö½Å»ï¿½ï¿½Â°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ù·Îºï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		CurrentVelocity = GetVelocity().GetSafeNormal();
 	}
 }
@@ -351,13 +352,13 @@ void AMyCharacter::BackKey(const FInputActionValue& Value)
 	if (!BackMoving && !DashMoving && !DashMoving && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetCusorVisual() == UIORNOT::UINot)
 	{
 		UCharacterMovementComponent* Move = GetCharacterMovement();
-		// Àá½Ã ¹Ì²ô·¯Áö°Ô: ¸¶Âû/°¨¼ÓÀ» ³·Ãã
+		// ï¿½ï¿½ï¿½ ï¿½Ì²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		Move->bUseSeparateBrakingFriction = true;
 		Move->GroundFriction = 0.5f;
 		Move->BrakingFriction = 0.5f;
 		Move->BrakingDecelerationWalking = 250.f;
-		// ´ÜÀ§ ¹éÅÍ´Ï±î ¹æÇâ¸¸ °¡Áö°í ÀÖÀ½ ¹æÇâ¹éÅÍ x°Å¸®
-	    FVector	NewLocation = -CurrentVelocity * 1000.0f; // µÚ·Î 20¸¸Å­
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í´Ï±ï¿½ ï¿½ï¿½ï¿½â¸¸ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ xï¿½Å¸ï¿½
+	    FVector	NewLocation = -CurrentVelocity * 1000.0f; // ï¿½Ú·ï¿½ 20ï¿½ï¿½Å­
 		LaunchCharacter(NewLocation, true, false);
 		BackMoving = true;
 		DashMoving = true;
@@ -372,13 +373,13 @@ void AMyCharacter::DashKey(const FInputActionValue& Value)
 	if (!BackMoving && !DashMoving && !DashMoving && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetCusorVisual() == UIORNOT::UINot)
 	{
 		UCharacterMovementComponent* Move = GetCharacterMovement();
-		// Àá½Ã ¹Ì²ô·¯Áö°Ô: ¸¶Âû/°¨¼ÓÀ» ³·Ãã
+		// ï¿½ï¿½ï¿½ ï¿½Ì²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		Move->bUseSeparateBrakingFriction = true;
 		Move->GroundFriction = 0.5f;
 		Move->BrakingFriction = 0.5f;
 		Move->BrakingDecelerationWalking = 250.f;
-		// ´ÜÀ§ ¹éÅÍ´Ï±î ¹æÇâ¸¸ °¡Áö°í ÀÖÀ½ ¹æÇâ¹éÅÍ x°Å¸®
-		FVector	NewLocation = CurrentVelocity * 1000.0f; // µÚ·Î 20¸¸Å­
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í´Ï±ï¿½ ï¿½ï¿½ï¿½â¸¸ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ xï¿½Å¸ï¿½
+		FVector	NewLocation = CurrentVelocity * 1000.0f; // ï¿½Ú·ï¿½ 20ï¿½ï¿½Å­
 		LaunchCharacter(NewLocation, true, false);
 		DashMoving = true;
 		BackMoving = true;

@@ -4,7 +4,6 @@
 
 #include "../Gameinfo.h"
 #include "../common/AnimationObject.h"
-#include "../singleton/DataManager.h"
 #include "Animation/AnimInstance.h"
 #include "MyPlayerAnimInstance.generated.h"
 
@@ -40,16 +39,13 @@ protected:
 	TObjectPtr<UAnimMontage>	AttackUpMontage;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UAnimMontage>	BackMontage;
-	// 현재 어떤 어택 섹션이 동작하고 있는지 저장할 인덱스.
+
 	int32		AttackSectionIndex = 0;
 	const FPlayerAnimInfo* AnimInfo;
 
-	//UObject 기반 클래스의 초기화 단계 중 하나로,객체의 프로퍼티가 생성자나 기본값 복사 이후에 메모리에 완전히 세팅된 직후 호출되는 가상 함수입니다.
 	virtual void PostInitProperties() override;
 	virtual void NativeBeginPlay() override;
-	//애니메이션 블루프린트 초기화용 C++ 오버라이드 함수
 	virtual void NativeInitializeAnimation() override;
-	// 게임 스레드에서 호출.
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 public:
 	void SetDir(float Dir)

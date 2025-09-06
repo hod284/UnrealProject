@@ -33,7 +33,8 @@ void AGreyStone::NAttack()
 void AGreyStone::BeginPlay()
 {
     Super::BeginPlay();
-    Info = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_G();
+    UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
+    Info = GI->GetDatainfo_G();
     PlayerHp = static_cast<float>(Info->HP);
     PlayerMp = static_cast<float>(Info->MP);
     PlayerHp_Const = PlayerHp;
