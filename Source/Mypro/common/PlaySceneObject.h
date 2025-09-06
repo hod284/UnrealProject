@@ -26,7 +26,7 @@ protected:
 	ALevelSequenceActor* SequenceActor;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cutscene")
 	TObjectPtr<ACameraActor> CineCamera;
-	// ½ÃÄö½º ÇÃ·¹ÀÌ
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½
 	void PlaySequence();
 	UFUNCTION()
 	void OnSequenceFinished();
@@ -43,7 +43,7 @@ public:
 		{
 			for (auto ac: FoundActors_M)
 			{
-				if(ac->GetActorLabel() == Name)
+				if(ac->GetName() == Name)
 				{
 					actor = ac;
 					break;

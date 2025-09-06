@@ -8,7 +8,7 @@
 #include "MonsterPawnMovement.h"
 #include "MonsterAnimInstance.h"
 #include "../singleton/UImanager.h"
-#include "../singleton/DataManager.h"
+#include "../common/MySingleton.h"
 #include "../common/PortalClass.h"
 #include "SkillActor/Action1_Monster.h"
 #include "SkillActor/Action2_Monster.h"
@@ -18,7 +18,7 @@
 
 UCLASS()
 class MYPRO_API AMonster : public APawn,
-	// IGenericTeamAgentInterface ¶ó´Â ÀÎÅÍÆäÀÌ½º »ó¼Ó¹Þ¾Æ¼­ ÇöÀç ÀÚ½ÅÀÇ ¼Ò¼ÓÀÌ ¾îµòÁö¼³Á¤
+	// IGenericTeamAgentInterface ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì½ï¿½ ï¿½ï¿½Ó¹Þ¾Æ¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Ò¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
@@ -73,7 +73,7 @@ public:
 	AAction4_Monster* Ac4;
 	TObjectPtr<UMonsterAnimInstance> AnimInstance;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser);
-	// IGenericTeamAgentInterface ¶ó´Â ÀÎÅÍÆäÀÌ½º ¿¡¼­ ±¸ÇöÇØ¾ßÇÒ ÇÔ¼ö
+	// IGenericTeamAgentInterface ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 	virtual FGenericTeamId GetGenericTeamId()	const  override
 	{
 		return TeamID;
@@ -88,10 +88,10 @@ public:
 		FVector	TargetLocation, MonsterLocation;
 		TargetLocation = FVector(Target->GetActorLocation().X, Target->GetActorLocation().Y,0);
 
-		// ¸ó½ºÅÍ À§Ä¡¸¦ ±¸ÇÑ´Ù.
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½Ñ´ï¿½.
 		MonsterLocation = FVector( GetActorLocation().X, GetActorLocation().Y,0);
 
-		// µÑ »çÀÌÀÇ °Å¸®¸¦ ±¸ÇÑ´Ù.
+		// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ñ´ï¿½.
 		dis = FVector::Dist(TargetLocation, MonsterLocation);
 		return dis;
 	}

@@ -18,18 +18,18 @@ void APlay::BeginPlay()
 void APlay::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
-	// defaultpawnÀÌ ±âº»ÀûÀ¸·Î »ý¼ºµÇ´Âµ¥ ¸ó½ºÅÍ´Â ÀÌ°ÍÀ» Å¸°ÙÀ» Àâ´Â °æ¿ì°¡ Á¾Á¾ ÀÖÀ½ ±×¸®°í  defalutpawnÀÌ ÅÎÃ³·³ ÀÛ¿ëÇÏ¿© ¿òÁ÷ÀÌ´Âµ¥ ¹æÇØµÇ¾î¼­ 
-	// defaultpawn À¸·Î »ý¼ºµÈ ÆùÀ» »èÁ¦ °¡Àå¸ÕÀú »ý¼ºµÇ´Â°Å´Ï±î ÇÃ·¹ÀÌ¾î¿¡¼­ ¿ÃµåÆùÀ¸·Î ÀâÀ»¼ö ÀÖÀ½ Ä³¸¯ÅÍ¸¦ »ý¼ºÇØ¼­ ºùÀÇÇÏ´Â°Å¶ó ÇÊ·á ¾øÀ½
+	// defaultpawnï¿½ï¿½ ï¿½âº»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç´Âµï¿½ ï¿½ï¿½ï¿½Í´ï¿½ ï¿½Ì°ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ì°¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½  defalutpawnï¿½ï¿½ ï¿½ï¿½Ã³ï¿½ï¿½ ï¿½Û¿ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì´Âµï¿½ ï¿½ï¿½ï¿½ØµÇ¾î¼­ 
+	// defaultpawn ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç´Â°Å´Ï±ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î¿¡ï¿½ï¿½ ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´Â°Å¶ï¿½ ï¿½Ê·ï¿½ ï¿½ï¿½ï¿½ï¿½
 	if (APawn* Old = NewPlayer->GetPawn())
 		Old->Destroy();
-	// ÇÃ·¹ÀÌ¾î ÄÁÆ®·Ñ·¯ Ä³½ºÆÃ
+	// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½
 	if (!NewPlayer) 
 		return;
 	AMainPlayerController* MyPC = Cast<AMainPlayerController>(NewPlayer);
-    // Å¬¶óÀÌ¾ðÆ®°¡ ¼±ÅÃÇÑ Ä³¸¯ÅÍ Á¤º¸ ¹Þ¾Æ¿À±â
+    // Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¿ï¿½ï¿½ï¿½
 	TSubclassOf<APawn> SelectedCharacterClass = MyPC->GetSelectCharactertClass();
 
-    // Ä³¸¯ÅÍ »ý¼º ¹× Possess
+    // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Possess
     FVector SpawnLocation = FVector(20,1030,90);
     FRotator SpawnRotation = FRotator(0,-90,0);
     APawn* NewPawn = GetWorld()->SpawnActor<APawn>(SelectedCharacterClass, SpawnLocation, SpawnRotation);

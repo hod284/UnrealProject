@@ -18,6 +18,12 @@ void AIntroSceneObject::BeginPlay()
 	SoundComp = NewObject<UMediaSoundComponent>(this);
 	SoundComp->SetMediaPlayer(MyMediaPlayer_intro);
 	SoundComp->RegisterComponent();
+	GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetIntroMainUI_widget()->AddToViewport();
+	if (UGameUserSettings* Settings = GEngine->GetGameUserSettings())
+	{
+		Settings->SetScreenResolution(FIntPoint(1920, 1080));
+		Settings->ApplySettings(true); 
+	}
 }
 
 // Called every frame
@@ -33,7 +39,6 @@ void AIntroSceneObject::Tick(float DeltaTime)
 
 void AIntroSceneObject::CalltheSelectCharacter(Characters choice)
 {
-	// 티멥에 있는 캐릭터 클래스를 for문을 통해 전부초기화
 	for (const TPair<Characters, ASelectCharacter*>& pair : SelectCharacterList)
 		pair.Value->Inite();
 	auto character = SelectCharacterList[choice];
@@ -42,7 +47,7 @@ void AIntroSceneObject::CalltheSelectCharacter(Characters choice)
 
 void AIntroSceneObject::CallthePlayCharacter(Characters choice)
 {
-	// 티멥에 있는 캐릭터 클래스를 for문을 통해 전부초기화
+
 	for (const TPair<Characters, ASelectCharacter*>& pair : SelectCharacterList)
 		pair.Value->Inite();
 	auto character = SelectCharacterList[choice];
@@ -79,8 +84,6 @@ void AIntroSceneObject::PlaySceneLoadAsync()
 	FSoftObjectPath LevelPath(TEXT("/Game/Virtual_Studio_Kit/Maps/Studio_D.Studio_D'"));
 	if (LevelPath.IsValid())
 	{
-		// 비동기로 미리 로드를 하지만 현재 얼마나 로드를 했는지 퍼센트를 알 수가 없어서 STREAMMAMAGER로 변환
-		//LoadPackageAsync(LevelPath.ToString(), FLoadPackageAsyncDelegate::CreateUObject(this, &AIntroSceneObject::PlaySceneLoad), 0, PKG_ContainsMap);
 		auto& SM = UAssetManager::GetStreamableManager();
 		Handle = SM.RequestAsyncLoad(LevelPath, FStreamableDelegate::CreateUObject(this,&AIntroSceneObject::LevelLoadComplete));
 	}
@@ -91,10 +94,8 @@ void AIntroSceneObject::LevelLoadComplete()
 	ui->SetPercenttext(1.0f);
 	Handle->ReleaseHandle();
 	Handle.Reset();
-	// 호스트인지 클라이언트인지 검사
 	if (GetWorld()->GetAuthGameMode())
 	{
-		//맵 전환 시 플레이어와 일부 월드 상태를 유지하면서 부드럽게 이동하는 기능을 켜는 플래그입니다.
 		GetWorld()->GetAuthGameMode()->bUseSeamlessTravel = true;
 		GetWorldTimerManager().ClearTimer(Timerahbdle);
 		GetWorld()->GetTimerManager().SetTimer(Timerahbdle, this, &AIntroSceneObject::PlaySceneLoadAsync_stream, 0.5, false);

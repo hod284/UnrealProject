@@ -86,7 +86,6 @@ void APlaySceneObject::OnSequenceFinished()
 	AMainPlayerController* PC = Cast<AMainPlayerController>( UGameplayStatics::GetPlayerController(this, 0));
 	if (PC)
 	{
-		// ¿ø·¡ ÇÃ·¹ÀÌ¾î ºä·Î º¹±Í
 		if (APawn* Pawn = PC->GetPawn())
 		{
 			PC->SetViewTargetWithBlend(Pawn, 0.25f);

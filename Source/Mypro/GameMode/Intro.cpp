@@ -2,18 +2,24 @@
 
 
 #include "Intro.h"
-// ºôµåÇÑµÚ °ÔÀÓ ½ÃÀÛÇÒ¶§ ¾²ÀÌ´Â ½ÃÀÛÁ¡ ÁöÁ¤ ¸ÞÅ©·Î
+// ï¿½ï¿½ï¿½ï¿½Ñµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ò¶ï¿½ ï¿½ï¿½ï¿½Ì´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å©ï¿½ï¿½
 //IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, Mypro, "Mypro");
 
 void AIntro::BeginPlay()
 {
 	Super::BeginPlay();
 	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetGameState(NowGameState::Intro);
+	GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetIntroMainUI_widget()->AddToViewport();
+	if (UGameUserSettings* Settings = GEngine->GetGameUserSettings())
+	{
+		Settings->SetScreenResolution(FIntPoint(1920, 1080));
+		Settings->ApplySettings(true);
+	}
 }
 
 AIntro::AIntro()
 {
 	
 	PlayerControllerClass = AMainPlayerController::StaticClass();
-
+	PlayerStateClass = AMyPlayerState::StaticClass();
 }

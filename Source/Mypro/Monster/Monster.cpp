@@ -13,33 +13,24 @@ AMonster::AMonster()
 	MeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshComponent"));
 	MeshComponent->SetupAttachment(RootComponent);
 	MovementComponent = CreateDefaultSubobject<UMonsterPawnMovement>(TEXT("MOVMENT"));
-	CapsuleComponent->bVisualizeComponent = true;
 	const ConstructorHelpers::FObjectFinder<UBehaviorTree> BTree(TEXT("/Script/AIModule.BehaviorTree'/Game/BT/MonsterTREE.MonsterTREE'"));
     if(BTree.Succeeded())
 	    MonsterBehaviorTree = BTree.Object;
 	CapsuleComponent->SetCollisionProfileName("Monster");
 	MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	/*
-	enum class EAutoPossessAI : uint8
-    {
-    Disabled,               // AI ÀÚµ¿ ¼ÒÈ¯ ¾È ÇÔ
-    PlacedInWorld,          // ¿¡µðÅÍ¿¡¼­ ¹Ì¸® ¹èÄ¡µÈ Pawn¸¸ AI¸¦ ºÙÀÓ
-    Spawned,                // ·±Å¸ÀÓ Áß SpawnµÈ Pawn¸¸ AI¸¦ ºÙÀÓ
-    PlacedInWorldOrSpawned  // µÑ ´Ù ÇØ´ç ¡æ Ç×»ó AI ºÙÀÓ
-    };
-	*/
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	AIControllerClass = AMonsterController::StaticClass();
 	MovementComponent->SetUpdatedComponent(RootComponent);
 	SetGenericTeamId(FGenericTeamId(TeamMonster));
-	bUseControllerRotationYaw = true; // ÄÁÆ®·Ñ·¯ÀÇ Yaw È¸ÀüÀ» Pawn¿¡ Àû¿ë
+	bUseControllerRotationYaw = true; // ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ï¿½ï¿½ Yaw È¸ï¿½ï¿½ï¿½ï¿½ Pawnï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 }
 
 // Called when the game starts or when spawned
 void AMonster::BeginPlay()
 {
 	Super::BeginPlay();
-	Info = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_Monster();
+	UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
+	Info = GI->GetDatainfo_Monster();
 	MonsterHp = static_cast <float>(Info->HP);
 	MonsterStun = static_cast <float>(Info->StunGage);
 	HP = 1.0f;
@@ -53,7 +44,7 @@ void AMonster::BeginPlay()
 	}
 	Brain = AIController->BrainComponent;
 	if (Brain )
-		Brain->PauseLogic(TEXT("ManualStop")); // ºê·¹ÀÎ Á¤Áö
+		Brain->PauseLogic(TEXT("ManualStop")); 
 	FVector  Loc = FVector::ZeroVector;
 	FRotator Rot = FRotator::ZeroRotator;
 	FVector  Scl = FVector(1, 1, 1);
@@ -77,7 +68,7 @@ void AMonster::BeginPlay()
 void AMonster::Start()
 {
 	if (Brain)
-		Brain->ResumeLogic(TEXT("ManualStopdf")); // ºê·¹ÀÎ Á¤Áö
+		Brain->ResumeLogic(TEXT("ManualStopdf")); // ï¿½ê·¹ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 }
 void AMonster::Attack1()
 {
@@ -181,19 +172,20 @@ float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 	{
 		AnimInstance->DeathAni();
 		if (Brain)
-			Brain->PauseLogic(TEXT("Death")); // ºê·¹ÀÎ Á¤Áö
+			Brain->PauseLogic(TEXT("Death")); 
 		FVector SpawnLocation(0, 0, 100);
 		FRotator SpawnRotation(0, 0, 0);
 
 		AStaticMeshActor* MeshActor = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), SpawnLocation, SpawnRotation);
-		MeshActor->SetActorLabel("Portal");
+		MeshActor ->Rename(TEXT("Portal"));
 		if (MeshActor)
 		{
 			MeshActor->SetMobility(EComponentMobility::Movable);
-			const FItmeTexturAndMeshInfo* Texture = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetTextureInfo();
+			UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
+			const FItmeTexturAndMeshInfo* Texture = GI->GetTextureInfo();
 			UStaticMesh* Mesh = Texture->MeshMap["Portal"];
 			MeshActor->GetStaticMeshComponent()->SetStaticMesh(Mesh);
-			MeshActor->SetActorScale3D(FVector(1.0f)); // Å©±â Á¶Àý
+			MeshActor->SetActorScale3D(FVector(1.0f)); 
 			CapsuleComponent->SetCollisionProfileName("PlayerSkill");
 		}
 		FActorSpawnParameters param;

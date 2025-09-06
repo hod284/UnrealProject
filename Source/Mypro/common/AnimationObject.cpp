@@ -7,7 +7,7 @@ UAnimationObject::UAnimationObject()
 {
 	UDataTable* mPlayerAnimData = NULL;
 	static ConstructorHelpers::FObjectFinder<UDataTable>
-		PlayerAnimTable(TEXT("/Script/Engine.DataTable'/Game/Data/PlayerAnimation.PlayerAnimation'"));
+		PlayerAnimTable(TEXT("/Script/Engine.DataTable'/Game/Animation/PlayerAnimation.PlayerAnimation'"));
 
 	if (PlayerAnimTable.Succeeded())
 		mPlayerAnimData = PlayerAnimTable.Object;
@@ -18,7 +18,7 @@ UAnimationObject::UAnimationObject()
 		DataAnimainfo_D =  mPlayerAnimData->FindRow<FPlayerAnimInfo>("DarkMagition", TEXT(""));
 	}
 	static ConstructorHelpers::FObjectFinder<UDataTable>
-		PlayerAnimTable_monster(TEXT("/Script/Engine.DataTable'/Game/Data/MonsterAnimation.MonsterAnimation'"));
+		PlayerAnimTable_monster(TEXT("/Script/Engine.DataTable'/Game/Animation/MonsterAnimation.MonsterAnimation'"));
 	if (PlayerAnimTable_monster.Succeeded())
 		mPlayerAnimData = PlayerAnimTable_monster.Object;
 	if (mPlayerAnimData)
