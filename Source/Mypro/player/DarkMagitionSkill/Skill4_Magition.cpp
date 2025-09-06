@@ -13,8 +13,8 @@ ASkill4_Magition::ASkill4_Magition()
 	BoxColider->SetupAttachment(NiagaraParticle);
 	BoxColider->SetCollisionProfileName("PlayerSkill");
 	BoxColider->OnComponentHit.AddDynamic(this, &ASkill4_Magition::OnHit_Skil4_Magition);
-	// ¿À¹ö·¦ ÀÎº¥Æ® È°¼ºÈ­
-	BoxColider->SetGenerateOverlapEvents(true); // ¾ÈÀüÇÏ°Ô ÄÑµÎ±â
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îºï¿½Æ® È°ï¿½ï¿½È­
+	BoxColider->SetGenerateOverlapEvents(true); // ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ÑµÎ±ï¿½
 	BoxColider->OnComponentBeginOverlap.AddDynamic(this, &ASkill4_Magition::OnCapsuleBeginOverlap_Skil4_Magition);
 	BoxColider->OnComponentEndOverlap.AddDynamic(this, &ASkill4_Magition::OnCapsuleEndOverlap_Skil4_Magition);
 }
@@ -32,7 +32,7 @@ void ASkill4_Magition::OnHit_Skil4_Magition(UPrimitiveComponent* HitComp, AActor
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
 	const FHitResult& Hit)
 {
-	FString s = OtherActor->GetActorLabel();
+	FString s = OtherActor->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("skil4_hit_m:%s"), *s);
 
 
@@ -45,7 +45,7 @@ void ASkill4_Magition::OnCapsuleBeginOverlap_Skil4_Magition(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
-	FString s = OtherActor->GetActorLabel();
+	FString s = OtherActor->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("skil4_overlap_m:%s"), *s);
 	float pe = static_cast<float>(AttackDamage);
 	UGameplayStatics::ApplyDamage(OtherActor, pe, GetInstigatorController(), this, UDamageType::StaticClass());
@@ -58,7 +58,7 @@ void ASkill4_Magition::OnCapsuleEndOverlap_Skil4_Magition(
 	UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex)
 {
-	FString s = OtherActor->GetActorLabel();
+	FString s = OtherActor->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("skil4_overlap_m:%s"), *s);
 
 

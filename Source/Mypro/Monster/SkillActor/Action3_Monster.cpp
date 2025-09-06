@@ -13,8 +13,8 @@ AAction3_Monster::AAction3_Monster()
 	BoxColider->SetupAttachment(NiagaraParticle);
 	BoxColider->SetCollisionProfileName("Monsterskill");
 	BoxColider->OnComponentHit.AddDynamic(this, &AAction3_Monster::OnHit_Action3_M);
-	// ¿À¹ö·¦ ÀÎº¥Æ® È°¼ºÈ­
-	BoxColider->SetGenerateOverlapEvents(true); // ¾ÈÀüÇÏ°Ô ÄÑµÎ±â
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îºï¿½Æ® È°ï¿½ï¿½È­
+	BoxColider->SetGenerateOverlapEvents(true); // ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ÑµÎ±ï¿½
 	BoxColider->OnComponentBeginOverlap.AddDynamic(this, &AAction3_Monster::OnCapsuleBeginOverlap_Action3_M);
 	BoxColider->OnComponentEndOverlap.AddDynamic(this, &AAction3_Monster::OnCapsuleEndOverlap_Action3_M);
 }
@@ -43,7 +43,7 @@ void AAction3_Monster::OnCapsuleBeginOverlap_Action3_M(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
-	FString s = OtherActor->GetActorLabel();
+	FString s = OtherActor->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("AC3_overlap:%s"), *s);
 	float pe = static_cast<float>(AttackDamage);
 	UGameplayStatics::ApplyDamage(OtherActor, pe, GetInstigatorController(), this, UDamageType::StaticClass());
@@ -78,7 +78,7 @@ void AAction3_Monster::Init()
 		FVector f = FVector(GetActorLocation().X, GetActorLocation().Y, 0);
 		FVector e = FVector(result.ImpactPoint.X, result.ImpactPoint.Y, 0);
 
-		UE_LOG(LogMypro, Warning, TEXT("beamlength:%s"), *result.GetActor()->GetActorLabel());
+		UE_LOG(LogMypro, Warning, TEXT("beamlength:%s"), *result.GetActor()->GetName());
 
 		NiagaraParticle->SetVariableFloat(TEXT("BeamLength"), result.Distance);
 		BoxColider->SetCapsuleHalfHeight(result.Distance);

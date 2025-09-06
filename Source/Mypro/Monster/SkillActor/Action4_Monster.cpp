@@ -30,23 +30,23 @@ AAction4_Monster::AAction4_Monster()
 	BoxColider4->SetupAttachment(NiagaraParticle4);
 	BoxColider4->SetCollisionProfileName("Monsterskill");
 	BoxColider1->OnComponentHit.AddDynamic(this, &AAction4_Monster::OnHit_Action4_M);
-	// ¿À¹ö·¦ ÀÎº¥Æ® È°¼ºÈ­
-	BoxColider1->SetGenerateOverlapEvents(true); // ¾ÈÀüÇÏ°Ô ÄÑµÎ±â
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îºï¿½Æ® È°ï¿½ï¿½È­
+	BoxColider1->SetGenerateOverlapEvents(true); // ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ÑµÎ±ï¿½
 	BoxColider1->OnComponentBeginOverlap.AddDynamic(this, &AAction4_Monster::OnCapsuleBeginOverlap_Action4_M);
 	BoxColider1->OnComponentEndOverlap.AddDynamic(this, &AAction4_Monster::OnCapsuleEndOverlap_Action4_M);
 	BoxColider2->OnComponentHit.AddDynamic(this, &AAction4_Monster::OnHit_Action4_M);
-	// ¿À¹ö·¦ ÀÎº¥Æ® È°¼ºÈ­
-	BoxColider2->SetGenerateOverlapEvents(true); // ¾ÈÀüÇÏ°Ô ÄÑµÎ±â
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îºï¿½Æ® È°ï¿½ï¿½È­
+	BoxColider2->SetGenerateOverlapEvents(true); // ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ÑµÎ±ï¿½
 	BoxColider2->OnComponentBeginOverlap.AddDynamic(this, &AAction4_Monster::OnCapsuleBeginOverlap_Action4_M);
 	BoxColider2->OnComponentEndOverlap.AddDynamic(this, &AAction4_Monster::OnCapsuleEndOverlap_Action4_M);
 	BoxColider3->OnComponentHit.AddDynamic(this, &AAction4_Monster::OnHit_Action4_M);
-	// ¿À¹ö·¦ ÀÎº¥Æ® È°¼ºÈ­
-	BoxColider3->SetGenerateOverlapEvents(true); // ¾ÈÀüÇÏ°Ô ÄÑµÎ±â
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îºï¿½Æ® È°ï¿½ï¿½È­
+	BoxColider3->SetGenerateOverlapEvents(true); // ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ÑµÎ±ï¿½
 	BoxColider3->OnComponentBeginOverlap.AddDynamic(this, &AAction4_Monster::OnCapsuleBeginOverlap_Action4_M);
 	BoxColider3->OnComponentEndOverlap.AddDynamic(this, &AAction4_Monster::OnCapsuleEndOverlap_Action4_M);
 	BoxColider4->OnComponentHit.AddDynamic(this, &AAction4_Monster::OnHit_Action4_M);
-	// ¿À¹ö·¦ ÀÎº¥Æ® È°¼ºÈ­
-	BoxColider4->SetGenerateOverlapEvents(true); // ¾ÈÀüÇÏ°Ô ÄÑµÎ±â
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îºï¿½Æ® È°ï¿½ï¿½È­
+	BoxColider4->SetGenerateOverlapEvents(true); // ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ÑµÎ±ï¿½
 	BoxColider4->OnComponentBeginOverlap.AddDynamic(this, &AAction4_Monster::OnCapsuleBeginOverlap_Action4_M);
 	BoxColider4->OnComponentEndOverlap.AddDynamic(this, &AAction4_Monster::OnCapsuleEndOverlap_Action4_M);
 }
@@ -79,7 +79,7 @@ void AAction4_Monster::OnCapsuleBeginOverlap_Action4_M(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
-	FString s = OtherActor->GetActorLabel();
+	FString s = OtherActor->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("AC4_overlap:%s"), *s);
 	float pe = static_cast<float>(AttackDamage);
 	UGameplayStatics::ApplyDamage(OtherActor, pe, GetInstigatorController(), this, UDamageType::StaticClass());

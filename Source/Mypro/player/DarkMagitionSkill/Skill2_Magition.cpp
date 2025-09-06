@@ -18,9 +18,9 @@ ASkill2_Magition::ASkill2_Magition()
 	Movement->InitialSpeed = TravelSpeed;
 	Movement->MaxSpeed = TravelSpeed;
 	Movement->ProjectileGravityScale = 0.f;
-	Movement->bRotationFollowsVelocity = true;// ÇöÀç¼Ó°¡ ÇâÇÏ´Â ¹æÇâÀ¸·Î ÀÚµ¿ È¸Àü
-	Movement->bAutoActivate = true;// ¹«ºê ÄÄÆ÷³ÍÆ® ÄÓÁö¿©ºÎ
-	Movement->bForceSubStepping = true; // °í¼Ó/ÀúFPS ¾ÈÁ¤
+	Movement->bRotationFollowsVelocity = true;// ï¿½ï¿½ï¿½ï¿½Ó°ï¿½ ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½ È¸ï¿½ï¿½
+	Movement->bAutoActivate = true;// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	Movement->bForceSubStepping = true; // ï¿½ï¿½ï¿½/ï¿½ï¿½FPS ï¿½ï¿½ï¿½ï¿½
 	Movement ->ProjectileGravityScale = 0.f;
 	Movement->OnProjectileStop.AddDynamic(this,&ASkill2_Magition::ProjectileStop);
 	BoxColider->SetCollisionProfileName("PlayerObject");
@@ -29,7 +29,7 @@ void ASkill2_Magition::OnHit_Skil2_Magition(UPrimitiveComponent* HitComp, AActor
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
 	const FHitResult& Hit)
 {
-	FString s = OtherActor->GetActorLabel();
+	FString s = OtherActor->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("skill2_hit:%s"), *s);
 
 
@@ -42,7 +42,7 @@ void ASkill2_Magition::OnCapsuleBeginOverlap_Skil2_Magition(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
-	FString s = OtherActor->GetActorLabel();
+	FString s = OtherActor->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("skil2_overlap:%s"), *s);
 
 
@@ -53,7 +53,7 @@ void ASkill2_Magition::OnCapsuleEndOverlap_Skil2_Magition(
 	UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex)
 {
-	FString s = OtherActor->GetActorLabel();
+	FString s = OtherActor->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("skil2_overlap:%s"), *s);
 
 
@@ -63,11 +63,11 @@ void ASkill2_Magition::OnCapsuleEndOverlap_Skil2_Magition(
 void ASkill2_Magition::BeginPlay()
 {
 	Super::BeginPlay();
-	// È£¹ÖÀº ¾ð¸®¾ó¿¡¼­ ¸¸µå´Â À¯µµ Åº À» ¸¸µé ¶§ »ç¿ëÇÏ´Â°ÍÀ¸·Î Å¸°ÙÄÄÆ÷³ÍÆ®¸¦ ´ëÀÔÇØ Å¸°ÙÀ» ¼³Á¤ÇÑ´Ù
+	// È£ï¿½ï¿½ï¿½ï¿½ ï¿½ð¸®¾ó¿¡¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Åº ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´Â°ï¿½ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½
 	Movement->bIsHomingProjectile = true;
 	Movement->HomingTargetComponent = UScene;
 	Movement->HomingAccelerationMagnitude = StartAccel;
-	ApplyInitialSideKick(); // ¡ç ¿©±â¼­ "È® Æ¼³ª´Â °î¼±"ÀÇ ½ÃÀÛ ¹æÇâÀ» ÁØ´Ù
+	ApplyInitialSideKick(); // ï¿½ï¿½ ï¿½ï¿½ï¿½â¼­ "È® Æ¼ï¿½ï¿½ï¿½ï¿½ ï¿½î¼±"ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½
 }
 
 // Called every frame
@@ -79,7 +79,7 @@ void ASkill2_Magition::Tick(float DeltaTime)
 void ASkill2_Magition::ProjectileStop(const FHitResult& rersult)
 {
 	Destroy();
-	FString s = rersult.GetActor()->GetActorLabel();
+	FString s = rersult.GetActor()->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("skil2_Stop :%s"), *s);
 	float pe = static_cast<float>(AttackDamage);
 	UGameplayStatics::ApplyDamage(rersult.GetActor(), pe, GetInstigatorController(), this, UDamageType::StaticClass());
@@ -87,12 +87,12 @@ void ASkill2_Magition::ProjectileStop(const FHitResult& rersult)
 
 void ASkill2_Magition::ApplyInitialSideKick()
 {
-	// Å¸°ÙÀÌ ÀÖÀ¸¸é ±×ÂÊÀ» ±âÁØÀ¸·Î ¿· ¹æÇâÀ» °è»êÇØ »ìÂ¦ Æ²¾î ½ð´Ù.
-	FVector dir = GetActorForwardVector(); // ±âº»
+	// Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¦ Æ²ï¿½ï¿½ ï¿½ï¿½ï¿½.
+	FVector dir = GetActorForwardVector(); // ï¿½âº»
 	if (UScene)
 	{
 		const FVector toTarget = (UScene->GetComponentLocation() - GetActorLocation()).GetSafeNormal();
-		// ¿· ¹æÇâ(right): Up ¡¿ Forward (À§ ±âÁØ ·Ñ¸µ ¾øÀÌ ½Ã°è ¹Ý´ëÂÊ)
+		// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(right): Up ï¿½ï¿½ Forward (ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½Ý´ï¿½ï¿½ï¿½)
 		const FVector right = FVector::CrossProduct(FVector::UpVector, toTarget).GetSafeNormal();
 
 		const float rad = FMath::DegreesToRadians(45);
@@ -105,7 +105,7 @@ void ASkill2_Magition::ApplyInitialSideKick()
 
 void ASkill2_Magition::UpdateAccel(float dt)
 {
-	// KINDA_SMALL_NUMBER :ºÎµ¿ ¼Ò¼öÁ¡À» ¹æÁöÇÏ±â À§ÇØ 0.0À» ºñ±³ÇÏ±â À§ÇÑ ¾ð¸®¾ó ¸ÞÅ©·Î
+	// KINDA_SMALL_NUMBER :ï¿½Îµï¿½ ï¿½Ò¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ 0.0ï¿½ï¿½ ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ð¸®¾ï¿½ ï¿½ï¿½Å©ï¿½ï¿½
 	if (AccelRampTime <= KINDA_SMALL_NUMBER)
 	{
 		Movement->HomingAccelerationMagnitude = 8000.0f; 
@@ -114,15 +114,15 @@ void ASkill2_Magition::UpdateAccel(float dt)
 
 	Elapsed += dt;
 	const float alpha = FMath::Clamp(Elapsed / AccelRampTime, 0.f, 1.f);
-	// °¡¼Ó ·¥ÇÁ¾÷(ºÎµå·´°Ô): S-curve
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½Îµå·´ï¿½ï¿½): S-curve
 	const float smooth = alpha * alpha * (3.f - 2.f * alpha);
 	Movement->HomingAccelerationMagnitude = FMath::Lerp(StartAccel, EndAccel, smooth);
 
-	// ¸·ÆÇ º¸Á¤(¼±ÅÃ): ÃæºÐÈ÷ °¡±î¿ì¸é ±ÞÈ÷ ºÙÀÌ±â
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½): ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì±ï¿½
 	if (UScene)
 	{
 		const float d = FVector::Dist(GetActorLocation(), UScene->GetComponentLocation());
-		if (d < 600.f) // 6m ³²À¸¸é °­Á¦ °¡¼Ó ¾÷
+		if (d < 600.f) // 6m ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 		{
 			Movement->HomingAccelerationMagnitude = FMath::Max(Movement->HomingAccelerationMagnitude, EndAccel * 1.5f);
 		}

@@ -13,8 +13,8 @@ AAction2_Monster::AAction2_Monster()
 	BoxColider->SetupAttachment(NiagaraParticle);
 	BoxColider->SetCollisionProfileName("Monsterskill");
 	BoxColider->OnComponentHit.AddDynamic(this, &AAction2_Monster::OnHit_Action2_M);
-	// ¿À¹ö·¦ ÀÎº¥Æ® È°¼ºÈ­
-	BoxColider->SetGenerateOverlapEvents(true); // ¾ÈÀüÇÏ°Ô ÄÑµÎ±â
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îºï¿½Æ® È°ï¿½ï¿½È­
+	BoxColider->SetGenerateOverlapEvents(true); // ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ÑµÎ±ï¿½
 	BoxColider->OnComponentBeginOverlap.AddDynamic(this, &AAction2_Monster::OnCapsuleBeginOverlap_Action2_M);
 	BoxColider->OnComponentEndOverlap.AddDynamic(this, &AAction2_Monster::OnCapsuleEndOverlap_Action2_M);
 }
@@ -41,7 +41,7 @@ void AAction2_Monster::OnCapsuleBeginOverlap_Action2_M(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
-	FString s = OtherActor->GetActorLabel();
+	FString s = OtherActor->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("AC2_overlap:%s"), *s);
 	float pe = static_cast<float>(AttackDamage);
 	UGameplayStatics::ApplyDamage(OtherActor, pe, GetInstigatorController(), this, UDamageType::StaticClass());

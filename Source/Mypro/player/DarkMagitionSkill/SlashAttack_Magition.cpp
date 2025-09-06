@@ -14,8 +14,8 @@ ASlashAttack_Magition::ASlashAttack_Magition()
 	BoxColider->SetupAttachment(NiagaraParticle);
 	BoxColider->SetCollisionProfileName("PlayerSkill");
 	BoxColider->OnComponentHit.AddDynamic(this, &ASlashAttack_Magition::OnHit_Slash_Magition);
-	// ¿À¹ö·¦ ÀÎº¥Æ® È°¼ºÈ­
-	BoxColider->SetGenerateOverlapEvents(true); // ¾ÈÀüÇÏ°Ô ÄÑµÎ±â
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îºï¿½Æ® È°ï¿½ï¿½È­
+	BoxColider->SetGenerateOverlapEvents(true); // ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ÑµÎ±ï¿½
 	BoxColider->OnComponentBeginOverlap.AddDynamic(this, &ASlashAttack_Magition::OnCapsuleBeginOverlap_Slash_Magition);
 	BoxColider->OnComponentEndOverlap.AddDynamic(this, &ASlashAttack_Magition::OnCapsuleEndOverlap_Slash_Magition);
 }
@@ -41,7 +41,7 @@ void ASlashAttack_Magition::OnHit_Slash_Magition(UPrimitiveComponent* HitComp, A
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
 	const FHitResult& Hit)
 {
-	FString s = OtherActor->GetActorLabel();
+	FString s = OtherActor->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("slash_hit_m:%s"), *s);
 
 }
@@ -53,7 +53,7 @@ void ASlashAttack_Magition::OnCapsuleBeginOverlap_Slash_Magition(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
-	FString s = OtherActor->GetActorLabel();
+	FString s = OtherActor->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("slash_overlap_m:%s"), *s);
 	float pe = static_cast<float>(AttackDamage);
 	UGameplayStatics::ApplyDamage(OtherActor, pe, GetInstigatorController(), this, UDamageType::StaticClass());
@@ -65,7 +65,7 @@ void ASlashAttack_Magition::OnCapsuleEndOverlap_Slash_Magition(
 	UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex)
 {
-	FString s = OtherActor->GetActorLabel();
+	FString s = OtherActor->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("slash_overlapend_m:%s"), *s);
 
 }

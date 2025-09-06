@@ -11,7 +11,8 @@ ADarkMagition::ADarkMagition()
 void ADarkMagition::BeginPlay()
 {
 	Super::BeginPlay();
-    Info = GetWorld()->GetGameInstance()->GetSubsystem<UDataManager>()->GetDatainfo_D();
+    UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
+    Info = GI->GetDatainfo_D();
     PlayerHp = static_cast<float>(Info->HP);
     PlayerMp = static_cast<float>(Info->MP);
     PlayerHp_Const = PlayerHp;
