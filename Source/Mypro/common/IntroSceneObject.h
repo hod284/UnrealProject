@@ -20,12 +20,12 @@ public:
 
 protected:
 
-	//FTimerHandleÀº Å¸ÀÌ¸Ó¸¦ °ü¸®ÇÏ´Â ÇÚµéÀÌ´Ù.
+	//FTimerHandleï¿½ï¿½ Å¸ï¿½Ì¸Ó¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Úµï¿½ï¿½Ì´ï¿½.
 	FTimerHandle Timerahbdle;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "listofSelctcharacter")
-	TMap<Characters, ASelectCharacter*> SelectCharacterList; // Ä³¸¯ÅÍ ¸®½ºÆ®
+	TMap<Characters, ASelectCharacter*> SelectCharacterList; // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
 ;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Cutscene")
 	TObjectPtr<UMediaPlayer> MyMediaPlayer_loading;
@@ -41,17 +41,17 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	void CalltheSelectCharacter(Characters choice); // Ä³¸¯ÅÍ ¼±ÅÃ ÇÔ¼ö
-	void CallthePlayCharacter(Characters choice); // º»°ÔÀÓ¿¡ µé¾î°¥¶§ ÇÃ·¹ÀÌ ÇÒ Ä³¸¯ÅÍ ¼±ÅÃ
-	// ·Îµù ÇÒ¶§ ³ª¿À´Â ºñµð¿À 
+	void CalltheSelectCharacter(Characters choice); // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
+	void CallthePlayCharacter(Characters choice); // ï¿½ï¿½ï¿½ï¿½ï¿½Ó¿ï¿½ ï¿½ï¿½î°¥ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½ ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	// ï¿½Îµï¿½ ï¿½Ò¶ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
 	void PlayloadingVideo();
-	// ÇÃ·¹ÀÌ½Å ºñµ¿±â ·Îµå ¿Ï·á µÉ¶§ ³ª¿À´Â ÇÔ¼ö
+	// ï¿½Ã·ï¿½ï¿½Ì½ï¿½ ï¿½ñµ¿±ï¿½ ï¿½Îµï¿½ ï¿½Ï·ï¿½ ï¿½É¶ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 	void PlaySceneLoad(const FName& PackageName, UPackage* LoadedPackage, EAsyncLoadingResult::Type Result);
-	// ÇÃ·¹ÀÌ½Å ºñµ¿±â ·Îµå 
+	// ï¿½Ã·ï¿½ï¿½Ì½ï¿½ ï¿½ñµ¿±ï¿½ ï¿½Îµï¿½ 
 	void PlaySceneLoadAsync();
-	// ºñµ¿±â ·¹º§ ·Îµå ¿Ï·á
+	// ï¿½ñµ¿±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ ï¿½Ï·ï¿½
 	void PlaySceneLoadAsync_stream();
-	// ·¡¹ë ·Îµå
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½
 	void LevelLoadComplete();
 	void FinishedSession(bool ok);
 	void CreateSessionComplete(FName, bool ok);

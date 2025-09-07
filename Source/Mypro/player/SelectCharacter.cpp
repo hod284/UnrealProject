@@ -79,9 +79,8 @@ void ASelectCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void ASelectCharacter::Selected()
 {
-		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
-	
-		PlayerController->SetViewTargetWithBlend(this,2.0f);
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
+	PlayerController->SetViewTargetWithBlend(this,2.0f);
 	GetWorldTimerManager().ClearTimer(Timerahbdle);
 	GetWorld()->GetTimerManager().SetTimer(Timerahbdle,this,&ASelectCharacter::SelectedAnimation,2.0f, false);
 	Niagara->SetVisibility(false);

@@ -12,8 +12,7 @@ ASkill3_Magition::ASkill3_Magition()
 	BoxColider->SetupAttachment(NiagaraParticle);
 	BoxColider->SetCollisionProfileName("PlayerSkill");
 	BoxColider->OnComponentHit.AddDynamic(this, &ASkill3_Magition::OnHit_Skil3_Magition);
-	// ������ �κ�Ʈ Ȱ��ȭ
-	BoxColider->SetGenerateOverlapEvents(true); // �����ϰ� �ѵα�
+	BoxColider->SetGenerateOverlapEvents(true); 
 	BoxColider->OnComponentBeginOverlap.AddDynamic(this, &ASkill3_Magition::OnCapsuleBeginOverlap_Skil3_Magition);
 	BoxColider->OnComponentEndOverlap.AddDynamic(this, &ASkill3_Magition::OnCapsuleEndOverlap_Skil3_Magition);
 }
@@ -54,6 +53,9 @@ void ASkill3_Magition::OnCapsuleBeginOverlap_Skil3_Magition(
 	UE_LOG(LogMypro, Warning, TEXT("skil3_overlap_m:%s"), *s);
 	float pe = static_cast<float>(AttackDamage);
 	UGameplayStatics::ApplyDamage(OtherActor, pe, GetInstigatorController(), this, UDamageType::StaticClass());
+	UNiagaraSystem* Niagara = LoadObject<UNiagaraSystem>(GetWorld(), TEXT("/Script/Niagara.NiagaraSystem'/Game/Pack_Simple_Particle_Burst/01_Niagara_Systems/NS_Simple_Burst_Level_3.NS_Simple_Burst_Level_3'"));
+
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), Niagara, SweepResult.ImpactPoint);
 }
 void ASkill3_Magition::OnCapsuleEndOverlap_Skil3_Magition(
 	UPrimitiveComponent* OverlappedComp,

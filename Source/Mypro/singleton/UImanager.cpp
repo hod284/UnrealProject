@@ -13,7 +13,8 @@ void UUImanager::Initialize(FSubsystemCollectionBase& Collection)
 	if (PlayMainUI)
 		PlayMainUI_widget = CreateWidget<UUserWidget>(GetWorld(), PlayMainUI);
 
-	
+	if (WinerUI)
+		Winer_widget = CreateWidget<UUserWidget>(GetWorld(), WinerUI);
 }
 
 UUImanager::UUImanager()
@@ -27,6 +28,11 @@ UUImanager::UUImanager()
 	if (WidgetClass_play.Succeeded())
 	{
 		PlayMainUI = WidgetClass_play.Class;
+	}
+	static ConstructorHelpers::FClassFinder<UUserWidget> WidgetClass_WINER(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/widget/winerWidget.winerWidget_C'"));
+	if (WidgetClass_WINER.Succeeded())
+	{
+		WinerUI = WidgetClass_WINER.Class;
 	}
 
 }

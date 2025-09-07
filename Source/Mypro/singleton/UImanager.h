@@ -5,12 +5,11 @@
 #include "../Gameinfo.h"
 #include "../Widget/PlayMainUI.h"
 #include "../Widget/IntroMainUI.h"
+#include "../Widget//WinerWidgetClass.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "UImanager.generated.h"
 
-/**
- ¸ÞÀÎ À§Á¬µéÀ» °ü¸®ÇÏ´Â ½Ì±ÛÅæ Å¬·¡½ºÀÔ´Ï´Ù.
- */
+
 UCLASS()
 class MYPRO_API UUImanager : public UGameInstanceSubsystem
 {
@@ -18,32 +17,32 @@ class MYPRO_API UUImanager : public UGameInstanceSubsystem
 	
 protected:
 	UPROPERTY()
-	TSubclassOf<UPlayMainUI> PlayMainUI; // ÇÃ·¹ÀÌ ¸ÞÀÎÅ¬·¡½º
+	TSubclassOf<UPlayMainUI> PlayMainUI; // ï¿½Ã·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å¬ï¿½ï¿½ï¿½ï¿½
 	UPROPERTY()
-	TSubclassOf<UIntroMainUI> IntroMainUI; // ÀÎÆ®·Î ¸ÞÀÎ Å¬·¡½º
+	TSubclassOf<UIntroMainUI> IntroMainUI; // ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
 	UPROPERTY()
-    TObjectPtr <UUserWidget> PlayMainUI_widget; // ÇÃ·¹ÀÌ ¸ÞÀÎ À§Á¬
+	TSubclassOf<UWinerWidgetClass> WinerUI; // ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
 	UPROPERTY()
-	TObjectPtr<UUserWidget> IntroMainUI_widget; // ÀÎÆ®·Î ¸ÞÀÎ À§Á¬
-	// Ã¹¹øÂÅ¾À¿¡¼­ ¾²ÀÏ ¸ÞÀÎ À§Á¬ get
-	// tobject ptr ¾Õ¿¡ ¾²ÀÌ´Â const´Â ¹ÝÈ¯°ªÀ» ¼öÁ¤ÇÒ¼ö ¾ø´Ù´Â ÀÇ¹ÌÀÔ´Ï´Ù.
-	// GetPlayMainUI_widget() = PlayMainUI_widget; // ÀÌ·¸°Ô ¾²¸é ¾ÈµË´Ï´Ù.
-	// tobject ptr µÚ¿¡ ¾²ÀÌ´Â const´Â ¸â¹öº¯¼öÀ» ¼öÁ¤ÇÒ¼ö ¾ø´Ù´Â ÀÇ¹ÌÀÔ´Ï´Ù.
-	// const TObjectPtr<UUserWidget> GetPlayMainUI_widget() const
-	//{
-	//	PlayMainUI_widget = IntroMainUI_widget; ¸â¹öº¯¼ö¸¦ ¼öÁ¤ÇÒ¼ö ¾øÀ¸¹Ç·Î ¿¡·¯°¡ ³³´Ï´Ù
-	//	return PlayMainUI_widget;
-	//}
+    TObjectPtr <UUserWidget> PlayMainUI_widget; // ï¿½Ã·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	UPROPERTY()
+	TObjectPtr<UUserWidget> IntroMainUI_widget; // ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	UPROPERTY()
+	TObjectPtr<UUserWidget> Winer_widget; // ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+
 public:
 	const TObjectPtr<UUserWidget> GetPlayMainUI_widget() const
 	{
 		
 		return PlayMainUI_widget;
 	}
-	// ÇÃ·¹ÀÌ¾À¿¡¼­ ¾²ÀÏ ¸ÞÀÎ À§Á¬ get
+	// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ get
 	const TObjectPtr<UUserWidget> GetIntroMainUI_widget() const
 	{
 		return IntroMainUI_widget;
+	}
+	const TObjectPtr<UUserWidget> GetWiner_widget() const
+	{
+		return Winer_widget;
 	}
 
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;

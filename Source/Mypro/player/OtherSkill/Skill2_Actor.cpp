@@ -51,7 +51,9 @@ void ASkill2_Actor::OnCapsuleBeginOverlap_Skil2(
 	UE_LOG(LogMypro, Warning, TEXT("skil2_overlap:%s"), *s);
 	float pe = static_cast<float>(AttackDamage);
 	UGameplayStatics::ApplyDamage(OtherActor, pe, GetInstigatorController(), this, UDamageType::StaticClass());
+	UNiagaraSystem* Niagara = LoadObject<UNiagaraSystem>(GetWorld(), TEXT("/Script/Niagara.NiagaraSystem'/Game/Pack_Simple_Particle_Burst/01_Niagara_Systems/NS_Simple_Burst_Level_3.NS_Simple_Burst_Level_3'"));
 
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), Niagara, SweepResult.ImpactPoint);
 }
 
 void ASkill2_Actor::OnCapsuleEndOverlap_Skil2(

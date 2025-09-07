@@ -25,22 +25,22 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	USceneComponent* UScene;
 
-	float TravelSpeed = 1200.f;          // cm/s (½ºÇÃ¶óÀÎ µû¶ó ÀÌµ¿ ¼Óµµ)
-	float HomingAccelMag = 6000.f;       // À¯µµ °¡¼Ó Å©±â(Ä¿ºê°¡ ±ÞÇÏ¸é ¿Ã·ÁÁà)
-	bool bLoop = false;                  // ³¡³ª¸é ´Ù½Ã Ã³À½À¸·Î
-	bool bPingPong = false;              // ¿Õº¹
-	float StartDistance = 0.f;           // ½ÃÀÛ ÁöÁ¡(cm)
-	bool bDisableGravity = true;         // °î¼± ¿¬Ãâ¿£ º¸Åë Áß·Â ²û
+	float TravelSpeed = 1200.f;    
+	float HomingAccelMag = 6000.f; 
+	bool bLoop = false;            
+	bool bPingPong = false;        
+	float StartDistance = 0.f;     
+	bool bDisableGravity = true;   
 	float Elapsed;
-	float AccelRampTime = 0.6f;   // °¡¼ÓÀ» Start¡æEnd·Î ¿Ã¸®´Â ½Ã°£(sec)
-	float StartAccel = 800.f;     // ½ÃÀÛ À¯µµ°¡¼Ó(Å©¸é °î¼±ÀÌ ´ú Ä¿Áü)
-	float EndAccel = 8000.f;    // ¸·ÆÇ À¯µµ°¡¼Ó(Å©¸é °­ÇÏ°Ô »¡¶óºÙÀ½)
-	// Ãæµ¹
+	float AccelRampTime = 0.6f;   
+	float StartAccel = 800.f;    
+	float EndAccel = 8000.f;    
+	// ï¿½æµ¹
 	UFUNCTION()
 	void OnHit_Skil2_Magition(UPrimitiveComponent* HitComp, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, FVector NormalImpulse,
 		const FHitResult& Hit);
-	// ¿À¹ö·¦
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	UFUNCTION()
 	void OnCapsuleBeginOverlap_Skil2_Magition(
 		UPrimitiveComponent* OverlappedComp,
@@ -49,7 +49,7 @@ protected:
 		int32 OtherBodyIndex,
 		bool bFromSweep,
 		const FHitResult& SweepResult);
-	// ¿À¹ö·¦ ³¡
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 	UFUNCTION()
 	void OnCapsuleEndOverlap_Skil2_Magition(
 		UPrimitiveComponent* OverlappedComp,
@@ -60,8 +60,8 @@ protected:
 	virtual void BeginPlay() override;
 	UFUNCTION()
 	void ProjectileStop(const FHitResult & rersult);
-	void ApplyInitialSideKick(); // Ã³À½¿¡ ¿·À¸·Î Æ²¾î ½î±â
-	void UpdateAccel(float dt);  // À¯µµ °¡¼Ó ·¥ÇÁ¾÷
+	void ApplyInitialSideKick(); 
+	void UpdateAccel(float dt); 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

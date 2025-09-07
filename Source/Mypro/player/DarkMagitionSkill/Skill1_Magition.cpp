@@ -50,7 +50,9 @@ void ASkill1_Magition::OnCapsuleBeginOverlap_Skil1_Magition(
 	UE_LOG(LogMypro, Warning, TEXT("skil1_overlap_m :%s"), *s);
 	float pe = static_cast<float>(AttackDamage);
 	UGameplayStatics::ApplyDamage(OtherActor, pe, GetInstigatorController(), this, UDamageType::StaticClass());
+	UNiagaraSystem* Niagara = LoadObject<UNiagaraSystem>(GetWorld(), TEXT("/Script/Niagara.NiagaraSystem'/Game/Pack_Simple_Particle_Burst/01_Niagara_Systems/NS_Simple_Burst_Level_3.NS_Simple_Burst_Level_3'"));
 
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), Niagara, SweepResult.ImpactPoint);
 }
 void ASkill1_Magition::OnCapsuleEndOverlap_Skil1_Magition(
 	UPrimitiveComponent* OverlappedComp,

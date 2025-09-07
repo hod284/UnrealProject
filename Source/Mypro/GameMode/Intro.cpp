@@ -9,12 +9,6 @@ void AIntro::BeginPlay()
 {
 	Super::BeginPlay();
 	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetGameState(NowGameState::Intro);
-	GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetIntroMainUI_widget()->AddToViewport();
-	if (UGameUserSettings* Settings = GEngine->GetGameUserSettings())
-	{
-		Settings->SetScreenResolution(FIntPoint(1920, 1080));
-		Settings->ApplySettings(true);
-	}
 }
 
 AIntro::AIntro()

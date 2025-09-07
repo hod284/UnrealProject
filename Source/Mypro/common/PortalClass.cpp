@@ -21,8 +21,8 @@ APortalClass::APortalClass()
 	Niagara4->SetupAttachment(Niagara1);
 	StaticMesh->SetupAttachment(Sphere);
 	Sphere->OnComponentHit.AddDynamic(this, &APortalClass::OnHit);
-	// ¿À¹ö·¦ ÀÎº¥Æ® È°¼ºÈ­
-	Sphere->SetGenerateOverlapEvents(true); // ¾ÈÀüÇÏ°Ô ÄÑµÎ±â
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îºï¿½Æ® È°ï¿½ï¿½È­
+	Sphere->SetGenerateOverlapEvents(true); // ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ÑµÎ±ï¿½
 	Sphere->OnComponentBeginOverlap.AddDynamic(this, &APortalClass::OnCapsuleBeginOverlap);
 	Sphere->OnComponentEndOverlap.AddDynamic(this, &APortalClass::OnCapsuleEndOverlap);
 }
@@ -46,7 +46,7 @@ void APortalClass::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 			AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
 			if (IsValid(PS))
 				PS->Inventoryco->ItemMinus.Broadcast("Portal");
-			UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
+			UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/TrackerlessStudio"));
 		}
 	}
 }

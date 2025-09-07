@@ -83,16 +83,18 @@ void ASkill2_Magition::ProjectileStop(const FHitResult& rersult)
 	UE_LOG(LogMypro, Warning, TEXT("skil2_Stop :%s"), *s);
 	float pe = static_cast<float>(AttackDamage);
 	UGameplayStatics::ApplyDamage(rersult.GetActor(), pe, GetInstigatorController(), this, UDamageType::StaticClass());
+	UNiagaraSystem* Niagara = LoadObject<UNiagaraSystem>(GetWorld(), TEXT("/Script/Niagara.NiagaraSystem'/Game/Pack_Simple_Particle_Burst/01_Niagara_Systems/NS_Simple_Burst_Level_3.NS_Simple_Burst_Level_3'"));
+
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), Niagara, rersult.ImpactPoint);
 }
 
 void ASkill2_Magition::ApplyInitialSideKick()
 {
-	// Ÿ���� ������ ������ �������� �� ������ ����� ��¦ Ʋ�� ���.
-	FVector dir = GetActorForwardVector(); // �⺻
+	FVector dir = GetActorForwardVector();
 	if (UScene)
 	{
 		const FVector toTarget = (UScene->GetComponentLocation() - GetActorLocation()).GetSafeNormal();
-		// �� ����(right): Up �� Forward (�� ���� �Ѹ� ���� �ð� �ݴ���)
+
 		const FVector right = FVector::CrossProduct(FVector::UpVector, toTarget).GetSafeNormal();
 
 		const float rad = FMath::DegreesToRadians(45);
@@ -105,7 +107,6 @@ void ASkill2_Magition::ApplyInitialSideKick()
 
 void ASkill2_Magition::UpdateAccel(float dt)
 {
-	// KINDA_SMALL_NUMBER :�ε� �Ҽ����� �����ϱ� ���� 0.0�� ���ϱ� ���� �𸮾� ��ũ��
 	if (AccelRampTime <= KINDA_SMALL_NUMBER)
 	{
 		Movement->HomingAccelerationMagnitude = 8000.0f; 
@@ -114,15 +115,13 @@ void ASkill2_Magition::UpdateAccel(float dt)
 
 	Elapsed += dt;
 	const float alpha = FMath::Clamp(Elapsed / AccelRampTime, 0.f, 1.f);
-	// ���� ������(�ε巴��): S-curve
 	const float smooth = alpha * alpha * (3.f - 2.f * alpha);
 	Movement->HomingAccelerationMagnitude = FMath::Lerp(StartAccel, EndAccel, smooth);
 
-	// ���� ����(����): ����� ������ ���� ���̱�
 	if (UScene)
 	{
 		const float d = FVector::Dist(GetActorLocation(), UScene->GetComponentLocation());
-		if (d < 600.f) // 6m ������ ���� ���� ��
+		if (d < 600.f) 
 		{
 			Movement->HomingAccelerationMagnitude = FMath::Max(Movement->HomingAccelerationMagnitude, EndAccel * 1.5f);
 		}

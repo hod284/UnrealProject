@@ -1,22 +1,24 @@
 #pragma once
 /*
-ÀÌÇì´õ ÆÄÀÏÀº ÀÌÇÁ·ÎÁ§Æ®¿¡ ÇÊ¿äÇÑ Çì´õ ÆÄÀÏ ¹× ¸ÞÅ©·Î ÁýÇÕ¼Ò ÀÔ´Ï´Ù
+ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Å©ï¿½ï¿½ ï¿½ï¿½ï¿½Õ¼ï¿½ ï¿½Ô´Ï´ï¿½
 */
 
 
-// Çì´õ ÆÄÀÏ ¸ð¾Æ³õ´Â°÷
+// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ³ï¿½ï¿½Â°ï¿½
 #include "EngineMinimal.h"
 #include "Engine.h"
 #include "Engine/EngineTypes.h"
 #include "Engine/GameViewportClient.h"
 //
-// ¸®½¼ ¼­¹ö Çì´õ ÆÄÀÏ ¸ð¾Æ³õÀº	°÷
+// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ³ï¿½ï¿½ï¿½	ï¿½ï¿½
 #include "Net/UnrealNetwork.h"
 #include "Engine/AssetManager.h"
 
 
 
 //
+#include "NiagaraFunctionLibrary.h"
+#include "Particles/ParticleSystem.h"
 #include "Interfaces/OnlineSessionInterface.h"
 #include "OnlineSubsystem.h"
 #include "Online/OnlineSessionNames.h"
@@ -53,7 +55,7 @@
 #include "Streaming/LevelStreamingDelegates.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-// ÀÌ¹ÌÁö Çì´õÆÄÀÏ ¸ð¾Æ³õÀº°÷
+// ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ³ï¿½ï¿½ï¿½ï¿½ï¿½
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 #include "Components/ProgressBar.h"
@@ -68,14 +70,14 @@
 #include "Components/ScrollBox.h"
 #include "Components/ScrollBoxSlot.h"
 //
-//³ª¸ÓÁö	Çì´õ ÆÄÀÏ ¸ð¾Æ³õÀº°÷
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½	ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ³ï¿½ï¿½ï¿½ï¿½ï¿½
 #include "Camera/CameraComponent.h"
 #include "Gameinfo.generated.h"
 
 
 DECLARE_LOG_CATEGORY_EXTERN(LogMypro, Warning, All);
 
-// Team : 0 ~ 255 »çÀÌÀÇ °ª
+// Team : 0 ~ 255 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 #define	TeamNeutral	255
 #define	TeamMonster	30
 #define	TeamPlayer	1
@@ -84,65 +86,65 @@ DECLARE_LOG_CATEGORY_EXTERN(LogMypro, Warning, All);
 
 
 /*
-  ÀÌ³Ñ Å¬·¡½º¿Í ÀÌ³ÑÀÇ Â÷ÀÌÁ¡
-  ÀÌ³ÑÀº °ú ÀÌ³ÑÅ¬·¡½ºÀÇ Â÷ÀÌÁ¡Àº Àü¿ª½ºÄÚÇÁ¿Í ÀÚ½ÅÀÇ ÀÚ½Ä¿¡ ½ºÄÚÇÁ¸¦ µÎ´Â³ÄÀÇ Â÷ÀÌ¿Í Å¸ÀÔÀ» ¾ÈÀü¼ºÀ» µûÁú¼ö ÀÖ´Ù
-  ÀÌ³ÑÀº ÀÚµ¿À¸·Î int·Î º¯ÇÏ´Â ¹Ý¸é ÀÌ³Ñ Å¬·¡½º´Â °³¹ßÀÚ°¡ Á¤ÇØÁÖ¾î¾ßÁö Å¸ÀÔÀÌ ÁöÁ¤µÈ´Ù
-  ½ºÄÚÇÁÀÇ °³³äÀÌ ´Ù¸£´Ù º¸´Ï ÀÌ³ÑÀº Áßº¹ÀÌ ÀÎÁ¤ÀÌ ¾ÈµÇ´Â ¹Ý¸é ÀÌ³Ñ Å¬·¡½º´Â Áßº¹ÀÌ Çã¿ëÀÌ µÈ´Ù
+  ï¿½Ì³ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  ï¿½Ì³ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ì³ï¿½Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Ú½Ä¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î´Â³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¿ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½
+  ï¿½Ì³ï¿½ï¿½ï¿½ ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ intï¿½ï¿½ ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ý¸ï¿½ ï¿½Ì³ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½È´ï¿½
+  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì³ï¿½ï¿½ï¿½ ï¿½ßºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ÈµÇ´ï¿½ ï¿½Ý¸ï¿½ ï¿½Ì³ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ßºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½È´ï¿½
 */
-//°ÔÀÓ»óÅÂ Á¤ÀÇ
+//ï¿½ï¿½ï¿½Ó»ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 UENUM()
 enum class  NowGameState: uint8
 {
 	None,Intro, playgame, gameover, pvp
 };
-//°ÔÀÓ»óÅÂ Á¤ÀÇ
+//ï¿½ï¿½ï¿½Ó»ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 UENUM()
 enum class  SingleORmulti : uint8
 {
 	None,single,Multi
 };
 
-//°ÔÀÓUI ÀÎÁö ¾Æ´ÏÁö ¿©ºÎ
+//ï¿½ï¿½ï¿½ï¿½UI ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 UENUM(BlueprintType)
 enum class UIORNOT : uint8
 {
 	UI, UINot
 };
 
-//°ÔÀÓÄ³¸¯ÅÍ Á¤ÀÇ
+//ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 UENUM(BlueprintType)
 enum class Characters : uint8
 {
 	Guiden, Warrior,DarkMagion, None
 };
-// °ÔÀÓ ·¹ÀÌ¾î Á¤ÀÇ
+// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½
 UENUM(BlueprintType)
 enum class ObjestLayer : uint8
 {
 	wall,floor,light
 };
-// °ÔÀÓ µ¥ÀÌÅÍ ±¸Á¶Ã¼ Á¤ÀÇ	
+// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½	
 USTRUCT(BlueprintType)
 struct FCharacterInfo:public FTableRowBase
 {
 	GENERATED_BODY()
 public:
 	UPROPERTY(EditAnywhere)
-	Characters CType; // Ä³¸¯ÅÍ Å¸ÀÔ
+	Characters CType; // Ä³ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½
 	UPROPERTY(EditAnywhere)
-	int32 HP; // Ã¼·Â
+	int32 HP; // Ã¼ï¿½ï¿½
 	UPROPERTY(EditAnywhere)
-	int32 MP; // ¸¶³ª
+	int32 MP; // ï¿½ï¿½ï¿½ï¿½
 	UPROPERTY(EditAnywhere)
-	int32 ATK; // °ø°Ý·Â
+	int32 ATK; // ï¿½ï¿½ï¿½Ý·ï¿½
 	UPROPERTY(EditAnywhere)
-	int32 Skill1_ATK; // ½ºÅ³1 °ø°Ý·Â 
+	int32 Skill1_ATK; // ï¿½ï¿½Å³1 ï¿½ï¿½ï¿½Ý·ï¿½ 
 	UPROPERTY(EditAnywhere)
-	int32 Skill2_ATK; // ½ºÅ³2 °ø°Ý·Â 
+	int32 Skill2_ATK; // ï¿½ï¿½Å³2 ï¿½ï¿½ï¿½Ý·ï¿½ 
 	UPROPERTY(EditAnywhere)
-	int32 Skill3_ATK; // ½ºÅ³3 °ø°Ý·Â 
+	int32 Skill3_ATK; // ï¿½ï¿½Å³3 ï¿½ï¿½ï¿½Ý·ï¿½ 
 	UPROPERTY(EditAnywhere)
-	int32 Skill4_ATK; // ½ºÅ³4 °ø°Ý·Â 
+	int32 Skill4_ATK; // ï¿½ï¿½Å³4 ï¿½ï¿½ï¿½Ý·ï¿½ 
 };
 USTRUCT(BlueprintType)
 struct FCMonsterInfo :public FTableRowBase
@@ -150,17 +152,17 @@ struct FCMonsterInfo :public FTableRowBase
 	GENERATED_BODY()
 public:
 	UPROPERTY(EditAnywhere)
-	int32 HP; // Ã¼·Â
+	int32 HP; // Ã¼ï¿½ï¿½
 	UPROPERTY(EditAnywhere)
-	int32 StunGage; // ½ºÅÏ°ÔÀÌÁö
+	int32 StunGage; // ï¿½ï¿½ï¿½Ï°ï¿½ï¿½ï¿½ï¿½ï¿½
 	UPROPERTY(EditAnywhere)
-	int32 Skill1_ATK; // ½ºÅ³1 °ø°Ý·Â 
+	int32 Skill1_ATK; // ï¿½ï¿½Å³1 ï¿½ï¿½ï¿½Ý·ï¿½ 
 	UPROPERTY(EditAnywhere)
-	int32 Skill2_ATK; // ½ºÅ³2 °ø°Ý·Â 
+	int32 Skill2_ATK; // ï¿½ï¿½Å³2 ï¿½ï¿½ï¿½Ý·ï¿½ 
 	UPROPERTY(EditAnywhere)
-	int32 Skill3_ATK; // ½ºÅ³3 °ø°Ý·Â 
+	int32 Skill3_ATK; // ï¿½ï¿½Å³3 ï¿½ï¿½ï¿½Ý·ï¿½ 
 	UPROPERTY(EditAnywhere)
-	int32 Skill4_ATK; // ½ºÅ³4 °ø°Ý·Â 
+	int32 Skill4_ATK; // ï¿½ï¿½Å³4 ï¿½ï¿½ï¿½Ý·ï¿½ 
 };
 USTRUCT(BlueprintType)
 struct FItemtableInfo :public FTableRowBase
@@ -168,17 +170,17 @@ struct FItemtableInfo :public FTableRowBase
 	GENERATED_BODY()
 public:
 	UPROPERTY(EditAnywhere)
-	FString Name;// ¾ÆÀÌÅÛ ³×ÀÓ
+	FString Name;// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	UPROPERTY(EditAnywhere)
-	int32 AddAttack; // Ãß°¡ °ø°Ý·Â
+	int32 AddAttack; // ï¿½ß°ï¿½ ï¿½ï¿½ï¿½Ý·ï¿½
 	UPROPERTY(EditAnywhere)
-	int32 AddMoveSpeed;// Ãß°¡ È¸ÇÇ·Â 
+	int32 AddMoveSpeed;// ï¿½ß°ï¿½ È¸ï¿½Ç·ï¿½ 
 	UPROPERTY(EditAnywhere)
-	int32 AddDefence; //Ãß°¡ ¹æ¾î·Â  
+	int32 AddDefence; //ï¿½ß°ï¿½ ï¿½ï¿½ï¿½ï¿½  
 	UPROPERTY(EditAnywhere)
-	int32 AddMp; // Ãß°¡ mp 
+	int32 AddMp; // ï¿½ß°ï¿½ mp 
 	UPROPERTY(EditAnywhere)
-	int32 AddHp; //Ãß°¡ hp
+	int32 AddHp; //ï¿½ß°ï¿½ hp
 };
 USTRUCT(BlueprintType)
 struct FPlayerAnimInfo : public FTableRowBase

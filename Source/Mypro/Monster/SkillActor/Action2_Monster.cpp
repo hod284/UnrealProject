@@ -46,6 +46,9 @@ void AAction2_Monster::OnCapsuleBeginOverlap_Action2_M(
 	float pe = static_cast<float>(AttackDamage);
 	UGameplayStatics::ApplyDamage(OtherActor, pe, GetInstigatorController(), this, UDamageType::StaticClass());
 	BoxColider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	UNiagaraSystem* Niagara = LoadObject<UNiagaraSystem>(GetWorld(), TEXT("/Script/Niagara.NiagaraSystem'/Game/Basic_VFX/Niagara/NS_Basic_2.NS_Basic_2'"));
+
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), Niagara, SweepResult.ImpactPoint);
 }
 void AAction2_Monster::OnCapsuleEndOverlap_Action2_M(
 	UPrimitiveComponent* OverlappedComp,

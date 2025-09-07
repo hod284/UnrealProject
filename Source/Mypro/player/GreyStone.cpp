@@ -16,14 +16,15 @@ void AGreyStone::NAttack()
         FQuat::Identity, ECollisionChannel::ECC_GameTraceChannel2,
         FCollisionShape::MakeCapsule(Radious, 200), param);
 
-    //DrawDebugAltCone
-
     if (Collision)
     {
         float	Origin = FMath::Cos(FMath::DegreesToRadians(45.f));
 
         for (auto& Hit : result)
         {
+            UNiagaraSystem* NiagaraAction = LoadObject<UNiagaraSystem>(GetWorld(), TEXT("/Script/Niagara.NiagaraSystem'/Game/Pack_Simple_Particle_Burst/01_Niagara_Systems/NS_Simple_Burst_Level_3.NS_Simple_Burst_Level_3'"));
+
+            UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), NiagaraAction, Hit.ImpactPoint);
             if(Hit.GetActor()->IsA<APawn>())
             AddMpbar(10);
             UGameplayStatics::ApplyDamage(Hit.GetActor(), AttackDamage, GetInstigatorController(), this, UDamageType::StaticClass());

@@ -29,11 +29,12 @@ void AAurora::NAttack()
     param.bTraceComplex = false;
     float Radious = 100.0f;
     FVector center = GetActorLocation()+CurrentVelocity * 50;
+
     bool Collision = GetWorld()->SweepMultiByChannel(result, center, center,
         FQuat::Identity, ECollisionChannel::ECC_GameTraceChannel2,
         FCollisionShape::MakeCapsule(Radious,200), param);
     DrawDebugCapsule(GetWorld(), center, 200, Radious, FQuat::Identity, FColor::Green, false, 2.f);
-    //DrawDebugAltCone
+
     float pe = static_cast<float>(AttackDamage);
     if (Collision)
     {
@@ -41,6 +42,9 @@ void AAurora::NAttack()
 
         for (auto& Hit : result)
         {
+            UNiagaraSystem* NiagaraAction = LoadObject<UNiagaraSystem>(GetWorld(), TEXT("/Script/Niagara.NiagaraSystem'/Game/Pack_Simple_Particle_Burst/01_Niagara_Systems/NS_Simple_Burst_Level_3.NS_Simple_Burst_Level_3'"));
+
+            UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), NiagaraAction, Hit.ImpactPoint);
             if (Hit.GetActor()->IsA<APawn>())
                 AddMpbar(10);
             UGameplayStatics::ApplyDamage(Hit.GetActor(), pe, GetInstigatorController(), this, UDamageType::StaticClass());
