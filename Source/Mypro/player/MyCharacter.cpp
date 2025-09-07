@@ -19,6 +19,8 @@ AMyCharacter::AMyCharacter()
 	GetCapsuleComponent()->SetCollisionProfileName("player");
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	SetGenericTeamId(FGenericTeamId(TeamPlayer));
+    SetReplicates(true);
+    SetReplicateMovement(true);
 }
 
 // Called when the game starts or when spawned
@@ -247,6 +249,7 @@ void AMyCharacter::MoveKey(const FInputActionValue& Value)
 {
 	if (!BackMoving&& !DashMoving && !DashMoving && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetCusorVisual() == UIORNOT::UINot)
 	{
+		SetReplicateMovement(true);
 		FVector Diret = Value.Get<FVector>();
 		// ĳ���� �����Ʈ���� �̵��Ѵٰ� ��ȣ ������ �Լ�
 		AddMovementInput(GetActorForwardVector(),  Diret.X);
@@ -352,13 +355,11 @@ void AMyCharacter::BackKey(const FInputActionValue& Value)
 	if (!BackMoving && !DashMoving && !DashMoving && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetCusorVisual() == UIORNOT::UINot)
 	{
 		UCharacterMovementComponent* Move = GetCharacterMovement();
-		// ��� �̲������: ����/������ ����
 		Move->bUseSeparateBrakingFriction = true;
 		Move->GroundFriction = 0.5f;
 		Move->BrakingFriction = 0.5f;
 		Move->BrakingDecelerationWalking = 250.f;
-		// ���� ���ʹϱ� ���⸸ ������ ���� ������� x�Ÿ�
-	    FVector	NewLocation = -CurrentVelocity * 1000.0f; // �ڷ� 20��ŭ
+	    FVector	NewLocation = -CurrentVelocity * 1500.0f; 
 		LaunchCharacter(NewLocation, true, false);
 		BackMoving = true;
 		DashMoving = true;
@@ -373,13 +374,11 @@ void AMyCharacter::DashKey(const FInputActionValue& Value)
 	if (!BackMoving && !DashMoving && !DashMoving && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetCusorVisual() == UIORNOT::UINot)
 	{
 		UCharacterMovementComponent* Move = GetCharacterMovement();
-		// ��� �̲������: ����/������ ����
 		Move->bUseSeparateBrakingFriction = true;
 		Move->GroundFriction = 0.5f;
 		Move->BrakingFriction = 0.5f;
 		Move->BrakingDecelerationWalking = 250.f;
-		// ���� ���ʹϱ� ���⸸ ������ ���� ������� x�Ÿ�
-		FVector	NewLocation = CurrentVelocity * 1000.0f; // �ڷ� 20��ŭ
+		FVector	NewLocation = CurrentVelocity * 1500.0f; 
 		LaunchCharacter(NewLocation, true, false);
 		DashMoving = true;
 		BackMoving = true;

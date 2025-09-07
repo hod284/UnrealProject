@@ -15,6 +15,7 @@ APVPController::APVPController()
 void APVPController::BeginPlay()
 {
 	Super::BeginPlay();
+	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UINot);
 	UPlayMainUI* ui = Cast<UPlayMainUI>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPlayMainUI_widget());
 	if (ui)
 	{

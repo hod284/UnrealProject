@@ -105,22 +105,22 @@ void AIntroSceneObject::LevelLoadComplete()
 void AIntroSceneObject::FinishedSession(bool ok)
 {
 	Session->OnFindSessionsCompleteDelegates.RemoveAll(this);
-	//LocalId´Â ¡°´©°¡ °Ë»öÀ» ¿äÃ»Çß´Â°¡¡±¸¦ ³ªÅ¸³»´Â °èÁ¤/ÇÃ·¹ÀÌ¾î ½Äº°ÀÚ
+	//LocalIdï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½ï¿½ï¿½ ï¿½ï¿½Ã»ï¿½ß´Â°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½/ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Äºï¿½ï¿½ï¿½
 	auto localid = GEngine->GetFirstGamePlayer(GetWorld())->GetPreferredUniqueNetId();
 	if (ok && Search.IsValid() && Search->SearchResults.Num() > 0)
 	{
-		// ÀÖÀ¸¸éÂü°¡
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		Session->OnJoinSessionCompleteDelegates.AddUObject(this, &AIntroSceneObject::JoinSessionComplete);
 		Session->JoinSession(*localid, NAME_GameSession, Search->SearchResults[0]);
 		return;
 	}
-	// ¾øÀ¸¸é È£½ºÆ®·Î »ý¼º
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	FOnlineSessionSettings s;
-	s.bIsLANMatch = Search->bIsLanQuery;//LAN ¸ÅÄ¡ ¿©ºÎ
-	s.bShouldAdvertise = true;//¼¼¼ÇÀÌ ´Ù¸¥ ÇÃ·¹ÀÌ¾îµéÀÌ ¾Æ¼ö ÀÖµµ·ÏÇÏ´Â°Í
-	s.NumPublicConnections = 8;// Âü°¡¼ö
-	s.bUsesPresence = true;//Ä£±¸¸ñ·ÏÀ¸·Î ¼¼¼ÇÂü°¡ÇÒ¼ö ÀÖµµ·ÏÇÏ´Â°Í
-	s.bAllowJoinInProgress = false; // ÁøÇàÁßÂü°¡ ¿©ºÎ
+	s.bIsLANMatch = Search->bIsLanQuery;//LAN ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
+	s.bShouldAdvertise = true;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ï¿½ ï¿½Æ¼ï¿½ ï¿½Öµï¿½ï¿½ï¿½ï¿½Ï´Â°ï¿½
+	s.NumPublicConnections = 8;// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	s.bUsesPresence = true;//Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¼ï¿½ ï¿½Öµï¿½ï¿½ï¿½ï¿½Ï´Â°ï¿½
+	s.bAllowJoinInProgress = false; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	Session->OnCreateSessionCompleteDelegates.AddUObject(this, &AIntroSceneObject::CreateSessionComplete);
 	Session->DestroySession(NAME_GameSession);
 	Session->CreateSession(*localid, NAME_GameSession, s);
@@ -131,7 +131,7 @@ void AIntroSceneObject::CreateSessionComplete(FName, bool ok)
 	Session->OnCreateSessionCompleteDelegates.RemoveAll(this);
 	if (!ok)
 		return;
-	UGameplayStatics::OpenLevel(GetWorld(), FName(TEXT("/Game/Virtual_Studio_Kit/Maps/StudioB")), false, TEXT("listen"));
+	UGameplayStatics::OpenLevel(GetWorld(), FName(TEXT("/Game/Virtual_Studio_Kit/Maps/StudioB")), true, TEXT("?listen"));
 }
 void AIntroSceneObject::JoinSessionComplete(FName, EOnJoinSessionCompleteResult::Type res)
 {
@@ -158,12 +158,12 @@ void AIntroSceneObject::PlaySceneLoadAsync_stream()
 			Session = oss ? oss->GetSessionInterface() : nullptr;
 		if (!Session.IsValid())
 			return;
-		// ¸ÕÀúÃ£±â
+		// ï¿½ï¿½ï¿½ï¿½Ã£ï¿½ï¿½
 		Search = MakeShared<FOnlineSessionSearch>();
 		Search->bIsLanQuery = true;
 		Search->MaxSearchResults = 50;
 		Search->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
-		//FindSessions´Â ¡°¼¼¼Ç ¸ñ·ÏÀ» ºñµ¿±â·Î °Ë»öÇØ¼­ SearchResults¿¡ Ã¤¿ö ³Ö´Â °Í¡±
+		//FindSessionsï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ñµ¿±ï¿½ï¿½ ï¿½Ë»ï¿½ï¿½Ø¼ï¿½ SearchResultsï¿½ï¿½ Ã¤ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½Í¡ï¿½
 		Session->OnFindSessionsCompleteDelegates.AddUObject(this, &AIntroSceneObject::FinishedSession);
 		auto localid = GEngine->GetFirstGamePlayer(GetWorld())->GetPreferredUniqueNetId();
 		Session->FindSessions(*localid, Search.ToSharedRef());
