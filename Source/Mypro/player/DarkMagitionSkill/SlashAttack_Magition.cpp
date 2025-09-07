@@ -58,9 +58,6 @@ void ASlashAttack_Magition::OnCapsuleBeginOverlap_Slash_Magition(
 	float pe = static_cast<float>(AttackDamage);
 	UGameplayStatics::ApplyDamage(OtherActor, pe, GetInstigatorController(), this, UDamageType::StaticClass());
 	SomeHit = true;
-	UNiagaraSystem* Niagara = LoadObject<UNiagaraSystem>(GetWorld(), TEXT("/Script/Niagara.NiagaraSystem'/Game/Pack_Simple_Particle_Burst/01_Niagara_Systems/NS_Simple_Burst_Level_3.NS_Simple_Burst_Level_3'"));
-
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), Niagara, SweepResult.ImpactPoint);
 }
 void ASlashAttack_Magition::OnCapsuleEndOverlap_Slash_Magition(
 	UPrimitiveComponent* OverlappedComp,

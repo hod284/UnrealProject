@@ -17,6 +17,8 @@ protected:
 	UPROPERTY(BlueprintReadWrite,EditAnywhere)
 	TObjectPtr<UButton> GotoIntro;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TObjectPtr<UButton> Gameexit;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TObjectPtr<UTextBlock> Winner;
 	int32 TimeCount;
 	FTimerHandle Timer;
@@ -26,4 +28,6 @@ protected:
 	void Typing();
 	UFUNCTION()
 	void Gotointromethod();
+	UFUNCTION()
+	void GotoExit();
 };

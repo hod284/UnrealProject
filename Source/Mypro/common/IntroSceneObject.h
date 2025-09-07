@@ -20,12 +20,11 @@ public:
 
 protected:
 
-	//FTimerHandle�� Ÿ�̸Ӹ� �����ϴ� �ڵ��̴�.
 	FTimerHandle Timerahbdle;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "listofSelctcharacter")
-	TMap<Characters, ASelectCharacter*> SelectCharacterList; // ĳ���� ����Ʈ
+	TMap<Characters, ASelectCharacter*> SelectCharacterList; 
 ;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Cutscene")
 	TObjectPtr<UMediaPlayer> MyMediaPlayer_loading;
@@ -43,15 +42,14 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void CalltheSelectCharacter(Characters choice); // ĳ���� ���� �Լ�
 	void CallthePlayCharacter(Characters choice); // �����ӿ� ���� �÷��� �� ĳ���� ����
-	// �ε� �Ҷ� ������ ���� 
+
 	void PlayloadingVideo();
-	// �÷��̽� �񵿱� �ε� �Ϸ� �ɶ� ������ �Լ�
 	void PlaySceneLoad(const FName& PackageName, UPackage* LoadedPackage, EAsyncLoadingResult::Type Result);
-	// �÷��̽� �񵿱� �ε� 
+
 	void PlaySceneLoadAsync();
-	// �񵿱� ���� �ε� �Ϸ�
+
 	void PlaySceneLoadAsync_stream();
-	// ���� �ε�
+
 	void LevelLoadComplete();
 	void FinishedSession(bool ok);
 	void CreateSessionComplete(FName, bool ok);

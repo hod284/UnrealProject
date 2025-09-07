@@ -191,7 +191,18 @@ float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 		FActorSpawnParameters param;
 		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 		GetWorld()->SpawnActor<AActor>(Portal, FVector(0, -200, 10), FRotator::ZeroRotator, param);
-		
+		FVector LO1 = MeshComponent->GetSocketLocation("Melee_Impact_R");
+		FVector LO2 = MeshComponent->GetSocketLocation("Impact");
+		FVector LO3 = MeshComponent->GetSocketLocation("Melee_Impact_L");
+		UNiagaraSystem* Niagara1 = LoadObject<UNiagaraSystem>(GetWorld(), TEXT("/Script/Niagara.NiagaraSystem'/Game/Pack_Simple_Particle_Burst/01_Niagara_Systems/NS_Simple_Burst_Level_3.NS_Simple_Burst_Level_3'"));
+
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), Niagara1, LO1);
+		UNiagaraSystem* Niagara2 = LoadObject<UNiagaraSystem>(GetWorld(), TEXT("/Script/Niagara.NiagaraSystem'/Game/Pack_Simple_Particle_Burst/01_Niagara_Systems/NS_Simple_Burst_Level_3.NS_Simple_Burst_Level_3'"));
+
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), Niagara2, LO2);
+		UNiagaraSystem* Niagara3 = LoadObject<UNiagaraSystem>(GetWorld(), TEXT("/Script/Niagara.NiagaraSystem'/Game/Pack_Simple_Particle_Burst/01_Niagara_Systems/NS_Simple_Burst_Level_3.NS_Simple_Burst_Level_3'"));
+
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), Niagara3, LO3);
 		Death = true;
 	}
 

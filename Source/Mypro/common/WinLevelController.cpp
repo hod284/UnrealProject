@@ -15,6 +15,7 @@ AWinLevelController::AWinLevelController()
 void AWinLevelController::BeginPlay()
 {
 	Super::BeginPlay();
+	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UI);
 	switch (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSelectedcharacter())
 	{
 	case  Characters::Warrior:

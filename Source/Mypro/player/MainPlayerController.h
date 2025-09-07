@@ -18,23 +18,15 @@ class MYPRO_API AMainPlayerController : public APlayerController
 	GENERATED_BODY()
 	
 protected:
-	// override�� �θ�Ŭ������ �Լ��� �������Ѵٰ� �����Ϸ����� ��Ȯ�� �˷��ش�.
 	virtual void BeginPlay() override;
 	TArray<AActor*>SceneActorList;
 	AMainPlayerController();
 	virtual void Tick(float DeltaTime) override;
 public:
-    /// <summary>
-    /// ������ �ִ� ��Ʈ�ξ� �ɺ���Ʈ ã������ ���� �Լ�
-    /// </summary>
-    /// <returns></returns>
+
     AActor* GetLevelSceneObjectActor() const
     {
-		/*
-		getclass��staticclass�� �������� �Ļ�Ŭ������ �������³� �ƴϸ� �ڽ��� Ŭ������ �������³��� ����
-		getlass�� �Ļ�Ŭ�������� �������� staticclass�� �ڽ��� Ŭ������ �����´�
-		�׷��� �ΰ��� �̿��� Ư�� Ŭ���� ���͸� ã�ƿ��� ���� ����
-		*/
+		
 	   AActor* Choice  = nullptr;
 	   for (AActor* Actor : SceneActorList)
 	   {
@@ -47,7 +39,6 @@ public:
 	   return Choice;
     }
 	
-	// ĳ���� ������ Ŭ���� ������ ��ȯ�ϴ� �Լ��Դϴ�.
 	TSubclassOf<APawn> GetSelectCharactertClass();
 	
 };

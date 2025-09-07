@@ -7,9 +7,11 @@ void UWinerWidgetClass::NativeConstruct()
 {
 	Winner = Cast<UTextBlock>(GetWidgetFromName("Title"));
 	GotoIntro = Cast<UButton>(GetWidgetFromName("Go"));
+	Gameexit = Cast<UButton>(GetWidgetFromName("exit"));
 	GetWorld()->GetTimerManager().ClearTimer(Timer);
-	GetWorld()->GetTimerManager().SetTimer(Timer, this, &UWinerWidgetClass::Typing, 2.0f, true);
+	GetWorld()->GetTimerManager().SetTimer(Timer, this, &UWinerWidgetClass::Typing, 0.5f, true);
 	GotoIntro->OnClicked.AddDynamic(this, &UWinerWidgetClass::Gotointromethod);
+	Gameexit->OnClicked.AddDynamic(this, &UWinerWidgetClass::GotoExit);
 }
 
 void UWinerWidgetClass::NativeOnInitialized()
@@ -56,5 +58,15 @@ void UWinerWidgetClass::Typing()
 
 void UWinerWidgetClass::Gotointromethod()
 {
-	UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC.StudioC"));
+	UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
+}
+
+void UWinerWidgetClass::GotoExit()
+{
+	UKismetSystemLibrary::QuitGame(
+		GetWorld(),
+		GetWorld()->GetFirstPlayerController(),
+		EQuitPreference::Quit,
+		false   // bIgnorePlatformRestrictions
+	);
 }

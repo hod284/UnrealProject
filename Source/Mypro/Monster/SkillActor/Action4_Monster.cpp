@@ -87,9 +87,6 @@ void AAction4_Monster::OnCapsuleBeginOverlap_Action4_M(
 	BoxColider2->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	BoxColider3->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	BoxColider4->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	UNiagaraSystem* Niagara = LoadObject<UNiagaraSystem>(GetWorld(), TEXT("/Script/Niagara.NiagaraSystem'/Game/Basic_VFX/Niagara/NS_Basic_2.NS_Basic_2'"));
-
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), Niagara, SweepResult.ImpactPoint);
 }
 void AAction4_Monster::OnCapsuleEndOverlap_Action4_M(
 	UPrimitiveComponent* OverlappedComp,

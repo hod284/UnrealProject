@@ -83,9 +83,7 @@ void ASkill2_Magition::ProjectileStop(const FHitResult& rersult)
 	UE_LOG(LogMypro, Warning, TEXT("skil2_Stop :%s"), *s);
 	float pe = static_cast<float>(AttackDamage);
 	UGameplayStatics::ApplyDamage(rersult.GetActor(), pe, GetInstigatorController(), this, UDamageType::StaticClass());
-	UNiagaraSystem* Niagara = LoadObject<UNiagaraSystem>(GetWorld(), TEXT("/Script/Niagara.NiagaraSystem'/Game/Pack_Simple_Particle_Burst/01_Niagara_Systems/NS_Simple_Burst_Level_3.NS_Simple_Burst_Level_3'"));
 
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), Niagara, rersult.ImpactPoint);
 }
 
 void ASkill2_Magition::ApplyInitialSideKick()
