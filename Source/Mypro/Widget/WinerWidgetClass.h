@@ -17,6 +17,8 @@ protected:
 	UPROPERTY(BlueprintReadWrite,EditAnywhere)
 	TObjectPtr<UButton> GotoIntro;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TObjectPtr<UButton> Mutebu;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TObjectPtr<UButton> Gameexit;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TObjectPtr<UTextBlock> Winner;
@@ -30,4 +32,12 @@ protected:
 	void Gotointromethod();
 	UFUNCTION()
 	void GotoExit();
+	UFUNCTION()
+	void AudioMutemethod();
+	UAudioComponent* SoundComp;
+public:
+	void SetMeDiasound(UAudioComponent*  Comp)
+	{
+		SoundComp = Comp;
+	}
 };

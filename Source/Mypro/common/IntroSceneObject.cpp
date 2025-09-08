@@ -18,6 +18,7 @@ void AIntroSceneObject::BeginPlay()
 	SoundComp = NewObject<UMediaSoundComponent>(this);
 	SoundComp->SetMediaPlayer(MyMediaPlayer_intro);
 	SoundComp->RegisterComponent();
+	ui->SetMeDiasound(SoundComp);
 	GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetIntroMainUI_widget()->AddToViewport();
 	if (UGameUserSettings* Settings = GEngine->GetGameUserSettings())
 	{

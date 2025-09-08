@@ -8,10 +8,15 @@ void UWinerWidgetClass::NativeConstruct()
 	Winner = Cast<UTextBlock>(GetWidgetFromName("Title"));
 	GotoIntro = Cast<UButton>(GetWidgetFromName("Go"));
 	Gameexit = Cast<UButton>(GetWidgetFromName("exit"));
+	Mutebu = Cast<UButton>(GetWidgetFromName("Mute"));
 	GetWorld()->GetTimerManager().ClearTimer(Timer);
 	GetWorld()->GetTimerManager().SetTimer(Timer, this, &UWinerWidgetClass::Typing, 0.5f, true);
+	if (!GotoIntro->OnClicked.IsBound())
 	GotoIntro->OnClicked.AddDynamic(this, &UWinerWidgetClass::Gotointromethod);
+	if (!Gameexit->OnClicked.IsBound())
 	Gameexit->OnClicked.AddDynamic(this, &UWinerWidgetClass::GotoExit);
+	if (!Mutebu->OnClicked.IsBound())
+		Mutebu->OnClicked.AddDynamic(this, &UWinerWidgetClass::AudioMutemethod);
 }
 
 void UWinerWidgetClass::NativeOnInitialized()
@@ -69,4 +74,11 @@ void UWinerWidgetClass::GotoExit()
 		EQuitPreference::Quit,
 		false   // bIgnorePlatformRestrictions
 	);
+}
+void UWinerWidgetClass::AudioMutemethod()
+{
+    if(SoundComp->IsPlaying())
+	SoundComp->Stop();
+	else 
+		SoundComp->Play();
 }

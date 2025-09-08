@@ -26,6 +26,8 @@ void UIntroMainUI::VisuallyStart(ESlateVisibility visible)
 	Start->SetVisibility(visible);
 }
 
+
+
 void UIntroMainUI::NativeConstruct()
 {
 	Super::NativePreConstruct();
@@ -33,6 +35,7 @@ void UIntroMainUI::NativeConstruct()
 	percenttext = Cast<UTextBlock>(GetWidgetFromName(TEXT("percent")));
 	Start = Cast<UButton>(GetWidgetFromName("Startbutton"));
 	EscBu = Cast<UButton>(GetWidgetFromName("Esc"));
+	MuteBu = Cast<UButton>(GetWidgetFromName("Mute"));
 	Switcher->SetActiveWidgetIndex(0);
 	laodingtitle->SetVisibility(ESlateVisibility::Collapsed);
 	percenttext->SetVisibility(ESlateVisibility::Collapsed);
@@ -42,6 +45,8 @@ void UIntroMainUI::NativeConstruct()
 	Start->OnClicked.AddDynamic(this, &UIntroMainUI::StartButtonClick);
 	if (!EscBu->OnClicked.IsBound())
 		EscBu->OnClicked.AddDynamic(this, &UIntroMainUI::EscClick);
+	if (!MuteBu->OnClicked.IsBound())
+		MuteBu->OnClicked.AddDynamic(this, &UIntroMainUI::AudioMutemethod);
 }
 
 void UIntroMainUI::NativeDestruct()
@@ -74,4 +79,9 @@ void UIntroMainUI::GameStart(Characters ch)
 	AIntroSceneObject* IntroSceneObject = Cast<AIntroSceneObject>(UGameplayStatics::GetActorOfClass(GetWorld(), AIntroSceneObject::StaticClass()));
 	if (IntroSceneObject)
 		IntroSceneObject->CallthePlayCharacter(ch);
+}
+void UIntroMainUI::AudioMutemethod()
+{
+	vo = vo <= KINDA_SMALL_NUMBER ? 1.0f : 0.0f;
+	SoundComp->SetVolumeMultiplier(vo);
 }

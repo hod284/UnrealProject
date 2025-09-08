@@ -38,6 +38,8 @@ void AWinLevelController::BeginPlay()
 		break;
 	} 
 	GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetWiner_widget()->AddToViewport();
+	UWinerWidgetClass*ui =Cast<UWinerWidgetClass>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetWiner_widget());
+	ui->SetMeDiasound(Audiocompo ->FindComponentByClass<UAudioComponent>());
 }
 
 // Called every frame

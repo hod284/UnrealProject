@@ -15,7 +15,9 @@ public class Mypro : ModuleRules
 			"MovieScene", 
 			"MediaAssets",
            "OnlineSubsystem",
-            "OnlineSubsystemUtils"});
+            "OnlineSubsystemUtils",
+			"AudioMixer",
+             "Synthesis"});
 
 
         PrivateDependencyModuleNames.AddRange(new string[] {  });

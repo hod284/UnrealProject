@@ -29,7 +29,8 @@ protected:
 	TObjectPtr<APawn> Giden;
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<APawn> GraySton;
-	
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<AAmbientSound> Audiocompo;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

@@ -17,6 +17,7 @@
 
 
 //
+#include "Components/AudioComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Particles/ParticleSystem.h"
 #include "Interfaces/OnlineSessionInterface.h"
