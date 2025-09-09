@@ -134,7 +134,7 @@ void AIntroSceneObject::CreateSessionComplete(FName, bool ok)
 	Session->OnCreateSessionCompleteDelegates.RemoveAll(this);
 	if (!ok)
 		return;
-	  GetWorld()->ServerTravel("/Game/Maps/StudioB?listen");
+	  GetWorld()->ServerTravel("/Game/Virtual_Studio_Kit/Maps/StudioB?listen");
 }
 void AIntroSceneObject::JoinSessionComplete(FName, EOnJoinSessionCompleteResult::Type res)
 {
