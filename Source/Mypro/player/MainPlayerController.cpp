@@ -2,6 +2,7 @@
 
 #include "MainPlayerController.h"
 #include "MyCharacter.h"
+#include "MyPlayerState.h"
 AMainPlayerController::AMainPlayerController()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -46,7 +47,17 @@ void AMainPlayerController::BeginPlay()
 			GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UI);
 			UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActor::StaticClass(), SceneActorList);
 	}
-	
+	if (!HasAuthority())
+	{
+		Server_SetSelectedPawn();
+	}
 }
 
 
+void AMainPlayerController::Server_SetSelectedPawn_Implementation()
+{
+	APlayerController* PC = GetWorld()->GetFirstPlayerController();
+	AMyPlayerState *PS = PC-> GetPlayerState<AMyPlayerState>();
+	PS->MyCharacter = GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSelectedcharacter();
+	PS ->SelectCharacter = GetSelectCharactertClass();
+}

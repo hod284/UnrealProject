@@ -7,7 +7,6 @@
 #include "../common/PlaySceneObject.h"
 #include "MyPlayerAnimInstance.h"
 #include "MaInPlayerController.h"
-#include "MyPlayerState.h"
 #include "../singleton/InputManager.h"
 #include "GameFramework/Character.h"
 #include "MyCharacter.generated.h"
@@ -168,5 +167,9 @@ public:
 	{
 		if (name == "Portal")
 			CanPortal = false;
+	}
+	void SetAttackDamage(FString cporfile)
+	{
+	    GetCapsuleComponent()->SetCollisionProfileName(FName(*cporfile));
 	}
 };

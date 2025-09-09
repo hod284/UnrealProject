@@ -23,4 +23,6 @@ protected:
 	APvPMode();
 	virtual void BeginPlay() override;
 	virtual void PostLogin(APlayerController* NewPlayer) override;
+	virtual void RestartPlayer(AController* NewPlayer)override;
+	virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
 };

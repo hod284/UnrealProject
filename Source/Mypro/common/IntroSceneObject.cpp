@@ -134,7 +134,7 @@ void AIntroSceneObject::CreateSessionComplete(FName, bool ok)
 	Session->OnCreateSessionCompleteDelegates.RemoveAll(this);
 	if (!ok)
 		return;
-	UGameplayStatics::OpenLevel(GetWorld(), FName(TEXT("/Game/Virtual_Studio_Kit/Maps/StudioB.StudioB")), true, TEXT("?listen"));
+	  GetWorld()->ServerTravel("/Game/Maps/StudioB?listen");
 }
 void AIntroSceneObject::JoinSessionComplete(FName, EOnJoinSessionCompleteResult::Type res)
 {
@@ -154,7 +154,7 @@ void AIntroSceneObject::PlaySceneLoadAsync_stream()
 {
 	GetWorldTimerManager().ClearTimer(Timerhandle);
 	if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSingorMulti() == SingleORmulti::single)
-		UGameplayStatics::OpenLevel(GetWorld(), FName(TEXT("/Game/Virtual_Studio_Kit/Maps/Studio_D.Studio_D")));
+		UGameplayStatics::OpenLevel(this, FName("Studio_D"));
 	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSingorMulti() == SingleORmulti::Multi)
 	{
 		if (IOnlineSubsystem* oss = IOnlineSubsystem::Get())

@@ -10,7 +10,7 @@
 #include "MainPlayerController.generated.h"
 
 /**
- gameinstance ->gamesubinstance ->levelload -> gamemode ->playercontroller ->charactercontroller
+ gamesubinstance ->gameinstance  ->levelload -> gamemode ->playercontroller ->charactercontroller
  */
 UCLASS()
 class MYPRO_API AMainPlayerController : public APlayerController
@@ -22,6 +22,8 @@ protected:
 	TArray<AActor*>SceneActorList;
 	AMainPlayerController();
 	virtual void Tick(float DeltaTime) override;
+	UFUNCTION(Server, Reliable)
+	void Server_SetSelectedPawn();
 public:
 
     AActor* GetLevelSceneObjectActor() const

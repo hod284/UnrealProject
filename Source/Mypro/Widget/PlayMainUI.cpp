@@ -39,10 +39,14 @@ UUserWidget(ObjectInitializer)
 void UPlayMainUI::NativeTick(const FGeometry& MyGeometry, float InDeltaTime) 
 {
 	Super::NativeTick( MyGeometry, InDeltaTime);
-	Skill1->SetTIme(Percent1);
-	Skill2-> SetTIme(Percent2);
-	Skill3->SetTIme(Percent3); 
-	Skill4 -> SetTIme(Percent4);
+	APlayerController* PC = Cast<AMainPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+	if (PC->IsLocalController())
+	{
+		Skill1->SetTIme(Percent1);
+		Skill2->SetTIme(Percent2);
+		Skill3->SetTIme(Percent3);
+		Skill4->SetTIme(Percent4);
+	}
 }
 void UPlayMainUI::SetStunBar(float da)
 {

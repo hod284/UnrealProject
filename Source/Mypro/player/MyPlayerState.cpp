@@ -3,15 +3,13 @@
 
 #include "MyPlayerState.h"
 
-void AMyPlayerState::SetMyCharacter_Implementation(Characters character)
-{
-}
 void AMyPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
     DOREPLIFETIME(AMyPlayerState, MyCharacter);
     DOREPLIFETIME(AMyPlayerState, Inventoryco);
+    DOREPLIFETIME(AMyPlayerState, SelectCharacter);
 }
 
 AMyPlayerState::AMyPlayerState()
@@ -19,3 +17,7 @@ AMyPlayerState::AMyPlayerState()
     Inventoryco = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inve"));
     SetReplicates(true);
 }
+
+
+
+

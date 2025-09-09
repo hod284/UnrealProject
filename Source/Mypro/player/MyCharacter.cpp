@@ -2,7 +2,7 @@
 
 
 #include "MyCharacter.h"
-
+#include"MyPlayerState.h"
 // Sets default values
 AMyCharacter::AMyCharacter()
 {
@@ -251,11 +251,11 @@ void AMyCharacter::MoveKey(const FInputActionValue& Value)
 	{
 		SetReplicateMovement(true);
 		FVector Diret = Value.Get<FVector>();
-		// ĳ���� �����Ʈ���� �̵��Ѵٰ� ��ȣ ������ �Լ�
+
 		AddMovementInput(GetActorForwardVector(),  Diret.X);
 		AddMovementInput(GetActorRightVector(), Diret.Y);
 		IsMoving = true;
-		// ��, �� ���� �� �������� �����̵��� Ű�� ������ ���
+
 		if (Diret.X > 0.f)
 		{
 			AnimInstance->SetDir(0.f);
