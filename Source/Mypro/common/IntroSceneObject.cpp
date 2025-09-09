@@ -53,8 +53,8 @@ void AIntroSceneObject::CallthePlayCharacter(Characters choice)
 		pair.Value->Inite();
 	auto character = SelectCharacterList[choice];
 	character->StartGame();
-	GetWorldTimerManager().ClearTimer(Timerahbdle);
-	GetWorld()->GetTimerManager().SetTimer(Timerahbdle, this, &AIntroSceneObject::PlayloadingVideo, 2.0, false);
+	GetWorldTimerManager().ClearTimer(Timerhandle);
+	GetWorld()->GetTimerManager().SetTimer(Timerhandle, this, &AIntroSceneObject::PlayloadingVideo, 2.0, false);
 	ui ->VisuallyStart(ESlateVisibility::Collapsed);
 }
 
@@ -68,8 +68,8 @@ void AIntroSceneObject::PlayloadingVideo()
 		SoundComp->SetMediaPlayer(MyMediaPlayer_loading);
 		SoundComp->RegisterComponent();
 	}
-	GetWorldTimerManager().ClearTimer(Timerahbdle);
-	GetWorld()->GetTimerManager().SetTimer(Timerahbdle, this, &AIntroSceneObject::PlaySceneLoadAsync, 2.0, false);
+	GetWorldTimerManager().ClearTimer(Timerhandle);
+	GetWorld()->GetTimerManager().SetTimer(Timerhandle, this, &AIntroSceneObject::PlaySceneLoadAsync, 2.0, false);
 }
 void AIntroSceneObject::PlaySceneLoad(const FName& PackageName, UPackage* LoadedPackage, EAsyncLoadingResult::Type Result)
 {
@@ -81,8 +81,11 @@ void AIntroSceneObject::PlaySceneLoad(const FName& PackageName, UPackage* Loaded
 
 void AIntroSceneObject::PlaySceneLoadAsync()
 {
-	GetWorldTimerManager().ClearTimer(Timerahbdle);
-	FSoftObjectPath LevelPath(TEXT("/Game/Virtual_Studio_Kit/Maps/Studio_D.Studio_D'"));
+	FSoftObjectPath LevelPath;
+	if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSingorMulti() == SingleORmulti::single)
+		LevelPath = FSoftObjectPath(TEXT("/Game/Virtual_Studio_Kit/Maps/Studio_D.Studio_D"));
+	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSingorMulti() == SingleORmulti::Multi)
+		LevelPath = FSoftObjectPath(TEXT("/Game/Virtual_Studio_Kit/Maps/StudioB.StudioB"));
 	if (LevelPath.IsValid())
 	{
 		auto& SM = UAssetManager::GetStreamableManager();
@@ -98,8 +101,8 @@ void AIntroSceneObject::LevelLoadComplete()
 	if (GetWorld()->GetAuthGameMode())
 	{
 		GetWorld()->GetAuthGameMode()->bUseSeamlessTravel = true;
-		GetWorldTimerManager().ClearTimer(Timerahbdle);
-		GetWorld()->GetTimerManager().SetTimer(Timerahbdle, this, &AIntroSceneObject::PlaySceneLoadAsync_stream, 0.5, false);
+		GetWorldTimerManager().ClearTimer(Timerhandle);
+		GetWorld()->GetTimerManager().SetTimer(Timerhandle, this, &AIntroSceneObject::PlaySceneLoadAsync_stream, 0.5, false);
 	}
 }
 
@@ -119,8 +122,7 @@ void AIntroSceneObject::FinishedSession(bool ok)
 	FOnlineSessionSettings s;
 	s.bIsLANMatch = Search->bIsLanQuery;//LAN ��ġ ����
 	s.bShouldAdvertise = true;//������ �ٸ� �÷��̾���� �Ƽ� �ֵ����ϴ°�
-	s.NumPublicConnections = 8;// ������
-	s.bUsesPresence = true;//ģ��������� ���������Ҽ� �ֵ����ϴ°�
+	s.NumPublicConnections = 2;// ������
 	s.bAllowJoinInProgress = false; // ���������� ����
 	Session->OnCreateSessionCompleteDelegates.AddUObject(this, &AIntroSceneObject::CreateSessionComplete);
 	Session->DestroySession(NAME_GameSession);
@@ -132,7 +134,7 @@ void AIntroSceneObject::CreateSessionComplete(FName, bool ok)
 	Session->OnCreateSessionCompleteDelegates.RemoveAll(this);
 	if (!ok)
 		return;
-	UGameplayStatics::OpenLevel(GetWorld(), FName(TEXT("/Game/Virtual_Studio_Kit/Maps/StudioB")), true, TEXT("?listen"));
+	UGameplayStatics::OpenLevel(GetWorld(), FName(TEXT("/Game/Virtual_Studio_Kit/Maps/StudioB.StudioB")), true, TEXT("?listen"));
 }
 void AIntroSceneObject::JoinSessionComplete(FName, EOnJoinSessionCompleteResult::Type res)
 {
@@ -150,9 +152,9 @@ void AIntroSceneObject::JoinSessionComplete(FName, EOnJoinSessionCompleteResult:
 }
 void AIntroSceneObject::PlaySceneLoadAsync_stream()
 {
-	GetWorldTimerManager().ClearTimer(Timerahbdle);
+	GetWorldTimerManager().ClearTimer(Timerhandle);
 	if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSingorMulti() == SingleORmulti::single)
-		UGameplayStatics::OpenLevel(GetWorld(), FName(TEXT("/Game/Virtual_Studio_Kit/Maps/Studio_D")));
+		UGameplayStatics::OpenLevel(GetWorld(), FName(TEXT("/Game/Virtual_Studio_Kit/Maps/Studio_D.Studio_D")));
 	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSingorMulti() == SingleORmulti::Multi)
 	{
 		if (IOnlineSubsystem* oss = IOnlineSubsystem::Get())
@@ -163,7 +165,6 @@ void AIntroSceneObject::PlaySceneLoadAsync_stream()
 		Search = MakeShared<FOnlineSessionSearch>();
 		Search->bIsLanQuery = true;
 		Search->MaxSearchResults = 50;
-		Search->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
 		//FindSessions�� ������ ����� �񵿱�� �˻��ؼ� SearchResults�� ä�� �ִ� �͡�
 		Session->OnFindSessionsCompleteDelegates.AddUObject(this, &AIntroSceneObject::FinishedSession);
 		auto localid = GEngine->GetFirstGamePlayer(GetWorld())->GetPreferredUniqueNetId();
