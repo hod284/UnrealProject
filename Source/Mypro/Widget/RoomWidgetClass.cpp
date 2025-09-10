@@ -16,14 +16,32 @@ void  URoomWidgetClass::NativeConstruct()
 	skill2_MA = Cast<UButton>(GetWidgetFromName("skill2b_ma"));
 	skill3_MA = Cast<UButton>(GetWidgetFromName("skill3b_ma"));
 	skill4_MA = Cast<UButton>(GetWidgetFromName("skill4b_ma"));
+	Ready = Cast<UButton>(GetWidgetFromName("Ready"));
+	Start = Cast<UButton>(GetWidgetFromName("Start"));
 	if (!Character1->OnClicked.IsBound())
 		Character1->OnClicked.AddDynamic(this, &URoomWidgetClass::Character1Click);
 	if (!Character2->OnClicked.IsBound())
 		Character2->OnClicked.AddDynamic(this, &URoomWidgetClass::Character2Click);
 	if (!Character3->OnClicked.IsBound())
 		Character3->OnClicked.AddDynamic(this, &URoomWidgetClass::Character3Click);
+	if (!Ready->OnClicked.IsBound())
+		Ready->OnClicked.AddDynamic(this, &URoomWidgetClass::ReadyButton);
 	UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
 	PC = Cast<AMainPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+	Start->SetVisibility(ESlateVisibility::Collapsed);
+	Character1Click();
+}
+void URoomWidgetClass::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+{
+	Super::NativeTick(MyGeometry,InDeltaTime);
+	if (PC->HasAuthority())
+	{
+		AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
+		UE_LOG(LogMypro, Warning, TEXT("bool°©%s"), (PS->Ready_H ? TEXT("true") : TEXT("false")));
+		UE_LOG(LogMypro, Warning, TEXT("bool°ªH%s"), (PS->Ready_C ?TEXT("true") : TEXT("false")));
+		if(PS->Ready_H&& PS->Ready_C)
+		Start->SetVisibility(ESlateVisibility::Visible);
+	}
 }
 void URoomWidgetClass::NativeOnInitialized()
 {
@@ -36,7 +54,9 @@ void  URoomWidgetClass::Character1Click()
 	UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (PC->HasAuthority())
 	{
-		PC->SendtheRotate(0);
+		APlayerController* PCfirst = GetWorld()->GetFirstPlayerController();
+		AMyPlayerState* PS = Cast<AMyPlayerState>(PCfirst->PlayerState);
+		PS->Pitch_H = 0;
 	}
 	else
 	{
@@ -51,7 +71,9 @@ void  URoomWidgetClass::Character2Click()
 	UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (PC->HasAuthority())
 	{
-		PC->SendtheRotate(-90);
+		APlayerController* PCfirst = GetWorld()->GetFirstPlayerController();
+		AMyPlayerState* PS = Cast<AMyPlayerState>(PCfirst->PlayerState);
+		 PS->Pitch_H =-90;
 	}
 	else
 	{
@@ -67,12 +89,29 @@ void  URoomWidgetClass::Character3Click()
 	UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (PC->HasAuthority())
 	{
-		PC->SendtheRotate(-180);
+		APlayerController* PCfirst = GetWorld()->GetFirstPlayerController();
+		AMyPlayerState* PS = Cast<AMyPlayerState>(PCfirst->PlayerState);
+		PS->Pitch_H = -180;
 	}
 	else
 	{
 		PC->Sever_SendtheRotate(-180);
 	}
+}
+void URoomWidgetClass::ReadyButton()
+{
+	if (PC->HasAuthority())
+	{
+		APlayerController* FirstPC = GetWorld()->GetFirstPlayerController();
+		AMyPlayerState* PS = Cast<AMyPlayerState>(FirstPC->PlayerState);
+		PS->Ready_H = true;
+	}
+	else
+	{
+		PC->Sever_SendtheReady(true);
+		PC->Server_SetSelectedPawn(PC->GetSelectCharactertClass());
+	}
+	Ready->SetVisibility(ESlateVisibility::Collapsed);
 }
 void URoomWidgetClass::CharacterButtonChoice(Characters ch)
 {

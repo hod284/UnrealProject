@@ -54,8 +54,8 @@ UClass* APvPMode::GetDefaultPawnClassForController_Implementation(AController* I
 {
 	if (AMyPlayerState* ps = InController->GetPlayerState<AMyPlayerState>())
 	{
-		if (ps->SelectCharacter)
-			return ps->SelectCharacter;
+		if (ps->SelectCharacter_C)
+			return ps->SelectCharacter_C;
 	}
 	return Super::GetDefaultPawnClassForController_Implementation(InController);
 }

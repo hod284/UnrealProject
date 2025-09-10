@@ -46,6 +46,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UButton>	skill4_MA;
 	virtual void NativeConstruct() override;
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 	virtual void NativeOnInitialized() override;
 	UFUNCTION()
 	void Character1Click(); 
@@ -53,5 +54,7 @@ protected:
 	void Character2Click(); 
 	UFUNCTION()
 	void Character3Click(); 
+	UFUNCTION()
+	void ReadyButton();
 	void CharacterButtonChoice(Characters ch);
 };

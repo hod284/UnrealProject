@@ -24,11 +24,25 @@ protected:
 	UPROPERTY(BlueprintReadWrite,EditAnywhere)
 	TObjectPtr<AStaticMeshActor>  SP1;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TObjectPtr<APawn>  SP1_Warrior;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TObjectPtr<APawn>  SP1_Gudien;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TObjectPtr<APawn>  SP1_DARK;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TObjectPtr<AStaticMeshActor>  SP2;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TObjectPtr<APawn>  SP2_Warrior;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TObjectPtr<APawn>  SP2_Gudien;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TObjectPtr<APawn>  SP2_DARK;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TObjectPtr<ACameraActor>  Camera;
-	float Pitch_h;
-	float Pitch_c;
+	float Pitch_H;
+	float Pitch_C;
+	bool ReadyOntheNIagara_C;
+	bool  ReadyOntheNIagara_H;
 	void GettheValue();
 public:	
 	// Called every frame

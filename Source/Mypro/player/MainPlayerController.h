@@ -19,18 +19,24 @@ protected:
 	virtual void BeginPlay() override;
 	AMainPlayerController();
 	virtual void Tick(float DeltaTime) override;
-	UFUNCTION(Server, Reliable)
-	void Server_SetSelectedPawn();
 public:
-
+	UFUNCTION(Server, Reliable)
+	void Server_SetSelectedPawn(TSubclassOf<APawn> LoadedClass);
 	UFUNCTION(Server, Reliable)
 	void Sever_SendtheRotate(float Pi_h);
 	UFUNCTION(Server, Reliable)
 	void Sever_GettheRotate();
 	UFUNCTION(Client, Reliable)
 	void Client_GettheRotate(float Pi_h, float Pi_c);
-	void SendtheRotate(float Pi_h);
+	UFUNCTION(Server, Reliable)
+	void Sever_SendtheReady(bool ready);
+	UFUNCTION(Server, Reliable)
+	void Sever_GettheReady();
+	UFUNCTION(Client, Reliable)
+	void Client_GettheReady(bool ready_h, bool ready_c);
 	TSubclassOf<APawn> GetSelectCharactertClass();
 	float  Pitch_c;
 	float	Pitch_h;
+	bool  Ready_c;
+	bool  Ready_h;
 };

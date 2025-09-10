@@ -19,13 +19,17 @@ protected:
 	AMyPlayerState();
 public:
 	UPROPERTY(Replicated)
-	TSubclassOf<APawn> SelectCharacter;
+	TSubclassOf<APawn> SelectCharacter_H;
+	UPROPERTY(Replicated)
+	TSubclassOf<APawn> SelectCharacter_C;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
 	TObjectPtr<UInventoryComponent> Inventoryco;
 	UPROPERTY(Replicated)
 	Characters MyCharacter;
 	UPROPERTY(Replicated)
-	int32 ReadyCount;
+	bool Ready_H;
+	UPROPERTY(Replicated)
+	bool Ready_C;
 	UPROPERTY(Replicated)
 	float Pitch_H;
 	UPROPERTY(Replicated)
