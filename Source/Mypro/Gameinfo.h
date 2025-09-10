@@ -96,7 +96,7 @@ DECLARE_LOG_CATEGORY_EXTERN(LogMypro, Warning, All);
 UENUM()
 enum class  NowGameState: uint8
 {
-	None,Intro, playgame, gameover, pvp
+	None,Intro, playgame, gameover, pvp,Room
 };
 //���ӻ��� ����
 UENUM()

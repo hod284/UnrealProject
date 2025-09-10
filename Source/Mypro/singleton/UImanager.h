@@ -5,6 +5,7 @@
 #include "../Gameinfo.h"
 #include "../Widget/PlayMainUI.h"
 #include "../Widget/IntroMainUI.h"
+#include "../Widget/RoomWidgetClass.h"
 #include "../Widget//WinerWidgetClass.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "UImanager.generated.h"
@@ -23,11 +24,15 @@ protected:
 	UPROPERTY()
 	TSubclassOf<UWinerWidgetClass> WinerUI; // ��Ʈ�� ���� Ŭ����
 	UPROPERTY()
+	TSubclassOf<URoomWidgetClass> RoomUI; // ��Ʈ�� ���� Ŭ����
+	UPROPERTY()
     TObjectPtr <UUserWidget> PlayMainUI_widget; // �÷��� ���� ����
 	UPROPERTY()
 	TObjectPtr<UUserWidget> IntroMainUI_widget; // ��Ʈ�� ���� ����
 	UPROPERTY()
 	TObjectPtr<UUserWidget> Winer_widget; // ��Ʈ�� ���� ����
+	UPROPERTY()
+	TObjectPtr<UUserWidget> Room_widget; // ��Ʈ�� ���� ����
 
 public:
 	const TObjectPtr<UUserWidget> GetPlayMainUI_widget() const
@@ -43,6 +48,10 @@ public:
 	const TObjectPtr<UUserWidget> GetWiner_widget() const
 	{
 		return Winer_widget;
+	}
+	const TObjectPtr<UUserWidget> GetRoom_widget() const
+	{
+		return Room_widget;
 	}
 
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;

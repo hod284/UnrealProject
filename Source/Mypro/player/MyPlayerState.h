@@ -24,4 +24,10 @@ public:
 	TObjectPtr<UInventoryComponent> Inventoryco;
 	UPROPERTY(Replicated)
 	Characters MyCharacter;
+	UPROPERTY(Replicated)
+	int32 ReadyCount;
+	UPROPERTY(Replicated)
+	float Pitch_H;
+	UPROPERTY(Replicated)
+	float Pitch_C;
 };

@@ -42,4 +42,9 @@ protected:
 	virtual void NativeConstruct() override;
 	void FirstSelectCharacter(); // 버튼을 누르고 난뒤 처음 캐릭터 선택
 	virtual void NativeOnInitialized() override;
+	void FinishedSession(bool ok);
+	void CreateSessionComplete(FName, bool ok);
+	void JoinSessionComplete(FName, EOnJoinSessionCompleteResult::Type res);
+	TSharedPtr<FOnlineSessionSearch> Search;
+	IOnlineSessionPtr Session;
 };

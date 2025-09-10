@@ -5,6 +5,7 @@
 
 void UWinerWidgetClass::NativeConstruct()
 {
+	Super::NativeConstruct();
 	Winner = Cast<UTextBlock>(GetWidgetFromName("Title"));
 	GotoIntro = Cast<UButton>(GetWidgetFromName("Go"));
 	Gameexit = Cast<UButton>(GetWidgetFromName("exit"));
@@ -22,6 +23,7 @@ void UWinerWidgetClass::NativeConstruct()
 void UWinerWidgetClass::NativeOnInitialized()
 {
 }
+
 
 void UWinerWidgetClass::Typing()
 {

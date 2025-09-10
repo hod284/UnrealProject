@@ -62,10 +62,10 @@ public:
 	UFUNCTION()
 	void Backclick();
 	UFUNCTION()
-	void Character1Click(); // �˵�� �ִ� ����ĳ���� ���� ��ư Ŭ�� �̺�Ʈ
+	void Character1Click(); 
 	UFUNCTION()
-	void Character2Click(); // ���п� ���� ��� �ִ� ���� ĳ����  ���� ��ư Ŭ�� �̺�Ʈ
+	void Character2Click(); 
 	UFUNCTION()
-	void Character3Click(); // �ƹ��͵� �ȵ�� �ִ� ���� ĳ���� ���� ��ư Ŭ�� �̺�Ʈ
-	void CharacterButtonChoice(Characters ch); // ĳ���� ���� �Լ�
+	void Character3Click(); 
+	void CharacterButtonChoice(Characters ch); 
 };

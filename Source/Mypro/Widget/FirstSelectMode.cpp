@@ -96,10 +96,60 @@ void UFirstSelectMode::ClickMultiButton()
 	UIntroMainUI* ui = Cast<UIntroMainUI>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetIntroMainUI_widget());
 	if (ui)
 	{
-		FirstSelectCharacter();
-		ui->SetSwitcherIndex(1);
 		GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSingorMulti(SingleORmulti::Multi);
 	}
+	if (IOnlineSubsystem* oss = IOnlineSubsystem::Get())
+		Session = oss ? oss->GetSessionInterface() : nullptr;
+	if (!Session.IsValid())
+		return;
+	Search = MakeShared<FOnlineSessionSearch>();
+	Search->bIsLanQuery = true;
+	Search->MaxSearchResults = 50;
+	Session->OnFindSessionsCompleteDelegates.AddUObject(this, &UFirstSelectMode::FinishedSession);
+	auto localid = GEngine->GetFirstGamePlayer(GetWorld())->GetPreferredUniqueNetId();
+	Session->FindSessions(*localid, Search.ToSharedRef());
 }
 
+void  UFirstSelectMode::FinishedSession(bool ok)
+{
+	Session->OnFindSessionsCompleteDelegates.RemoveAll(this);
 
+	auto localid = GEngine->GetFirstGamePlayer(GetWorld())->GetPreferredUniqueNetId();
+	if (ok && Search.IsValid() && Search->SearchResults.Num() > 0)
+	{
+		Session->OnJoinSessionCompleteDelegates.AddUObject(this, &UFirstSelectMode::JoinSessionComplete);
+		Session->JoinSession(*localid, NAME_GameSession, Search->SearchResults[0]);
+		return;
+	}
+	FOnlineSessionSettings s;
+	s.bIsLANMatch = Search->bIsLanQuery;
+	s.bShouldAdvertise = true;
+	s.NumPublicConnections = 2;
+	s.bAllowJoinInProgress = true;
+	s.bUsesPresence = true;
+	Session->OnCreateSessionCompleteDelegates.AddUObject(this, &UFirstSelectMode::CreateSessionComplete);
+	Session->DestroySession(NAME_GameSession);
+	Session->CreateSession(*localid, NAME_GameSession, s);
+}
+
+void  UFirstSelectMode::CreateSessionComplete(FName, bool ok)
+{
+	Session->OnCreateSessionCompleteDelegates.RemoveAll(this);
+	if (!ok)
+		return;
+	GetWorld()->ServerTravel("/Game/Virtual_Studio_Kit/Maps/Room?listen");
+}
+void  UFirstSelectMode::JoinSessionComplete(FName, EOnJoinSessionCompleteResult::Type res)
+{
+	Session->OnJoinSessionCompleteDelegates.RemoveAll(this);
+	if (res != EOnJoinSessionCompleteResult::Success)
+		return;
+	FString add;
+	if (Session->GetResolvedConnectString(NAME_GameSession, add))
+	{
+		if (APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0))
+		{
+			PC->ClientTravel(add, TRAVEL_Absolute);
+		}
+	}
+}

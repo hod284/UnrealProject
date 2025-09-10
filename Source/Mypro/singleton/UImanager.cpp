@@ -15,6 +15,8 @@ void UUImanager::Initialize(FSubsystemCollectionBase& Collection)
 
 	if (WinerUI)
 		Winer_widget = CreateWidget<UUserWidget>(GetWorld(), WinerUI);
+	if (RoomUI)
+		Room_widget = CreateWidget<UUserWidget>(GetWorld(), RoomUI);
 }
 
 UUImanager::UUImanager()
@@ -34,5 +36,9 @@ UUImanager::UUImanager()
 	{
 		WinerUI = WidgetClass_WINER.Class;
 	}
-
+	static ConstructorHelpers::FClassFinder<UUserWidget> Room_WINER(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/widget/RoomWidget.RoomWidget_C'"));
+	if (Room_WINER.Succeeded())
+	{
+		RoomUI = Room_WINER.Class;
+	}
 }

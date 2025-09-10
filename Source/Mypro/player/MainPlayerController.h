@@ -4,8 +4,6 @@
 
 #include "../Gameinfo.h"
 #include "../singleton/GameManager.h"
-#include "../singleton/UImanager.h"
-#include "../common/IntroSceneObject.h"
 #include "GameFramework/PlayerController.h"
 #include "MainPlayerController.generated.h"
 
@@ -19,28 +17,20 @@ class MYPRO_API AMainPlayerController : public APlayerController
 	
 protected:
 	virtual void BeginPlay() override;
-	TArray<AActor*>SceneActorList;
 	AMainPlayerController();
 	virtual void Tick(float DeltaTime) override;
 	UFUNCTION(Server, Reliable)
 	void Server_SetSelectedPawn();
 public:
 
-    AActor* GetLevelSceneObjectActor() const
-    {
-		
-	   AActor* Choice  = nullptr;
-	   for (AActor* Actor : SceneActorList)
-	   {
-	      	if (Actor->GetClass() == AIntroSceneObject :: StaticClass())
-	      	{
-	      		Choice = Actor;
-				break;
-			}
-	   }
-	   return Choice;
-    }
-	
+	UFUNCTION(Server, Reliable)
+	void Sever_SendtheRotate(float Pi_h);
+	UFUNCTION(Server, Reliable)
+	void Sever_GettheRotate();
+	UFUNCTION(Client, Reliable)
+	void Client_GettheRotate(float Pi_h, float Pi_c);
+	void SendtheRotate(float Pi_h);
 	TSubclassOf<APawn> GetSelectCharactertClass();
-	
+	float  Pitch_c;
+	float	Pitch_h;
 };

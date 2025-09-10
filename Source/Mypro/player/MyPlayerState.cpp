@@ -10,6 +10,9 @@ void AMyPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
     DOREPLIFETIME(AMyPlayerState, MyCharacter);
     DOREPLIFETIME(AMyPlayerState, Inventoryco);
     DOREPLIFETIME(AMyPlayerState, SelectCharacter);
+    DOREPLIFETIME(AMyPlayerState, ReadyCount);
+    DOREPLIFETIME(AMyPlayerState, Pitch_H);
+    DOREPLIFETIME(AMyPlayerState, Pitch_C);
 }
 
 AMyPlayerState::AMyPlayerState()
