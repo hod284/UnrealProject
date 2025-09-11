@@ -8,14 +8,6 @@ void  URoomWidgetClass::NativeConstruct()
 	Character1 = Cast<UButton>(GetWidgetFromName("ch1"));
 	Character2 = Cast<UButton>(GetWidgetFromName("ch2"));
 	Character3 = Cast<UButton>(GetWidgetFromName("ch3"));
-	skill1 = Cast<UButton>(GetWidgetFromName("skill1b"));
-	skill2 = Cast<UButton>(GetWidgetFromName("skill2b"));
-	skill3 = Cast<UButton>(GetWidgetFromName("skill3b"));
-	skill4 = Cast<UButton>(GetWidgetFromName("skill4b"));
-	skill1_MA = Cast<UButton>(GetWidgetFromName("skill1b_ma"));
-	skill2_MA = Cast<UButton>(GetWidgetFromName("skill2b_ma"));
-	skill3_MA = Cast<UButton>(GetWidgetFromName("skill3b_ma"));
-	skill4_MA = Cast<UButton>(GetWidgetFromName("skill4b_ma"));
 	Ready = Cast<UButton>(GetWidgetFromName("Ready"));
 	Start = Cast<UButton>(GetWidgetFromName("Start"));
 	if (!Character1->OnClicked.IsBound())
@@ -52,7 +44,6 @@ void URoomWidgetClass::NativeOnInitialized()
 void  URoomWidgetClass::Character1Click()
 {
 	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSelectCharacter(Characters::Warrior);
-	CharacterButtonChoice(Characters::Warrior);
 	UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (PC->HasAuthority())
 	{
@@ -71,7 +62,6 @@ void  URoomWidgetClass::Character1Click()
 void  URoomWidgetClass::Character2Click()
 {
 	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSelectCharacter(Characters::Guiden);
-	CharacterButtonChoice(Characters::Guiden);
 	UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (PC->HasAuthority())
 	{
@@ -91,7 +81,6 @@ void  URoomWidgetClass::Character2Click()
 void  URoomWidgetClass::Character3Click()
 {
 	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSelectCharacter(Characters::DarkMagion);
-	CharacterButtonChoice(Characters::DarkMagion);
 	UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (PC->HasAuthority())
 	{
@@ -127,29 +116,5 @@ void URoomWidgetClass::GoTravel()
 {
 	GetWorld()->ServerTravel("/Game/Virtual_Studio_Kit/Maps/StudioB?listen");
 }
-void URoomWidgetClass::CharacterButtonChoice(Characters ch)
-{
 
-	if (ch == Characters::DarkMagion)
-	{
-		skill1_MA->SetVisibility(ESlateVisibility::Visible);
-		skill2_MA->SetVisibility(ESlateVisibility::Visible);
-		skill3_MA->SetVisibility(ESlateVisibility::Visible);
-		skill4_MA->SetVisibility(ESlateVisibility::Visible);
-		skill1->SetVisibility(ESlateVisibility::Collapsed);
-		skill2->SetVisibility(ESlateVisibility::Collapsed);
-		skill3->SetVisibility(ESlateVisibility::Collapsed);
-		skill4->SetVisibility(ESlateVisibility::Collapsed);
-	}
-	else
-	{
-		skill1_MA->SetVisibility(ESlateVisibility::Collapsed);
-		skill2_MA->SetVisibility(ESlateVisibility::Collapsed);
-		skill3_MA->SetVisibility(ESlateVisibility::Collapsed);
-		skill4_MA->SetVisibility(ESlateVisibility::Collapsed);
-		skill1->SetVisibility(ESlateVisibility::Visible);
-		skill2->SetVisibility(ESlateVisibility::Visible);
-		skill3->SetVisibility(ESlateVisibility::Visible);
-		skill4->SetVisibility(ESlateVisibility::Visible);
-	}
-}
+	

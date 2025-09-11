@@ -29,22 +29,6 @@ protected:
 	TObjectPtr<UButton>	Character2;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UButton>	Character3;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UButton> skill1; 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UButton>	skill2;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UButton>	skill3;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UButton>	skill4;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UButton> skill1_MA; 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UButton>	skill2_MA;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UButton>	skill3_MA;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UButton>	skill4_MA;
 	virtual void NativeConstruct() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 	virtual void NativeOnInitialized() override;
@@ -58,5 +42,4 @@ protected:
 	void ReadyButton();
 	UFUNCTION()
 	void GoTravel();
-	void CharacterButtonChoice(Characters ch);
 };
