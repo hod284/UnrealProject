@@ -19,6 +19,8 @@ private:
 	// 게임 메니저에서 플레이 캐릭터 선택
 	Characters character = Characters::None;
 	// 게임 메니저에서 플레이 캐릭터 선택
+	Characters character_Client = Characters::None;
+	// 게임 메니저에서 플레이 캐릭터 선택
 	UIORNOT  CusorVisual = UIORNOT::UINot;
 	SingleORmulti   SingleOrMulti = SingleORmulti::None;
 public:
@@ -39,6 +41,12 @@ public:
 	}
 	const Characters  GetSelectedcharacter() const {
 		return character;
+	}
+	void SetSelectCharacter_client(Characters  ch) {
+		character_Client = ch;
+	}
+	const Characters  GetSelectedcharacter_client() const {
+		return character_Client;
 	}
 	const UIORNOT  GetCusorVisual() const {
 		return CusorVisual;

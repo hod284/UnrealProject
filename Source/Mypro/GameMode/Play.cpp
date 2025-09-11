@@ -18,7 +18,6 @@ void APlay::BeginPlay()
 void APlay::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
-	// defaultpawn ���� ������ ���� ���� ������� �����Ǵ°Ŵϱ� �÷��̾�� �õ������� ������ ���� ĳ���͸� �����ؼ� �����ϴ°Ŷ� �ʷ� ����
 	if (APawn* Old = NewPlayer->GetPawn())
 		Old->Destroy();
 	if (!NewPlayer) 

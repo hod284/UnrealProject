@@ -56,5 +56,7 @@ protected:
 	void Character3Click(); 
 	UFUNCTION()
 	void ReadyButton();
+	UFUNCTION()
+	void GoTravel();
 	void CharacterButtonChoice(Characters ch);
 };

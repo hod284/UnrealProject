@@ -17,15 +17,15 @@ class MYPRO_API AMyPlayerState : public APlayerState
 protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps)  const override;
 	AMyPlayerState();
+	virtual void BeginPlay() override;
+	virtual void CopyProperties(APlayerState* NewPlayerState) override;
 public:
-	UPROPERTY(Replicated)
-	TSubclassOf<APawn> SelectCharacter_H;
-	UPROPERTY(Replicated)
-	TSubclassOf<APawn> SelectCharacter_C;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
 	TObjectPtr<UInventoryComponent> Inventoryco;
 	UPROPERTY(Replicated)
-	Characters MyCharacter;
+	Characters MyCharacter_C = Characters::None;
+	UPROPERTY(Replicated)
+	Characters MyCharacter_H = Characters::None;
 	UPROPERTY(Replicated)
 	bool Ready_H;
 	UPROPERTY(Replicated)

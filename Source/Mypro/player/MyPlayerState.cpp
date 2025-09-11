@@ -2,25 +2,47 @@
 
 
 #include "MyPlayerState.h"
+#include "MainPlayerController.h"
 
 void AMyPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-    DOREPLIFETIME(AMyPlayerState, MyCharacter);
+    DOREPLIFETIME(AMyPlayerState, MyCharacter_H);
+    DOREPLIFETIME(AMyPlayerState, MyCharacter_C);
     DOREPLIFETIME(AMyPlayerState, Inventoryco);
-    DOREPLIFETIME(AMyPlayerState, SelectCharacter_H);
-    DOREPLIFETIME(AMyPlayerState, SelectCharacter_C);
     DOREPLIFETIME(AMyPlayerState, Ready_H);
     DOREPLIFETIME(AMyPlayerState, Ready_C);
     DOREPLIFETIME(AMyPlayerState, Pitch_H);
     DOREPLIFETIME(AMyPlayerState, Pitch_C);
 }
-
+void AMyPlayerState::BeginPlay()
+{
+    Super::BeginPlay();
+    AMainPlayerController* pc = Cast<AMainPlayerController>(GetOwner());
+    if (pc)
+    {
+        if (pc->HasAuthority())
+        {
+            MyCharacter_H = GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSelectedcharacter();
+            MyCharacter_C = GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSelectedcharacter_client();
+        }
+    }
+}
 AMyPlayerState::AMyPlayerState()
 {
     Inventoryco = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inve"));
     SetReplicates(true);
+}
+
+void AMyPlayerState::CopyProperties(APlayerState* NewPlayerState)
+{
+    Super::CopyProperties(NewPlayerState);
+    AMyPlayerState* state  =Cast<AMyPlayerState>(NewPlayerState);
+    if (state)
+    {
+        state->MyCharacter_C = MyCharacter_C;
+    }
 }
 
 

@@ -21,7 +21,7 @@ protected:
 	virtual void Tick(float DeltaTime) override;
 public:
 	UFUNCTION(Server, Reliable)
-	void Server_SetSelectedPawn(TSubclassOf<APawn> LoadedClass);
+	void Server_SetSelectedPawn(Characters CH);
 	UFUNCTION(Server, Reliable)
 	void Sever_SendtheRotate(float Pi_h);
 	UFUNCTION(Server, Reliable)

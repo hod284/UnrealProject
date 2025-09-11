@@ -62,11 +62,12 @@ void AMainPlayerController::Sever_SendtheReady_Implementation(bool ready)
 	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
 	PS->Ready_C = ready;
 }
-void AMainPlayerController::Server_SetSelectedPawn_Implementation(TSubclassOf<APawn> LoadedClass)
+void AMainPlayerController::Server_SetSelectedPawn_Implementation(Characters CH)
 {
 	APlayerController* PC = GetWorld()->GetFirstPlayerController();
 	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
-	PS ->SelectCharacter_C = LoadedClass;
+	PS ->MyCharacter_C = CH;
+	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSelectCharacter_client(CH);
 }
 void  AMainPlayerController::Sever_SendtheRotate_Implementation(float Pi_h)
 {

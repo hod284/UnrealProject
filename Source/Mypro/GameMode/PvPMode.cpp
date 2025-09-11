@@ -28,7 +28,7 @@ void APvPMode::RestartPlayer(AController* NewPlayer)
 	FVector SpawnLocation;
 	FRotator SpawnRotation;
 	FVector Scale = FVector(1, 1, 1);
-	TSubclassOf<APawn> ch;
+	TSubclassOf<APawn> ch= nullptr;
 	if (PlayerCount ==1)
 	{
 	   SpawnLocation = FVector(110,690, 95);
@@ -39,7 +39,7 @@ void APvPMode::RestartPlayer(AController* NewPlayer)
 	else
 	{
 		SpawnLocation = FVector(110, -670, 95);
-		SpawnRotation = FRotator(0, 90, 0);
+		SpawnRotation = FRotator::ZeroRotator;
 		ch = GetDefaultPawnClassForController(NewPlayer);
 	}
 	FTransform T(SpawnRotation, SpawnLocation, Scale);
@@ -47,15 +47,34 @@ void APvPMode::RestartPlayer(AController* NewPlayer)
 	Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 	APawn* po = GetWorld()->SpawnActor<APawn>(ch, T, Params);
 	if (po)
+	{
+		po->SetActorRotation(FRotator(0,90,0));
 		NewPlayer->Possess(po);
+	}
 }
 
 UClass* APvPMode::GetDefaultPawnClassForController_Implementation(AController* InController)
 {
 	if (AMyPlayerState* ps = InController->GetPlayerState<AMyPlayerState>())
 	{
-		if (ps->SelectCharacter_C)
-			return ps->SelectCharacter_C;
+		switch (ps->MyCharacter_C)
+		{
+		case Characters::Guiden:
+			return  StaticLoadClass(
+				AMyCharacter::StaticClass(), nullptr,
+				TEXT("/Script/Engine.Blueprint'/Game/bluePrint/PlayGudion.PlayGudion_C'"));
+			break;
+		case Characters::Warrior:
+			return StaticLoadClass(
+				AMyCharacter::StaticClass(), nullptr,
+				TEXT("/Script/Engine.Blueprint'/Game/bluePrint/PlayWarrior.PlayWarrior_C'"));
+			break;
+		case Characters::DarkMagion:
+			return  StaticLoadClass(
+				AMyCharacter::StaticClass(), nullptr,
+				TEXT("/Script/Engine.Blueprint'/Game/bluePrint/PlayDark.PlayDark_C'"));
+			break;
+		}
 	}
 	return Super::GetDefaultPawnClassForController_Implementation(InController);
 }

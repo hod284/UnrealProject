@@ -26,6 +26,8 @@ void  URoomWidgetClass::NativeConstruct()
 		Character3->OnClicked.AddDynamic(this, &URoomWidgetClass::Character3Click);
 	if (!Ready->OnClicked.IsBound())
 		Ready->OnClicked.AddDynamic(this, &URoomWidgetClass::ReadyButton);
+	if (!Start->OnClicked.IsBound())
+		Start->OnClicked.AddDynamic(this, &URoomWidgetClass::GoTravel);
 	UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
 	PC = Cast<AMainPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
 	Start->SetVisibility(ESlateVisibility::Collapsed);
@@ -57,10 +59,12 @@ void  URoomWidgetClass::Character1Click()
 		APlayerController* PCfirst = GetWorld()->GetFirstPlayerController();
 		AMyPlayerState* PS = Cast<AMyPlayerState>(PCfirst->PlayerState);
 		PS->Pitch_H = 0;
+		PS->MyCharacter_H = Characters::Warrior;
 	}
 	else
 	{
 		PC->Sever_SendtheRotate(0);
+		PC->Server_SetSelectedPawn(Characters::Warrior);
 	}
 }
 
@@ -74,11 +78,13 @@ void  URoomWidgetClass::Character2Click()
 		APlayerController* PCfirst = GetWorld()->GetFirstPlayerController();
 		AMyPlayerState* PS = Cast<AMyPlayerState>(PCfirst->PlayerState);
 		 PS->Pitch_H =-90;
+		 PS->MyCharacter_H = Characters::Guiden;
 	}
 	else
 	{
 
 		PC->Sever_SendtheRotate(-90);
+		PC->Server_SetSelectedPawn(Characters::Guiden);
 	}
 }
 
@@ -92,10 +98,12 @@ void  URoomWidgetClass::Character3Click()
 		APlayerController* PCfirst = GetWorld()->GetFirstPlayerController();
 		AMyPlayerState* PS = Cast<AMyPlayerState>(PCfirst->PlayerState);
 		PS->Pitch_H = -180;
+		PS->MyCharacter_H = Characters::DarkMagion;
 	}
 	else
 	{
 		PC->Sever_SendtheRotate(-180);
+		PC->Server_SetSelectedPawn(Characters::DarkMagion);
 	}
 }
 void URoomWidgetClass::ReadyButton()
@@ -109,9 +117,15 @@ void URoomWidgetClass::ReadyButton()
 	else
 	{
 		PC->Sever_SendtheReady(true);
-		PC->Server_SetSelectedPawn(PC->GetSelectCharactertClass());
 	}
+	Character1->SetVisibility(ESlateVisibility::Collapsed);
+	Character2->SetVisibility(ESlateVisibility::Collapsed);
+	Character3->SetVisibility(ESlateVisibility::Collapsed);
 	Ready->SetVisibility(ESlateVisibility::Collapsed);
+}
+void URoomWidgetClass::GoTravel()
+{
+	GetWorld()->ServerTravel("/Game/Virtual_Studio_Kit/Maps/StudioB?listen");
 }
 void URoomWidgetClass::CharacterButtonChoice(Characters ch)
 {
