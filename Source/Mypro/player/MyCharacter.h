@@ -168,7 +168,7 @@ public:
 		if (name == "Portal")
 			CanPortal = false;
 	}
-	void SetAttackDamage(FString cporfile)
+	void SetColision(FString cporfile)
 	{
 	    GetCapsuleComponent()->SetCollisionProfileName(FName(*cporfile));
 	}

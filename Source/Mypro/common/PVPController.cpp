@@ -2,7 +2,7 @@
 
 
 #include "PVPController.h"
-
+#include "../player/MyCharacter.h"
 // Sets default values
 APVPController::APVPController()
 {
@@ -22,12 +22,22 @@ void APVPController::BeginPlay()
 		ui->AddToViewport();
 		ui->SkillInite();
 	}
+	if (!HasAuthority())
+	{
+		APawn* mych = Cast<APawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
+		AMyCharacter* mychar = Cast<AMyCharacter>(mych);
+		mychar->SetColision("Monster");
+	}
 }
 
 // Called every frame
 void APVPController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	if (!HasAuthority())
+	{
+		APawn* mych1 = Cast<APawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
+		mych1->SetActorRotation(FRotator(0, 90, 0));
+	}
 }
 

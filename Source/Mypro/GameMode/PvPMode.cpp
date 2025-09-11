@@ -2,7 +2,7 @@
 
 
 #include "PvPMode.h"
-
+#include "../player/MyCharacter.h"
 APvPMode::APvPMode()
 {
 	DefaultPawnClass = ASpectatorPawn::StaticClass();
@@ -29,17 +29,17 @@ void APvPMode::RestartPlayer(AController* NewPlayer)
 	FRotator SpawnRotation;
 	FVector Scale = FVector(1, 1, 1);
 	TSubclassOf<APawn> ch= nullptr;
+	AMainPlayerController* MyPC = Cast<AMainPlayerController>(NewPlayer);
 	if (PlayerCount ==1)
 	{
 	   SpawnLocation = FVector(110,690, 95);
 	   SpawnRotation = FRotator(0, -90, 0);
-	   AMainPlayerController* MyPC = Cast<AMainPlayerController>(NewPlayer);
 	   ch= MyPC->GetSelectCharactertClass();
 	}
 	else
 	{
 		SpawnLocation = FVector(110, -670, 95);
-		SpawnRotation = FRotator::ZeroRotator;
+		SpawnRotation = FRotator(0, 90, 0);
 		ch = GetDefaultPawnClassForController(NewPlayer);
 	}
 	FTransform T(SpawnRotation, SpawnLocation, Scale);
@@ -48,7 +48,12 @@ void APvPMode::RestartPlayer(AController* NewPlayer)
 	APawn* po = GetWorld()->SpawnActor<APawn>(ch, T, Params);
 	if (po)
 	{
-		po->SetActorRotation(FRotator(0,90,0));
+		po->bUseControllerRotationYaw = false;
+		if (PlayerCount != 1)
+		{
+			AMyCharacter* mych = Cast<AMyCharacter>(po);
+			mych->SetColision("Monster");
+		}
 		NewPlayer->Possess(po);
 	}
 }
