@@ -17,6 +17,8 @@ void UUImanager::Initialize(FSubsystemCollectionBase& Collection)
 		Winer_widget = CreateWidget<UUserWidget>(GetWorld(), WinerUI);
 	if (RoomUI)
 		Room_widget = CreateWidget<UUserWidget>(GetWorld(), RoomUI);
+	if (PvPUI)
+		PvP_widget = CreateWidget<UUserWidget>(GetWorld(), PvPUI);
 }
 
 UUImanager::UUImanager()
@@ -36,9 +38,14 @@ UUImanager::UUImanager()
 	{
 		WinerUI = WidgetClass_WINER.Class;
 	}
-	static ConstructorHelpers::FClassFinder<UUserWidget> Room_WINER(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/widget/RoomWidget.RoomWidget_C'"));
-	if (Room_WINER.Succeeded())
+	static ConstructorHelpers::FClassFinder<UUserWidget> Room(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/widget/RoomWidget.RoomWidget_C'"));
+	if (Room.Succeeded())
 	{
-		RoomUI = Room_WINER.Class;
+		RoomUI = Room.Class;
+	}
+	static ConstructorHelpers::FClassFinder<UUserWidget> PVPClass(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/widget/PVPMainWidget.PVPMainWidget_C'"));
+	if (PVPClass.Succeeded())
+	{
+		PvPUI = PVPClass.Class;
 	}
 }

@@ -9,8 +9,6 @@ AMainPlayerController::AMainPlayerController()
 	bEnableMouseOverEvents = true;
 	bEnableClickEvents = true;
 }
-
-
 TSubclassOf<APawn> AMainPlayerController::GetSelectCharactertClass()
 {
 	TSubclassOf<APawn> LoadedClass = NULL;
@@ -86,4 +84,44 @@ void AMainPlayerController::Client_GettheReady_Implementation(bool ready_h, bool
 {
 	Ready_c = ready_c;
 	Ready_h = ready_h;
+}
+void AMainPlayerController::Sever_GettheSelectCharacter_Implementation()
+{
+	APlayerController* PC = GetWorld()->GetFirstPlayerController();
+	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
+	Client_GettheSelectCharacter(PS->MyCharacter_C, PS->MyCharacter_H);
+}
+
+void AMainPlayerController::Client_GettheSelectCharacter_Implementation(Characters ch_c, Characters ch_h)
+{
+	MyCharacter_C = ch_c;
+	MyCharacter_H = ch_h;
+}
+
+void AMainPlayerController::Sever_GettheMPandHP_Implementation()
+{
+	APlayerController* PC = GetWorld()->GetFirstPlayerController();
+	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
+	Client_GettheMPandHP_Implementation(PS->PlayerHP_H, PS->PlayerMP_H, PS->PlayerHP_C, PS->PlayerMP_C);
+}
+
+void AMainPlayerController::Client_GettheMPandHP_Implementation(float Hp_H, float Mp_H, float Hp_C, float Mp_C)
+{
+	PlayerHP_H = Hp_H;
+	PlayerMP_H = Mp_H;
+	PlayerHP_C = Hp_C;
+	PlayerMP_C = Mp_C;
+}
+void AMainPlayerController::Sever_SendtheClientHP_Implementation(float Hp)
+{
+	APlayerController* PC = GetWorld()->GetFirstPlayerController();
+	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
+	PS->PlayerHP_C = Hp;
+}
+
+void AMainPlayerController::Sever_SendtheClientMP_Implementation(float Mp)
+{
+	APlayerController* PC = GetWorld()->GetFirstPlayerController();
+	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
+	PS->PlayerMP_C = Mp;
 }

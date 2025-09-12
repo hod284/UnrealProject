@@ -34,4 +34,12 @@ public:
 	float Pitch_H;
 	UPROPERTY(Replicated)
 	float Pitch_C;
+	UPROPERTY(Replicated)
+	float PlayerHP_H=1.0F;
+	UPROPERTY(Replicated)
+	float PlayerMP_H=1.0F;
+	UPROPERTY(Replicated)
+	float PlayerHP_C=1.0F;
+	UPROPERTY(Replicated)
+	float PlayerMP_C=1.0F;
 };

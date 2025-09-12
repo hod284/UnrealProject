@@ -39,8 +39,7 @@ void AMyCharacter::BeginPlay()
 	PlaySceneObject = Cast<APlaySceneObject>(UGameplayStatics::GetActorOfClass(GetWorld(), APlaySceneObject::StaticClass()));
 	UCapsuleComponent* Capsule = GetCapsuleComponent();
 	Capsule->OnComponentHit.AddDynamic(this, &AMyCharacter::OnHit);
-	// ������ �κ�Ʈ Ȱ��ȭ
-	Capsule->SetGenerateOverlapEvents(true); // �����ϰ� �ѵα�
+	Capsule->SetGenerateOverlapEvents(true); 
 	Capsule->OnComponentBeginOverlap.AddDynamic(this, &AMyCharacter::OnCapsuleBeginOverlap);
 	Capsule->OnComponentEndOverlap.AddDynamic(this, &AMyCharacter::OnCapsuleEndOverlap);
 	UCharacterMovementComponent* Move = GetCharacterMovement();

@@ -7,6 +7,7 @@
 #include "../Widget/IntroMainUI.h"
 #include "../Widget/RoomWidgetClass.h"
 #include "../Widget//WinerWidgetClass.h"
+#include "../Widget/PvPUIClass.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "UImanager.generated.h"
 
@@ -26,6 +27,8 @@ protected:
 	UPROPERTY()
 	TSubclassOf<URoomWidgetClass> RoomUI; // ��Ʈ�� ���� Ŭ����
 	UPROPERTY()
+	TSubclassOf<UPvPUIClass> PvPUI; // ��Ʈ�� ���� Ŭ����
+	UPROPERTY()
     TObjectPtr <UUserWidget> PlayMainUI_widget; // �÷��� ���� ����
 	UPROPERTY()
 	TObjectPtr<UUserWidget> IntroMainUI_widget; // ��Ʈ�� ���� ����
@@ -33,6 +36,8 @@ protected:
 	TObjectPtr<UUserWidget> Winer_widget; // ��Ʈ�� ���� ����
 	UPROPERTY()
 	TObjectPtr<UUserWidget> Room_widget; // ��Ʈ�� ���� ����
+	UPROPERTY()
+	TObjectPtr<UUserWidget> PvP_widget; // ��Ʈ�� ���� ����
 
 public:
 	const TObjectPtr<UUserWidget> GetPlayMainUI_widget() const
@@ -52,6 +57,10 @@ public:
 	const TObjectPtr<UUserWidget> GetRoom_widget() const
 	{
 		return Room_widget;
+	}
+	const TObjectPtr<UUserWidget> GetPvP_widget() const
+	{
+		return  PvP_widget;
 	}
 
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
