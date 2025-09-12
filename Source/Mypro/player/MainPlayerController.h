@@ -46,10 +46,17 @@ public:
 	void Sever_SendtheClientHP(float Hp);
 	UFUNCTION(Server, Reliable)
 	void Sever_SendtheClientMP(float Mp);
-
+	UFUNCTION(Server, Reliable)
+	void Sever_SendtheClientMeshPitch(float Pitch);
+	UFUNCTION(Server, Reliable)
+	void Sever_GettheMeshPitch();
+	UFUNCTION(Client , Reliable)
+	void Client_GedtheMeshRotate(float RO_H,float RO_C);
 	TSubclassOf<APawn> GetSelectCharactertClass();
-	float  Pitch_c;
-	float	Pitch_h;
+	float Pitch_c;
+	float Pitch_h;
+	float MeshPitch_c =-90;
+	float MeshPitch_h =-90;
 	bool  Ready_c;
 	bool  Ready_h;
 	float PlayerHP_H=1.0;

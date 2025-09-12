@@ -65,7 +65,10 @@ void AAction2_Monster::Tick(float DeltaTime)
 void AAction2_Monster::Init()
 {
 	NiagaraParticle->SetActive(true);
-	BoxColider->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	GetWorldTimerManager().ClearTimer(Time_Colider);
+	GetWorld()->GetTimerManager().SetTimer(Time_Colider, FTimerDelegate::CreateLambda([this]() {
+		BoxColider->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		}), 0.5, false);
 }
 void AAction2_Monster::Reset()
 {

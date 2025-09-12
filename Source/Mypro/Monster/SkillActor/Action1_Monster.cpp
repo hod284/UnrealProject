@@ -16,8 +16,7 @@ AAction1_Monster::AAction1_Monster()
 	BoxColider->SetupAttachment(NiagaraParticle);
 	BoxColider->SetCollisionProfileName("Monsterskill");
 	BoxColider->OnComponentHit.AddDynamic(this, &AAction1_Monster::OnHit_Action1_M);
-	// ������ �κ�Ʈ Ȱ��ȭ
-	BoxColider->SetGenerateOverlapEvents(true); // �����ϰ� �ѵα�
+	BoxColider->SetGenerateOverlapEvents(true);
 	BoxColider->OnComponentBeginOverlap.AddDynamic(this, &AAction1_Monster::OnCapsuleBeginOverlap_Action1_M);
 	BoxColider->OnComponentEndOverlap.AddDynamic(this, &AAction1_Monster::OnCapsuleEndOverlap_Action1_M);
 }

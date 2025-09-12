@@ -110,10 +110,13 @@ void AAction4_Monster::Init()
 	NiagaraParticle2->SetActive(true);
 	NiagaraParticle3->SetActive(true);
 	NiagaraParticle4->SetActive(true);
-	BoxColider1->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	BoxColider2->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	BoxColider3->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	BoxColider4->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	GetWorldTimerManager().ClearTimer(Time_Colider);
+	GetWorld()->GetTimerManager().SetTimer(Time_Colider, FTimerDelegate::CreateLambda([this]() {	
+		BoxColider1->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		BoxColider2->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		BoxColider3->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		BoxColider4->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		}), 0.5, false);
 }
 void AAction4_Monster::Reset()
 {

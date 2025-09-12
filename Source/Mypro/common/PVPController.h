@@ -17,7 +17,11 @@ public:
 	APVPController();
 
 protected:
+	FTimerHandle Timer;
 	UPvPUIClass* ui;
+	TArray<AActor*> Players;
+	ACharacter* HostPawn;
+	ACharacter* ClientPawn;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 public:	

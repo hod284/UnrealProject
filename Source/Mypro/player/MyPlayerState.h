@@ -42,4 +42,8 @@ public:
 	float PlayerHP_C=1.0F;
 	UPROPERTY(Replicated)
 	float PlayerMP_C=1.0F;
+	UPROPERTY(Replicated)
+	float MeshPitch_C = -90;
+	UPROPERTY(Replicated)
+	float MeshPitch_H = -90;
 };

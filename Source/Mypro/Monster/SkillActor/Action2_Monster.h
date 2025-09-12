@@ -22,6 +22,7 @@ protected:
 	TObjectPtr<UBoxComponent> BoxColider;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	int32 AttackDamage;
+	FTimerHandle Time_Colider;
 	// Ãæµ¹
 	UFUNCTION()
 	void OnHit_Action2_M(UPrimitiveComponent* HitComp, AActor* OtherActor,

@@ -9,6 +9,7 @@ AMainPlayerController::AMainPlayerController()
 	bEnableMouseOverEvents = true;
 	bEnableClickEvents = true;
 }
+
 TSubclassOf<APawn> AMainPlayerController::GetSelectCharactertClass()
 {
 	TSubclassOf<APawn> LoadedClass = NULL;
@@ -37,6 +38,25 @@ TSubclassOf<APawn> AMainPlayerController::GetSelectCharactertClass()
 void AMainPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+	GetWorld()->GetTimerManager().SetTimerForNextTick(FTimerDelegate::CreateLambda ([this]() {
+		UPvPUIClass* ui = Cast<UPvPUIClass>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPvP_widget());
+		if (ui)
+		{
+			if (HasAuthority())
+			{
+				APlayerController* PC = GetWorld()->GetFirstPlayerController();
+				if (PC)
+				{
+					AMyPlayerState* PS = PC->GetPlayerState<AMyPlayerState>();
+					if (PS)
+					{
+						ui->SetHostImagebyCharacter(PS->MyCharacter_H);
+						ui->SetClientImagebyCharacter(PS->MyCharacter_C);
+					}
+				}
+			}
+		}
+	}));
 	SetReplicates(true);
 }
 void AMainPlayerController::Tick(float DeltaTime)
@@ -124,4 +144,23 @@ void AMainPlayerController::Sever_SendtheClientMP_Implementation(float Mp)
 	APlayerController* PC = GetWorld()->GetFirstPlayerController();
 	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
 	PS->PlayerMP_C = Mp;
+}
+void AMainPlayerController::Sever_SendtheClientMeshPitch_Implementation(float Pitch)
+{
+	APlayerController* PC = GetWorld()->GetFirstPlayerController();
+	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
+	PS->MeshPitch_C = Pitch;
+}
+void AMainPlayerController::Sever_GettheMeshPitch_Implementation()
+{
+	APlayerController* PC = GetWorld()->GetFirstPlayerController();
+	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
+	UE_LOG(LogMypro, Warning, TEXT("host rotate: %f"), PS->MeshPitch_H);
+	Client_GedtheMeshRotate(PS->MeshPitch_H ,PS->MeshPitch_C);
+}
+void AMainPlayerController::Client_GedtheMeshRotate_Implementation(float RO_H, float RO_C)
+{
+	MeshPitch_h = RO_H;
+	UE_LOG(LogMypro, Warning, TEXT("host rotate: %f"), MeshPitch_h);
+	MeshPitch_c = RO_C;
 }

@@ -220,13 +220,15 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 	if (!BackMoving && !DashMoving)
 		PlayerHp -= DamageAmount;
 	else
+	{
 		PlayerHp -= 0;
 		UE_LOG(LogMypro, Warning, TEXT("PHP:%f"), PlayerHp);
-		float HpTemp = (PlayerHp / PlayerHp_Const) * 100;
-		UE_LOG(LogMypro, Warning, TEXT("pHp:%f"), HpTemp);
-		HP = HpTemp / 100;
-		UE_LOG(LogMypro, Warning, TEXT("PMP:%f"), HP);
-		ui->OnDamage_P.Broadcast(HP);
+	}
+	float HpTemp = (PlayerHp / PlayerHp_Const) * 100;
+	UE_LOG(LogMypro, Warning, TEXT("pHp:%f"), HpTemp);
+	HP = HpTemp / 100;
+	UE_LOG(LogMypro, Warning, TEXT("PMP:%f"), HP);
+	ui->OnDamage_P.Broadcast(HP);
 	return  DamageAmount;
 }
 void AMyCharacter::EndDash()
@@ -254,19 +256,22 @@ void AMyCharacter::MoveKey(const FInputActionValue& Value)
 		AddMovementInput(GetActorForwardVector(),  Diret.X);
 		AddMovementInput(GetActorRightVector(), Diret.Y);
 		IsMoving = true;
-
+		float ro = 0.0f;
 		if (Diret.X > 0.f)
 		{
 			AnimInstance->SetDir(0.f);
+			ro = -90.0f;
 			GetMesh()->SetRelativeRotation(FRotator(0, -90.0f, 0));
 			if (Diret.Y > 0.f)
 			{
+				ro = -45.0f;
 				GetMesh()->SetRelativeRotation(FRotator(0, -45.0f, 0));
 				AnimInstance->SetDir(45.f);
 			}
 
 			else if (Diret.Y < 0.f)
 			{
+				ro = -135.0f;
 				GetMesh()->SetRelativeRotation(FRotator(0, -135.0f, 0));
 				AnimInstance->SetDir(-45.f);
 			}
@@ -274,16 +279,19 @@ void AMyCharacter::MoveKey(const FInputActionValue& Value)
 
 		else if (Diret.X < 0.f)
 		{
+			ro = -270.0f;
 			AnimInstance->SetDir(180.f);
 			GetMesh()->SetRelativeRotation(FRotator(0, -270.0f, 0));
 			if (Diret.Y > 0.f)
 			{
+				ro = -315.0f;
 				GetMesh()->SetRelativeRotation(FRotator(0, -315.0f, 0));
 				AnimInstance->SetDir(135.f);
 			}
 
 			else if (Diret.Y < 0.f)
 			{
+				ro = -225.0f;
 				GetMesh()->SetRelativeRotation(FRotator(0, -225.0f, 0));
 				AnimInstance->SetDir(-135.f);
 			}
@@ -293,15 +301,28 @@ void AMyCharacter::MoveKey(const FInputActionValue& Value)
 		{
 			if (Diret.Y > 0.f)
 			{
+				ro = 0.0f;
 				GetMesh()->SetRelativeRotation(FRotator(0, 0.0f, 0));
 			}
 
 			else if (Diret.Y < 0.f)
 			{
+				ro = -180.0f;
 				GetMesh()->SetRelativeRotation(FRotator(0, -180.0f, 0));
 			}
 		}
-		
+		if (HasAuthority())
+		{
+			AMyPlayerState* PS = GetPlayerState<AMyPlayerState>();
+			if(PS)
+			PS->MeshPitch_H = ro;
+		}
+		else
+		{
+			AMainPlayerController* PC = Cast<AMainPlayerController>(GetController());
+			if (PC)
+				PC->Sever_SendtheClientMeshPitch(ro);
+		}
 		//���� �ӵ�(velocity) ���͸� �������ϰԡ� ����ȭ�ؼ� ���⸸ ���� ���� ���� ���ϴ� �Լ�
 		// GetVelocity().GetSafeNormal()  
 		//GetVelocity().GetSafeNormal() �̰� �̿��ؼ� �ֽŻ��°� ���� �ٷκ��� �ִ��� ����
@@ -363,7 +384,7 @@ void AMyCharacter::BackKey(const FInputActionValue& Value)
 		BackMoving = true;
 		DashMoving = true;
 		GetWorldTimerManager().ClearTimer(DashTimer);
-		GetWorld()->GetTimerManager().SetTimer(DashTimer, this, &AMyCharacter::EndDash, 0.5, false);
+		GetWorld()->GetTimerManager().SetTimer(DashTimer, this, &AMyCharacter::EndDash, 1.0, false);
 		if (AnimInstance)
 			AnimInstance->PlayBack();
 	}
@@ -382,7 +403,7 @@ void AMyCharacter::DashKey(const FInputActionValue& Value)
 		DashMoving = true;
 		BackMoving = true;
 		GetWorldTimerManager().ClearTimer(DashTimer);
-		GetWorld()->GetTimerManager().SetTimer(DashTimer, this, &AMyCharacter::EndDash, 0.5, false);
+		GetWorld()->GetTimerManager().SetTimer(DashTimer, this, &AMyCharacter::EndDash, 1.0, false);
 		if (AnimInstance)
 			AnimInstance->PlayBack();
 	}
