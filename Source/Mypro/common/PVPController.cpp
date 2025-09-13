@@ -62,6 +62,7 @@ void APVPController::Tick(float DeltaTime)
 			}
 			if(ClientPawn)
 				ClientPawn->GetMesh()->SetRelativeRotation(FRotator(0, PS->MeshPitch_C,0));
+		    
 		}
 		else
 		{
@@ -69,7 +70,7 @@ void APVPController::Tick(float DeltaTime)
 			AMainPlayerController* PC = Cast<AMainPlayerController>(GetWorld()->GetFirstPlayerController());
 			if (PC)
 			{
-				APawn* mych = Cast<APawn>(PC->GetPawn());
+				APawn* mych = PC->GetPawn();
 				if(mych)
 				mych->SetActorRotation(FRotator(0, 90, 0));
 				PC->Sever_GettheMPandHP();

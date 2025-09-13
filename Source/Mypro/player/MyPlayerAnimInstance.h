@@ -42,12 +42,13 @@ protected:
 
 	int32		AttackSectionIndex = 0;
 	const FPlayerAnimInfo* AnimInfo;
-
 	virtual void PostInitProperties() override;
 	virtual void NativeBeginPlay() override;
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 public:
+	void PlayAttack_interanl(bool Attackup, int32  attackindex);
+	void PlaySkill_interanl(int32  attackindex);
 	void SetDir(float Dir)
 	{
 		Direction = Dir;

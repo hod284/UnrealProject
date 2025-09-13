@@ -26,7 +26,6 @@ void UMyPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	AMyCharacter * PlayerCharacter =
 		Cast<AMyCharacter>(TryGetPawnOwner());
 
-	// ���� ��ü�� ��ȿ�ϴٸ�.
 	if (IsValid(PlayerCharacter))
 	{
 		UCharacterMovementComponent* Movement =
@@ -52,7 +51,6 @@ void UMyPlayerAnimInstance::PlayAttack()
 	{
 		if (!Montage_IsPlaying(AttackUpMontage) && AttackSectionIndex < AttackSectionArray.Num())
 		{
-			// ��Ÿ�ָ� �����Ų��.
 			Montage_Play(AttackUpMontage);
 			Montage_JumpToSection(AttackSectionArray[AttackSectionIndex], AttackUpMontage);
 			AttackSectionIndex += 1;
@@ -64,12 +62,12 @@ void UMyPlayerAnimInstance::PlayAttack()
 			return;
 		if (!Montage_IsPlaying(AttackMontage) && AttackSectionIndex < AttackSectionArray.Num())
 		{
-			// ��Ÿ�ָ� �����Ų��.
 			Montage_Play(AttackMontage);
 			Montage_JumpToSection(AttackSectionArray[AttackSectionIndex], AttackMontage);
 			AttackSectionIndex += 1;
 		}
 	}
+	PlayerCharacter->SendtheMontageAttack(PlayerCharacter->GetCanskill3(),AttackSectionIndex);
 }
 
 void UMyPlayerAnimInstance::PlayBack()
@@ -78,7 +76,6 @@ void UMyPlayerAnimInstance::PlayBack()
 		return;
 	if (!Montage_IsPlaying(BackMontage))
 	{
-		// ��Ÿ�ָ� �����Ų��.
 		Montage_Play(BackMontage);
 	}
 }
@@ -87,13 +84,14 @@ void UMyPlayerAnimInstance::PlaySkill(int32 index)
 {
 	if (!IsValid(SkillMontage))
 		return;
-	if (!Montage_IsPlaying(SkillMontage))
+	if (!Montage_IsPlaying(SkillMontage)) 
 	{
-		// ��Ÿ�ָ� �����Ų��.
 		Montage_Play(SkillMontage,1.0f);
 		Montage_JumpToSection(SkillSectionArray[index], SkillMontage);
 		Montage_SetNextSection(SkillSectionArray[index],FName(""));
 	}
+   AMyCharacter* Player = Cast<AMyCharacter>(TryGetPawnOwner());
+   Player->SendtheMontageSkill(index);
 }
 
 void UMyPlayerAnimInstance::Attackend(UAnimMontage* Montage, bool Interrupted)
@@ -201,5 +199,39 @@ void UMyPlayerAnimInstance::AniInite()
 			}
 			break;
 		}
+	}
+}
+void UMyPlayerAnimInstance::PlayAttack_interanl(bool Attackup , int32  attackindex)
+{
+	if (!Attackup)
+	{
+		if (!IsValid(AttackUpMontage))
+			return;
+		if (!Montage_IsPlaying(AttackUpMontage))
+		{
+			Montage_Play(AttackUpMontage);
+			Montage_JumpToSection(AttackSectionArray[attackindex], AttackUpMontage);
+		}
+	}
+	else
+	{
+		if (!IsValid(AttackMontage))
+			return;
+		if (!Montage_IsPlaying(AttackMontage))
+		{
+			Montage_Play(AttackMontage);
+			Montage_JumpToSection(AttackSectionArray[attackindex], AttackMontage);
+		}
+	}
+}
+void UMyPlayerAnimInstance::PlaySkill_interanl(int32  attackindex)
+{
+	if (!IsValid(SkillMontage))
+		return;
+	if (!Montage_IsPlaying(SkillMontage))
+	{
+		Montage_Play(SkillMontage, 1.0f);
+		Montage_JumpToSection(SkillSectionArray[attackindex], SkillMontage);
+		Montage_SetNextSection(SkillSectionArray[attackindex], FName(""));
 	}
 }

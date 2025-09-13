@@ -17,6 +17,7 @@ class MYPRO_API AMyCharacter : public ACharacter, public IGenericTeamAgentInterf
 	GENERATED_BODY()
 private:
 protected:
+	AMainPlayerController* PlayerController;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
@@ -115,7 +116,16 @@ protected:
 	// Sets default values for this character's properties
 	AMyCharacter();
 public:	
-	
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_PlayMontageAttack(bool up, int32 inde);
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_PlayMontageSkill(int32 index);
+	UFUNCTION(Server, Reliable)
+	void Server_PlayMontageAttack(bool up, int32 index);
+	UFUNCTION(Server, Reliable)
+	void Server_PlayMontageSkill(int32 index);
+	void SendtheMontageAttack(bool up, int32 index);
+	void SendtheMontageSkill(int32 index);
 	// 가상함수 
 	virtual void NAttack();
 	virtual void  Skill1();

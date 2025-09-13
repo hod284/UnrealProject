@@ -28,7 +28,7 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	AnimInstance = Cast<UMyPlayerAnimInstance>(GetMesh()->GetAnimInstance());
-	AMainPlayerController* PlayerController = Cast<AMainPlayerController>(GetController());
+    PlayerController = Cast<AMainPlayerController>(GetController());
 	if (PlayerController)
 	{
 		UEnhancedInputLocalPlayerSubsystem* Subsystem =
@@ -53,6 +53,7 @@ void AMyCharacter::BeginPlay()
 		PS->Inventoryco->Itemadd.AddUObject(this, &AMyCharacter::SetAddCanPortal);
 		PS->Inventoryco->ItemMinus.AddUObject(this,& AMyCharacter::SetMinusCanPortal);
 	}
+	GetCharacterMovement()->NetworkSmoothingMode = ENetworkSmoothingMode::Linear;
 }
 void AMyCharacter::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
@@ -470,8 +471,6 @@ void AMyCharacter::Skill4coolTime(float speed)
 	Skill4cool = 1.0F;
 	Skill4Speed = speed;
 }
-
-
 void AMyCharacter::NAttack()
 {
 
@@ -511,4 +510,45 @@ void AMyCharacter::AddMpbar(float cost)
   MP = mpTemp / 100;
   UE_LOG(LogMypro, Warning, TEXT("addPMP:%f"), MP);
   ui->OnSyncMp_P.Broadcast(MP);
+}
+void AMyCharacter::SendtheMontageAttack(bool up, int32 index)
+{
+	if (HasAuthority())
+		Multicast_PlayMontageAttack(up, index);
+	else
+		Server_PlayMontageAttack(up, index);
+}
+
+void AMyCharacter::SendtheMontageSkill(int32 index)
+{
+	if (HasAuthority())
+		Multicast_PlayMontageSkill(index);
+	else
+		Server_PlayMontageSkill(index);
+}
+void AMyCharacter::Multicast_PlayMontageAttack_Implementation(bool up, int32 index)
+{
+	if (AnimInstance)
+	{
+		AnimInstance->PlayAttack_interanl(up, index);
+		UE_LOG(LogMypro, Warning, TEXT("attackindex : %d"), index);
+	}
+}
+
+void AMyCharacter::Multicast_PlayMontageSkill_Implementation(int32 index)
+{
+	if (AnimInstance)
+	{
+		AnimInstance->PlaySkill_interanl(index);
+		UE_LOG(LogMypro, Warning, TEXT("skillindex : %d"), index);
+	}
+}
+void AMyCharacter::Server_PlayMontageAttack_Implementation(bool up, int32 index)
+{
+	Multicast_PlayMontageAttack(up, index);
+}
+
+void AMyCharacter::Server_PlayMontageSkill_Implementation(int32 index)
+{
+	Multicast_PlayMontageSkill(index);
 }
