@@ -42,6 +42,7 @@ void APVPController::BeginPlay()
 				UE_LOG(LogTemp, Warning, TEXT("Players:%s"), *actor->GetName());
 			}
 			}));
+		GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetGameState(NowGameState::pvp);
 	}
 }
 

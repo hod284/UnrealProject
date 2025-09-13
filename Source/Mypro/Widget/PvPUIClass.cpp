@@ -6,6 +6,7 @@
 #include "../player/MyPlayerState.h"
 void UPvPUIClass::NativeConstruct()
 {
+	Super::NativeConstruct();
 	Skill1 = Cast<USkillStatus>(GetWidgetFromName("SkillUI1"));
 	Skill2 = Cast<USkillStatus>(GetWidgetFromName("SkillUI2"));
 	Skill3 = Cast<USkillStatus>(GetWidgetFromName("SkillUI3"));
@@ -85,22 +86,25 @@ void UPvPUIClass::SetHostImage(FString Path)
 void UPvPUIClass::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
-	if (PC->HasAuthority())
+	PC = Cast<AMainPlayerController>(GetWorld()->GetFirstPlayerController());
+	if (PC)
 	{
-		APlayerController* PCfirst = GetWorld()->GetFirstPlayerController();
-		AMyPlayerState* PS = Cast<AMyPlayerState>(PCfirst->PlayerState);
-		PS->PlayerHP_H = HostHp->GetPercent();
-		PS->PlayerMP_H = HostMp->GetPercent();
+		if (PC->HasAuthority())
+		{
+			AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
+			PS->PlayerHP_H = HostHp->GetPercent();
+			PS->PlayerMP_H = HostMp->GetPercent();
+		}
+		else
+		{
+			PC->Sever_SendtheClientHP(ClientHp->GetPercent());
+			PC->Sever_SendtheClientMP(ClientMp->GetPercent());
+		}
+		Skill1->SetTIme(Percent1);
+		Skill2->SetTIme(Percent2);
+		Skill3->SetTIme(Percent3);
+		Skill4->SetTIme(Percent4);
 	}
-	else
-	{
-		PC->Sever_SendtheClientHP(ClientHp->GetPercent());
-		PC->Sever_SendtheClientMP(ClientMp->GetPercent());
-	}
-	Skill1->SetTIme(Percent1);
-	Skill2->SetTIme(Percent2);
-	Skill3->SetTIme(Percent3);
-	Skill4->SetTIme(Percent4);
 }
 void UPvPUIClass::SetClientImage(FString Path)
 {

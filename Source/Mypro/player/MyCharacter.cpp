@@ -47,6 +47,7 @@ void AMyCharacter::BeginPlay()
 	SavedBrakingFriction = Move->BrakingFriction;
 	SavedBrakingDecel = Move->BrakingDecelerationWalking;
 	ui = Cast<UPlayMainUI>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPlayMainUI_widget());
+	uipvp = Cast<UPvPUIClass>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPvP_widget());
 	Niagara->SetVisibility(false);
 	if (AMyPlayerState* PS = GetPlayerState<AMyPlayerState>())
 	{
@@ -93,54 +94,92 @@ void AMyCharacter::OnCapsuleEndOverlap(
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (ui)
+	PlayerController = Cast<AMainPlayerController>(GetController());
+	if (!Canskill1)
 	{
-		if (!Canskill1)
+		Skill1cool -= DeltaTime * Skill1Speed;
+		if(ui&& GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() ==NowGameState::playgame)
+		ui->SetPercent1(Skill1cool);
+		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
-			Skill1cool -= DeltaTime * Skill1Speed;
-			ui->SetPercent1(Skill1cool);
+			uipvp->SetPercent1(Skill1cool);
 		}
-		if (!Canskill2)
+	}
+	if (!Canskill2)
+	{
+		Skill2cool -= DeltaTime * Skill2Speed;
+		if (ui && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+		ui->SetPercent2(Skill2cool);
+		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
-			Skill2cool -= DeltaTime * Skill2Speed;
-			ui->SetPercent2(Skill2cool);
+			uipvp->SetPercent2(Skill2cool);
 		}
-		if (!Canskill3)
+	}
+	if (!Canskill3)
+	{
+		Skill3cool -= DeltaTime * Skill3Speed;
+		if (ui && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+		ui->SetPercent3(Skill3cool);
+		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
-			Skill3cool -= DeltaTime * Skill3Speed;
-			ui->SetPercent3(Skill3cool);
+			uipvp->SetPercent3(Skill3cool);
 		}
-		if (!Canskill4)
+	}
+	if (!Canskill4)
+	{
+		Skill4cool -= DeltaTime * Skill4Speed;
+		if (ui && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+		ui->SetPercent4(Skill4cool);
+		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
-			Skill4cool -= DeltaTime * Skill4Speed;
-			ui->SetPercent4(Skill4cool);
+			uipvp->SetPercent4(Skill4cool);
 		}
-		if (Skill1cool < 0.0f)
+	}
+	if (Skill1cool < 0.0f)
+	{
+		Skill1cool = 1.0f;
+		Canskill1 = true;
+		if (ui && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+		ui->SetPercent1(1.0f);
+		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
-			Skill1cool = 1.0f;
-			Canskill1 = true;
-			ui->SetPercent1(1.0f);
+			uipvp->SetPercent1(1.0f);
 		}
-		if (Skill2cool < 0.0f)
+	}
+	if (Skill2cool < 0.0f)
+	{
+		Skill2cool = 1.0f;
+		Canskill2 = true;
+		if (ui && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+		ui->SetPercent2(1.0f);
+		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
-			Skill2cool = 1.0f;
-			Canskill2 = true;
-			ui->SetPercent2(1.0f);
+			uipvp->SetPercent2(1.0f);
 		}
-		if (Skill3cool < 0.0f)
+	}
+	if (Skill3cool < 0.0f)
+	{
+		Skill3cool = 1.0f;
+		Canskill3 = true;
+		if (ui && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+		ui->SetPercent3(1.0f);
+		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
-			Skill3cool = 1.0f;
-			Canskill3 = true;
-			ui->SetPercent3(1.0f);
-			GetMesh()->SetOverlayMaterial(nullptr);
-			AttackDamage -= AttackDamageUp;
-			Niagara->SetVisibility(false);
+			uipvp->SetPercent3(1.0f);
 		}
-		if (Skill4cool < 0.0f)
+		AttackDamage -= AttackDamageUp;
+		GetMesh()->SetOverlayMaterial(nullptr);
+		Niagara->SetVisibility(false);
+	}
+	if (Skill4cool < 0.0f)
+	{
+		Skill4cool = 1.0f;
+		Canskill4 = true;
+		if (ui && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+		ui->SetPercent4(1.0f);
+		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
-			Skill4cool = 1.0f;
-			Canskill4 = true;
-			ui->SetPercent4(1.0f);
+			uipvp->SetPercent4(1.0f);
 		}
 	}
 	if (LookAt)

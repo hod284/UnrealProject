@@ -50,6 +50,7 @@ protected:
 	float SavedBrakingFriction = 8.f;
 	float SavedBrakingDecel = 2048.f;
 	UPlayMainUI* ui;
+	UPvPUIClass* uipvp;
 	bool Canskill1 = true;
 	float Skill1cool = 1.0F;
 	float Skill1Speed = 0.0F;
