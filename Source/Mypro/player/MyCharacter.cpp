@@ -97,42 +97,86 @@ void AMyCharacter::Tick(float DeltaTime)
 	PlayerController = Cast<AMainPlayerController>(GetController());
 	if (!Canskill1)
 	{
-		Skill1cool -= DeltaTime * Skill1Speed;
-		if(ui&& GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() ==NowGameState::playgame)
-		ui->SetPercent1(Skill1cool);
+		if (ui && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+		{
+			Skill1cool -= DeltaTime * Skill1Speed;
+			ui->SetPercent1(Skill1cool);
+		}
 		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
-			uipvp->SetPercent1(Skill1cool);
+			if (HasAuthority())
+			{
+				Skill1cool -= DeltaTime * Skill1Speed;
+				uipvp->SetPercent1(Skill1cool);
+			}
+			else if(PlayerController&&PlayerController->IsLocalController())
+			{
+				Skill1cool -= DeltaTime * Skill1Speed;
+				uipvp->SetPercent1_c(Skill1cool);
+			}
 		}
 	}
 	if (!Canskill2)
 	{
-		Skill2cool -= DeltaTime * Skill2Speed;
 		if (ui && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
-		ui->SetPercent2(Skill2cool);
+		{
+			Skill2cool -= DeltaTime * Skill2Speed;
+			ui->SetPercent2(Skill2cool);
+		}
 		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
-			uipvp->SetPercent2(Skill2cool);
+			if (HasAuthority())
+			{
+				Skill2cool -= DeltaTime * Skill2Speed;
+				uipvp->SetPercent2(Skill2cool);
+			}
+			else if (PlayerController && PlayerController->IsLocalController())
+			{
+				Skill2cool -= DeltaTime * Skill2Speed;
+				uipvp->SetPercent2_c(Skill2cool);
+			}
 		}
 	}
 	if (!Canskill3)
 	{
-		Skill3cool -= DeltaTime * Skill3Speed;
 		if (ui && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
-		ui->SetPercent3(Skill3cool);
+		{
+			Skill3cool -= DeltaTime * Skill3Speed;
+			ui->SetPercent3(Skill3cool);
+		}
 		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
-			uipvp->SetPercent3(Skill3cool);
+			if (HasAuthority())
+			{
+				Skill3cool -= DeltaTime * Skill3Speed;
+				uipvp->SetPercent3(Skill3cool);
+			}
+			else if (PlayerController && PlayerController->IsLocalController())
+			{
+				Skill3cool -= DeltaTime * Skill3Speed;
+				uipvp->SetPercent3_c(Skill3cool);
+			}
 		}
 	}
 	if (!Canskill4)
 	{
-		Skill4cool -= DeltaTime * Skill4Speed;
 		if (ui && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
-		ui->SetPercent4(Skill4cool);
+		{
+			Skill4cool -= DeltaTime * Skill4Speed;
+			ui->SetPercent4(Skill4cool);
+		}
 		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
-			uipvp->SetPercent4(Skill4cool);
+			if (HasAuthority())
+			{
+				Skill4cool -= DeltaTime * Skill4Speed;
+				uipvp->SetPercent4(Skill4cool);
+			}
+			else if (PlayerController && PlayerController->IsLocalController())
+			{
+				Skill4cool -= DeltaTime * Skill4Speed;
+				uipvp->SetPercent4_c(Skill4cool);
+			}
 		}
 	}
 	if (Skill1cool < 0.0f)
@@ -143,7 +187,10 @@ void AMyCharacter::Tick(float DeltaTime)
 		ui->SetPercent1(1.0f);
 		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
+			if (HasAuthority())
 			uipvp->SetPercent1(1.0f);
+			else if (PlayerController && PlayerController->IsLocalController())
+				uipvp->SetPercent1_c(Skill1cool);
 		}
 	}
 	if (Skill2cool < 0.0f)
@@ -154,7 +201,10 @@ void AMyCharacter::Tick(float DeltaTime)
 		ui->SetPercent2(1.0f);
 		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
+			if(HasAuthority())
 			uipvp->SetPercent2(1.0f);
+			else if (PlayerController && PlayerController->IsLocalController())
+			uipvp->SetPercent2_c(1.0f);
 		}
 	}
 	if (Skill3cool < 0.0f)
@@ -165,7 +215,10 @@ void AMyCharacter::Tick(float DeltaTime)
 		ui->SetPercent3(1.0f);
 		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
+			if (HasAuthority())
 			uipvp->SetPercent3(1.0f);
+			else if(PlayerController && PlayerController->IsLocalController())
+				uipvp->SetPercent3_c(1.0f);
 		}
 		AttackDamage -= AttackDamageUp;
 		GetMesh()->SetOverlayMaterial(nullptr);
@@ -179,7 +232,10 @@ void AMyCharacter::Tick(float DeltaTime)
 		ui->SetPercent4(1.0f);
 		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
+			if(HasAuthority())
 			uipvp->SetPercent4(1.0f);
+			else if (PlayerController && PlayerController->IsLocalController())
+				uipvp->SetPercent4_c(1.0f);
 		}
 	}
 	if (LookAt)

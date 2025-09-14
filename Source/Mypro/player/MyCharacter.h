@@ -29,14 +29,13 @@ protected:
 	TObjectPtr<UMyPlayerAnimInstance> AnimInstance;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<USceneComponent> CameraHead;
-	// 플레이어 급백 방향
 	FVector CurrentVelocity;
-	bool DashMoving = false;// 대쉬기능
-	bool BackMoving = false;// 백기능
-	bool IsMoving = false;// 이동중인지 아닌지
-	bool LookAt = true;// 카메라 바라보기
-	bool CameraRo = false;// 카메라 돌리기
-	bool CanPortal = false;// 카메라 돌리기
+	bool DashMoving = false;
+	bool BackMoving = false;
+	bool IsMoving = false;
+	bool LookAt = true;
+	bool CameraRo = false;
+	bool CanPortal = false;
 	FGenericTeamId	TeamID;
 	float HP = 1.0F;
 	float MP = 1.0F;
@@ -67,12 +66,11 @@ protected:
 	USceneComponent* TargetTransform;
 	int32 AttackDamage;
 	int32 AttackDamageUp;
-	// 충돌
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, FVector NormalImpulse,
 		const FHitResult& Hit);
-	// 오버랩
+
 	UFUNCTION()
 	void OnCapsuleBeginOverlap(
 		UPrimitiveComponent* OverlappedComp,
@@ -81,14 +79,12 @@ protected:
 		int32 OtherBodyIndex,
 		bool bFromSweep,
 		const FHitResult& SweepResult);
-	// 오버랩 끝
 	UFUNCTION()
 	void OnCapsuleEndOverlap(
 		UPrimitiveComponent* OverlappedComp,
 		AActor* OtherActor,
 		UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex);
-	// 백대쉬 끝날때 호출
 	void EndDash();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -127,7 +123,6 @@ public:
 	void Server_PlayMontageSkill(int32 index);
 	void SendtheMontageAttack(bool up, int32 index);
 	void SendtheMontageSkill(int32 index);
-	// 가상함수 
 	virtual void NAttack();
 	virtual void  Skill1();
 	virtual void  Skill2();

@@ -59,10 +59,10 @@ protected:
 	void SetPMpBar(float da);
 public:
 	virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)override;
-	FOnDamage_M OnDamage_M;// ¸ó½ºÅÍ µ¥¹ÌÁö µ¨¸®°ÔÀÌÆ®
-	FOnStun OnStunDamage; //¸ó½ºÅÍ ½ºÅÏµ¥¹ÌÁö µ¨¸®°ÔÀÌÆ®
-	FOnDamage_P OnDamage_P;// µ¥¹ÌÁö ÇÃ·¹ÀÌ¾î µ¨¸®°ÔÀÌÆ®
-	FOnMp_P OnSyncMp_P;// ÇÃ·¹ÀÌ¾î MP¼Ò¸ð µ¨¸®°ÔÀÌÆ®
+	FOnDamage_M OnDamage_M;// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
+	FOnStun OnStunDamage; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
+	FOnDamage_P OnDamage_P;// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
+	FOnMp_P OnSyncMp_P;// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ MPï¿½Ò¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
 	UPlayMainUI(const FObjectInitializer& ObjectInitializer);
 	void SetSkill1Inite(FString Path);
 	void SetSkill2Inite(FString Path);

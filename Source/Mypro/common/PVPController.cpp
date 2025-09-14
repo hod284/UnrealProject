@@ -19,7 +19,7 @@ void APVPController::BeginPlay()
 	Super::BeginPlay();
 	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UINot);
 	ui = Cast<UPvPUIClass>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPvP_widget());
-	if (ui)
+	if (ui&& GetWorld()->GetFirstPlayerController()->IsLocalController())
 	{
 		ui->AddToViewport();
 		ui->SkillInite();

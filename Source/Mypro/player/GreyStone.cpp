@@ -44,7 +44,21 @@ void AGreyStone::Skill1()
 {
     Skill1coolTime(0.5f);
     FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 0);
-    FRotator SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
+    FRotator SpawnRotation = FRotator::ZeroRotator;
+    if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+        SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
+    else if (PlayerController)
+    {
+        if (PlayerController->HasAuthority())
+        {
+            SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
+        }
+        else
+        {
+
+            SpawnRotation = FRotator(0, (GetMesh()->GetRelativeRotation().Yaw - GetActorRotation().Yaw) - 90, 0);
+        }
+    }
     FVector  Loc = SpawnLocation;
     FRotator Rot = SpawnRotation;
     FVector  Scl = FVector(1, 1, 1);
@@ -59,7 +73,21 @@ void AGreyStone::Skill2()
 {
     Skill2coolTime(0.4f);
     FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 0);
-    FRotator SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
+    FRotator SpawnRotation = FRotator::ZeroRotator;
+    if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+        SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
+    else if (PlayerController)
+    {
+        if (PlayerController->HasAuthority())
+        {
+            SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
+        }
+        else
+        {
+
+            SpawnRotation = FRotator(0, (GetMesh()->GetRelativeRotation().Yaw - GetActorRotation().Yaw) - 90, 0);
+        }
+    }
     FVector  Loc = SpawnLocation;
     FRotator Rot = SpawnRotation;
     FVector  Scl = FVector(1, 1, 1);
@@ -83,7 +111,7 @@ void AGreyStone::Skill4()
 {
     Skill4coolTime(0.1f);
     FVector SpawnLocation = FVector(TargetLocation.X, TargetLocation.Y, 0);
-    FRotator SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
+    FRotator SpawnRotation = FRotator::ZeroRotator;
     FVector  Loc = SpawnLocation;
     FRotator Rot = SpawnRotation;
     FVector  Scl = FVector(1, 1, 1);

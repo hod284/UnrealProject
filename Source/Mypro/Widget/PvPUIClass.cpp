@@ -94,16 +94,20 @@ void UPvPUIClass::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 			AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
 			PS->PlayerHP_H = HostHp->GetPercent();
 			PS->PlayerMP_H = HostMp->GetPercent();
+			Skill1->SetTIme(Percent1);
+			Skill2->SetTIme(Percent2);
+			Skill3->SetTIme(Percent3);
+			Skill4->SetTIme(Percent4);
 		}
-		else
+		else if (PC->IsLocalController())
 		{
 			PC->Sever_SendtheClientHP(ClientHp->GetPercent());
 			PC->Sever_SendtheClientMP(ClientMp->GetPercent());
+			Skill1->SetTIme(Percent1_c);
+			Skill2->SetTIme(Percent2_c);
+			Skill3->SetTIme(Percent3_c);
+			Skill4->SetTIme(Percent4_c);
 		}
-		Skill1->SetTIme(Percent1);
-		Skill2->SetTIme(Percent2);
-		Skill3->SetTIme(Percent3);
-		Skill4->SetTIme(Percent4);
 	}
 }
 void UPvPUIClass::SetClientImage(FString Path)
