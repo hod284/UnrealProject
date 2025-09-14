@@ -32,6 +32,8 @@ protected:
 	TObjectPtr<UCapsuleComponent> CapsuleComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<UMonsterPawnMovement> MovementComponent;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
+	TObjectPtr<UMaterial> Overlap;
 	FGenericTeamId	TeamID;
 	TObjectPtr<UBehaviorTree> MonsterBehaviorTree;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CusteomRange")
@@ -61,6 +63,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "portal")
 	TSubclassOf<APortalClass> Portal;
 	UPlayMainUI* UI;
+	FTimerHandle Timmer;
 public:	
 	void Start();
 	void Attack1();

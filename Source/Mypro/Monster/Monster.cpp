@@ -146,6 +146,11 @@ void AMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	MeshComponent->SetOverlayMaterial(Overlap);
+	GetWorld()->GetTimerManager().ClearTimer(Timmer);
+	GetWorld()->GetTimerManager().SetTimer(Timmer, [this]() {
+		MeshComponent->SetOverlayMaterial(nullptr);
+		}, 0.3, false);
 	if (CanStun)
 	{
 		MonsterStun -= DamageAmount;
