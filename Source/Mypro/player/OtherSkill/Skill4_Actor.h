@@ -23,12 +23,12 @@ protected:
 	TObjectPtr<UCapsuleComponent> BoxColider;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	int32 AttackDamage;
-	// Ãæµ¹
+	// ï¿½æµ¹
 	UFUNCTION()
 	void OnHit_Skil4(UPrimitiveComponent* HitComp, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, FVector NormalImpulse,
 		const FHitResult& Hit);
-	// ¿À¹ö·¦
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	UFUNCTION()
 	void OnCapsuleBeginOverlap_Skil4(
 		UPrimitiveComponent* OverlappedComp,
@@ -37,7 +37,7 @@ protected:
 		int32 OtherBodyIndex,
 		bool bFromSweep,
 		const FHitResult& SweepResult);
-	// ¿À¹ö·¦ ³¡
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 	UFUNCTION()
 	void OnCapsuleEndOverlap_Skil4(
 		UPrimitiveComponent* OverlappedComp,

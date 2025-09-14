@@ -32,6 +32,24 @@ public:
 	virtual void  Skill2()override;
 	virtual void  Skill3()override;
 	virtual void  Skill4()override;
-
+	ASkill1_Actor* A1;
+	ASkill2_Actor* A2;
+	ASkill4_Actor* A4;
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_PlaySkill1(FTransform form);
+	UFUNCTION(Server, Reliable)
+	void Server_PlaySkill1(FTransform form);
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_PlaySkill2(FTransform form);
+	UFUNCTION(Server, Reliable)
+	void Server_PlaySkill2(FTransform form);
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_PlaySkill3();
+	UFUNCTION(Server, Reliable)
+	void Server_PlaySkill3();
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_PlaySkill4(FTransform form);
+	UFUNCTION(Server, Reliable)
+	void Server_PlaySkill4(FTransform form);
 	AGreyStone();
 };

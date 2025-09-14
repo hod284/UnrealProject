@@ -212,17 +212,23 @@ void AMyCharacter::Tick(float DeltaTime)
 		Skill3cool = 1.0f;
 		Canskill3 = true;
 		if (ui && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
-		ui->SetPercent3(1.0f);
+		{
+			GetMesh()->SetOverlayMaterial(nullptr);
+			Niagara->SetVisibility(false);
+			ui->SetPercent3(1.0f);
+		}
 		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
 			if (HasAuthority())
 			uipvp->SetPercent3(1.0f);
 			else if(PlayerController && PlayerController->IsLocalController())
 				uipvp->SetPercent3_c(1.0f);
+			if (HasAuthority())
+				Multicast_NullOverlap();
+			else
+				Server_NullOverlap();
 		}
 		AttackDamage -= AttackDamageUp;
-		GetMesh()->SetOverlayMaterial(nullptr);
-		Niagara->SetVisibility(false);
 	}
 	if (Skill4cool < 0.0f)
 	{
@@ -646,4 +652,14 @@ void AMyCharacter::Server_PlayMontageAttack_Implementation(bool up, int32 index)
 void AMyCharacter::Server_PlayMontageSkill_Implementation(int32 index)
 {
 	Multicast_PlayMontageSkill(index);
+}
+void AMyCharacter::Multicast_NullOverlap_Implementation()
+{
+	GetMesh()->SetOverlayMaterial(nullptr);
+	Niagara->SetVisibility(false);
+}
+
+void AMyCharacter::Server_NullOverlap_Implementation()
+{
+	Multicast_NullOverlap();
 }

@@ -52,6 +52,7 @@ void UMyPlayerAnimInstance::PlayAttack()
 		if (!Montage_IsPlaying(AttackUpMontage) && AttackSectionIndex < AttackSectionArray.Num())
 		{
 			Montage_Play(AttackUpMontage);
+			PlayerCharacter->SendtheMontageAttack(PlayerCharacter->GetCanskill3(), AttackSectionIndex);
 			Montage_JumpToSection(AttackSectionArray[AttackSectionIndex], AttackUpMontage);
 			AttackSectionIndex += 1;
 		}
@@ -63,11 +64,11 @@ void UMyPlayerAnimInstance::PlayAttack()
 		if (!Montage_IsPlaying(AttackMontage) && AttackSectionIndex < AttackSectionArray.Num())
 		{
 			Montage_Play(AttackMontage);
+			PlayerCharacter->SendtheMontageAttack(PlayerCharacter->GetCanskill3(), AttackSectionIndex);
 			Montage_JumpToSection(AttackSectionArray[AttackSectionIndex], AttackMontage);
 			AttackSectionIndex += 1;
 		}
 	}
-	PlayerCharacter->SendtheMontageAttack(PlayerCharacter->GetCanskill3(),AttackSectionIndex);
 }
 
 void UMyPlayerAnimInstance::PlayBack()

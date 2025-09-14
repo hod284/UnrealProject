@@ -121,6 +121,10 @@ public:
 	void Server_PlayMontageAttack(bool up, int32 index);
 	UFUNCTION(Server, Reliable)
 	void Server_PlayMontageSkill(int32 index);
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_NullOverlap();
+	UFUNCTION(Server, Reliable)
+	void Server_NullOverlap();
 	void SendtheMontageAttack(bool up, int32 index);
 	void SendtheMontageSkill(int32 index);
 	virtual void NAttack();

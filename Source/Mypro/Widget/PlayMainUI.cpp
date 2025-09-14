@@ -73,23 +73,23 @@ bool UPlayMainUI::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent
 		if (IsValid( PS) )
 			PS->Inventoryco->ItemMinus.Broadcast(Op->SourceSlot->GetName());
 		Op->SourceSlot->SetName("");
-		// 1) Àý´ë ½ºÅ©¸°ÁÂÇ¥ ¡æ ºäÆ÷Æ® ÁÂÇ¥
+		// 1) ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å©ï¿½ï¿½ï¿½ï¿½Ç¥ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½Ç¥
 		FVector2D Abs = InDragDropEvent.GetScreenSpacePosition();
 		FGeometry ViewGeom = UWidgetLayoutLibrary::GetViewportWidgetGeometry(this);
 		FVector2D ViewPos = ViewGeom.AbsoluteToLocal(Abs);
 
-		// 2) ºäÆ÷Æ® ÁÂÇ¥ ¡æ ¿ùµå ½ÃÀÛÁ¡/¹æÇâ
+		// 2) ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½Ç¥ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½
 		FVector Origin, Dir;
 		PC->DeprojectScreenPositionToWorld(ViewPos.X, ViewPos.Y, Origin, Dir);
 
-		// 3) »ç¼±(´ë°¢)À¸·Î °¢µµ ±â¿ïÀÌ±â
-		//    ¿¹: ¿ìÃøÀ¸·Î Yaw +20¡Æ, À§·Î Pitch +10¡Æ µé¾î¿Ã¸®±â
-		 float YawDeg = -40.f;  // ÁÂ(-) / ¿ì(+)
-		 float PitchDeg = -10.f;  // À§(-) / ¾Æ·¡(+), Rotator ±ÔÄ¢ ÁÖÀÇ
+		// 3) ï¿½ç¼±(ï¿½ë°¢)ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ì±ï¿½
+		//    ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Yaw +20ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ Pitch +10ï¿½ï¿½ ï¿½ï¿½ï¿½Ã¸ï¿½ï¿½ï¿½
+		 float YawDeg = -40.f;  // ï¿½ï¿½(-) / ï¿½ï¿½(+)
+		 float PitchDeg = -10.f;  // ï¿½ï¿½(-) / ï¿½Æ·ï¿½(+), Rotator ï¿½ï¿½Ä¢ ï¿½ï¿½ï¿½ï¿½
 		 FRotator DeltaRot(PitchDeg, YawDeg, 0.f);
 		 FVector  DiagDir = DeltaRot.RotateVector(Dir).GetSafeNormal();
 
-		// 4) Æ®·¹ÀÌ½º(¶¥¸¸ ¸ÂÃß°í ½ÍÀ¸¸é Ã¤³Î/¿ÀºêÁ§Æ® Å¸ÀÔ Á¶Á¤)
+		// 4) Æ®ï¿½ï¿½ï¿½Ì½ï¿½(ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¤ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
 		 float MaxDist = 200000.f;
 		 FVector Start = Origin;
 		 FVector End = Start + DiagDir * MaxDist;
@@ -98,15 +98,15 @@ bool UPlayMainUI::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent
 		FCollisionQueryParams Params(SCENE_QUERY_STAT(DropDiagTrace), /*bTraceComplex=*/true);
 		if (APawn* Pawn = PC->GetPawn()) Params.AddIgnoredActor(Pawn);
 
-		// (A) °¡º±°Ô: °¡½Ã¼º Ã¤³Î
+		// (A) ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½Ã¼ï¿½ Ã¤ï¿½ï¿½
 		bool bHit = GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params);
 
-		// (B) Áö¸é¸¸: ¿ùµå½ºÅÂÆ½¸¸ ¸ÂÃß±â
+		// (B) ï¿½ï¿½ï¿½é¸¸: ï¿½ï¿½ï¿½å½ºï¿½ï¿½Æ½ï¿½ï¿½ ï¿½ï¿½ï¿½ß±ï¿½
 		// FCollisionObjectQueryParams Obj;
 		// Obj.AddObjectTypesToQuery(ECC_WorldStatic);
 		// bool bHit = GetWorld()->LineTraceSingleByObjectType(Hit, Start, End, Obj, Params);
 
-		// µð¹ö±×
+		// ï¿½ï¿½ï¿½ï¿½ï¿½
 		DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 2.f, 0, 1.f);
 
 		if (!bHit) 

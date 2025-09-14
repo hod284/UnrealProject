@@ -31,7 +31,31 @@ protected:
 	TSubclassOf<ASlashAttack_Magition > Attack;
 	virtual void BeginPlay() override;
 	int32 Atn = 0;
-     
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_PlayASkill(FTransform form);
+	UFUNCTION(Server, Reliable)
+	void Server_PlayASkill(FTransform form);
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_PlaySkill1(FTransform form);
+	UFUNCTION(Server, Reliable)
+	void Server_PlaySkill1(FTransform form);
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_PlaySkill2(FTransform form);
+	UFUNCTION(Server, Reliable)
+	void Server_PlaySkill2(FTransform form);
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_PlaySkill3(FTransform form);
+	UFUNCTION(Server, Reliable)
+	void Server_PlaySkill3(FTransform form);
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_PlaySkill4(FTransform form);
+	UFUNCTION(Server, Reliable)
+	void Server_PlaySkill4(FTransform form);
+	ASlashAttack_Magition* AS;
+	ASkill1_Magition* A1;
+	ASkill2_Magition* A2;
+	ASkill3_Magition* A3;
+	ASkill4_Magition* A4;
 public:
 
 	ADarkMagition();

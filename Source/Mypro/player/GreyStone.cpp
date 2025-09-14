@@ -53,20 +53,30 @@ void AGreyStone::Skill1()
         {
             SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
         }
-        else
+        else if (PlayerController->IsLocalController())
         {
-
             SpawnRotation = FRotator(0, (GetMesh()->GetRelativeRotation().Yaw - GetActorRotation().Yaw) - 90, 0);
         }
     }
+    FRotator SpawnRotationShowing = SpawnRotation;
     FVector  Loc = SpawnLocation;
-    FRotator Rot = SpawnRotation;
+    FRotator Rot = SpawnRotationShowing;
     FVector  Scl = FVector(1, 1, 1);
     FTransform Xform(Rot, Loc, Scl);
-    ASkill1_Actor* A = GetWorld()->SpawnActorDeferred<ASkill1_Actor>(Sk1, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-    A->SetAttackDamage(Info->Skill1_ATK);
-    UGameplayStatics::FinishSpawningActor(A, Xform);
-    MpbarSync(10.0F);
+    if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+    {
+        A1 = GetWorld()->SpawnActorDeferred<ASkill1_Actor>(Sk1, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+        A1->SetAttackDamage(Info->Skill1_ATK);
+        UGameplayStatics::FinishSpawningActor(A1, Xform);
+        MpbarSync(10.0F);
+    }
+    else if(GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+    {
+        if (HasAuthority())
+            Multicast_PlaySkill1(Xform);
+        else
+            Server_PlaySkill1(Xform);
+    }
 }
 
 void AGreyStone::Skill2()
@@ -82,29 +92,50 @@ void AGreyStone::Skill2()
         {
             SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
         }
-        else
+        else if (PlayerController->IsLocalController())
         {
 
             SpawnRotation = FRotator(0, (GetMesh()->GetRelativeRotation().Yaw - GetActorRotation().Yaw) - 90, 0);
         }
     }
+    FRotator SpawnRotationShowing = SpawnRotation;
     FVector  Loc = SpawnLocation;
-    FRotator Rot = SpawnRotation;
+    FRotator Rot = SpawnRotationShowing;
     FVector  Scl = FVector(1, 1, 1);
     FTransform Xform(Rot, Loc, Scl);
-    ASkill2_Actor* A = GetWorld()->SpawnActorDeferred<ASkill2_Actor>(Sk2, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-    A->SetAttackDamage(Info->Skill2_ATK);
-    UGameplayStatics::FinishSpawningActor(A, Xform);
-    MpbarSync(10.0F);
+    if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+    {
+        A2 = GetWorld()->SpawnActorDeferred<ASkill2_Actor>(Sk2, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+        A2->SetAttackDamage(Info->Skill2_ATK);
+        UGameplayStatics::FinishSpawningActor(A2, Xform);
+        MpbarSync(10.0F);
+    }
+    else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+    {
+        if (HasAuthority())
+            Multicast_PlaySkill2(Xform);
+        else
+            Server_PlaySkill2(Xform);
+    }
 }
 
 void AGreyStone::Skill3()
 {
     Skill3coolTime(0.2f);
-    GetMesh()->SetOverlayMaterial(Mat);
     AttackDamage += AttackDamageUp;
-    Niagara->SetVisibility(true);
-    MpbarSync(10.0F);
+    if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+    {
+        Niagara->SetVisibility(true);
+        GetMesh()->SetOverlayMaterial(Mat);
+        MpbarSync(10.0F);
+    }
+    else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+    {
+        if (HasAuthority())
+            Multicast_PlaySkill3();
+        else
+            Server_PlaySkill3();
+    }
 }
 
 void AGreyStone::Skill4()
@@ -116,13 +147,70 @@ void AGreyStone::Skill4()
     FRotator Rot = SpawnRotation;
     FVector  Scl = FVector(1, 1, 1);
     FTransform Xform(Rot, Loc, Scl);
-    ASkill4_Actor* A = GetWorld()->SpawnActorDeferred<ASkill4_Actor>(Sk4, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-    A->SetAttackDamage(Info->Skill4_ATK);
-    UGameplayStatics::FinishSpawningActor(A, Xform);
-    MpbarSync(10.0F);
+    if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+    {
+        A4 = GetWorld()->SpawnActorDeferred<ASkill4_Actor>(Sk4, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+        A4->SetAttackDamage(Info->Skill4_ATK);
+        UGameplayStatics::FinishSpawningActor(A4, Xform);
+        MpbarSync(10.0F);
+    }
+    else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+    {
+        if (HasAuthority())
+            Multicast_PlaySkill4(Xform);
+        else
+            Server_PlaySkill4(Xform);
+    }
 }
 
 AGreyStone::AGreyStone()
 {
 
 }
+void AGreyStone::Multicast_PlaySkill1_Implementation(FTransform form)
+{
+    A1 = GetWorld()->SpawnActorDeferred<ASkill1_Actor>(Sk1, form, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+    A1->SetAttackDamage(Info->Skill1_ATK);
+    UGameplayStatics::FinishSpawningActor(A1, form);
+}
+
+void AGreyStone::Server_PlaySkill1_Implementation(FTransform form)
+{
+    Multicast_PlaySkill1(form);
+}
+
+void AGreyStone::Multicast_PlaySkill2_Implementation(FTransform form)
+{
+    A2 = GetWorld()->SpawnActorDeferred<ASkill2_Actor>(Sk2, form, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+    A2->SetAttackDamage(Info->Skill2_ATK);
+    UGameplayStatics::FinishSpawningActor(A2, form);
+}
+
+void AGreyStone::Server_PlaySkill2_Implementation(FTransform form)
+{
+    Multicast_PlaySkill2(form);
+}
+
+void AGreyStone::Multicast_PlaySkill3_Implementation()
+{
+    GetMesh()->SetOverlayMaterial(Mat);
+    Niagara->SetVisibility(true);
+}
+
+void AGreyStone::Server_PlaySkill3_Implementation()
+{
+    Multicast_PlaySkill3();
+}
+
+void AGreyStone::Multicast_PlaySkill4_Implementation(FTransform form)
+{
+    A4 = GetWorld()->SpawnActorDeferred<ASkill4_Actor>(Sk4, form, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+    A4->SetAttackDamage(Info->Skill4_ATK);
+    UGameplayStatics::FinishSpawningActor(A4, form);
+}
+
+void AGreyStone::Server_PlaySkill4_Implementation(FTransform form)
+{
+    Multicast_PlaySkill4(form);
+}
+

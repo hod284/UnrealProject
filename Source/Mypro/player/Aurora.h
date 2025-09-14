@@ -26,6 +26,25 @@ protected:
 	TSubclassOf<ASkill4_Actor> Sk4;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
 	TObjectPtr<UMaterialInterface> Mat;
+	ASkill1_Actor* A1;
+	ASkill2_Actor* A2;
+	ASkill4_Actor* A4;
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_PlaySkill1(FTransform form);
+	UFUNCTION(Server, Reliable)
+	void Server_PlaySkill1(FTransform form);
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_PlaySkill2(FTransform form);
+	UFUNCTION(Server, Reliable)
+	void Server_PlaySkill2(FTransform form);
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_PlaySkill3();
+	UFUNCTION(Server, Reliable)
+	void Server_PlaySkill3();
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_PlaySkill4(FTransform form);
+	UFUNCTION(Server, Reliable)
+	void Server_PlaySkill4(FTransform form);
 	virtual void BeginPlay() override;
 public:
 
