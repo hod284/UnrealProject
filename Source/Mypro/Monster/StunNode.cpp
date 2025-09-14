@@ -75,6 +75,7 @@ void UStunNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, f
 	}
 	else
 	{
+		Monster->AnimInstance->StunAni();
 		Gage += (DeltaSeconds*5.0f);
 		Monster->SetMonsterStun(Gage);
 	}
