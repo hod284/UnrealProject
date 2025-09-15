@@ -2,7 +2,6 @@
 
 
 #include "PVPController.h"
-#include "../player/MyCharacter.h"
 #include "../player/MyPlayerState.h"
 #include "../player/MainPlayerController.h"
 // Sets default values
@@ -19,6 +18,8 @@ void APVPController::BeginPlay()
 	Super::BeginPlay();
 	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UINot);
 	ui = Cast<UPvPUIClass>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPvP_widget());
+	APawn* mych = Cast<APawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	Mychar = Cast<AMyCharacter>(mych);
 	if (ui&& GetWorld()->GetFirstPlayerController()->IsLocalController())
 	{
 		ui->AddToViewport();
@@ -26,15 +27,13 @@ void APVPController::BeginPlay()
 	}
 	if (!HasAuthority())
 	{
-		APawn* mych = Cast<APawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
-		AMyCharacter* mychar = Cast<AMyCharacter>(mych);
-		mychar->SetColision("Monster");
-		GetWorld() ->GetTimerManager().SetTimerForNextTick(FTimerDelegate::CreateLambda([this,mychar]() {
+		Mychar->SetColision("Monster");
+		GetWorld() ->GetTimerManager().SetTimerForNextTick(FTimerDelegate::CreateLambda([this]() {
 			UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMyCharacter::StaticClass(), Players);
 			for (AActor* actor : Players)
 			{
 				AMyCharacter* otherchar = Cast<AMyCharacter>(actor);
-				if (otherchar != mychar)
+				if (otherchar != Mychar)
 				{
 					HostPawn = otherchar;
 					break;
@@ -61,9 +60,11 @@ void APVPController::Tick(float DeltaTime)
 				ui->SetClientHpBar(PS->PlayerHP_C);
 				ui->SetClientMpBar(PS->PlayerMP_C);
 			}
-			if(ClientPawn)
-				ClientPawn->GetMesh()->SetRelativeRotation(FRotator(0, PS->MeshPitch_C,0));
-		    
+			if (ClientPawn)
+			{
+				Mychar->SetCameraTarget(ClientPawn);
+				ClientPawn->GetMesh()->SetRelativeRotation(FRotator(0, PS->MeshPitch_C, 0));
+			}
 		}
 		else
 		{
@@ -83,8 +84,11 @@ void APVPController::Tick(float DeltaTime)
 				ui->SetHostMpBar(PC->PlayerMP_H);
 				ui->SetClientHpBar(PC->PlayerHP_C);
 				ui->SetClientMpBar(PC->PlayerMP_C);
-				if(HostPawn)
+				if (HostPawn)
+				{
 					HostPawn->GetMesh()->SetRelativeRotation(FRotator(0, PC->MeshPitch_h, 0));
+					Mychar->SetCameraTarget(HostPawn);
+				}
 			}
 		}
 }

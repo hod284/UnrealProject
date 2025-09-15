@@ -44,11 +44,11 @@ void ADarkMagition::NAttack()
         SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, pitch);
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
-        if (HasAuthority())
+        if (PlayerController && PlayerController->IsLocalController()&&HasAuthority())
         {
             SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, pitch);
         }
-        else if (PlayerController&&PlayerController->IsLocalController())
+        else if (PlayerController&&PlayerController->IsLocalController() && !HasAuthority())
         {
             SpawnRotation = FRotator(0, (GetMesh()->GetRelativeRotation().Yaw - GetActorRotation().Yaw) - 90, pitch);
         }
@@ -68,9 +68,9 @@ void ADarkMagition::NAttack()
     }
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
-        if (HasAuthority())
+        if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
             Multicast_PlayASkill(Xform);
-        else
+        else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
             Server_PlayASkill(Xform);
     }
     Atn += 1;
@@ -90,15 +90,15 @@ void ADarkMagition::Skill1()
         A1 = GetWorld()->SpawnActorDeferred<ASkill1_Magition>(Sk1, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
         A1->SetAttackDamage(Info->Skill1_ATK);
         UGameplayStatics::FinishSpawningActor(A1, Xform);
-        MpbarSync(10.0F);
     }
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
-        if (HasAuthority())
+        if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
             Multicast_PlaySkill1(Xform);
-        else
+        else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
             Server_PlaySkill1(Xform);
     }
+    MpbarSync(10.0F);
 }
 
 void ADarkMagition::Skill2()
@@ -116,15 +116,15 @@ void ADarkMagition::Skill2()
         A2->SetTagetTransform(TargetTransform);
         A2->SetAttackDamage(Info->Skill2_ATK);
         UGameplayStatics::FinishSpawningActor(A2, Xform);
-        MpbarSync(10.0F);
     }
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
-        if (HasAuthority())
+        if (PlayerController && PlayerController->IsLocalController()&&HasAuthority())
             Multicast_PlaySkill2(Xform);
-        else
+        else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
             Server_PlaySkill2(Xform);
     }
+    MpbarSync(10.0F);
 }
 
 void ADarkMagition::Skill3()
@@ -136,11 +136,11 @@ void ADarkMagition::Skill3()
         SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
-        if (HasAuthority())
+        if (PlayerController && PlayerController->IsLocalController()&&HasAuthority())
         {
             SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
         }
-        else if (PlayerController&&PlayerController->IsLocalController())
+        else if (PlayerController&&PlayerController->IsLocalController() && !HasAuthority())
         {
             SpawnRotation = FRotator(0, (GetMesh()->GetRelativeRotation().Yaw - GetActorRotation().Yaw) - 90,0);
         }
@@ -155,15 +155,15 @@ void ADarkMagition::Skill3()
         A3 = GetWorld()->SpawnActorDeferred<ASkill3_Magition>(Sk3, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
         A3->SetAttackDamage(Info->Skill3_ATK);
         UGameplayStatics::FinishSpawningActor(A3, Xform);
-        MpbarSync(10.0F);
     }
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
-        if (HasAuthority())
+        if (PlayerController && PlayerController->IsLocalController()&&HasAuthority())
             Multicast_PlaySkill3(Xform);
-        else
+        else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
             Server_PlaySkill3(Xform);
     }
+    MpbarSync(10.0F);
 }
 
 void ADarkMagition::Skill4()
@@ -180,15 +180,15 @@ void ADarkMagition::Skill4()
         A4 = GetWorld()->SpawnActorDeferred<ASkill4_Magition>(Sk4, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
         A4->SetAttackDamage(Info->Skill4_ATK);
         UGameplayStatics::FinishSpawningActor(A4, Xform);
-        MpbarSync(10.0F);
     }
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
-        if (HasAuthority())
+        if (PlayerController && PlayerController->IsLocalController()&&HasAuthority())
             Multicast_PlaySkill4(Xform);
-        else
+        else if(PlayerController && PlayerController->IsLocalController() && !HasAuthority())
             Server_PlaySkill4(Xform);
     }
+    MpbarSync(10.0F);
 }
 void ADarkMagition::Multicast_PlayASkill_Implementation(FTransform form)
 {

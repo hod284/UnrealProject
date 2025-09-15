@@ -12,10 +12,21 @@ void AGreyStone::NAttack()
     param.bTraceComplex = false;
     FVector center = GetActorLocation() + CurrentVelocity * 50;
     DrawDebugCapsule(GetWorld(), center, 200, Radious, FQuat::Identity, FColor::Green, false, 2.f);
+    ECollisionChannel channel = ECollisionChannel::ECC_GameTraceChannel2;
+    if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+    {
+        channel = ECollisionChannel::ECC_GameTraceChannel2;
+    }
+    else  if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+    {
+        if (GetMesh()->GetCollisionProfileName() == "Monster")
+            channel = ECollisionChannel::ECC_GameTraceChannel3;
+        else
+            channel = ECollisionChannel::ECC_GameTraceChannel2;
+    }
     bool Collision = GetWorld()->SweepMultiByChannel(result, center, center,
-        FQuat::Identity, ECollisionChannel::ECC_GameTraceChannel2,
+        FQuat::Identity, channel,
         FCollisionShape::MakeCapsule(Radious, 200), param);
-
     if (Collision)
     {
         float	Origin = FMath::Cos(FMath::DegreesToRadians(45.f));
@@ -47,13 +58,13 @@ void AGreyStone::Skill1()
     FRotator SpawnRotation = FRotator::ZeroRotator;
     if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
         SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
-    else if (PlayerController)
+    else  if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
-        if (PlayerController->HasAuthority())
+        if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
         {
             SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
         }
-        else if (PlayerController->IsLocalController())
+        else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
         {
             SpawnRotation = FRotator(0, (GetMesh()->GetRelativeRotation().Yaw - GetActorRotation().Yaw) - 90, 0);
         }
@@ -68,15 +79,15 @@ void AGreyStone::Skill1()
         A1 = GetWorld()->SpawnActorDeferred<ASkill1_Actor>(Sk1, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
         A1->SetAttackDamage(Info->Skill1_ATK);
         UGameplayStatics::FinishSpawningActor(A1, Xform);
-        MpbarSync(10.0F);
     }
     else if(GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
-        if (HasAuthority())
+        if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
             Multicast_PlaySkill1(Xform);
-        else
+        else  if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
             Server_PlaySkill1(Xform);
     }
+    MpbarSync(10.0F);
 }
 
 void AGreyStone::Skill2()
@@ -86,13 +97,13 @@ void AGreyStone::Skill2()
     FRotator SpawnRotation = FRotator::ZeroRotator;
     if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
         SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
-    else if (PlayerController)
+    else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
-        if (PlayerController->HasAuthority())
+        if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
         {
             SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
         }
-        else if (PlayerController->IsLocalController())
+        else  if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
         {
 
             SpawnRotation = FRotator(0, (GetMesh()->GetRelativeRotation().Yaw - GetActorRotation().Yaw) - 90, 0);
@@ -108,15 +119,15 @@ void AGreyStone::Skill2()
         A2 = GetWorld()->SpawnActorDeferred<ASkill2_Actor>(Sk2, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
         A2->SetAttackDamage(Info->Skill2_ATK);
         UGameplayStatics::FinishSpawningActor(A2, Xform);
-        MpbarSync(10.0F);
     }
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
-        if (HasAuthority())
+        if (PlayerController && PlayerController->IsLocalController() &&HasAuthority())
             Multicast_PlaySkill2(Xform);
-        else
+        else  if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
             Server_PlaySkill2(Xform);
     }
+    MpbarSync(10.0F);
 }
 
 void AGreyStone::Skill3()
@@ -127,15 +138,15 @@ void AGreyStone::Skill3()
     {
         Niagara->SetVisibility(true);
         GetMesh()->SetOverlayMaterial(Mat);
-        MpbarSync(10.0F);
     }
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
-        if (HasAuthority())
+        if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
             Multicast_PlaySkill3();
-        else
+        else   if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
             Server_PlaySkill3();
     }
+    MpbarSync(10.0F);
 }
 
 void AGreyStone::Skill4()
@@ -152,15 +163,15 @@ void AGreyStone::Skill4()
         A4 = GetWorld()->SpawnActorDeferred<ASkill4_Actor>(Sk4, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
         A4->SetAttackDamage(Info->Skill4_ATK);
         UGameplayStatics::FinishSpawningActor(A4, Xform);
-        MpbarSync(10.0F);
     }
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
-        if (HasAuthority())
+        if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
             Multicast_PlaySkill4(Xform);
-        else
+        else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
             Server_PlaySkill4(Xform);
     }
+    MpbarSync(10.0F);
 }
 
 AGreyStone::AGreyStone()

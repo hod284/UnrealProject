@@ -104,12 +104,12 @@ void AMyCharacter::Tick(float DeltaTime)
 		}
 		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
-			if (HasAuthority())
+			if (PlayerController && PlayerController->IsLocalController()&&HasAuthority())
 			{
 				Skill1cool -= DeltaTime * Skill1Speed;
 				uipvp->SetPercent1(Skill1cool);
 			}
-			else if(PlayerController&&PlayerController->IsLocalController())
+			else if(PlayerController&&PlayerController->IsLocalController()&&!HasAuthority())
 			{
 				Skill1cool -= DeltaTime * Skill1Speed;
 				uipvp->SetPercent1_c(Skill1cool);
@@ -125,12 +125,12 @@ void AMyCharacter::Tick(float DeltaTime)
 		}
 		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
-			if (HasAuthority())
+			if (PlayerController && PlayerController->IsLocalController()&&HasAuthority())
 			{
 				Skill2cool -= DeltaTime * Skill2Speed;
 				uipvp->SetPercent2(Skill2cool);
 			}
-			else if (PlayerController && PlayerController->IsLocalController())
+			else if (PlayerController && PlayerController->IsLocalController()&&!HasAuthority())
 			{
 				Skill2cool -= DeltaTime * Skill2Speed;
 				uipvp->SetPercent2_c(Skill2cool);
@@ -146,12 +146,12 @@ void AMyCharacter::Tick(float DeltaTime)
 		}
 		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
-			if (HasAuthority())
+			if (PlayerController && PlayerController->IsLocalController()&&HasAuthority())
 			{
 				Skill3cool -= DeltaTime * Skill3Speed;
 				uipvp->SetPercent3(Skill3cool);
 			}
-			else if (PlayerController && PlayerController->IsLocalController())
+			else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
 			{
 				Skill3cool -= DeltaTime * Skill3Speed;
 				uipvp->SetPercent3_c(Skill3cool);
@@ -167,12 +167,12 @@ void AMyCharacter::Tick(float DeltaTime)
 		}
 		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
-			if (HasAuthority())
+			if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
 			{
 				Skill4cool -= DeltaTime * Skill4Speed;
 				uipvp->SetPercent4(Skill4cool);
 			}
-			else if (PlayerController && PlayerController->IsLocalController())
+			else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
 			{
 				Skill4cool -= DeltaTime * Skill4Speed;
 				uipvp->SetPercent4_c(Skill4cool);
@@ -187,9 +187,9 @@ void AMyCharacter::Tick(float DeltaTime)
 		ui->SetPercent1(1.0f);
 		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
-			if (HasAuthority())
+			if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
 			uipvp->SetPercent1(1.0f);
-			else if (PlayerController && PlayerController->IsLocalController())
+			else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
 				uipvp->SetPercent1_c(Skill1cool);
 		}
 	}
@@ -201,9 +201,9 @@ void AMyCharacter::Tick(float DeltaTime)
 		ui->SetPercent2(1.0f);
 		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
-			if(HasAuthority())
+			if(PlayerController && PlayerController->IsLocalController() && HasAuthority())
 			uipvp->SetPercent2(1.0f);
-			else if (PlayerController && PlayerController->IsLocalController())
+			else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
 			uipvp->SetPercent2_c(1.0f);
 		}
 	}
@@ -219,9 +219,9 @@ void AMyCharacter::Tick(float DeltaTime)
 		}
 		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
-			if (HasAuthority())
+			if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
 			uipvp->SetPercent3(1.0f);
-			else if(PlayerController && PlayerController->IsLocalController())
+			else if(PlayerController && PlayerController->IsLocalController() && !HasAuthority())
 				uipvp->SetPercent3_c(1.0f);
 			if (HasAuthority())
 				Multicast_NullOverlap();
@@ -238,9 +238,9 @@ void AMyCharacter::Tick(float DeltaTime)
 		ui->SetPercent4(1.0f);
 		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 		{
-			if(HasAuthority())
+			if(PlayerController && PlayerController->IsLocalController() && HasAuthority())
 			uipvp->SetPercent4(1.0f);
-			else if (PlayerController && PlayerController->IsLocalController())
+			else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
 				uipvp->SetPercent4_c(1.0f);
 		}
 	}
@@ -249,20 +249,21 @@ void AMyCharacter::Tick(float DeltaTime)
 		float radious = FMath::Cos(FMath::DegreesToRadians(45.0f));
 		if (PlaySceneObject)
 		{
-		    AActor* CameraTarget = PlaySceneObject->GetMonster(TEXT("Monster_C_1"));
-			if (CameraTarget != NULL)
+			CameraTarget = PlaySceneObject->GetMonster(TEXT("Monster_C_1"));
+		}
+		if (CameraTarget != NULL)
+		{
+		    TargetTransform = CameraTarget->GetRootComponent();
+		
+			TargetLocation = CameraTarget->GetActorLocation();
+			
+			AMonster* m = Cast<AMonster>(CameraTarget);
+			if (m&&m->GetDeath())
 			{
-			    TargetTransform = CameraTarget->GetRootComponent();
-				// ���Ϳ��� �����̼�
-				TargetLocation = CameraTarget->GetActorLocation();
-				AMonster* m = Cast<AMonster>(CameraTarget);
-				if (m->GetDeath())
-				{
-					LookAt = false;
-					CameraHead->SetRelativeRotation(FRotator(0, 180, 0));
-				}
+				LookAt = false;
+				CameraHead->SetRelativeRotation(FRotator(0, 180, 0));
 			}
-				// ĳ���� ��������̼�
+
 			FVector CameraLocation = GetActorLocation();
 			float Angle = FVector::DotProduct(GetActorForwardVector(), (CameraLocation - TargetLocation).GetSafeNormal());
 			if (Angle > 0)
@@ -275,17 +276,17 @@ void AMyCharacter::Tick(float DeltaTime)
 			}
 			if (Angle <= radious || Angle >= -radious)
 			{
-				FVector To = CameraTarget->GetActorLocation();     // Ÿ�����������
-				FVector From = Camera->GetComponentLocation(); // ī�޶� ���� ��ġ
+				FVector To = CameraTarget->GetActorLocation();     
+				FVector From = Camera->GetComponentLocation(); 
 				const FRotator Desired = UKismetMathLibrary::FindLookAtRotation(From, To);
 				const FRotator Smoothed = FMath::RInterpTo(Camera->GetComponentRotation(),
-					Desired, DeltaTime, 5 /*��:5~12*/);
+					Desired, DeltaTime, 5 );
 				Camera->SetWorldRotation(Smoothed);
 			}
 			else
 			{
 				Camera->SetRelativeRotation(FRotator(Camera->GetRelativeRotation().Pitch, 0, 0));
-			}	
+			}
 		}
 	}
 }
@@ -421,9 +422,8 @@ void AMyCharacter::MoveKey(const FInputActionValue& Value)
 		}
 		else
 		{
-			AMainPlayerController* PC = Cast<AMainPlayerController>(GetController());
-			if (PC)
-				PC->Sever_SendtheClientMeshPitch(ro);
+			if (PlayerController)
+				PlayerController->Sever_SendtheClientMeshPitch(ro);
 		}
 		//���� �ӵ�(velocity) ���͸� �������ϰԡ� ����ȭ�ؼ� ���⸸ ���� ���� ���� ���ϴ� �Լ�
 		// GetVelocity().GetSafeNormal()  
@@ -601,7 +601,19 @@ void AMyCharacter::MpbarSync(float cost)
 	UE_LOG(LogMypro, Warning, TEXT("pmp:%f"), mpTemp);
 	MP = mpTemp / 100;
 	UE_LOG(LogMypro, Warning, TEXT("PMP:%f"), MP);
+	if (ui && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
 	ui->OnSyncMp_P.Broadcast(MP);
+	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+	{
+		if (HasAuthority())
+		{
+			AMyPlayerState* PS = GetPlayerState<AMyPlayerState>();
+			if (PS)
+				PS->PlayerMP_H = MP;
+		}
+		else if (PlayerController && PlayerController->IsLocalController())
+			PlayerController->Sever_SendtheClientMP(MP);
+	}
 }
 void AMyCharacter::AddMpbar(float cost)
 {
@@ -610,7 +622,20 @@ void AMyCharacter::AddMpbar(float cost)
   UE_LOG(LogMypro, Warning, TEXT("addpmp:%f"), mpTemp);
   MP = mpTemp / 100;
   UE_LOG(LogMypro, Warning, TEXT("addPMP:%f"), MP);
+  if (ui && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
   ui->OnSyncMp_P.Broadcast(MP);
+  else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+  { 
+
+	  if (HasAuthority())
+	  {
+		  AMyPlayerState* PS = GetPlayerState<AMyPlayerState>();
+		  if (PS)
+			  PS->PlayerMP_H = MP;
+	  }
+	  else if (PlayerController && PlayerController->IsLocalController())
+		  PlayerController->Sever_SendtheClientMP(MP);
+  }
 }
 void AMyCharacter::SendtheMontageAttack(bool up, int32 index)
 {

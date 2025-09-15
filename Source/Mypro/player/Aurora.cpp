@@ -29,12 +29,23 @@ void AAurora::NAttack()
     param.bTraceComplex = false;
     float Radious = 100.0f;
     FVector center = GetActorLocation()+CurrentVelocity * 50;
-
-    bool Collision = GetWorld()->SweepMultiByChannel(result, center, center,
-        FQuat::Identity, ECollisionChannel::ECC_GameTraceChannel2,
-        FCollisionShape::MakeCapsule(Radious,200), param);
+    bool Collision;
+	ECollisionChannel channel = ECollisionChannel::ECC_GameTraceChannel2;
+    if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+    {
+         channel = ECollisionChannel::ECC_GameTraceChannel2;
+    }
+    else  if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+    {
+      if(GetMesh()->GetCollisionProfileName()== "Monster")
+           channel = ECollisionChannel::ECC_GameTraceChannel3;
+      else
+           channel = ECollisionChannel::ECC_GameTraceChannel2;
+    }
+    Collision = GetWorld()->SweepMultiByChannel(result, center, center,
+        FQuat::Identity,channel,
+        FCollisionShape::MakeCapsule(Radious, 200), param);
     DrawDebugCapsule(GetWorld(), center, 200, Radious, FQuat::Identity, FColor::Green, false, 2.f);
-
     float pe = static_cast<float>(AttackDamage);
     if (Collision)
     {
@@ -59,11 +70,11 @@ void AAurora::Skill1()
         SpawnRotation =  FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
     else if(GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
-        if (HasAuthority())
+        if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
         {
             SpawnRotation=   FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
         }
-        else if (PlayerController&& PlayerController->IsLocalController())
+        else if (PlayerController&& PlayerController->IsLocalController() && !HasAuthority())
         {
             SpawnRotation=  FRotator(0, (GetMesh()->GetRelativeRotation().Yaw- GetActorRotation().Yaw)-90, 0);
         }
@@ -78,15 +89,15 @@ void AAurora::Skill1()
         A1 = GetWorld()->SpawnActorDeferred<ASkill1_Actor>(Sk1, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
         A1->SetAttackDamage(Info->Skill1_ATK);
         UGameplayStatics::FinishSpawningActor(A1, Xform);
-        MpbarSync(10.0F);
     }
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
-        if (HasAuthority())
+        if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
             Multicast_PlaySkill1(Xform);
-        else
+        else  if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
             Server_PlaySkill1(Xform);
     }
+    MpbarSync(10.0F);
 }
 
 void AAurora::Skill2()
@@ -98,11 +109,11 @@ void AAurora::Skill2()
         SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
-        if (HasAuthority())
+        if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
         {
             SpawnRotation =FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
         }
-        else if (PlayerController&&PlayerController->IsLocalController())
+        else if (PlayerController&&PlayerController->IsLocalController() && !HasAuthority())
         {
             SpawnRotation = FRotator(0, (GetMesh()->GetRelativeRotation().Yaw - GetActorRotation().Yaw) - 90, 0);
         }
@@ -117,15 +128,15 @@ void AAurora::Skill2()
         A2 = GetWorld()->SpawnActorDeferred<ASkill2_Actor>(Sk2, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
         A2->SetAttackDamage(Info->Skill2_ATK);
         UGameplayStatics::FinishSpawningActor(A2, Xform);
-        MpbarSync(10.0F);
     }
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
-        if (HasAuthority())
+        if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
             Multicast_PlaySkill2(Xform);
-        else
+        else  if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
             Server_PlaySkill2(Xform);
     }
+    MpbarSync(10.0F);
 }
 
 void AAurora::Skill3()
@@ -136,15 +147,15 @@ void AAurora::Skill3()
      {
          GetMesh()->SetOverlayMaterial(Mat);
          Niagara->SetVisibility(true);
-         MpbarSync(10.0F);
      }
      else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
      {
-         if (HasAuthority())
+         if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
              Multicast_PlaySkill3();
-         else
+         else  if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
              Server_PlaySkill3();
      }
+     MpbarSync(10.0F);
 }
 
 void AAurora::Skill4()
@@ -161,15 +172,15 @@ void AAurora::Skill4()
         A4 = GetWorld()->SpawnActorDeferred<ASkill4_Actor>(Sk4, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
         A4->SetAttackDamage(Info->Skill4_ATK);
         UGameplayStatics::FinishSpawningActor(A4, Xform);
-        MpbarSync(10.0F);
     }
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
-        if (HasAuthority())
+        if (PlayerController && PlayerController->IsLocalController()&&HasAuthority())
             Multicast_PlaySkill4(Xform);
-        else
+        else if (PlayerController && PlayerController->IsLocalController()&&!HasAuthority())
             Server_PlaySkill4(Xform);
     }
+    MpbarSync(10.0F);
 }
 
 void AAurora::Multicast_PlaySkill1_Implementation(FTransform form)

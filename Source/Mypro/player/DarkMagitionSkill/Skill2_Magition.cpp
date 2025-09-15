@@ -91,12 +91,12 @@ void ASkill2_Magition::ApplyInitialSideKick()
 	FVector dir = GetActorForwardVector();
 	if (UScene)
 	{
-		const FVector toTarget = (UScene->GetComponentLocation() - GetActorLocation()).GetSafeNormal();
+		 FVector toTarget = (UScene->GetComponentLocation() - GetActorLocation()).GetSafeNormal();
 
-		const FVector right = FVector::CrossProduct(FVector::UpVector, toTarget).GetSafeNormal();
+		 FVector right = FVector::CrossProduct(FVector::UpVector, toTarget).GetSafeNormal();
 
-		const float rad = FMath::DegreesToRadians(45);
-		const FVector curvy = (toTarget * FMath::Cos(rad) + right * FMath::Sin(rad)).GetSafeNormal();
+		 float rad = FMath::DegreesToRadians(45);
+		 FVector curvy = (toTarget * FMath::Cos(rad) + right * FMath::Sin(rad)).GetSafeNormal();
 		dir = curvy;
 	}
 
@@ -112,13 +112,13 @@ void ASkill2_Magition::UpdateAccel(float dt)
 	}
 
 	Elapsed += dt;
-	const float alpha = FMath::Clamp(Elapsed / AccelRampTime, 0.f, 1.f);
-	const float smooth = alpha * alpha * (3.f - 2.f * alpha);
+    float alpha = FMath::Clamp(Elapsed / AccelRampTime, 0.f, 1.f);
+	float smooth = alpha * alpha * (3.f - 2.f * alpha);
 	Movement->HomingAccelerationMagnitude = FMath::Lerp(StartAccel, EndAccel, smooth);
 
 	if (UScene)
 	{
-		const float d = FVector::Dist(GetActorLocation(), UScene->GetComponentLocation());
+		 float d = FVector::Dist(GetActorLocation(), UScene->GetComponentLocation());
 		if (d < 600.f) 
 		{
 			Movement->HomingAccelerationMagnitude = FMath::Max(Movement->HomingAccelerationMagnitude, EndAccel * 1.5f);

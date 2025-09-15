@@ -122,7 +122,7 @@ void AMainPlayerController::Sever_GettheMPandHP_Implementation()
 {
 	APlayerController* PC = GetWorld()->GetFirstPlayerController();
 	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
-	Client_GettheMPandHP_Implementation(PS->PlayerHP_H, PS->PlayerMP_H, PS->PlayerHP_C, PS->PlayerMP_C);
+	Client_GettheMPandHP(PS->PlayerHP_H, PS->PlayerMP_H, PS->PlayerHP_C, PS->PlayerMP_C);
 }
 
 void AMainPlayerController::Client_GettheMPandHP_Implementation(float Hp_H, float Mp_H, float Hp_C, float Mp_C)

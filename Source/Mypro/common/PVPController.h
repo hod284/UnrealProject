@@ -4,6 +4,7 @@
 
 #include "../Gameinfo.h"
 #include "../singleton/UImanager.h"
+#include "../player/MyCharacter.h"
 #include "GameFramework/Actor.h"
 #include "PVPController.generated.h"
 
@@ -22,6 +23,7 @@ protected:
 	TArray<AActor*> Players;
 	ACharacter* HostPawn;
 	ACharacter* ClientPawn;
+	AMyCharacter* Mychar;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 public:	

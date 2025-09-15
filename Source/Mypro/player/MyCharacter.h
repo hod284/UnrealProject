@@ -66,6 +66,7 @@ protected:
 	USceneComponent* TargetTransform;
 	int32 AttackDamage;
 	int32 AttackDamageUp;
+	AActor* CameraTarget = NULL;
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, FVector NormalImpulse,
@@ -181,5 +182,9 @@ public:
 	void SetColision(FString cporfile)
 	{
 	    GetCapsuleComponent()->SetCollisionProfileName(FName(*cporfile));
+	}
+	void SetCameraTarget(AActor* target)
+	{
+		CameraTarget = target;
 	}
 };
