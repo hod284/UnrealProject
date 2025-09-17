@@ -24,6 +24,10 @@ ASlashAttack_Magition::ASlashAttack_Magition()
 void ASlashAttack_Magition::BeginPlay()
 {
 	Super::BeginPlay();
+	if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+		BoxColider->SetCollisionProfileName("PlayerSkill");
+	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+		BoxColider->SetCollisionProfileName("MonsterSkill");
 	GetWorldTimerManager().ClearTimer(Time);
 	GetWorld()->GetTimerManager().SetTimer(Time, FTimerDelegate::CreateLambda([this]() {
 		Destroy();
@@ -53,6 +57,8 @@ void ASlashAttack_Magition::OnCapsuleBeginOverlap_Slash_Magition(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
+	if (OtherActor == OwnerActor)
+		return;
 	FString s = OtherActor->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("slash_overlap_m:%s"), *s);
 	float pe = static_cast<float>(AttackDamage);

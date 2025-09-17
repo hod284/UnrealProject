@@ -20,6 +20,7 @@ void ARoomSceenController::BeginPlay()
 	ui->AddToViewport();
 	AMainPlayerController* PC = Cast<AMainPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
 	PC->SetViewTarget(Camera);
+	ui->SetMeDiasound(Audiocompo->FindComponentByClass<UAudioComponent>());
 }
 
 void ARoomSceenController::GettheValue()

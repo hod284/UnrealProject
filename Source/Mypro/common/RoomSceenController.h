@@ -18,6 +18,8 @@ public:
 	ARoomSceenController();
 
 protected:
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<AAmbientSound> Audiocompo;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	float Pitch;

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "../../Gameinfo.h"
+#include "../../singleton/GameManager.h"
 #include "GameFramework/Actor.h"
 #include "Skill2_Magition.generated.h"
 
@@ -62,6 +63,7 @@ protected:
 	void ProjectileStop(const FHitResult & rersult);
 	void ApplyInitialSideKick(); 
 	void UpdateAccel(float dt); 
+	AActor* OwnerActor;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -80,5 +82,9 @@ public:
 	void SetAttackDamage(FString cporfile)
 	{
 		BoxColider->SetCollisionProfileName(FName(*cporfile));
+	}
+	void IngoreActor(AActor* actor)
+	{
+		OwnerActor = actor;
 	}
 };

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "../../Gameinfo.h"
+#include "../../singleton/GameManager.h"
 #include "GameFramework/Actor.h"
 #include "Skill1_Magition.generated.h"
 
@@ -46,7 +47,7 @@ protected:
 		int32 OtherBodyIndex);
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
+	AActor* OwnerActor;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -61,5 +62,9 @@ public:
 	void SetAttackDamage(FString cporfile)
 	{
 		BoxColider->SetCollisionProfileName(FName(*cporfile));
+	}
+	void IngoreActor(AActor* actor)
+	{
+		OwnerActor = actor;
 	}
 };

@@ -24,6 +24,10 @@ void ASkill4_Actor::BeginPlay()
 {
 	Super::BeginPlay();
 	GetWorldTimerManager().ClearTimer(Time);
+	if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+		BoxColider->SetCollisionProfileName("PlayerSkill");
+	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+		BoxColider->SetCollisionProfileName("MonsterSkill");
 	GetWorld()->GetTimerManager().SetTimer(Time, FTimerDelegate::CreateLambda([this]() {
 		Destroy();
 		}), 2.0f,false);
@@ -46,7 +50,8 @@ void ASkill4_Actor::OnCapsuleBeginOverlap_Skil4(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
-
+	if (OtherActor == OwnerActor)
+		return;
 	FString s = OtherActor->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("skil4_overlap:%s"), *s);
 	float pe = static_cast<float>(AttackDamage);

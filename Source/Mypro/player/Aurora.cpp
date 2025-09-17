@@ -96,6 +96,7 @@ void AAurora::Skill1()
     {
         A1 = GetWorld()->SpawnActorDeferred<ASkill1_Actor>(Sk1, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
         A1->SetAttackDamage(Info->Skill1_ATK);
+        A1->IngoreActor(this);
         UGameplayStatics::FinishSpawningActor(A1, Xform);
     }
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
@@ -135,6 +136,7 @@ void AAurora::Skill2()
     {
         A2 = GetWorld()->SpawnActorDeferred<ASkill2_Actor>(Sk2, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
         A2->SetAttackDamage(Info->Skill2_ATK);
+        A2->IngoreActor(this);
         UGameplayStatics::FinishSpawningActor(A2, Xform);
     }
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
@@ -179,6 +181,7 @@ void AAurora::Skill4()
     {
         A4 = GetWorld()->SpawnActorDeferred<ASkill4_Actor>(Sk4, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
         A4->SetAttackDamage(Info->Skill4_ATK);
+        A4->IngoreActor(this);
         UGameplayStatics::FinishSpawningActor(A4, Xform);
     }
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
@@ -195,6 +198,7 @@ void AAurora::Multicast_PlaySkill1_Implementation(FTransform form)
 {
     A1 = GetWorld()->SpawnActorDeferred<ASkill1_Actor>(Sk1, form, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
     A1->SetAttackDamage(Info->Skill1_ATK);
+    A1->IngoreActor(this);
     UGameplayStatics::FinishSpawningActor(A1, form);
 }
 
@@ -207,6 +211,7 @@ void AAurora::Multicast_PlaySkill2_Implementation(FTransform form)
 {
     A2 = GetWorld()->SpawnActorDeferred<ASkill2_Actor>(Sk2, form, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
     A2->SetAttackDamage(Info->Skill2_ATK);
+    A2->IngoreActor(this);
     UGameplayStatics::FinishSpawningActor(A2, form);
 }
 
@@ -230,6 +235,7 @@ void AAurora::Multicast_PlaySkill4_Implementation(FTransform form)
 {
     A4 = GetWorld()->SpawnActorDeferred<ASkill4_Actor>(Sk4, form, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
     A4->SetAttackDamage(Info->Skill4_ATK);
+    A4->IngoreActor(this);
     UGameplayStatics::FinishSpawningActor(A4, form);
 }
 

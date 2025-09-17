@@ -29,6 +29,8 @@ protected:
 	TObjectPtr<UButton>	Character2;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UButton>	Character3;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UButton>	Muteb;
 	virtual void NativeConstruct() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 	virtual void NativeOnInitialized() override;
@@ -42,4 +44,12 @@ protected:
 	void ReadyButton();
 	UFUNCTION()
 	void GoTravel();
+	UFUNCTION()
+	void AudioMutemethod();
+	UAudioComponent* SoundComp;
+public:	
+	void SetMeDiasound(UAudioComponent* Comp)
+	{
+		SoundComp = Comp;
+	}
 };

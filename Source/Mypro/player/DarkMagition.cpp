@@ -89,6 +89,7 @@ void ADarkMagition::Skill1()
     {
         A1 = GetWorld()->SpawnActorDeferred<ASkill1_Magition>(Sk1, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
         A1->SetAttackDamage(Info->Skill1_ATK);
+        A1->IngoreActor(this);
         UGameplayStatics::FinishSpawningActor(A1, Xform);
     }
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
@@ -115,6 +116,7 @@ void ADarkMagition::Skill2()
         A2 = GetWorld()->SpawnActorDeferred<ASkill2_Magition>(Sk2, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
         A2->SetTagetTransform(TargetTransform);
         A2->SetAttackDamage(Info->Skill2_ATK);
+        A2->IngoreActor(this);
         UGameplayStatics::FinishSpawningActor(A2, Xform);
     }
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
@@ -154,6 +156,7 @@ void ADarkMagition::Skill3()
     {
         A3 = GetWorld()->SpawnActorDeferred<ASkill3_Magition>(Sk3, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
         A3->SetAttackDamage(Info->Skill3_ATK);
+        A3->IngoreActor(this);
         UGameplayStatics::FinishSpawningActor(A3, Xform);
     }
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
@@ -179,6 +182,7 @@ void ADarkMagition::Skill4()
     {
         A4 = GetWorld()->SpawnActorDeferred<ASkill4_Magition>(Sk4, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
         A4->SetAttackDamage(Info->Skill4_ATK);
+        A4->IngoreActor(this);
         UGameplayStatics::FinishSpawningActor(A4, Xform);
     }
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
@@ -194,6 +198,7 @@ void ADarkMagition::Multicast_PlayASkill_Implementation(FTransform form)
 {
     AS = GetWorld()->SpawnActorDeferred<ASlashAttack_Magition>(Attack, form, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
     AS->SetAttackDamage(Info->ATK);
+    AS->IngoreActor(this);
     UGameplayStatics::FinishSpawningActor(AS, form);
 }
 
@@ -206,6 +211,7 @@ void ADarkMagition::Multicast_PlaySkill1_Implementation(FTransform form)
 {
     A1 = GetWorld()->SpawnActorDeferred<ASkill1_Magition>(Sk1, form, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
     A1->SetAttackDamage(Info->Skill1_ATK);
+    A1->IngoreActor(this);
     UGameplayStatics::FinishSpawningActor(A1, form);
 }
 
@@ -219,6 +225,7 @@ void ADarkMagition::Multicast_PlaySkill2_Implementation(FTransform form)
     A2 = GetWorld()->SpawnActorDeferred<ASkill2_Magition>(Sk2, form, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
     A2->SetTagetTransform(TargetTransform);
     A2->SetAttackDamage(Info->Skill2_ATK);
+    A2->IngoreActor(this);
     UGameplayStatics::FinishSpawningActor(A2, form);
 }
 
@@ -231,6 +238,7 @@ void ADarkMagition::Multicast_PlaySkill3_Implementation(FTransform form)
 {
     A3 = GetWorld()->SpawnActorDeferred<ASkill3_Magition>(Sk3, form, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
     A3->SetAttackDamage(Info->Skill3_ATK);
+    A3->IngoreActor(this);
     UGameplayStatics::FinishSpawningActor(A3, form);
 }
 
@@ -243,6 +251,7 @@ void ADarkMagition::Multicast_PlaySkill4_Implementation(FTransform form)
 {
     A4 = GetWorld()->SpawnActorDeferred<ASkill4_Magition>(Sk4, form, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
     A4->SetAttackDamage(Info->Skill4_ATK);
+    A4->IngoreActor(this);
     UGameplayStatics::FinishSpawningActor(A4, form);
 }
 

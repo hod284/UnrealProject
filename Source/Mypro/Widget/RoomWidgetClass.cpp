@@ -8,6 +8,7 @@ void  URoomWidgetClass::NativeConstruct()
 	Character1 = Cast<UButton>(GetWidgetFromName("ch1"));
 	Character2 = Cast<UButton>(GetWidgetFromName("ch2"));
 	Character3 = Cast<UButton>(GetWidgetFromName("ch3"));
+	Muteb = Cast<UButton>(GetWidgetFromName("Mute"));
 	Ready = Cast<UButton>(GetWidgetFromName("Ready"));
 	Start = Cast<UButton>(GetWidgetFromName("Start"));
 	if (!Character1->OnClicked.IsBound())
@@ -20,6 +21,8 @@ void  URoomWidgetClass::NativeConstruct()
 		Ready->OnClicked.AddDynamic(this, &URoomWidgetClass::ReadyButton);
 	if (!Start->OnClicked.IsBound())
 		Start->OnClicked.AddDynamic(this, &URoomWidgetClass::GoTravel);
+	if (!Muteb->OnClicked.IsBound())
+		Muteb->OnClicked.AddDynamic(this, &URoomWidgetClass::AudioMutemethod);
 	UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
 	PC = Cast<AMainPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
 	Start->SetVisibility(ESlateVisibility::Collapsed);
@@ -117,4 +120,10 @@ void URoomWidgetClass::GoTravel()
 	GetWorld()->ServerTravel("/Game/Virtual_Studio_Kit/Maps/StudioB?listen");
 }
 
-	
+void URoomWidgetClass::AudioMutemethod()
+{
+	if (SoundComp->IsPlaying())
+		SoundComp->Stop();
+	else
+		SoundComp->Play();
+}

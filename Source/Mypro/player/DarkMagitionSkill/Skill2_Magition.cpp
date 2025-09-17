@@ -2,6 +2,7 @@
 
 
 #include "Skill2_Magition.h"
+#include "../MainPlayerController.h"
 // Sets default values
 ASkill2_Magition::ASkill2_Magition()
 {
@@ -63,7 +64,11 @@ void ASkill2_Magition::OnCapsuleEndOverlap_Skil2_Magition(
 void ASkill2_Magition::BeginPlay()
 {
 	Super::BeginPlay();
-	// ȣ���� �𸮾󿡼� ����� ���� ź �� ���� �� ����ϴ°����� Ÿ��������Ʈ�� ������ Ÿ���� �����Ѵ�
+	if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+		BoxColider->SetCollisionProfileName("PlayerObject");
+	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+		BoxColider->SetCollisionProfileName("MultiOB");
+	BoxColider->IgnoreActorWhenMoving(OwnerActor,true);
 	Movement->bIsHomingProjectile = true;
 	Movement->HomingTargetComponent = UScene;
 	Movement->HomingAccelerationMagnitude = StartAccel;
@@ -82,7 +87,12 @@ void ASkill2_Magition::ProjectileStop(const FHitResult& rersult)
 	FString s = rersult.GetActor()->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("skil2_Stop :%s"), *s);
 	float pe = static_cast<float>(AttackDamage);
+	if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
 	UGameplayStatics::ApplyDamage(rersult.GetActor(), pe, GetInstigatorController(), this, UDamageType::StaticClass());
+	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+	{
+			UGameplayStatics::ApplyDamage(rersult.GetActor(), pe, GetInstigatorController(), this, UDamageType::StaticClass());
+	}
 
 }
 

@@ -24,6 +24,10 @@ ASkill1_Magition::ASkill1_Magition()
 void ASkill1_Magition::BeginPlay()
 {
 	Super::BeginPlay();
+	if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+		BoxColider->SetCollisionProfileName("PlayerSkill");
+	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+		BoxColider->SetCollisionProfileName("MonsterSkill");
 	GetWorldTimerManager().ClearTimer(Time);
 	GetWorld()->GetTimerManager().SetTimer(Time, FTimerDelegate::CreateLambda([this]() {
 		Destroy();
@@ -46,6 +50,8 @@ void ASkill1_Magition::OnCapsuleBeginOverlap_Skil1_Magition(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
+	if (OtherActor == OwnerActor)
+		return;
 	FString s = OtherActor->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("skil1_overlap_m :%s"), *s);
 	float pe = static_cast<float>(AttackDamage);

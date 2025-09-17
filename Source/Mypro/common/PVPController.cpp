@@ -87,6 +87,7 @@ void APVPController::Tick(float DeltaTime)
 				{
 					HostPawn->GetMesh()->SetRelativeRotation(FRotator(0, PC->MeshPitch_h, 0));
 					Mychar->SetCameraTarget(HostPawn);
+					HostPawn->SetColision("Monster");
 				}
 			}
 		}

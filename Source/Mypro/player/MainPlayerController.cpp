@@ -167,9 +167,12 @@ void AMainPlayerController::Client_GedtheMeshRotate_Implementation(float RO_H, f
 void AMainPlayerController::Server_SendtheDamage_Implementation(AActor* actor, float damage)
 {
 	AMyCharacter* mychar = Cast<AMyCharacter>(actor);
-	if(!mychar->ClientAttack)
-	UGameplayStatics::ApplyDamage(actor, damage, GetInstigatorController(), this, UDamageType::StaticClass());
-	mychar->ClientAttack = true;
-	GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([mychar]() {mychar->ClientAttack = false; }), 0.3f, false);
+	if (mychar)
+	{
+		if (!mychar->ClientAttack)
+			UGameplayStatics::ApplyDamage(mychar, damage, GetInstigatorController(), this, UDamageType::StaticClass());
+		mychar->ClientAttack = true;
+		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([mychar]() {mychar->ClientAttack = false; }), 0.3f, false);
+	}
 }
