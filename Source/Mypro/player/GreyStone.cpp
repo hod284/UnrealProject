@@ -10,7 +10,7 @@ void AGreyStone::NAttack()
     FCollisionQueryParams	param;
     param.AddIgnoredActor(this);
     param.bTraceComplex = false;
-    FVector center = GetActorLocation() + CurrentVelocity * 50;
+    FVector center = GetActorLocation() + CurrentVelocity * 100;
     DrawDebugCapsule(GetWorld(), center, 200, Radious, FQuat::Identity, FColor::Green, false, 2.f);
     ECollisionChannel channel = ECollisionChannel::ECC_GameTraceChannel2;
     if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
@@ -19,10 +19,7 @@ void AGreyStone::NAttack()
     }
     else  if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
-        if (GetMesh()->GetCollisionProfileName() == "Monster")
-            channel = ECollisionChannel::ECC_GameTraceChannel3;
-        else
-            channel = ECollisionChannel::ECC_GameTraceChannel2;
+        channel = ECollisionChannel::ECC_GameTraceChannel3;
     }
     bool Collision = GetWorld()->SweepMultiByChannel(result, center, center,
         FQuat::Identity, channel,
@@ -33,9 +30,21 @@ void AGreyStone::NAttack()
 
         for (auto& Hit : result)
         {
-            if(Hit.GetActor()->IsA<APawn>())
-            AddMpbar(10);
-            UGameplayStatics::ApplyDamage(Hit.GetActor(), AttackDamage, GetInstigatorController(), this, UDamageType::StaticClass());
+            if (Hit.GetActor()->IsA<APawn>())
+            {
+                AddMpbar(10);
+                if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+                    UGameplayStatics::ApplyDamage(Hit.GetActor(), AttackDamage, GetInstigatorController(), this, UDamageType::StaticClass());
+                else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+                {
+                    if (!HasAuthority())
+                        UGameplayStatics::ApplyDamage(Hit.GetActor(), AttackDamage, GetInstigatorController(), this, UDamageType::StaticClass());
+                    else
+                    {
+                        PlayerController->Server_SendtheDamage(Hit.GetActor(), AttackDamage);
+                    }
+                }
+            }
         }
     }
 }

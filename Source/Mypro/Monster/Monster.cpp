@@ -173,7 +173,7 @@ float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 	}
 	if (MonsterStun <= KINDA_SMALL_NUMBER)
 		CanStun = false;
-	if (MonsterHp <= KINDA_SMALL_NUMBER)
+	if (MonsterHp <= KINDA_SMALL_NUMBER&&!Death)
 	{
 		AnimInstance->DeathAni();
 		if (Brain)
@@ -191,7 +191,6 @@ float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 			UStaticMesh* Mesh = Texture->MeshMap["Portal"];
 			MeshActor->GetStaticMeshComponent()->SetStaticMesh(Mesh);
 			MeshActor->SetActorScale3D(FVector(1.0f)); 
-			CapsuleComponent->SetCollisionProfileName("PlayerSkill");
 		}
 		FActorSpawnParameters param;
 		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;

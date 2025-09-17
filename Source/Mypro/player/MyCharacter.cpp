@@ -331,7 +331,19 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 	UE_LOG(LogMypro, Warning, TEXT("pHp:%f"), HpTemp);
 	HP = HpTemp / 100;
 	UE_LOG(LogMypro, Warning, TEXT("PMP:%f"), HP);
+	if (ui && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
 	ui->OnDamage_P.Broadcast(HP);
+	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+	{
+		if (PlayerController&& PlayerController->IsLocalController()  && HasAuthority())
+		{
+			AMyPlayerState* PS = GetPlayerState<AMyPlayerState>();
+			if (PS)
+				PS->PlayerHP_H = HP;
+		}
+		else if (PlayerController &&PlayerController->IsLocalController() && !HasAuthority())
+		PlayerController->Sever_SendtheClientHP(HP);
+	}
 	return  DamageAmount;
 }
 void AMyCharacter::EndDash()
@@ -605,13 +617,13 @@ void AMyCharacter::MpbarSync(float cost)
 	ui->OnSyncMp_P.Broadcast(MP);
 	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 	{
-		if (HasAuthority())
+		if (PlayerController && PlayerController->IsLocalController()&&HasAuthority())
 		{
 			AMyPlayerState* PS = GetPlayerState<AMyPlayerState>();
 			if (PS)
 				PS->PlayerMP_H = MP;
 		}
-		else if (PlayerController && PlayerController->IsLocalController())
+		else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
 			PlayerController->Sever_SendtheClientMP(MP);
 	}
 }
@@ -627,13 +639,13 @@ void AMyCharacter::AddMpbar(float cost)
   else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
   { 
 
-	  if (HasAuthority())
+	  if (PlayerController && PlayerController->IsLocalController()&&HasAuthority())
 	  {
 		  AMyPlayerState* PS = GetPlayerState<AMyPlayerState>();
 		  if (PS)
 			  PS->PlayerMP_H = MP;
 	  }
-	  else if (PlayerController && PlayerController->IsLocalController())
+	  else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
 		  PlayerController->Sever_SendtheClientMP(MP);
   }
 }

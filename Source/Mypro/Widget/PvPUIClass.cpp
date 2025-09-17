@@ -12,7 +12,7 @@ void UPvPUIClass::NativeConstruct()
 	Skill3 = Cast<USkillStatus>(GetWidgetFromName("SkillUI3"));
 	Skill4 = Cast<USkillStatus>(GetWidgetFromName("SkillUI4"));
 	HostImage = Cast<UImage>(GetWidgetFromName("HostImage"));
-	HostHp = Cast<UProgressBar>(GetWidgetFromName("HostMP"));
+	HostHp = Cast<UProgressBar>(GetWidgetFromName("HostHP"));
 	HostMp = Cast<UProgressBar>(GetWidgetFromName("HostMP"));
 	ClientImage = Cast<UImage>(GetWidgetFromName("ClientImage"));
 	ClientHp = Cast<UProgressBar>(GetWidgetFromName("ClientHP"));

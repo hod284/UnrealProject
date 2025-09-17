@@ -164,3 +164,12 @@ void AMainPlayerController::Client_GedtheMeshRotate_Implementation(float RO_H, f
 	UE_LOG(LogMypro, Warning, TEXT("host rotate: %f"), MeshPitch_h);
 	MeshPitch_c = RO_C;
 }
+void AMainPlayerController::Server_SendtheDamage_Implementation(AActor* actor, float damage)
+{
+	AMyCharacter* mychar = Cast<AMyCharacter>(actor);
+	if(!mychar->ClientAttack)
+	UGameplayStatics::ApplyDamage(actor, damage, GetInstigatorController(), this, UDamageType::StaticClass());
+	mychar->ClientAttack = true;
+	GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([mychar]() {mychar->ClientAttack = false; }), 0.3f, false);
+}

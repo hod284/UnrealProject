@@ -53,6 +53,8 @@ public:
 	UFUNCTION(Client , Reliable)
 	void Client_GedtheMeshRotate(float RO_H,float RO_C);
 	TSubclassOf<APawn> GetSelectCharactertClass();
+	UFUNCTION(Server, Reliable)
+	void Server_SendtheDamage(AActor* actor, float damage);
 	float Pitch_c;
 	float Pitch_h;
 	float MeshPitch_c =-90;
@@ -65,4 +67,5 @@ public:
 	float PlayerMP_C=1.0;
 	Characters MyCharacter_C = Characters::None;
 	Characters MyCharacter_H = Characters::None;
+	FTimerHandle TimerHandle;
 };

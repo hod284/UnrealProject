@@ -27,7 +27,6 @@ void APVPController::BeginPlay()
 	}
 	if (!HasAuthority())
 	{
-		Mychar->SetColision("Monster");
 		GetWorld() ->GetTimerManager().SetTimerForNextTick(FTimerDelegate::CreateLambda([this]() {
 			UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMyCharacter::StaticClass(), Players);
 			for (AActor* actor : Players)

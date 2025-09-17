@@ -187,4 +187,5 @@ public:
 	{
 		CameraTarget = target;
 	}
+	bool ClientAttack=false;
 };

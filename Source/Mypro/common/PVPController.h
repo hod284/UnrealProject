@@ -21,8 +21,8 @@ protected:
 	FTimerHandle Timer;
 	UPvPUIClass* ui;
 	TArray<AActor*> Players;
-	ACharacter* HostPawn;
-	ACharacter* ClientPawn;
+	AMyCharacter* HostPawn;
+	AMyCharacter* ClientPawn;
 	AMyCharacter* Mychar;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
