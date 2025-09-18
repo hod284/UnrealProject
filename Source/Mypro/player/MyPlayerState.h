@@ -37,9 +37,17 @@ public:
 	UPROPERTY(Replicated)
 	float PlayerHP_H=1.0F;
 	UPROPERTY(Replicated)
+	float PlayerHPtotal_H;
+	UPROPERTY(Replicated)
+	float PlayerHPtotalconst_H;
+	UPROPERTY(Replicated)
 	float PlayerMP_H=1.0F;
 	UPROPERTY(Replicated)
 	float PlayerHP_C=1.0F;
+	UPROPERTY(Replicated)
+	float PlayerHPtotal_C;
+	UPROPERTY(Replicated)
+	float PlayerHPtotalconst_C;
 	UPROPERTY(Replicated)
 	float PlayerMP_C=1.0F;
 	UPROPERTY(Replicated)

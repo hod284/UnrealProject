@@ -320,29 +320,37 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	if (!BackMoving && !DashMoving)
-		PlayerHp -= DamageAmount;
-	else
-	{
-		PlayerHp -= 0;
-		UE_LOG(LogMypro, Warning, TEXT("PHP:%f"), PlayerHp);
-	}
-	float HpTemp = (PlayerHp / PlayerHp_Const) * 100;
-	UE_LOG(LogMypro, Warning, TEXT("pHp:%f"), HpTemp);
-	HP = HpTemp / 100;
-	UE_LOG(LogMypro, Warning, TEXT("PMP:%f"), HP);
 	if (ui && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
-	ui->OnDamage_P.Broadcast(HP);
+	{
+		if (!BackMoving && !DashMoving)
+			PlayerHp -= DamageAmount;
+		else
+		{
+			PlayerHp -= 0;
+			UE_LOG(LogMypro, Warning, TEXT("PHP:%f"), PlayerHp);
+		}
+		float HpTemp = (PlayerHp / PlayerHp_Const) * 100;
+		UE_LOG(LogMypro, Warning, TEXT("pHp:%f"), HpTemp);
+		HP = HpTemp / 100;
+		UE_LOG(LogMypro, Warning, TEXT("PMP:%f"), HP);
+		ui->OnDamage_P.Broadcast(HP);
+	}
 	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 	{
+
 		if (PlayerController&& PlayerController->IsLocalController()  && HasAuthority())
 		{
 			AMyPlayerState* PS = GetPlayerState<AMyPlayerState>();
 			if (PS)
+			{
+				PS->PlayerHPtotal_H -= DamageAmount;
+				float HpTemp = (PS->PlayerHPtotal_H/ PS->PlayerHPtotalconst_H) * 100;
+				HP = HpTemp / 100;
 				PS->PlayerHP_H = HP;
+			}
 		}
 		else if (PlayerController &&PlayerController->IsLocalController() && !HasAuthority())
-		PlayerController->Sever_SendtheClientHP(HP);
+		PlayerController->Sever_SendtheClientHP(DamageAmount);
 	}
 	return  DamageAmount;
 }

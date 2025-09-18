@@ -91,7 +91,18 @@ void ASkill2_Magition::ProjectileStop(const FHitResult& rersult)
 	UGameplayStatics::ApplyDamage(rersult.GetActor(), pe, GetInstigatorController(), this, UDamageType::StaticClass());
 	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 	{
-			UGameplayStatics::ApplyDamage(rersult.GetActor(), pe, GetInstigatorController(), this, UDamageType::StaticClass());
+		AMainPlayerController* PC = Cast<AMainPlayerController>(GetInstigatorController());
+		if (PC)
+		{
+			if (PC->HasAuthority())
+			{
+				PC->Server_HittheDamageClient(rersult.GetActor(), pe);
+			}
+			else
+			{
+				PC->Server_HittheDamageHost(rersult.GetActor(), pe);
+			}
+		}
 	}
 
 }

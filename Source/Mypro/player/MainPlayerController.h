@@ -43,7 +43,7 @@ public:
 	UFUNCTION(Client, Reliable)
 	void Client_GettheMPandHP(float Hp_H,float Mp_H, float Hp_C, float Mp_C);
 	UFUNCTION(Server, Reliable)
-	void Sever_SendtheClientHP(float Hp);
+	void Sever_SendtheClientHP(float damage);
 	UFUNCTION(Server, Reliable)
 	void Sever_SendtheClientMP(float Mp);
 	UFUNCTION(Server, Reliable)
@@ -55,6 +55,12 @@ public:
 	TSubclassOf<APawn> GetSelectCharactertClass();
 	UFUNCTION(Server, Reliable)
 	void Server_SendtheDamage(AActor* actor, float damage);
+	UFUNCTION(Server, Reliable)
+	void Server_HittheDamageHost(AActor* actor, float damage);
+	UFUNCTION(Server, Reliable)
+	void Server_HittheDamageClient(AActor* actor, float damage);
+	UFUNCTION(Server, Reliable)
+	void Server_SendthetotalHP(float hp);
 	float Pitch_c;
 	float Pitch_h;
 	float MeshPitch_c =-90;
@@ -62,8 +68,10 @@ public:
 	bool  Ready_c;
 	bool  Ready_h;
 	float PlayerHP_H=1.0;
+	float PlayerHPtotal_H;
 	float PlayerMP_H=1.0;
 	float PlayerHP_C=1.0;
+	float PlayerHPtptal_C;
 	float PlayerMP_C=1.0;
 	Characters MyCharacter_C = Characters::None;
 	Characters MyCharacter_H = Characters::None;

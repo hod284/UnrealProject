@@ -132,11 +132,14 @@ void AMainPlayerController::Client_GettheMPandHP_Implementation(float Hp_H, floa
 	PlayerHP_C = Hp_C;
 	PlayerMP_C = Mp_C;
 }
-void AMainPlayerController::Sever_SendtheClientHP_Implementation(float Hp)
+void AMainPlayerController::Sever_SendtheClientHP_Implementation(float damage)
 {
 	APlayerController* PC = GetWorld()->GetFirstPlayerController();
 	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
-	PS->PlayerHP_C = Hp;
+	PS->PlayerHPtotal_C -= damage;
+	float hpb = (PS->PlayerHPtotal_C / PS->PlayerHPtotalconst_C) * 100;
+	hpb = hpb / 100.0f;
+	PS->PlayerHP_C = hpb;
 }
 
 void AMainPlayerController::Sever_SendtheClientMP_Implementation(float Mp)
@@ -175,4 +178,45 @@ void AMainPlayerController::Server_SendtheDamage_Implementation(AActor* actor, f
 		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([mychar]() {mychar->ClientAttack = false; }), 0.3f, false);
 	}
+}
+void AMainPlayerController::Server_HittheDamageHost_Implementation(AActor* actor, float damage)
+{
+	AMyCharacter* mychar = Cast<AMyCharacter>(actor);
+	if (mychar)
+	{
+		APlayerController* PC = GetWorld()->GetFirstPlayerController();
+		if (PC)
+		{
+			AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
+			PS->PlayerHPtotal_H -= damage;
+		   float hpb = (PS->PlayerHPtotal_H / PS->PlayerHPtotalconst_H) * 100;
+		   hpb = hpb / 100.0f;
+		   PS->PlayerHP_H = hpb;
+		}
+	}
+}
+
+void AMainPlayerController::Server_HittheDamageClient_Implementation(AActor* actor, float damage)
+{
+		AMyCharacter* mychar = Cast<AMyCharacter>(actor);
+		if (mychar)
+		{
+			APlayerController* PC = GetWorld()->GetFirstPlayerController();
+			if (PC )
+			{
+				AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
+				PS->PlayerHPtotal_C -= damage;
+				float hpb = (PS->PlayerHPtotal_C / PS->PlayerHPtotalconst_C) * 100;
+				hpb = hpb / 100.0f;
+				PS->PlayerHP_C = hpb;
+			}
+		}
+}
+
+void AMainPlayerController::Server_SendthetotalHP_Implementation(float hp)
+{
+	APlayerController* PC = GetWorld()->GetFirstPlayerController();
+	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
+	PS->PlayerHPtotal_C = hp;
+	PS->PlayerHPtotalconst_C = hp;
 }

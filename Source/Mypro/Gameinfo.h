@@ -17,6 +17,7 @@
 
 
 //
+#include "Engine/DamageEvents.h"
 #include "Components/AudioComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Particles/ParticleSystem.h"

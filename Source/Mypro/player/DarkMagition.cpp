@@ -15,6 +15,20 @@ void ADarkMagition::BeginPlay()
     Info = GI->GetDatainfo_D();
     PlayerHp = static_cast<float>(Info->HP);
     PlayerMp = static_cast<float>(Info->MP);
+    PlayerController = Cast<AMainPlayerController>(GetWorld()->GetFirstPlayerController());
+    if (PlayerController)
+    {
+        if (PlayerController-> HasAuthority())
+        {
+            AMyPlayerState* ps = Cast<AMyPlayerState>(PlayerController->PlayerState);
+            ps->PlayerHPtotal_H = PlayerHp;
+            ps->PlayerHPtotalconst_H = PlayerHp;
+        }
+        else
+        {
+            PlayerController->Server_SendthetotalHP(PlayerHp);
+        }
+    }
     PlayerHp_Const = PlayerHp;
     PlayerMp_Const = PlayerMp;
     AttackDamage = 0;

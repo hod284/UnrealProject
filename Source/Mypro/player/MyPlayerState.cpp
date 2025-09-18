@@ -21,6 +21,10 @@ void AMyPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
     DOREPLIFETIME(AMyPlayerState, PlayerMP_H);
     DOREPLIFETIME(AMyPlayerState, PlayerHP_C);
     DOREPLIFETIME(AMyPlayerState, PlayerMP_C);
+    DOREPLIFETIME(AMyPlayerState, PlayerHPtotal_C);
+    DOREPLIFETIME(AMyPlayerState, PlayerHPtotal_H);
+    DOREPLIFETIME(AMyPlayerState, PlayerHPtotalconst_C);
+    DOREPLIFETIME(AMyPlayerState, PlayerHPtotalconst_H);
 }
 void AMyPlayerState::BeginPlay()
 {
