@@ -25,6 +25,8 @@ ASkill2_Magition::ASkill2_Magition()
 	Movement ->ProjectileGravityScale = 0.f;
 	Movement->OnProjectileStop.AddDynamic(this,&ASkill2_Magition::ProjectileStop);
 	BoxColider->SetCollisionProfileName("PlayerObject");
+	SetReplicates(true);
+	SetReplicateMovement(true);
 }
 void ASkill2_Magition::OnHit_Skil2_Magition(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
@@ -85,7 +87,7 @@ void ASkill2_Magition::ProjectileStop(const FHitResult& rersult)
 {
 	Destroy();
 	FString s = rersult.GetActor()->GetName();
-	UE_LOG(LogMypro, Warning, TEXT("skil2_Stop :%s"), *s);
+	UE_LOG(LogMypro, Warning, TEXT("skil2_Stophit :%s"), *s);
 	float pe = static_cast<float>(AttackDamage);
 	if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
 	UGameplayStatics::ApplyDamage(rersult.GetActor(), pe, GetInstigatorController(), this, UDamageType::StaticClass());
@@ -94,13 +96,13 @@ void ASkill2_Magition::ProjectileStop(const FHitResult& rersult)
 		AMainPlayerController* PC = Cast<AMainPlayerController>(GetInstigatorController());
 		if (PC)
 		{
-			if (PC->HasAuthority())
-			{
-				PC->Server_HittheDamageClient(rersult.GetActor(), pe);
-			}
-			else
+			if (PC->IsLocalController()&&!rersult.GetActor()->HasAuthority())
 			{
 				PC->Server_HittheDamageHost(rersult.GetActor(), pe);
+			}
+			else if(PC->IsLocalController())
+			{
+				PC->Server_HittheDamageClient(rersult.GetActor(), pe);
 			}
 		}
 	}

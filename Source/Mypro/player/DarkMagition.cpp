@@ -120,9 +120,23 @@ void ADarkMagition::Skill2()
 {
     Skill2coolTime(0.5f);
     FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 120);
-    FRotator SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
+    FRotator SpawnRotation = FRotator::ZeroRotator;
+    if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+        SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
+    else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+    {
+        if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
+        {
+            SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
+        }
+        else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
+        {
+            SpawnRotation = FRotator(0, (GetMesh()->GetRelativeRotation().Yaw - GetActorRotation().Yaw) - 90, 0);
+        }
+    }
+    FRotator SpawnRotationShowing = SpawnRotation;
     FVector  Loc = SpawnLocation;
-    FRotator Rot = SpawnRotation;
+    FRotator Rot = SpawnRotationShowing;
     FVector  Scl = FVector(1, 1, 1);
     FTransform Xform(Rot, Loc, Scl);
     if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
@@ -236,11 +250,14 @@ void ADarkMagition::Server_PlaySkill1_Implementation(FTransform form)
 
 void ADarkMagition::Multicast_PlaySkill2_Implementation(FTransform form)
 {
-    A2 = GetWorld()->SpawnActorDeferred<ASkill2_Magition>(Sk2, form, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-    A2->SetTagetTransform(TargetTransform);
-    A2->SetAttackDamage(Info->Skill2_ATK);
-    A2->IngoreActor(this);
-    UGameplayStatics::FinishSpawningActor(A2, form);
+    if (PlayerController && PlayerController->IsLocalController())
+    {
+        A2 = GetWorld()->SpawnActorDeferred<ASkill2_Magition>(Sk2, form, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+        A2->SetTagetTransform(TargetTransform);
+        A2->SetAttackDamage(Info->Skill2_ATK);
+        A2->IngoreActor(this);
+        UGameplayStatics::FinishSpawningActor(A2, form);
+    }
 }
 
 void ADarkMagition::Server_PlaySkill2_Implementation(FTransform form)
