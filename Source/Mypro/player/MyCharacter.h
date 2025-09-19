@@ -3,6 +3,7 @@
 #pragma once
 
 #include "../Gameinfo.h"
+#include "../Widget/DamageShowing.h"
 #include  "../singleton/GameManager.h"
 #include "../common/PlaySceneObject.h"
 #include "MyPlayerAnimInstance.h"
@@ -17,6 +18,7 @@ class MYPRO_API AMyCharacter : public ACharacter, public IGenericTeamAgentInterf
 	GENERATED_BODY()
 private:
 protected:
+	FTimerHandle TimerShowing;
 	AMainPlayerController* PlayerController;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -29,6 +31,8 @@ protected:
 	TObjectPtr<UMyPlayerAnimInstance> AnimInstance;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<USceneComponent> CameraHead;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UWidgetComponent> Damagesh;
 	FVector CurrentVelocity;
 	bool DashMoving = false;
 	bool BackMoving = false;

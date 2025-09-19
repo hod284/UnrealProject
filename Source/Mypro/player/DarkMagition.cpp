@@ -250,14 +250,11 @@ void ADarkMagition::Server_PlaySkill1_Implementation(FTransform form)
 
 void ADarkMagition::Multicast_PlaySkill2_Implementation(FTransform form)
 {
-    if (PlayerController && PlayerController->IsLocalController())
-    {
         A2 = GetWorld()->SpawnActorDeferred<ASkill2_Magition>(Sk2, form, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
         A2->SetTagetTransform(TargetTransform);
         A2->SetAttackDamage(Info->Skill2_ATK);
         A2->IngoreActor(this);
         UGameplayStatics::FinishSpawningActor(A2, form);
-    }
 }
 
 void ADarkMagition::Server_PlaySkill2_Implementation(FTransform form)

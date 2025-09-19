@@ -12,9 +12,18 @@ AMyCharacter::AMyCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	CameraHead = CreateDefaultSubobject<USceneComponent>(TEXT("CameraHead"));
 	Niagara = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Particle"));
+	Damagesh = CreateDefaultSubobject<UWidgetComponent>(TEXT("DamageWidget"));
+	static ConstructorHelpers::FClassFinder<UDamageShowing>UI(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/widget/DamageWidget.DamageWidget_C'"));
+	if(UI.Succeeded())
+	Damagesh->SetWidgetClass(UI.Class);
+	Damagesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Damagesh->SetWidgetSpace(EWidgetSpace::World);
+	Damagesh->SetDrawSize(FVector2D(200, 80));
+	Damagesh->SetAbsolute(false, false, false);
 	CameraHead->SetupAttachment(RootComponent);
 	SpringArm->SetupAttachment(CameraHead);
 	Camera->SetupAttachment(SpringArm);
+	Damagesh->SetupAttachment(CameraHead);
 	Niagara->SetupAttachment(GetMesh());
 	GetCapsuleComponent()->SetCollisionProfileName("player");
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -35,7 +44,8 @@ void AMyCharacter::BeginPlay()
 			ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
 		Subsystem->AddMappingContext(GetWorld()->GetGameInstance()->GetSubsystem<UInputManager>()->Context, 0);
 	}
-
+	UDamageShowing* da = Cast<UDamageShowing>(Damagesh->GetWidget());
+	da->SetVisibility(ESlateVisibility::Collapsed);
 	PlaySceneObject = Cast<APlaySceneObject>(UGameplayStatics::GetActorOfClass(GetWorld(), APlaySceneObject::StaticClass()));
 	UCapsuleComponent* Capsule = GetCapsuleComponent();
 	Capsule->OnComponentHit.AddDynamic(this, &AMyCharacter::OnHit);
@@ -334,30 +344,38 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 		HP = HpTemp / 100;
 		UE_LOG(LogMypro, Warning, TEXT("PMP:%f"), HP);
 		ui->OnDamage_P.Broadcast(HP);
+		UDamageShowing* da = Cast<UDamageShowing>(Damagesh->GetWidget());
+		da->SetVisibility(ESlateVisibility::Visible);
+		da->SetDamag(DamageAmount);
+		GetWorld()->GetTimerManager().ClearTimer(TimerShowing);
+		GetWorld()->GetTimerManager().SetTimer(TimerShowing, FTimerDelegate::CreateLambda([this, da]() {da->SetVisibility(ESlateVisibility::Collapsed); }), 0.5f, false);
 	}
 	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 	{
-
-		if (PlayerController&& PlayerController->IsLocalController()  && HasAuthority())
+		if (!BackMoving && !DashMoving)
 		{
-			AMyPlayerState* PS = GetPlayerState<AMyPlayerState>();
-			if (PS)
+			if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
 			{
-				PS->PlayerHPtotal_H -= DamageAmount;
-				float HpTemp = (PS->PlayerHPtotal_H/ PS->PlayerHPtotalconst_H) * 100;
-				HP = HpTemp / 100;
-				PS->PlayerHP_H = HP;
+				AMyPlayerState* PS = GetPlayerState<AMyPlayerState>();
+				if (PS)
+				{
+					PS->PlayerHPtotal_H -= DamageAmount;
+					float HpTemp = (PS->PlayerHPtotal_H / PS->PlayerHPtotalconst_H) * 100;
+					HP = HpTemp / 100;
+					PS->PlayerHP_H = HP;
+				}
 			}
+			else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
+				PlayerController->Sever_SendtheClientHP(DamageAmount);
 		}
-		else if (PlayerController &&PlayerController->IsLocalController() && !HasAuthority())
-		PlayerController->Sever_SendtheClientHP(DamageAmount);
 	}
+	if(HP<=KINDA_SMALL_NUMBER)
+		UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
 	return  DamageAmount;
 }
 void AMyCharacter::EndDash()
 {
 	UCharacterMovementComponent* Move = GetCharacterMovement();
-	// ��� �̲������: ����/������ ����
 	Move->bUseSeparateBrakingFriction = false;
 	Move->GroundFriction = SavedGroundFriction;
 	Move->BrakingFriction = SavedBrakingFriction;
