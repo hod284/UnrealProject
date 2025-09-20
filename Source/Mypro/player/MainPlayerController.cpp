@@ -33,8 +33,6 @@ TSubclassOf<APawn> AMainPlayerController::GetSelectCharactertClass()
 	}
 	return LoadedClass;
 }
-
-
 void AMainPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -219,4 +217,23 @@ void AMainPlayerController::Server_SendthetotalHP_Implementation(float hp)
 	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
 	PS->PlayerHPtotal_C = hp;
 	PS->PlayerHPtotalconst_C = hp;
+}
+void AMainPlayerController::Server_SendtheVelocity_Implementation(FVector ve)
+{
+	APlayerController* PC = GetWorld()->GetFirstPlayerController();
+	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
+	PS->CurrentVelocity_C = ve;
+}
+
+void AMainPlayerController::Server_GetttheVelocity_Implementation()
+{
+	APlayerController* PC = GetWorld()->GetFirstPlayerController();
+	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
+	Client_GetttheVelocity(PS->CurrentVelocity_H, PS->CurrentVelocity_C);
+}
+
+void AMainPlayerController::Client_GetttheVelocity_Implementation(FVector ve_h, FVector ve_c)
+{
+	CurrentVelocity_H = ve_h;
+	CurrentVelocity_C = ve_c;
 }

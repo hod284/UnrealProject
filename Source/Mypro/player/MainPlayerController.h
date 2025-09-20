@@ -61,6 +61,12 @@ public:
 	void Server_HittheDamageClient(AActor* actor, float damage);
 	UFUNCTION(Server, Reliable)
 	void Server_SendthetotalHP(float hp);
+	UFUNCTION(Server, Reliable)
+	void Server_SendtheVelocity(FVector ve);
+	UFUNCTION(Server, Reliable)
+	void Server_GetttheVelocity();
+	UFUNCTION(Client, Reliable)
+	void Client_GetttheVelocity(FVector ve_h, FVector ve_c);
 	float Pitch_c;
 	float Pitch_h;
 	float MeshPitch_c =-90;
@@ -73,6 +79,8 @@ public:
 	float PlayerHP_C=1.0;
 	float PlayerHPtptal_C;
 	float PlayerMP_C=1.0;
+	FVector CurrentVelocity_H;
+	FVector CurrentVelocity_C;
 	Characters MyCharacter_C = Characters::None;
 	Characters MyCharacter_H = Characters::None;
 	FTimerHandle TimerHandle;

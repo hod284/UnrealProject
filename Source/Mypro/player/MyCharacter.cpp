@@ -472,10 +472,16 @@ void AMyCharacter::MoveKey(const FInputActionValue& Value)
 			if (PlayerController)
 				PlayerController->Sever_SendtheClientMeshPitch(ro);
 		}
-		//���� �ӵ�(velocity) ���͸� �������ϰԡ� ����ȭ�ؼ� ���⸸ ���� ���� ���� ���ϴ� �Լ�
-		// GetVelocity().GetSafeNormal()  
-		//GetVelocity().GetSafeNormal() �̰� �̿��ؼ� �ֽŻ��°� ���� �ٷκ��� �ִ��� ����
 		CurrentVelocity = GetVelocity().GetSafeNormal();
+		if (HasAuthority())
+		{
+			AMyPlayerState* ps = Cast<AMyPlayerState>(PlayerController->PlayerState);
+			ps->CurrentVelocity_H = CurrentVelocity;
+		}
+		else
+		{
+			PlayerController->Server_SendtheVelocity(CurrentVelocity);
+		}
 	}
 }
 void AMyCharacter::MoveStop(const FInputActionValue& Value)

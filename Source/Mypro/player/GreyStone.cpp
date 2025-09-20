@@ -26,22 +26,29 @@ void AGreyStone::NAttack()
         FCollisionShape::MakeCapsule(Radious, 200), param);
     if (Collision)
     {
-        float	Origin = FMath::Cos(FMath::DegreesToRadians(45.f));
+        float	Origin =45.f;
 
         for (auto& Hit : result)
         {
             if (Hit.GetActor()->IsA<APawn>())
             {
-                AddMpbar(10);
-                if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
-                    UGameplayStatics::ApplyDamage(Hit.GetActor(), AttackDamage, GetInstigatorController(), this, UDamageType::StaticClass());
-                else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+                FVector DIr = (GetActorLocation() - Hit.GetActor()->GetActorLocation()).GetSafeNormal();
+                FVector Forward = (GetActorLocation() - center).GetSafeNormal();
+                float dot = FVector::DotProduct(Forward, DIr);
+                float Angle = FMath::RadiansToDegrees(FMath::Acos(dot));
+                if (Angle <= Origin)
                 {
-                    if (!HasAuthority())
+                    AddMpbar(10);
+                    if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
                         UGameplayStatics::ApplyDamage(Hit.GetActor(), AttackDamage, GetInstigatorController(), this, UDamageType::StaticClass());
-                    else
+                    else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
                     {
-                        PlayerController->Server_SendtheDamage(Hit.GetActor(), AttackDamage);
+                        if (!HasAuthority())
+                            UGameplayStatics::ApplyDamage(Hit.GetActor(), AttackDamage, GetInstigatorController(), this, UDamageType::StaticClass());
+                        else
+                        {
+                            PlayerController->Server_SendtheDamage(Hit.GetActor(), AttackDamage);
+                        }
                     }
                 }
             }

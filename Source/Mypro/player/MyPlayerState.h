@@ -54,4 +54,8 @@ public:
 	float MeshPitch_C = -90;
 	UPROPERTY(Replicated)
 	float MeshPitch_H = -90;
+	UPROPERTY(Replicated)
+	FVector CurrentVelocity_H;
+	UPROPERTY(Replicated)
+	FVector CurrentVelocity_C;
 };
