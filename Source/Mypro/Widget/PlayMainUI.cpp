@@ -31,6 +31,7 @@ void UPlayMainUI::NativeConstruct()
 	MonsterStun->SetPercent(1.0);
 	MonsterHp->SetPercent(1.0);
 	PlayerMp->SetPercent(1.0);
+	LoseTyping->SetText(FText::FromString(""));
 }
 
 UPlayMainUI::UPlayMainUI(const FObjectInitializer& ObjectInitializer):
@@ -74,23 +75,20 @@ bool UPlayMainUI::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent
 		if (IsValid( PS) )
 			PS->Inventoryco->ItemMinus.Broadcast(Op->SourceSlot->GetName());
 		Op->SourceSlot->SetName("");
-		// 1) ���� ��ũ����ǥ �� ����Ʈ ��ǥ
+
 		FVector2D Abs = InDragDropEvent.GetScreenSpacePosition();
 		FGeometry ViewGeom = UWidgetLayoutLibrary::GetViewportWidgetGeometry(this);
 		FVector2D ViewPos = ViewGeom.AbsoluteToLocal(Abs);
 
-		// 2) ����Ʈ ��ǥ �� ���� ������/����
+
 		FVector Origin, Dir;
 		PC->DeprojectScreenPositionToWorld(ViewPos.X, ViewPos.Y, Origin, Dir);
 
-		// 3) �缱(�밢)���� ���� ����̱�
-		//    ��: �������� Yaw +20��, ���� Pitch +10�� ���ø���
 		 float YawDeg = -40.f;  // ��(-) / ��(+)
 		 float PitchDeg = -10.f;  // ��(-) / �Ʒ�(+), Rotator ��Ģ ����
 		 FRotator DeltaRot(PitchDeg, YawDeg, 0.f);
 		 FVector  DiagDir = DeltaRot.RotateVector(Dir).GetSafeNormal();
 
-		// 4) Ʈ���̽�(���� ���߰� ������ ä��/������Ʈ Ÿ�� ����)
 		 float MaxDist = 200000.f;
 		 FVector Start = Origin;
 		 FVector End = Start + DiagDir * MaxDist;
@@ -99,15 +97,8 @@ bool UPlayMainUI::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent
 		FCollisionQueryParams Params(SCENE_QUERY_STAT(DropDiagTrace), /*bTraceComplex=*/true);
 		if (APawn* Pawn = PC->GetPawn()) Params.AddIgnoredActor(Pawn);
 
-		// (A) ������: ���ü� ä��
 		bool bHit = GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params);
 
-		// (B) ���鸸: ���彺��ƽ�� ���߱�
-		// FCollisionObjectQueryParams Obj;
-		// Obj.AddObjectTypesToQuery(ECC_WorldStatic);
-		// bool bHit = GetWorld()->LineTraceSingleByObjectType(Hit, Start, End, Obj, Params);
-
-		// �����
 		DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 2.f, 0, 1.f);
 
 		if (!bHit) 

@@ -191,5 +191,6 @@ public:
 	{
 		CameraTarget = target;
 	}
-	bool ClientAttack=false;
+	FVector CurrentVelocity_H;
+	FVector CurrentVelocity_C;
 };

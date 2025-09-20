@@ -54,8 +54,6 @@ public:
 	void Client_GedtheMeshRotate(float RO_H,float RO_C);
 	TSubclassOf<APawn> GetSelectCharactertClass();
 	UFUNCTION(Server, Reliable)
-	void Server_SendtheDamage(AActor* actor, float damage);
-	UFUNCTION(Server, Reliable)
 	void Server_HittheDamageHost(AActor* actor, float damage);
 	UFUNCTION(Server, Reliable)
 	void Server_HittheDamageClient(AActor* actor, float damage);

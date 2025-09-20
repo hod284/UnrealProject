@@ -58,6 +58,9 @@ void APVPController::Tick(float DeltaTime)
 				ui->SetHostMpBar(PS->PlayerMP_H);
 				ui->SetClientHpBar(PS->PlayerHP_C);
 				ui->SetClientMpBar(PS->PlayerMP_C);
+				Mychar->CurrentVelocity_H = PS->CurrentVelocity_H;
+				if (PS->PlayerHP_H <= KINDA_SMALL_NUMBER || PS->PlayerHP_C <= KINDA_SMALL_NUMBER)
+					UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
 			}
 			if (ClientPawn)
 			{
@@ -77,12 +80,16 @@ void APVPController::Tick(float DeltaTime)
 				PC->Sever_GettheMPandHP();
 				PC->Sever_GettheMeshPitch();
 				PC->Sever_GettheSelectCharacter();
+				PC->Server_GetttheVelocity();
 				ui->SetHostImagebyCharacter(PC->MyCharacter_H);
 				ui->SetClientImagebyCharacter(PC->MyCharacter_C);
 				ui->SetHostHpBar(PC->PlayerHP_H);
 				ui->SetHostMpBar(PC->PlayerMP_H);
 				ui->SetClientHpBar(PC->PlayerHP_C);
 				ui->SetClientMpBar(PC->PlayerMP_C);
+				if (PC->PlayerHP_H <= KINDA_SMALL_NUMBER || PC->PlayerHP_C <= KINDA_SMALL_NUMBER)
+					UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
+				Mychar->CurrentVelocity_C = PC->CurrentVelocity_C;
 				if (HostPawn)
 				{
 					HostPawn->GetMesh()->SetRelativeRotation(FRotator(0, PC->MeshPitch_h, 0));

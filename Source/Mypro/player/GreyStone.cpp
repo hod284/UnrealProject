@@ -20,6 +20,19 @@ void AGreyStone::NAttack()
     else  if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
         channel = ECollisionChannel::ECC_GameTraceChannel3;
+        if (HasAuthority())
+        {
+            center = GetActorLocation() + CurrentVelocity_H * 100.0f;
+            UE_LOG(LogMypro, Warning, TEXT("AUROA CURRENTVECTOR_c : %s"), *CurrentVelocity_H.ToString());
+        }
+        else
+        {
+            if (PlayerController)
+            {
+                UE_LOG(LogMypro, Warning, TEXT("AUROACURRENTVECTOR_c : %s"), *CurrentVelocity_C.ToString());
+                center = GetActorLocation() + CurrentVelocity_C * 100.0f;
+            }
+        }
     }
     bool Collision = GetWorld()->SweepMultiByChannel(result, center, center,
         FQuat::Identity, channel,
@@ -43,12 +56,19 @@ void AGreyStone::NAttack()
                         UGameplayStatics::ApplyDamage(Hit.GetActor(), AttackDamage, GetInstigatorController(), this, UDamageType::StaticClass());
                     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
                     {
-                        if (!HasAuthority())
-                            UGameplayStatics::ApplyDamage(Hit.GetActor(), AttackDamage, GetInstigatorController(), this, UDamageType::StaticClass());
-                        else
-                        {
-                            PlayerController->Server_SendtheDamage(Hit.GetActor(), AttackDamage);
-                        }
+                            UE_LOG(LogMypro, Warning, TEXT("hereismulti"));
+                            AMainPlayerController* PC = Cast<AMainPlayerController>(GetWorld()->GetFirstPlayerController());
+                            if (PC->IsLocalController() && PC->HasAuthority())
+                            {
+
+                                UE_LOG(LogMypro, Warning, TEXT("hereismulti_host"));
+                                PC->Server_HittheDamageClient(Hit.GetActor(), AttackDamage);
+                            }
+                            else if (PC->IsLocalController())
+                            {
+                                UE_LOG(LogMypro, Warning, TEXT("hereismulti_client"));
+                                PC->Server_HittheDamageHost(Hit.GetActor(), AttackDamage);
+                            }
                     }
                 }
             }

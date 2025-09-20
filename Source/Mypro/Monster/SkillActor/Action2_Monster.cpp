@@ -67,6 +67,7 @@ void AAction2_Monster::Init()
 	NiagaraParticle->SetActive(true);
 	GetWorldTimerManager().ClearTimer(Time_Colider);
 	GetWorld()->GetTimerManager().SetTimer(Time_Colider, FTimerDelegate::CreateLambda([this]() {
+		if(BoxColider)
 		BoxColider->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		}), 0.5, false);
 }

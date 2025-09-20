@@ -42,16 +42,30 @@ void AAurora::NAttack()
     param.AddIgnoredActor(this);
     param.bTraceComplex = false;
     float Radious = 100.0f;
-    FVector center = GetActorLocation()+CurrentVelocity * 100;
+    FVector center = GetActorLocation() + CurrentVelocity * 100;
     bool Collision;
 	ECollisionChannel channel = ECollisionChannel::ECC_GameTraceChannel2;
     if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
     {
          channel = ECollisionChannel::ECC_GameTraceChannel2;
+         center = GetActorLocation() + CurrentVelocity * 100;
     }
     else  if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
             channel = ECollisionChannel::ECC_GameTraceChannel3;
+            if (HasAuthority())
+            {
+                center = GetActorLocation() + CurrentVelocity_H * 100.0f;
+                UE_LOG(LogMypro, Warning, TEXT("AUROA CURRENTVECTOR_c : %s"), *CurrentVelocity_H.ToString());
+            }
+            else
+            {
+                if (PlayerController)
+                {
+                    UE_LOG(LogMypro, Warning, TEXT("AUROACURRENTVECTOR_c : %s"), *CurrentVelocity_C.ToString());
+                    center = GetActorLocation() + CurrentVelocity_C * 100.0f;
+                }
+            }
     }
     Collision = GetWorld()->SweepMultiByChannel(result, center, center,
         FQuat::Identity,channel,
@@ -70,6 +84,8 @@ void AAurora::NAttack()
 				 FVector Forward = (GetActorLocation()-center).GetSafeNormal();
 				 float dot = FVector::DotProduct(Forward, DIr);
 				 float Angle = FMath::RadiansToDegrees(FMath::Acos(dot));
+                 UE_LOG(LogMypro, Warning, TEXT("Angle : %f"), Angle);
+                 UE_LOG(LogMypro, Warning, TEXT("origin : %f"), Origin);
                  if (Angle <= Origin)
                  {
                      AddMpbar(10);
@@ -77,11 +93,18 @@ void AAurora::NAttack()
                          UGameplayStatics::ApplyDamage(Hit.GetActor(), pe, GetInstigatorController(), this, UDamageType::StaticClass());
                      else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
                      {
-                         if (!HasAuthority())
-                             UGameplayStatics::ApplyDamage(Hit.GetActor(), pe, GetInstigatorController(), this, UDamageType::StaticClass());
-                         else
+                         UE_LOG(LogMypro, Warning, TEXT("hereismulti"));
+                         AMainPlayerController* PC = Cast<AMainPlayerController>(GetWorld()->GetFirstPlayerController());
+                         if (PC->IsLocalController()&& PC->HasAuthority())
                          {
-                             PlayerController->Server_SendtheDamage(Hit.GetActor(), pe);
+
+                             UE_LOG(LogMypro, Warning, TEXT("hereismulti_host"));
+                             PC->Server_HittheDamageClient(Hit.GetActor(), pe);
+                         }
+                         else if( PC->IsLocalController())
+                         {
+                             UE_LOG(LogMypro, Warning, TEXT("hereismulti_client"));
+                             PC->Server_HittheDamageHost(Hit.GetActor(), pe);
                          }
                      }
                  }

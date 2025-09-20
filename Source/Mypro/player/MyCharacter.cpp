@@ -333,7 +333,14 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 	if (ui && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
 	{
 		if (!BackMoving && !DashMoving)
+		{
 			PlayerHp -= DamageAmount;
+			UDamageShowing* da = Cast<UDamageShowing>(Damagesh->GetWidget());
+			da->SetVisibility(ESlateVisibility::Visible);
+			da->SetDamag(DamageAmount);
+			GetWorld()->GetTimerManager().ClearTimer(TimerShowing);
+			GetWorld()->GetTimerManager().SetTimer(TimerShowing, FTimerDelegate::CreateLambda([this, da]() {da->SetVisibility(ESlateVisibility::Collapsed); }), 0.5f, false);
+		}
 		else
 		{
 			PlayerHp -= 0;
@@ -349,14 +356,6 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 
 			GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UI);
 			ui->TypingStart();
-		}
-		else
-		{
-			UDamageShowing* da = Cast<UDamageShowing>(Damagesh->GetWidget());
-			da->SetVisibility(ESlateVisibility::Visible);
-			da->SetDamag(DamageAmount);
-			GetWorld()->GetTimerManager().ClearTimer(TimerShowing);
-			GetWorld()->GetTimerManager().SetTimer(TimerShowing, FTimerDelegate::CreateLambda([this, da]() {da->SetVisibility(ESlateVisibility::Collapsed); }), 0.5f, false);
 		}
 	}
 	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
@@ -377,8 +376,6 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 			else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
 				PlayerController->Sever_SendtheClientHP(DamageAmount);
 		}
-		if (HP <= KINDA_SMALL_NUMBER)
-			UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
 	}
 	return  DamageAmount;
 }
@@ -461,26 +458,25 @@ void AMyCharacter::MoveKey(const FInputActionValue& Value)
 				GetMesh()->SetRelativeRotation(FRotator(0, -180.0f, 0));
 			}
 		}
+		CurrentVelocity = GetVelocity().GetSafeNormal();
 		if (HasAuthority())
 		{
 			AMyPlayerState* PS = GetPlayerState<AMyPlayerState>();
-			if(PS)
-			PS->MeshPitch_H = ro;
+			if (PS)
+			{
+				PS->CurrentVelocity_H = CurrentVelocity;
+				UE_LOG(LogMypro, Warning, TEXT("CURRENTVECTOR_h : %s"), *CurrentVelocity.ToString());
+				PS->MeshPitch_H = ro;
+			}
 		}
 		else
 		{
 			if (PlayerController)
+			{
+				PlayerController->Server_SendtheVelocity(CurrentVelocity);
+				UE_LOG(LogMypro, Warning, TEXT("CURRENTVECTOR_c : %s"), *CurrentVelocity.ToString());
 				PlayerController->Sever_SendtheClientMeshPitch(ro);
-		}
-		CurrentVelocity = GetVelocity().GetSafeNormal();
-		if (HasAuthority())
-		{
-			AMyPlayerState* ps = Cast<AMyPlayerState>(PlayerController->PlayerState);
-			ps->CurrentVelocity_H = CurrentVelocity;
-		}
-		else
-		{
-			PlayerController->Server_SendtheVelocity(CurrentVelocity);
+			}
 		}
 	}
 }
