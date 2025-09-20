@@ -46,15 +46,18 @@ void UWinerWidgetClass::Typing()
 			Winner->SetText(FText::FromString("W I N"));
 			break;
 		case 6:
-			Winner->SetText(FText::FromString("W I N E"));
+			Winner->SetText(FText::FromString("W I N "));
 			break;
 		case 7:
-			Winner->SetText(FText::FromString("W I N E "));
+			Winner->SetText(FText::FromString("W I N E"));
 			break;
 		case 8:
-			Winner->SetText(FText::FromString("W I N E R"));
+			Winner->SetText(FText::FromString("W I N E "));
 			break;
 		case 9:
+			Winner->SetText(FText::FromString("W I N E R"));
+			break;
+		case 10:
 			TimeCount=0;
 			GetWorld()->GetTimerManager().ClearTimer(Timer);
 			break;

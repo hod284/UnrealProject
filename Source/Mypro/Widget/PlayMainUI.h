@@ -38,6 +38,8 @@ protected:
 	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<UImage> PlayerImage;
 	UPROPERTY(BlueprintReadWrite)
+	TObjectPtr<UTextBlock> LoseTyping;
+	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<UInventory> Inventory;
 
 	float Percent1 = 1.0f;
@@ -57,7 +59,11 @@ protected:
 	void SetPHpBar(float da);
 	UFUNCTION()
 	void SetPMpBar(float da);
+	int32 TimeCount;
+	FTimerHandle Timer;
 public:
+	void Typing();
+	void TypingStart();
 	virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)override;
 	FOnDamage_M OnDamage_M;// ���� ������ ��������Ʈ
 	FOnStun OnStunDamage; //���� ���ϵ����� ��������Ʈ

@@ -17,7 +17,7 @@ AMyCharacter::AMyCharacter()
 	if(UI.Succeeded())
 	Damagesh->SetWidgetClass(UI.Class);
 	Damagesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	Damagesh->SetWidgetSpace(EWidgetSpace::World);
+	Damagesh->SetWidgetSpace(EWidgetSpace::Screen);
 	Damagesh->SetDrawSize(FVector2D(200, 80));
 	Damagesh->SetAbsolute(false, false, false);
 	CameraHead->SetupAttachment(RootComponent);
@@ -344,11 +344,20 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 		HP = HpTemp / 100;
 		UE_LOG(LogMypro, Warning, TEXT("PMP:%f"), HP);
 		ui->OnDamage_P.Broadcast(HP);
-		UDamageShowing* da = Cast<UDamageShowing>(Damagesh->GetWidget());
-		da->SetVisibility(ESlateVisibility::Visible);
-		da->SetDamag(DamageAmount);
-		GetWorld()->GetTimerManager().ClearTimer(TimerShowing);
-		GetWorld()->GetTimerManager().SetTimer(TimerShowing, FTimerDelegate::CreateLambda([this, da]() {da->SetVisibility(ESlateVisibility::Collapsed); }), 0.5f, false);
+		if (HP <= KINDA_SMALL_NUMBER)
+		{
+
+			GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UI);
+			ui->TypingStart();
+		}
+		else
+		{
+			UDamageShowing* da = Cast<UDamageShowing>(Damagesh->GetWidget());
+			da->SetVisibility(ESlateVisibility::Visible);
+			da->SetDamag(DamageAmount);
+			GetWorld()->GetTimerManager().ClearTimer(TimerShowing);
+			GetWorld()->GetTimerManager().SetTimer(TimerShowing, FTimerDelegate::CreateLambda([this, da]() {da->SetVisibility(ESlateVisibility::Collapsed); }), 0.5f, false);
+		}
 	}
 	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 	{
@@ -368,9 +377,9 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 			else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
 				PlayerController->Sever_SendtheClientHP(DamageAmount);
 		}
+		if (HP <= KINDA_SMALL_NUMBER)
+			UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
 	}
-	if(HP<=KINDA_SMALL_NUMBER)
-		UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
 	return  DamageAmount;
 }
 void AMyCharacter::EndDash()
@@ -664,7 +673,7 @@ void AMyCharacter::AddMpbar(float cost)
   ui->OnSyncMp_P.Broadcast(MP);
   else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
   { 
-
+	 
 	  if (PlayerController && PlayerController->IsLocalController()&&HasAuthority())
 	  {
 		  AMyPlayerState* PS = GetPlayerState<AMyPlayerState>();

@@ -17,6 +17,7 @@ void UPlayMainUI::NativeConstruct()
 	MonsterHp = Cast<UProgressBar>(GetWidgetFromName("MHP"));
 	MonsterStun = Cast<UProgressBar>(GetWidgetFromName("MST"));
 	Inventory = Cast<UInventory>(GetWidgetFromName("Inven"));
+	LoseTyping = Cast<UTextBlock>(GetWidgetFromName("Lose"));
 	Inventory->SetVisibility(ESlateVisibility::Collapsed);
 	if(!OnDamage_M.IsBound())
 	FDelegateHandle Handle1 =  OnDamage_M.AddUObject(this,&UPlayMainUI::SetMHpBar);
@@ -185,4 +186,46 @@ void UPlayMainUI::SkillInite()
 	default:
 		break;
 	}
+}
+
+void UPlayMainUI::Typing()
+{
+	TimeCount += 1;
+	switch (TimeCount)
+	{
+	case 1:
+		LoseTyping->SetText(FText::FromString("L"));
+		break;
+	case 2:
+		LoseTyping->SetText(FText::FromString("L "));
+		break;
+	case 3:
+		LoseTyping->SetText(FText::FromString("L O"));
+		break;
+	case 4:
+		LoseTyping->SetText(FText::FromString("L O "));
+		break;
+	case 5:
+		LoseTyping->SetText(FText::FromString("L O S"));
+		break;
+	case 6:
+		LoseTyping->SetText(FText::FromString("L O S "));
+		break;
+	case 7:
+		LoseTyping->SetText(FText::FromString("L O S E"));
+		break;
+	case 9:
+		TimeCount = 0;
+		GetWorld()->GetTimerManager().ClearTimer(Timer);
+		UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
+		break;
+	default:
+		break;
+	}
+}
+
+void UPlayMainUI::TypingStart()
+{
+	GetWorld()->GetTimerManager().ClearTimer(Timer);
+	GetWorld()->GetTimerManager().SetTimer(Timer, this, &UPlayMainUI::Typing, 0.5f, true);
 }
