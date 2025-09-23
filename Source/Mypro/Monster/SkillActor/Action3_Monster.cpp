@@ -77,12 +77,13 @@ void AAction3_Monster::Init()
 	{
 		FVector f = FVector(GetActorLocation().X, GetActorLocation().Y, 0);
 		FVector e = FVector(result.ImpactPoint.X, result.ImpactPoint.Y, 0);
-
+		float dis = FVector::Dist(result.ImpactPoint, GetActorLocation());
 		UE_LOG(LogMypro, Warning, TEXT("beamlength:%s"), *result.GetActor()->GetName());
-
-		NiagaraParticle->SetVariableFloat(TEXT("BeamLength"), result.Distance);
-		BoxColider->SetCapsuleHalfHeight(result.Distance);
-		BoxColider->SetRelativeLocation(FVector(0, 0, result.Distance));
+		UE_LOG(LogMypro, Warning, TEXT("result.impactp[oint:%s"), *result.ImpactPoint.ToString());
+		UE_LOG(LogMypro, Warning, TEXT("startlocation:%s"), *GetActorLocation().ToString());
+		NiagaraParticle->SetVariableFloat(TEXT("BeamLength"),dis);
+		BoxColider->SetCapsuleHalfHeight(dis/2.0f);
+		BoxColider->SetRelativeLocation(FVector(0, 0, dis/2.0f));
 	}
 	NiagaraParticle->SetActive(true);
 	BoxColider->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
