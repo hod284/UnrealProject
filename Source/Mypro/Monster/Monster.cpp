@@ -67,7 +67,7 @@ void AMonster::BeginPlay()
 void AMonster::Start()
 {
 	if (Brain)
-		Brain->ResumeLogic(TEXT("ManualStopdf")); // �극�� ����
+		Brain->ResumeLogic(TEXT("ManualStopd")); 
 }
 void AMonster::Attack1()
 {

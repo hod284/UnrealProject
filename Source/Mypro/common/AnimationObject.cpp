@@ -22,5 +22,9 @@ UAnimationObject::UAnimationObject()
 	if (PlayerAnimTable_monster.Succeeded())
 		mPlayerAnimData = PlayerAnimTable_monster.Object;
 	if (mPlayerAnimData)
-	DataAnimainfo_Monster = mPlayerAnimData->FindRow<FMonsterAnimInfo>("Steel", TEXT(""));
+	{
+		DataAnimainfo_Monster = mPlayerAnimData->FindRow<FMonsterAnimInfo>("Steel", TEXT(""));
+		DataAnimainfo_Monster_super = mPlayerAnimData->FindRow<FMonsterAnimInfo>("Minion_Super", TEXT(""));
+		DataAnimainfo_Monster_shooting = mPlayerAnimData->FindRow<FMonsterAnimInfo>("Minion_Shooting", TEXT(""));
+	}
 }

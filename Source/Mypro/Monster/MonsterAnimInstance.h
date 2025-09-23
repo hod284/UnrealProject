@@ -17,6 +17,10 @@ class MYPRO_API UMonsterAnimInstance : public UAnimInstance
 protected:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TMap<FName, TObjectPtr<UAnimSequence>> SequenceMap;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<FName, TObjectPtr<UAnimSequence>> SequenceMap_minion;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<FName, TObjectPtr<UAnimSequence>> SequenceMap_minion_shooting;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	EMonsterDefaultAnim	mAnimType = EMonsterDefaultAnim::Idle;
 
@@ -36,7 +40,6 @@ public:
 	void StunAni();
 	void RubAni();
 	void IdleAni();
-
 	UFUNCTION()
 	void AnimNotify_At1Play();
 	UFUNCTION()
@@ -55,4 +58,8 @@ public:
 	void AnimNotify_At3Reset();
 	UFUNCTION()
 	void AnimNotify_At4Reset();
+	UFUNCTION()
+	void AnimNotify_At1MinionPlay();
+	UFUNCTION()
+	void AnimNotify_At1MinionShootingPlay();
 };

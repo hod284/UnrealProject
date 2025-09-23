@@ -22,6 +22,10 @@ protected:
 	const FPlayerAnimInfo* DataAnimainfo_W;
 	// 플레이어 애니메이션 정보 몬스터
 	const FMonsterAnimInfo* DataAnimainfo_Monster;
+	// 플레이어 애니메이션 정보 몬스터
+	const FMonsterAnimInfo* DataAnimainfo_Monster_super;
+	// 플레이어 애니메이션 정보 몬스터
+	const FMonsterAnimInfo* DataAnimainfo_Monster_shooting;
 public:
 	const FPlayerAnimInfo* GetAnimaDatainfo_W() const
 	{
@@ -38,6 +42,14 @@ public:
 	const  FMonsterAnimInfo* GetDataAnimainfo_Monster() const
 	{
 		return DataAnimainfo_Monster;
+	}
+	const  FMonsterAnimInfo* GetDataAnimainfo_Monster_super() const
+	{
+		return DataAnimainfo_Monster_super;
+	}
+	const  FMonsterAnimInfo* GetDataAnimainfo_Monster_shooting() const
+	{
+		return DataAnimainfo_Monster_shooting;
 	}
 
 	UAnimationObject();

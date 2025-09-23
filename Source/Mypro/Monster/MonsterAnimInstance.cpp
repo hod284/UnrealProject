@@ -3,13 +3,18 @@
 
 #include "MonsterAnimInstance.h"
 #include "Monster.h"
+#include "MinionMonster.h"
 void UMonsterAnimInstance::PostInitProperties()
 {
 	Super::PostInitProperties();
 	// Initialize any properties or variables here
 	const  UAnimationObject* DataSystem = GetDefault<UAnimationObject>();
 	const FMonsterAnimInfo* AnimInfo = DataSystem->GetDataAnimainfo_Monster();
+	const FMonsterAnimInfo* AnimInfo_super = DataSystem->GetDataAnimainfo_Monster_super();
+	const FMonsterAnimInfo* AnimInfo_shooting = DataSystem->GetDataAnimainfo_Monster_shooting();
 	SequenceMap = AnimInfo->SequenceMap;
+	SequenceMap_minion = AnimInfo_super->SequenceMap;
+	SequenceMap_minion_shooting = AnimInfo_shooting->SequenceMap;
 }
 
 void UMonsterAnimInstance::NativeBeginPlay()
@@ -98,6 +103,19 @@ void UMonsterAnimInstance::AnimNotify_At4Reset()
 {
 	AMonster* monster = Cast<AMonster>(TryGetPawnOwner());
 	monster->GetAAction4_Monster()->Reset();
+}
+
+void UMonsterAnimInstance::AnimNotify_At1MinionPlay()
+{
+	AMinionMonster* monster = Cast<AMinionMonster>(TryGetPawnOwner());
+	monster->AttackSuper();
+}
+
+
+void UMonsterAnimInstance::AnimNotify_At1MinionShootingPlay()
+{
+	AMinionMonster* monster = Cast<AMinionMonster>(TryGetPawnOwner());
+	monster->AttackShooting();
 }
 
 void UMonsterAnimInstance::AnimNotify_Death()
