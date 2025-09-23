@@ -17,9 +17,7 @@
 #include "Monster.generated.h"
 
 UCLASS()
-class MYPRO_API AMonster : public APawn,
-	// IGenericTeamAgentInterface ��� �������̽� ��ӹ޾Ƽ� ���� �ڽ��� �Ҽ��� ���������
-	public IGenericTeamAgentInterface
+class MYPRO_API AMonster : public APawn
 {
 	GENERATED_BODY()
 
@@ -76,25 +74,14 @@ public:
 	AAction4_Monster* Ac4;
 	TObjectPtr<UMonsterAnimInstance> AnimInstance;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser);
-	// IGenericTeamAgentInterface ��� �������̽� ���� �����ؾ��� �Լ�
-	virtual FGenericTeamId GetGenericTeamId()	const  override
-	{
-		return TeamID;
-	}
-	void SetGenericTeamId(const FGenericTeamId& mTeamID) 
-	{
-		TeamID = mTeamID;
-	}
 	float DistanceToTarget( AActor* Target)
 	{
 		float dis = 0.0f;
 		FVector	TargetLocation, MonsterLocation;
 		TargetLocation = FVector(Target->GetActorLocation().X, Target->GetActorLocation().Y,0);
 
-		// ���� ��ġ�� ���Ѵ�.
 		MonsterLocation = FVector( GetActorLocation().X, GetActorLocation().Y,0);
 
-		// �� ������ �Ÿ��� ���Ѵ�.
 		dis = FVector::Dist(TargetLocation, MonsterLocation);
 		return dis;
 	}

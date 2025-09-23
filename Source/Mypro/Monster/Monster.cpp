@@ -21,8 +21,7 @@ AMonster::AMonster()
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	AIControllerClass = AMonsterController::StaticClass();
 	MovementComponent->SetUpdatedComponent(RootComponent);
-	SetGenericTeamId(FGenericTeamId(TeamMonster));
-	bUseControllerRotationYaw = true; // ��Ʈ�ѷ��� Yaw ȸ���� Pawn�� ����
+	bUseControllerRotationYaw = true; 
 }
 
 // Called when the game starts or when spawned
@@ -208,6 +207,14 @@ float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), Niagara3, LO3);
 		Death = true;
+		if(Ac1)
+		Ac1->Destroy();
+		if (Ac2)
+			Ac2->Destroy();
+		if (Ac3)
+		Ac3->Destroy();
+		if (Ac4)
+		Ac4->Destroy();
 	}
 
 	return DamageAmount;

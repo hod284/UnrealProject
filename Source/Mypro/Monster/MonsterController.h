@@ -27,7 +27,6 @@ protected:
 public:
 	virtual void OnConstruction(const FTransform& Transform) override;
 
-	// 이동이 완료된 후에 호출되는 함수.
 	virtual void OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result) override;
 
 	virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const;
