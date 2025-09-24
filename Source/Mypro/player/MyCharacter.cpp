@@ -523,40 +523,26 @@ void AMyCharacter::CameraRotation_Cancel(const FInputActionValue& Value)
 
 void AMyCharacter::BackKey(const FInputActionValue& Value)
 {
-	if (!BackMoving && !DashMoving && !DashMoving && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetCusorVisual() == UIORNOT::UINot)
+	if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+		BackDash(CurrentVelocity);
+	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 	{
-		UCharacterMovementComponent* Move = GetCharacterMovement();
-		Move->bUseSeparateBrakingFriction = true;
-		Move->GroundFriction = 0.5f;
-		Move->BrakingFriction = 0.5f;
-		Move->BrakingDecelerationWalking = 250.f;
-	    FVector	NewLocation = -CurrentVelocity * 1500.0f; 
-		LaunchCharacter(NewLocation, true, false);
-		BackMoving = true;
-		DashMoving = true;
-		GetWorldTimerManager().ClearTimer(DashTimer);
-		GetWorld()->GetTimerManager().SetTimer(DashTimer, this, &AMyCharacter::EndDash, 1.0, false);
-		if (AnimInstance)
-			AnimInstance->PlayBack();
+		if (HasAuthority())
+			Multicast_Back(CurrentVelocity);
+		else
+			Server_Back(CurrentVelocity);
 	}
 }
 void AMyCharacter::DashKey(const FInputActionValue& Value)
 {
-	if (!BackMoving && !DashMoving && !DashMoving && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetCusorVisual() == UIORNOT::UINot)
+	if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+		Dash(CurrentVelocity);
+	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 	{
-		UCharacterMovementComponent* Move = GetCharacterMovement();
-		Move->bUseSeparateBrakingFriction = true;
-		Move->GroundFriction = 0.5f;
-		Move->BrakingFriction = 0.5f;
-		Move->BrakingDecelerationWalking = 250.f;
-		FVector	NewLocation = CurrentVelocity * 1500.0f; 
-		LaunchCharacter(NewLocation, true, false);
-		DashMoving = true;
-		BackMoving = true;
-		GetWorldTimerManager().ClearTimer(DashTimer);
-		GetWorld()->GetTimerManager().SetTimer(DashTimer, this, &AMyCharacter::EndDash, 1.0, false);
-		if (AnimInstance)
-			AnimInstance->PlayBack();
+		if (HasAuthority())
+			Multicast_Dash(CurrentVelocity);
+		else
+			Server_Dash(CurrentVelocity);
 	}
 }
 void AMyCharacter::InventoryKey(const FInputActionValue& Value)
@@ -701,6 +687,44 @@ void AMyCharacter::SendtheMontageSkill(int32 index)
 	else
 		Server_PlayMontageSkill(index);
 }
+void AMyCharacter::Dash(FVector velocity)
+{
+	if (!BackMoving && !DashMoving && !DashMoving && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetCusorVisual() == UIORNOT::UINot)
+	{
+		UCharacterMovementComponent* Move = GetCharacterMovement();
+		Move->bUseSeparateBrakingFriction = true;
+		Move->GroundFriction = 0.5f;
+		Move->BrakingFriction = 0.5f;
+		Move->BrakingDecelerationWalking = 250.f;
+		FVector	NewLocation = velocity * 1500.0f;
+		LaunchCharacter(NewLocation, true, false);
+		DashMoving = true;
+		BackMoving = true;
+		GetWorldTimerManager().ClearTimer(DashTimer);
+		GetWorld()->GetTimerManager().SetTimer(DashTimer, this, &AMyCharacter::EndDash, 1.0, false);
+		if (AnimInstance)
+			AnimInstance->PlayBack();
+	}
+}
+void AMyCharacter::BackDash(FVector velocity)
+{
+	if (!BackMoving && !DashMoving && !DashMoving && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetCusorVisual() == UIORNOT::UINot)
+	{
+		UCharacterMovementComponent* Move = GetCharacterMovement();
+		Move->bUseSeparateBrakingFriction = true;
+		Move->GroundFriction = 0.5f;
+		Move->BrakingFriction = 0.5f;
+		Move->BrakingDecelerationWalking = 250.f;
+		FVector	NewLocation= -velocity * 1500.0f;
+		LaunchCharacter(NewLocation, true, false);
+		BackMoving = true;
+		DashMoving = true;
+		GetWorldTimerManager().ClearTimer(DashTimer);
+		GetWorld()->GetTimerManager().SetTimer(DashTimer, this, &AMyCharacter::EndDash, 1.0, false);
+		if (AnimInstance)
+			AnimInstance->PlayBack();
+	}
+}
 void AMyCharacter::Multicast_PlayMontageAttack_Implementation(bool up, int32 index)
 {
 	if (AnimInstance)
@@ -736,4 +760,24 @@ void AMyCharacter::Multicast_NullOverlap_Implementation()
 void AMyCharacter::Server_NullOverlap_Implementation()
 {
 	Multicast_NullOverlap();
+}
+
+void AMyCharacter::Server_Dash_Implementation(FVector velocity)
+{
+	Multicast_Dash(velocity);
+}
+
+void AMyCharacter::Server_Back_Implementation(FVector velocity)
+{
+	Multicast_Back(velocity);
+}
+
+void AMyCharacter::Multicast_Dash_Implementation(FVector velocity)
+{
+	Dash(velocity);
+}
+
+void AMyCharacter::Multicast_Back_Implementation(FVector velocity)
+{
+	BackDash(velocity);
 }

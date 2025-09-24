@@ -130,8 +130,18 @@ public:
 	void Multicast_NullOverlap();
 	UFUNCTION(Server, Reliable)
 	void Server_NullOverlap();
+	UFUNCTION(Server, Reliable)
+	void Server_Dash(FVector velocity);
+	UFUNCTION(Server, Reliable)
+	void Server_Back(FVector velocity);
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_Dash(FVector velocity);
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_Back(FVector velocity);
 	void SendtheMontageAttack(bool up, int32 index);
 	void SendtheMontageSkill(int32 index);
+	void Dash(FVector velocity);
+	void BackDash(FVector velocity);
 	virtual void NAttack();
 	virtual void  Skill1();
 	virtual void  Skill2();
