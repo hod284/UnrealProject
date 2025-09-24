@@ -38,6 +38,14 @@ AMinionMonster::AMinionMonster()
 void AMinionMonster::BeginPlay()
 {
 	Super::BeginPlay();
+	HP = 1.0f;
+	AnimInstance = Cast<UMonsterAnimInstance>(MeshComponent->GetAnimInstance());
+	AAIController* AIController = Cast<AAIController>(GetController());
+	if (AIController && MonsterBehaviorTree)
+	{
+		AIController->RunBehaviorTree(MonsterBehaviorTree);
+		AIController->GetBlackboardComponent()->SetValueAsFloat("NoramlAttackRange", NoramlAttackRange);
+	}
 }
 
 // Called every frame

@@ -24,6 +24,15 @@ void UFirstSelectMode::NativeConstruct()
 	// 멀티버튼 클릭 이벤트 연결
 	if (!MultiButton->OnClicked.IsBound())
 	MultiButton->OnClicked.AddDynamic(this, &UFirstSelectMode::ClickMultiButton);
+	// 멀티버튼 호버 이벤트 연결
+	if (!multipartybutton->OnHovered.IsBound())
+		multipartybutton->OnHovered.AddDynamic(this, &UFirstSelectMode::HoverMultiPartyButton);
+	// 멀티버튼 언호버 이벤트 연결
+	if (!multipartybutton->OnUnhovered.IsBound())
+		multipartybutton->OnUnhovered.AddDynamic(this, &UFirstSelectMode::UnHoverMultiPartyButton);
+	// 멀티버튼 클릭 이벤트 연결
+	if (!multipartybutton->OnClicked.IsBound())
+		multipartybutton->OnClicked.AddDynamic(this, &UFirstSelectMode::ClickMultiPartyButton);
 }
 
 void UFirstSelectMode::FirstSelectCharacter()
@@ -78,6 +87,19 @@ void UFirstSelectMode::UnHoverMultiButton()
 		StopAnimation(multi);
 }
 
+void UFirstSelectMode::HoverMultiPartyButton()
+{
+	// 멀티 버튼 호버 시 애니메이션 재생
+	if (multiparty)
+		PlayAnimation(multiparty, 0.0, 0, EUMGSequencePlayMode::Forward, 1.0f);
+}
+
+void UFirstSelectMode::UnHoverMultiPartyButton()
+{
+	if (multiparty)
+		StopAnimation(multiparty);
+}
+
 void UFirstSelectMode::ClickSingleButton()
 {
 	// 싱글 버튼 클릭 시 IntroMainUI의 스위처 인덱스를 1로 설정하여 캐릭터 선택화면 으로 전환
@@ -97,6 +119,26 @@ void UFirstSelectMode::ClickMultiButton()
 	if (ui)
 	{
 		GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSingorMulti(SingleORmulti::Multi);
+	}
+	if (IOnlineSubsystem* oss = IOnlineSubsystem::Get())
+		Session = oss ? oss->GetSessionInterface() : nullptr;
+	if (!Session.IsValid())
+		return;
+	Search = MakeShared<FOnlineSessionSearch>();
+	Search->bIsLanQuery = true;
+	Search->MaxSearchResults = 50;
+	Session->OnFindSessionsCompleteDelegates.AddUObject(this, &UFirstSelectMode::FinishedSession);
+	auto localid = GEngine->GetFirstGamePlayer(GetWorld())->GetPreferredUniqueNetId();
+	Session->FindSessions(*localid, Search.ToSharedRef());
+}
+
+void UFirstSelectMode::ClickMultiPartyButton()
+{
+	// 멀티 버튼 클릭 시 IntroMainUI의 스위처 인덱스를 1로 설정하여 캐릭터 선택 화면으로 전환
+	UIntroMainUI* ui = Cast<UIntroMainUI>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetIntroMainUI_widget());
+	if (ui)
+	{
+		GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSingorMulti(SingleORmulti::MultiParty);
 	}
 	if (IOnlineSubsystem* oss = IOnlineSubsystem::Get())
 		Session = oss ? oss->GetSessionInterface() : nullptr;

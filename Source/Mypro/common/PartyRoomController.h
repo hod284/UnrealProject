@@ -3,6 +3,8 @@
 #pragma once
 
 #include "../Gameinfo.h"
+#include "../singleton/UImanager.h"
+#include "../player/MyCharacter.h"
 #include "GameFramework/Actor.h"
 #include "PartyRoomController.generated.h"
 
@@ -18,7 +20,11 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
+	UPartyRoomWidgetClass* ui;
+	AMyCharacter* Mychar;
+	AMyCharacter* HostPawn;
+	AMyCharacter* ClientPawn;
+	TArray<AActor*> Players;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

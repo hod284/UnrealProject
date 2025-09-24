@@ -118,7 +118,10 @@ void URoomWidgetClass::ReadyButton()
 }
 void URoomWidgetClass::GoTravel()
 {
+	if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSingorMulti() == SingleORmulti::Multi)
 	GetWorld()->ServerTravel("/Game/Virtual_Studio_Kit/Maps/StudioB?listen");
+	else 	if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSingorMulti() == SingleORmulti::MultiParty)
+		GetWorld()->ServerTravel("/Game/Virtual_Studio_Kit/Maps/StudioA?listen");
 }
 
 void URoomWidgetClass::AudioMutemethod()

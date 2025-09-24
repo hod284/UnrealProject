@@ -13,5 +13,12 @@ UCLASS()
 class MYPRO_API AParty : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+protected:
+
+	AParty();
+	virtual void BeginPlay() override;
+	virtual void PostLogin(APlayerController* NewPlayer) override;
+	virtual void RestartPlayer(AController* NewPlayer)override;
+	virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
+
 };

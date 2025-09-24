@@ -8,6 +8,7 @@
 #include "../Widget/RoomWidgetClass.h"
 #include "../Widget//WinerWidgetClass.h"
 #include "../Widget/PvPUIClass.h"
+#include "../Widget/PartyRoomWidgetClass.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "UImanager.generated.h"
 
@@ -19,25 +20,29 @@ class MYPRO_API UUImanager : public UGameInstanceSubsystem
 	
 protected:
 	UPROPERTY()
-	TSubclassOf<UPlayMainUI> PlayMainUI; // �÷��� ����Ŭ����
+	TSubclassOf<UPlayMainUI> PlayMainUI; 
 	UPROPERTY()
-	TSubclassOf<UIntroMainUI> IntroMainUI; // ��Ʈ�� ���� Ŭ����
+	TSubclassOf<UIntroMainUI> IntroMainUI; 
 	UPROPERTY()
-	TSubclassOf<UWinerWidgetClass> WinerUI; // ��Ʈ�� ���� Ŭ����
+	TSubclassOf<UWinerWidgetClass> WinerUI; 
 	UPROPERTY()
-	TSubclassOf<URoomWidgetClass> RoomUI; // ��Ʈ�� ���� Ŭ����
+	TSubclassOf<URoomWidgetClass> RoomUI; 
 	UPROPERTY()
-	TSubclassOf<UPvPUIClass> PvPUI; // ��Ʈ�� ���� Ŭ����
+	TSubclassOf<UPvPUIClass> PvPUI; 
 	UPROPERTY()
-    TObjectPtr <UUserWidget> PlayMainUI_widget; // �÷��� ���� ����
+	TSubclassOf<UPartyRoomWidgetClass> PartyRoomUI; 
 	UPROPERTY()
-	TObjectPtr<UUserWidget> IntroMainUI_widget; // ��Ʈ�� ���� ����
+    TObjectPtr <UUserWidget> PlayMainUI_widget; 
 	UPROPERTY()
-	TObjectPtr<UUserWidget> Winer_widget; // ��Ʈ�� ���� ����
+	TObjectPtr<UUserWidget> IntroMainUI_widget; 
 	UPROPERTY()
-	TObjectPtr<UUserWidget> Room_widget; // ��Ʈ�� ���� ����
+	TObjectPtr<UUserWidget> Winer_widget; 
 	UPROPERTY()
-	TObjectPtr<UUserWidget> PvP_widget; // ��Ʈ�� ���� ����
+	TObjectPtr<UUserWidget> Room_widget; 
+	UPROPERTY()
+	TObjectPtr<UUserWidget> PvP_widget; 
+	UPROPERTY()
+	TObjectPtr<UUserWidget> PartyRoom_widget; 
 
 public:
 	const TObjectPtr<UUserWidget> GetPlayMainUI_widget() const
@@ -62,7 +67,10 @@ public:
 	{
 		return  PvP_widget;
 	}
-
+	const TObjectPtr<UUserWidget> GetPartyRoom_widget() const
+	{
+		return  PartyRoom_widget;
+	}
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	
 	UUImanager();

@@ -104,7 +104,7 @@ enum class  NowGameState: uint8
 UENUM()
 enum class  SingleORmulti : uint8
 {
-	None,single,Multi
+	None,single,Multi,MultiParty
 };
 
 //����UI ���� �ƴ��� ����

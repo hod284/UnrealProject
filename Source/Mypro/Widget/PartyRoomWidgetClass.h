@@ -4,6 +4,7 @@
 
 #include "../Gameinfo.h"
 #include "SkillStatus.h"
+#include "../player/MainPlayerController.h"
 #include "Blueprint/UserWidget.h"
 #include "PartyRoomWidgetClass.generated.h"
 
@@ -31,21 +32,27 @@ protected:
 	TObjectPtr<UProgressBar> PlayerHp_other;
 	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<UProgressBar> PlayerMp_other;
-	float Percent1 = 1.0f;
-
-	float Percent2 = 1.0f;
-
-	float Percent3 = 1.0f;
-
-	float Percent4 = 1.0f;
+	UPROPERTY(BlueprintReadWrite)
+	TObjectPtr<UImage> PlayerImage;
+	UPROPERTY(BlueprintReadWrite)
+	TObjectPtr<UImage> PlayerMp_OtherImage;
 	virtual void NativeConstruct() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 public:
+	void SetPlayerImagebyCharacter(Characters ch);
+	void SetPlayerOtherImagebyCharacter(Characters ch);
+	AMainPlayerController* PC;
+	void SetPlayOtherImage(FString Path);
+	void SetPlayerImage(FString Path);
 	void SetSkill1Inite(FString Path);
 	void SetSkill2Inite(FString Path);
 	void SetSkill3Inite(FString Path);
 	void SetSkill4Inite(FString Path);
-	void SetPlayerImage(FString Path);
+	void SkillInite();
+	void SetPlayerHpBar(float da);
+	void SetPlayerMpBar(float da);
+	void SetotherHpBar(float da);
+	void SetotherMpBar(float da);
 	void SetPercent1(float pe)
 	{
 		Percent1 = pe;
@@ -53,6 +60,14 @@ public:
 	float GetPercent1()
 	{
 		return Percent1;
+	}
+	void SetPercent1_c(float pe)
+	{
+		Percent1_c = pe;
+	}
+	float GetPercent1_c()
+	{
+		return Percent1_c;
 	}
 	void SetPercent2(float pe)
 	{
@@ -62,6 +77,14 @@ public:
 	{
 		return Percent2;
 	}
+	void SetPercent2_c(float pe)
+	{
+		Percent2_c = pe;
+	}
+	float GetPercent2_c()
+	{
+		return Percent2_c;
+	}
 	void SetPercent3(float pe)
 	{
 		Percent3 = pe;
@@ -69,6 +92,14 @@ public:
 	float GetPercent3()
 	{
 		return Percent3;
+	}
+	void SetPercent3_c(float pe)
+	{
+		Percent3_c = pe;
+	}
+	float GetPercent3_c()
+	{
+		return Percent3_c;
 	}
 	void SetPercent4(float pe)
 	{
@@ -78,4 +109,20 @@ public:
 	{
 		return Percent4;
 	}
+	void SetPercent4_c(float pe)
+	{
+		Percent4_c = pe;
+	}
+	float GetPercent4_c()
+	{
+		return Percent4_c;
+	}
+	float Percent1 = 1.0f;
+	float Percent1_c = 1.0f;
+	float Percent2 = 1.0f;
+	float Percent2_c = 1.0f;
+	float Percent3 = 1.0f;
+	float Percent3_c = 1.0f;
+	float Percent4 = 1.0f;
+	float Percent4_c = 1.0f;
 };
