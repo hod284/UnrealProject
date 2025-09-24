@@ -5,74 +5,19 @@
 
 void AGreyStone::NAttack()
 {
-    TArray<FHitResult>	result;
-    float Radious = 100.0f;
-    FCollisionQueryParams	param;
-    param.AddIgnoredActor(this);
-    param.bTraceComplex = false;
-    FVector center = GetActorLocation() + CurrentVelocity * 100;
-    DrawDebugCapsule(GetWorld(), center, 200, Radious, FQuat::Identity, FColor::Green, false, 2.f);
     ECollisionChannel channel = ECollisionChannel::ECC_GameTraceChannel2;
     if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
     {
         channel = ECollisionChannel::ECC_GameTraceChannel2;
+        AttackWeapon(CurrentVelocity, channel);
     }
     else  if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
         channel = ECollisionChannel::ECC_GameTraceChannel3;
-        if (HasAuthority())
-        {
-            center = GetActorLocation() + CurrentVelocity_H * 100.0f;
-            UE_LOG(LogMypro, Warning, TEXT("AUROA CURRENTVECTOR_c : %s"), *CurrentVelocity_H.ToString());
-        }
-        else
-        {
-            if (PlayerController)
-            {
-                UE_LOG(LogMypro, Warning, TEXT("AUROACURRENTVECTOR_c : %s"), *CurrentVelocity_C.ToString());
-                center = GetActorLocation() + CurrentVelocity_C * 100.0f;
-            }
-        }
-    }
-    bool Collision = GetWorld()->SweepMultiByChannel(result, center, center,
-        FQuat::Identity, channel,
-        FCollisionShape::MakeCapsule(Radious, 200), param);
-    if (Collision)
-    {
-        float	Origin =45.f;
-
-        for (auto& Hit : result)
-        {
-            if (Hit.GetActor()->IsA<APawn>())
-            {
-                FVector DIr = (GetActorLocation() - Hit.GetActor()->GetActorLocation()).GetSafeNormal();
-                FVector Forward = (GetActorLocation() - center).GetSafeNormal();
-                float dot = FVector::DotProduct(Forward, DIr);
-                float Angle = FMath::RadiansToDegrees(FMath::Acos(dot));
-                if (Angle <= Origin)
-                {
-                    AddMpbar(10);
-                    if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
-                        UGameplayStatics::ApplyDamage(Hit.GetActor(), AttackDamage, GetInstigatorController(), this, UDamageType::StaticClass());
-                    else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
-                    {
-                            UE_LOG(LogMypro, Warning, TEXT("hereismulti"));
-                            AMainPlayerController* PC = Cast<AMainPlayerController>(GetWorld()->GetFirstPlayerController());
-                            if (PC->IsLocalController() && PC->HasAuthority())
-                            {
-
-                                UE_LOG(LogMypro, Warning, TEXT("hereismulti_host"));
-                                PC->Server_HittheDamageClient(Hit.GetActor(), AttackDamage);
-                            }
-                            else if (PC->IsLocalController())
-                            {
-                                UE_LOG(LogMypro, Warning, TEXT("hereismulti_client"));
-                                PC->Server_HittheDamageHost(Hit.GetActor(), AttackDamage);
-                            }
-                    }
-                }
-            }
-        }
+        if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
+            Multicast_NAttack(CurrentVelocity, channel);
+        else  if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
+            Server_NAttack(CurrentVelocity, channel);
     }
 }
 void AGreyStone::BeginPlay()
@@ -281,3 +226,50 @@ void AGreyStone::Server_PlaySkill4_Implementation(FTransform form)
     Multicast_PlaySkill4(form);
 }
 
+void AGreyStone::Server_NAttack_Implementation(FVector velocity, ECollisionChannel atchannel)
+{
+    Multicast_NAttack(velocity, atchannel);
+}
+
+void AGreyStone::Multicast_NAttack_Implementation(FVector velocity, ECollisionChannel atchannel)
+{
+    AttackWeapon(velocity, atchannel);
+}
+
+void AGreyStone::AttackWeapon(FVector velocity, ECollisionChannel atchannel)
+{
+    TArray<FHitResult>	result;
+    FCollisionQueryParams	param;
+    param.AddIgnoredActor(this);
+    param.bTraceComplex = false;
+    float Radious = 100.0f;
+    FVector center = GetActorLocation() + velocity * 100;
+    bool Collision;
+    ECollisionChannel channel = atchannel;
+    Collision = GetWorld()->SweepMultiByChannel(result, center, center,
+        FQuat::Identity, channel,
+        FCollisionShape::MakeCapsule(Radious, 200), param);
+    DrawDebugCapsule(GetWorld(), center, 200, Radious, FQuat::Identity, FColor::Green, false, 2.f);
+    float pe = static_cast<float>(AttackDamage);
+    if (Collision)
+    {
+        float	Origin = 45.0f;
+        for (auto& Hit : result)
+        {
+            if (Hit.GetActor()->IsA<APawn>())
+            {
+                FVector DIr = (GetActorLocation() - Hit.GetActor()->GetActorLocation()).GetSafeNormal();
+                FVector Forward = (GetActorLocation() - center).GetSafeNormal();
+                float dot = FVector::DotProduct(Forward, DIr);
+                float Angle = FMath::RadiansToDegrees(FMath::Acos(dot));
+                UE_LOG(LogMypro, Warning, TEXT("Angle : %f"), Angle);
+                UE_LOG(LogMypro, Warning, TEXT("origin : %f"), Origin);
+                if (Angle <= Origin)
+                {
+                    AddMpbar(10);
+                    UGameplayStatics::ApplyDamage(Hit.GetActor(), pe, GetInstigatorController(), this, UDamageType::StaticClass());
+                }
+            }
+        }
+    }
+}

@@ -51,5 +51,10 @@ public:
 	void Multicast_PlaySkill4(FTransform form);
 	UFUNCTION(Server, Reliable)
 	void Server_PlaySkill4(FTransform form);
+	UFUNCTION(Server, Reliable)
+	void Server_NAttack(FVector velocity, ECollisionChannel atchannel);
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_NAttack(FVector velocity, ECollisionChannel atchannel);
+	void AttackWeapon(FVector velocity, ECollisionChannel atchannel);
 	AGreyStone();
 };

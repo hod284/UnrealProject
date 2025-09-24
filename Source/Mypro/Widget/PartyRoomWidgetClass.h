@@ -35,7 +35,7 @@ protected:
 	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<UImage> PlayerImage;
 	UPROPERTY(BlueprintReadWrite)
-	TObjectPtr<UImage> PlayerMp_OtherImage;
+	TObjectPtr<UImage> 	Player_OtherImage;
 	virtual void NativeConstruct() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 public:

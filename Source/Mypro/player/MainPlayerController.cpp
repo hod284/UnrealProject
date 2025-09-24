@@ -36,49 +36,6 @@ TSubclassOf<APawn> AMainPlayerController::GetSelectCharactertClass()
 void AMainPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
-	GetWorld()->GetTimerManager().SetTimerForNextTick(FTimerDelegate::CreateLambda ([this]() {
-		if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSingorMulti() == SingleORmulti::Multi)
-		{
-			UPvPUIClass* ui = Cast<UPvPUIClass>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPvP_widget());
-			if (ui)
-			{
-				if (HasAuthority())
-				{
-					APlayerController* PC = GetWorld()->GetFirstPlayerController();
-					if (PC)
-					{
-						AMyPlayerState* PS = PC->GetPlayerState<AMyPlayerState>();
-						if (PS)
-						{
-							ui->SetHostImagebyCharacter(PS->MyCharacter_H);
-							ui->SetClientImagebyCharacter(PS->MyCharacter_C);
-						}
-					}
-				}
-			}
-		}
-		else 	if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetSingorMulti() == SingleORmulti::MultiParty)
-		{
-			UPartyRoomWidgetClass* ui = Cast<UPartyRoomWidgetClass>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPartyRoom_widget());
-			if (ui)
-			{
-				if (HasAuthority())
-				{
-					APlayerController* PC = GetWorld()->GetFirstPlayerController();
-					if (PC)
-					{
-						AMyPlayerState* PS = PC->GetPlayerState<AMyPlayerState>();
-						if (PS)
-						{
-							ui->SetPlayerImagebyCharacter(PS->MyCharacter_H);
-							ui->SetPlayerOtherImagebyCharacter(PS->MyCharacter_C);
-						}
-					}
-				}
-			}
-		}
-	}));
 	SetReplicates(true);
 }
 void AMainPlayerController::Tick(float DeltaTime)

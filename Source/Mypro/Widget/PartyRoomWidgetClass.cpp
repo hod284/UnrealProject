@@ -13,7 +13,7 @@ void UPartyRoomWidgetClass::NativeConstruct()
 	PlayerImage = Cast<UImage>(GetWidgetFromName("PImage"));
 	PlayerHp = Cast<UProgressBar>(GetWidgetFromName("PHP"));
 	PlayerMp = Cast<UProgressBar>(GetWidgetFromName("PMP"));
-	PlayerMp_OtherImage = Cast<UImage>(GetWidgetFromName("OtherImage"));
+	Player_OtherImage = Cast<UImage>(GetWidgetFromName("OtherImage"));
 	PlayerHp_other = Cast<UProgressBar>(GetWidgetFromName("OtherHP"));
 	PlayerMp_other = Cast<UProgressBar>(GetWidgetFromName("OtherMP"));
 }
@@ -121,7 +121,7 @@ void UPartyRoomWidgetClass::SetPlayerOtherImagebyCharacter(Characters ch)
 void UPartyRoomWidgetClass::SetPlayOtherImage(FString Path)
 {
 	UTexture2D* SoftTexture = LoadObject<UTexture2D>(nullptr, *Path);
-	PlayerMp_OtherImage->SetBrushFromSoftTexture(SoftTexture);
+	Player_OtherImage ->SetBrushFromSoftTexture(SoftTexture);
 }
 void UPartyRoomWidgetClass::SetPlayerImage(FString Path)
 {
