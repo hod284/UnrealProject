@@ -83,6 +83,21 @@ public:
 		}
 		return datatable_M->FindRow<FCMonsterInfo>("steel", TEXT(""));
 	}
+	const FCMonsterInfo* GetDatainfo_Minion()
+	{
+		for (auto& Assetid : Assetids)
+		{
+			FString name = Assetid.PrimaryAssetName.ToString();
+			if (name == "Monster")
+			{
+				UAssetManager& AssetManager = UAssetManager::Get();
+				FAssetData data;
+				AssetManager.GetPrimaryAssetData(Assetid, data);
+				datatable_M = Cast<UDataTable>(data.GetAsset());
+			}
+		}
+		return datatable_M->FindRow<FCMonsterInfo>("minion", TEXT(""));
+	}
 	const FItemtableInfo* GetItemInfo() 
 	{
 		for (auto& Assetid : Assetids)

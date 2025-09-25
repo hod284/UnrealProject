@@ -32,7 +32,14 @@ ASpawnPortalClass::ASpawnPortalClass()
 void ASpawnPortalClass::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	if (HasAuthority())
+	{
+		FActorSpawnParameters parametor;
+		parametor.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+		parametor.Owner = this;
+		APawn* spawn1 = GetWorld()->SpawnActor<APawn>(Minion, FVector(140, -550, 90), FRotator(0, 90, 0), parametor);
+		APawn* spawn2 = GetWorld()->SpawnActor<APawn>(Minion_gun, FVector(-90, -550, 90), FRotator(0, 90, 0), parametor);
+	}
 }
 
 // Called every frame

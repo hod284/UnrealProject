@@ -205,3 +205,22 @@ void AMainPlayerController::Client_GetttheVelocity_Implementation(FVector ve_h, 
 	CurrentVelocity_H = ve_h;
 	CurrentVelocity_C = ve_c;
 }
+
+void AMainPlayerController::Server_SendttheTargetName_Implementation(const FString& na)
+{
+	APlayerController* PC = GetWorld()->GetFirstPlayerController();
+	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
+	PS->TargetName = na;
+}
+
+void AMainPlayerController::Server_GetttheTargetName_Implementation()
+{
+	APlayerController* PC = GetWorld()->GetFirstPlayerController();
+	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
+	Client_GetttheTargetName(PS->TargetName);
+}
+
+void AMainPlayerController::Client_GetttheTargetName_Implementation(const FString&na)
+{
+	TargetName = na;
+}

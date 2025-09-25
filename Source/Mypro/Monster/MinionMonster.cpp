@@ -38,6 +38,9 @@ AMinionMonster::AMinionMonster()
 void AMinionMonster::BeginPlay()
 {
 	Super::BeginPlay();
+	UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
+	Info = GI->GetDatainfo_Minion();
+	MonsterHpConst =MonsterHp = static_cast <float>(Info->HP);
 	HP = 1.0f;
 	AnimInstance = Cast<UMonsterAnimInstance>(MeshComponent->GetAnimInstance());
 	AAIController* AIController = Cast<AAIController>(GetController());
@@ -46,6 +49,13 @@ void AMinionMonster::BeginPlay()
 		AIController->RunBehaviorTree(MonsterBehaviorTree);
 		AIController->GetBlackboardComponent()->SetValueAsFloat("NoramlAttackRange", NoramlAttackRange);
 	}
+	FVector  Loc = FVector::ZeroVector;
+	FRotator Rot = FRotator::ZeroRotator;
+	FVector  Scl = FVector(1, 1, 1);
+	FTransform Xform(Rot, Loc, Scl);
+	Ac3 = GetWorld()->SpawnActorDeferred<AAction3_Monster>(Sk3, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+	Ac3->SetAttackDamage(Info->Skill1_ATK);
+	UGameplayStatics::FinishSpawningActor(Ac3, Xform);
 }
 
 // Called every frame
@@ -69,7 +79,7 @@ void AMinionMonster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 }
 void AMinionMonster::OnRep_Health()
 {
-	UMonsterHPBar* hp = Cast<UMonsterHPBar>(Damagesh);
+	UMonsterHPBar* hp = Cast<UMonsterHPBar>(Damagesh->GetWidget());
 	hp->SetHpBar(HP);
 }
 
@@ -82,8 +92,13 @@ void AMinionMonster::AttackShooting()
 float AMinionMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	
-
+	MonsterHp -= DamageAmount;
+	float HpTemp = (MonsterHp/ MonsterHpConst) * 100;
+	HP = HpTemp / 100.0F;
+	if (HasAuthority()) // 서버에서만 변경
+	{
+		OnRep_Health(); // 서버에서도 즉시 UI 반영
+	}
 	return DamageAmount;
 }
 

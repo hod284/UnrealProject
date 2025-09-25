@@ -6,6 +6,8 @@
 #include "../Widget/MonsterHPBar.h"
 #include "MonsterAnimInstance.h"
 #include "MinionController.h"
+#include "SkillActor/Action3_Monster.h"
+#include "../common/MySingleton.h"
 #include "MonsterPawnMovement.h"
 #include "GameFramework/Pawn.h"
 #include "MinionMonster.generated.h"
@@ -15,7 +17,7 @@ class MYPRO_API AMinionMonster : public APawn
 {
 	GENERATED_BODY()
 
-public:
+protected:
 	// Sets default values for this pawn's properties
 	AMinionMonster();
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
@@ -26,34 +28,36 @@ public:
 	TObjectPtr<UMonsterPawnMovement> MovementComponent;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<UMaterial> Overlap;
-	FGenericTeamId	TeamID;
-	TObjectPtr<UBehaviorTree> MonsterBehaviorTree;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CusteomRange")
 	float NoramlAttackRange = 200.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CusteomRange")
+	bool ShootingM = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UWidgetComponent> Damagesh;
+	UPROPERTY(ReplicatedUsing = OnRep_Health)
+	float HP = 1.0F;
+	float MonsterHp;
+	float MonsterHpConst;
+	bool Death = false;
+	const FCMonsterInfo* Info;
+	TObjectPtr<UBehaviorTree> MonsterBehaviorTree;
+	UFUNCTION()
+	void OnRep_Health();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
+	TSubclassOf<AAction3_Monster> Sk3;
+	AAction3_Monster* Ac3;
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps)  const override;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	FTimerHandle TimeSkill;
-	UPROPERTY(ReplicatedUsing = OnRep_Health)
-	float HP = 1.0F;
-	float MonsterHp;
-	bool Death = false;
-	UBrainComponent* Brain;
-	const FCMonsterInfo* Info;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UWidgetComponent> Damagesh;
-	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps)  const override;
-
-	UFUNCTION()
-	void OnRep_Health();
-
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser);
+	TObjectPtr<UMonsterAnimInstance> AnimInstance;
 public:
 	void AttackSuper();
 	void AttackShooting();
-	TObjectPtr<UMonsterAnimInstance> AnimInstance;
-	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser);
+
 	float DistanceToTarget(AActor* Target)
 	{
 		float dis = 0.0f;
@@ -77,5 +81,16 @@ public:
 	{
 		return Death;
 	}
-
+	bool GetShootingM() const
+	{
+		return  ShootingM;
+	}
+	TObjectPtr<USkeletalMeshComponent> GetMesh()
+	{
+		return MeshComponent;
+	}
+	TObjectPtr<UMonsterAnimInstance> GetAnimInstance()
+	{
+		return AnimInstance;
+	}
 };

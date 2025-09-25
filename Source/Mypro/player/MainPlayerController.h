@@ -65,6 +65,12 @@ public:
 	void Server_GetttheVelocity();
 	UFUNCTION(Client, Reliable)
 	void Client_GetttheVelocity(FVector ve_h, FVector ve_c);
+	UFUNCTION(Server, Reliable)
+	void Server_SendttheTargetName(const FString& na);
+	UFUNCTION(Server, Reliable)
+	void Server_GetttheTargetName();
+	UFUNCTION(Client, Reliable)
+	void Client_GetttheTargetName(const FString& na);
 	float Pitch_c;
 	float Pitch_h;
 	float MeshPitch_c =-90;
@@ -79,7 +85,7 @@ public:
 	float PlayerMP_C=1.0;
 	FVector CurrentVelocity_H;
 	FVector CurrentVelocity_C;
+    FString TargetName;
 	Characters MyCharacter_C = Characters::None;
 	Characters MyCharacter_H = Characters::None;
-	FTimerHandle TimerHandle;
 };

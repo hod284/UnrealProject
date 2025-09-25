@@ -15,15 +15,14 @@ class MYPRO_API UMonsterAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
 protected:
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<FName, TObjectPtr<UAnimSequence>> SequenceMap;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<FName, TObjectPtr<UAnimSequence>> SequenceMap_minion;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<FName, TObjectPtr<UAnimSequence>> SequenceMap_minion_shooting;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	EMonsterDefaultAnim	mAnimType = EMonsterDefaultAnim::Idle;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<FName, TObjectPtr<UAnimSequence>> SequenceMap_minion_shooting;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<FName, TObjectPtr<UAnimSequence>> SequenceMap_minion;
 	//UObject 기반 클래스의 초기화 단계 중 하나로,객체의 프로퍼티가 생성자나 기본값 복사 이후에 메모리에 완전히 세팅된 직후 호출되는 가상 함수입니다.
 	virtual void PostInitProperties() override;
 	virtual void NativeBeginPlay() override;
@@ -62,4 +61,12 @@ public:
 	void AnimNotify_At1MinionPlay();
 	UFUNCTION()
 	void AnimNotify_At1MinionShootingPlay();
+	TMap<FName, TObjectPtr<UAnimSequence>> shooting()
+	{
+		return SequenceMap_minion_shooting;
+	}
+	TMap<FName, TObjectPtr<UAnimSequence>> minion()
+	{
+		return SequenceMap_minion;
+	}
 };

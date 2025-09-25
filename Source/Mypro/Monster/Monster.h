@@ -32,10 +32,9 @@ protected:
 	TObjectPtr<UMonsterPawnMovement> MovementComponent;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<UMaterial> Overlap;
-	FGenericTeamId	TeamID;
-	TObjectPtr<UBehaviorTree> MonsterBehaviorTree;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CusteomRange")
 	float NoramlAttackRange = 200.0f;
+	TObjectPtr<UBehaviorTree> MonsterBehaviorTree; 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;

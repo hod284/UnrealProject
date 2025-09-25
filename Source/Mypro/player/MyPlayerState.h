@@ -58,4 +58,6 @@ public:
 	FVector CurrentVelocity_H;
 	UPROPERTY(Replicated)
 	FVector CurrentVelocity_C;
+	UPROPERTY(Replicated)
+	FString TargetName;
 };

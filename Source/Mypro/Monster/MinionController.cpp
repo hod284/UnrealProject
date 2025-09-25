@@ -2,7 +2,9 @@
 
 
 #include "MinionController.h"
-
+#include "../player/MainPlayerController.h"
+#include "../player/MyPlayerState.h"
+#include "MinionMonster.h"
 AMinionController::AMinionController()
 {
 	AIPerception = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AIPerception"));
@@ -26,6 +28,7 @@ AMinionController::AMinionController()
 	AIPerception->ConfigureSense(*DamageConfig); //감각기관에 데미지 감각 설정
 	AIPerception->SetDominantSense(SightConfig->GetSenseImplementation()); //주 감각 설정
 	SetGenericTeamId(FGenericTeamId(TeamMonster));
+	SetReplicates(true);
 }
 void  AMinionController::BeginPlay()
 {
@@ -35,39 +38,83 @@ void  AMinionController::BeginPlay()
 void AMinionController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	PerceivedActors.Empty();
-	PerceptionComponent->GetCurrentlyPerceivedActors(UAISense_Sight::StaticClass(), PerceivedActors);
-
-	AActor* ClosestActor = nullptr;
-	float ClosestDistance = TNumericLimits<float>::Max();
-
-	for (AActor* Actor : PerceivedActors)
+	if (TargetActor == NULL)
 	{
-		IGenericTeamAgentInterface* TeamAgent = Cast<IGenericTeamAgentInterface>(Actor);
-		if (TeamAgent && TeamAgent->GetGenericTeamId() == GetGenericTeamId())
+		PerceivedActors.Empty();
+		PerceptionComponent->GetCurrentlyPerceivedActors(UAISense_Sight::StaticClass(), PerceivedActors);
+
+		AActor* ClosestActor = nullptr;
+		float ClosestDistance = TNumericLimits<float>::Max();
+
+		for (AActor* Actor : PerceivedActors)
 		{
-			continue; // 같은 팀이면 스킵
+			APawn* Pa = Cast<APawn>(Actor);
+			if (Pa)
+			{
+				AAIController* AIController = Cast<AAIController>(Pa->GetController());
+				if (AIController)
+				{
+					IGenericTeamAgentInterface* TeamAgent = Cast<IGenericTeamAgentInterface>(AIController);
+					if (TeamAgent && TeamAgent->GetGenericTeamId() == GetGenericTeamId())
+					{
+						continue; // 같은 팀이면 스킵
+					}
+					else
+					{
+						float Distance = FVector::Dist(Actor->GetActorLocation(), GetPawn()->GetActorLocation());
+						if (Distance < ClosestDistance)
+						{
+							ClosestDistance = Distance;
+							ClosestActor = Actor;
+						}
+					}
+				}
+				else
+				{
+					FString name = "";
+					APlayerController* PC = GetWorld()->GetFirstPlayerController();
+					AMyPlayerState* PS = PC->GetPlayerState<AMyPlayerState>();
+					if (HasAuthority())
+						name = PS->TargetName;
+					else
+					{
+						AMainPlayerController* MPC = Cast<AMainPlayerController>(PC);
+						MPC->Server_GetttheTargetName();
+						name = MPC->TargetName;
+					}
+					if (Actor->GetName()== name )
+					{
+						continue;
+					}
+					else
+					{
+						float Distance = FVector::Dist(Actor->GetActorLocation(), GetPawn()->GetActorLocation());
+						if (Distance < ClosestDistance)
+							ClosestActor = Actor;
+					}
+				}
+			}
+		}
+
+		if (ClosestActor)
+		{
+			TargetActor = ClosestActor;
+			APlayerController* PC = GetWorld()->GetFirstPlayerController();
+			AMyPlayerState* PS = PC->GetPlayerState<AMyPlayerState>();
+			if (HasAuthority())
+				PS->TargetName = ClosestActor->GetName();
+			else
+			{
+				AMainPlayerController* MPC = Cast<AMainPlayerController>(PC);
+				MPC->Server_SendttheTargetName(ClosestActor->GetName());
+			}
+			Blackboard->SetValueAsObject(TEXT("Target"), ClosestActor);
 		}
 		else
 		{
-			float Distance = FVector::Dist(Actor->GetActorLocation(), GetPawn()->GetActorLocation());
-			if (Distance < ClosestDistance)
-			{
-				ClosestDistance = Distance;
-				ClosestActor = Actor;
-			}
+			Blackboard->SetValueAsObject(TEXT("Target"), nullptr);
 		}
 	}
-
-	if (ClosestActor)
-	{
-		Blackboard->SetValueAsObject(TEXT("Target"), ClosestActor);
-	}
-	else
-	{
-		Blackboard->SetValueAsObject(TEXT("Target"), nullptr);
-	}
-
 }
 void  AMinionController::OnConstruction(const FTransform& Transform)
 {
@@ -116,4 +163,149 @@ ETeamAttitude::Type  AMinionController::GetTeamAttitudeTowards(const AActor& Oth
 	// GenericTeamAgentInterface를 구현한 다른 에이전트와 비교하여 팀 태도 결정
 	return GetGenericTeamId() == OtherTeamAgent->GetGenericTeamId() ?
 		ETeamAttitude::Friendly : ETeamAttitude::Hostile;
+}
+void AMinionController::Idle_M()
+{
+	AMinionMonster* mi = Cast<AMinionMonster>(GetPawn());
+	TObjectPtr<UAnimSequence>an;
+	if (mi)
+	{
+		if (mi->GetShootingM())
+		{
+			auto array = mi->GetAnimInstance()->shooting();
+			if (array.Num() > 0)
+			{
+				an = array["Idle"];
+				if (an)
+					Multicast_idle(an);
+			}
+		}
+		else
+		{
+			auto array = mi->GetAnimInstance()->minion();
+			if (array.Num() > 0)
+			{
+				an = array["Idle"];
+				if(an)
+				Multicast_idle(an);
+			}
+		}
+	}
+}
+void AMinionController::Attack_M()
+{
+	AMinionMonster* mi = Cast<AMinionMonster>(GetPawn());
+	TObjectPtr<UAnimSequence>an;
+	if (mi)
+	{
+		if (mi->GetShootingM())
+		{
+			auto array = mi->GetAnimInstance()->shooting();
+			if (array.Num() > 0)
+			{
+				an = array["At1"];
+				if (an)
+					Multicast_PlayAttack(an);
+			}
+		}
+		else
+		{
+			auto array = mi->GetAnimInstance()->minion();
+			if (array.Num() > 0)
+			{
+				an = array["At1"];
+				if (an)
+					Multicast_PlayAttack(an);
+			}
+		}
+	}
+}
+void AMinionController::Death_M()
+{
+	AMinionMonster* mi = Cast<AMinionMonster>(GetPawn());
+	TObjectPtr<UAnimSequence>an;
+	if (mi)
+	{
+		if (mi->GetShootingM())
+		{
+			auto array = mi->GetAnimInstance()->shooting();
+			if (array.Num()>0)
+			{
+				an = array["Death"];
+				if (an)
+					Multicast_Death(an);
+			}
+		}
+		else
+		{
+			auto array = mi->GetAnimInstance()->minion();
+			if (array.Num() > 0)
+			{
+				an = array["Death"];
+				if (an)
+					Multicast_Death(an);
+			}
+		}
+	}
+}
+void AMinionController::Run_M()
+{
+	AMinionMonster* mi = Cast<AMinionMonster>(GetPawn());
+	TObjectPtr<UAnimSequence>an;
+	if (mi)
+	{
+		if (mi->GetShootingM())
+		{
+			auto array = mi->GetAnimInstance()->shooting();
+			if (array.Num() > 0)
+			{
+				an = array["Run"];
+				if (an)
+					Multicast_Run(an);
+			}
+		}
+		else
+		{
+				auto array = mi->GetAnimInstance()->minion();
+				if (array.Num() > 0)
+				{
+					an = array["Run"];
+					if (an)
+						Multicast_Run(an);
+				}
+		}
+	}
+}
+void AMinionController::Multicast_PlayAttack_Implementation(UAnimSequence*ani)
+{
+  AMinionMonster *mi = Cast<AMinionMonster>(GetPawn());
+  if (mi)
+  {
+	  mi->GetMesh()->PlayAnimation(ani, false);
+  }
+}
+void AMinionController::Multicast_Run_Implementation(UAnimSequence*ani)
+{
+	AMinionMonster* mi = Cast<AMinionMonster>(GetPawn());
+	if (mi)
+	{
+			mi->GetMesh()->PlayAnimation(ani, false);
+	}
+}
+void AMinionController::Multicast_Death_Implementation(UAnimSequence*ani)
+{
+	AMinionMonster* mi = Cast<AMinionMonster>(GetPawn());
+	if (mi)
+	{
+		
+			mi->GetMesh()->PlayAnimation(ani, false);
+	}
+}
+void AMinionController::Multicast_idle_Implementation(UAnimSequence*ani)
+{
+	AMinionMonster* mi = Cast<AMinionMonster>(GetPawn());
+	if (mi)
+	{
+			mi->GetMesh()->PlayAnimation(ani, false);
+	}
 }
