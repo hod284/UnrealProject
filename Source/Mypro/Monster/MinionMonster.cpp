@@ -76,6 +76,7 @@ void AMinionMonster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(AMinionMonster, HP);
+	DOREPLIFETIME(AMinionMonster, MonSterAnim);
 }
 void AMinionMonster::OnRep_Health()
 {
@@ -102,3 +103,67 @@ float AMinionMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& 
 	return DamageAmount;
 }
 
+void AMinionMonster::Multicast_PlayAttack_Implementation(EMonsterDefaultAnim type)
+{
+	MonSterAnim = type;
+}
+void AMinionMonster::Multicast_Run_Implementation(EMonsterDefaultAnim type)
+{
+	MonSterAnim = type;
+}
+void AMinionMonster::Multicast_Death_Implementation(EMonsterDefaultAnim type)
+{
+	MonSterAnim = type;
+}
+void AMinionMonster::Multicast_idle_Implementation(EMonsterDefaultAnim type)
+{
+	MonSterAnim = type;
+}
+void AMinionMonster::Idle_M()
+{
+	if (HasAuthority())
+		Multicast_idle(EMonsterDefaultAnim ::Idle);
+	else
+		Server_idle(EMonsterDefaultAnim::Idle);
+}
+void AMinionMonster::Attack_M()
+{
+	if (HasAuthority())
+		Multicast_PlayAttack(EMonsterDefaultAnim::Attack1);
+	else
+		Server_PlayAttack(EMonsterDefaultAnim::Attack1);
+}
+void AMinionMonster::Death_M()
+{
+	if (HasAuthority())
+		Multicast_Death(EMonsterDefaultAnim::Death);
+	else
+		Server_Death(EMonsterDefaultAnim::Death);
+}
+void AMinionMonster::Run_M()
+{
+	if (HasAuthority())
+		Multicast_Run(EMonsterDefaultAnim::Run);
+	else
+		Server_Run(EMonsterDefaultAnim::Run);
+}
+
+void AMinionMonster::Server_PlayAttack_Implementation(EMonsterDefaultAnim type)
+{
+	Multicast_PlayAttack(type);
+}
+
+void AMinionMonster::Server_Run_Implementation(EMonsterDefaultAnim type)
+{
+	Multicast_Run(type);
+}
+
+void AMinionMonster::Server_Death_Implementation(EMonsterDefaultAnim type)
+{
+	Multicast_Death(type);
+}
+
+void AMinionMonster::Server_idle_Implementation(EMonsterDefaultAnim type)
+{
+	Multicast_idle(type);
+}

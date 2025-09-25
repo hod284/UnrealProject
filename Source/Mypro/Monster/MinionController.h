@@ -33,22 +33,6 @@ public:
 
 	virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const;
 
-	UFUNCTION(NetMulticast, Reliable)
-	void Multicast_PlayAttack(UAnimSequence*ani);
-
-	UFUNCTION(NetMulticast, Reliable)
-	void Multicast_Run(UAnimSequence*ani);
-
-	UFUNCTION(NetMulticast, Reliable)
-	void Multicast_Death(UAnimSequence*ani);
-
-	UFUNCTION(NetMulticast, Reliable)
-	void Multicast_idle(UAnimSequence*ani);
-
-	void Idle_M();
-	void Attack_M();
-	void Death_M();
-	void Run_M();
 	virtual void StopMovement() override;
 	void ClearMovment();
 

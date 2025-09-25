@@ -31,9 +31,7 @@ EBTNodeResult::Type  UMinionAttackNode::ExecuteTask(UBehaviorTreeComponent& Owne
 	{
 		return EBTNodeResult::Failed;
 	}
-	AMinionController* minioncontroller = Cast<AMinionController>(AIController);
-	if (minioncontroller)
-		minioncontroller->Attack_M();
+	Monster->Attack_M();
 	return EBTNodeResult::InProgress;
 }
 EBTNodeResult::Type  UMinionAttackNode::AbortTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -85,17 +83,14 @@ void  UMinionAttackNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 		}
 		if (Distance <= BlackboardComp->GetValueAsFloat("NoramlAttackRange"))
 		{
-			AMinionController* minioncontroller = Cast<AMinionController>(aicontroller);
-			if (minioncontroller)
-				minioncontroller->Attack_M();
+			Monster->Attack_M();
 		}
 	}
 }
 void  UMinionAttackNode::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTNodeResult::Type TaskResult)
 {
 	Super::OnTaskFinished(OwnerComp, NodeMemory, TaskResult);
-	AAIController* AIController = OwnerComp.GetAIOwner();
-	AMinionController* minioncontroller = Cast<AMinionController>(AIController);
-	if (minioncontroller)
-		minioncontroller->Idle_M();
+	AMinionMonster* Monster = Cast<AMinionMonster>(OwnerComp.GetAIOwner()->GetPawn());
+	if (Monster)
+		Monster->Idle_M();
 }

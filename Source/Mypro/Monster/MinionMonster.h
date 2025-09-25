@@ -54,10 +54,37 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser);
 	TObjectPtr<UMonsterAnimInstance> AnimInstance;
+	UPROPERTY(Replicated)
+	EMonsterDefaultAnim MonSterAnim;
 public:
 	void AttackSuper();
 	void AttackShooting();
+	void Idle_M();
+	void Attack_M();
+	void Death_M();
+	void Run_M();
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_PlayAttack(EMonsterDefaultAnim type);
 
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_Run(EMonsterDefaultAnim type);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_Death(EMonsterDefaultAnim type);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_idle(EMonsterDefaultAnim type);
+	UFUNCTION(Server, Reliable)
+	void Server_PlayAttack(EMonsterDefaultAnim type);
+
+	UFUNCTION(Server, Reliable)
+	void Server_Run(EMonsterDefaultAnim type);
+
+	UFUNCTION(Server, Reliable)
+	void Server_Death(EMonsterDefaultAnim type);
+
+	UFUNCTION(Server, Reliable)
+	void Server_idle(EMonsterDefaultAnim type);
 	float DistanceToTarget(AActor* Target)
 	{
 		float dis = 0.0f;
@@ -92,5 +119,9 @@ public:
 	TObjectPtr<UMonsterAnimInstance> GetAnimInstance()
 	{
 		return AnimInstance;
+	}
+	EMonsterDefaultAnim GetMonSterAnim()
+	{
+		return MonSterAnim;
 	}
 };

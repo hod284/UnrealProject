@@ -25,12 +25,32 @@ void UMonsterAnimInstance::NativeBeginPlay()
 void UMonsterAnimInstance::NativeInitializeAnimation()
 {
 	Super::NativeInitializeAnimation();
-	
+   
 }
 
 void UMonsterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
+	AMinionMonster* minion = Cast<AMinionMonster>(TryGetPawnOwner());
+	if (minion)
+	{
+		auto ani = minion->GetMonSterAnim();
+		switch (ani)
+		{
+		case EMonsterDefaultAnim::Run:
+			RubAni();
+			break;
+		case EMonsterDefaultAnim::Attack1:
+			MonsterAttack1();
+			break;
+		case EMonsterDefaultAnim::Idle:
+			IdleAni();
+			break;
+		case EMonsterDefaultAnim::Death:
+			DeathAni();
+			break;
+		}
+	}
 }
 
 void UMonsterAnimInstance::MonsterAttack1()

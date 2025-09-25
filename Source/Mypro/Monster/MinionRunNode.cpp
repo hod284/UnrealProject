@@ -39,9 +39,7 @@ EBTNodeResult::Type UMinionRunNode::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	{
 		return EBTNodeResult::Failed;
 	}
-	AMinionController* minioncontroller = Cast<AMinionController>(AIController);
-	if (minioncontroller)
-	minioncontroller->Run_M();
+	Monster->Run_M();
 	return EBTNodeResult::InProgress;
 }
 EBTNodeResult::Type UMinionRunNode::AbortTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -98,9 +96,8 @@ void UMinionRunNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
 void UMinionRunNode::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTNodeResult::Type TaskResult)
 {
 	Super::OnTaskFinished(OwnerComp, NodeMemory, TaskResult);
-	AAIController* AIController = OwnerComp.GetAIOwner();
-	AMinionController* minioncontroller = Cast<AMinionController>(AIController);
-	if (minioncontroller)
-		minioncontroller->Idle_M();
+	AMinionMonster* Monster = Cast<AMinionMonster>(OwnerComp.GetAIOwner()->GetPawn());
+	if (Monster)
+		Monster->Idle_M();
 }
 
