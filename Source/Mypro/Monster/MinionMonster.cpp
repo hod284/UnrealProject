@@ -14,6 +14,7 @@ AMinionMonster::AMinionMonster()
 	MeshComponent->SetupAttachment(RootComponent);
 	MovementComponent = CreateDefaultSubobject<UMonsterPawnMovement>(TEXT("MOVMENT"));
 	Damagesh = CreateDefaultSubobject<UWidgetComponent>(TEXT("DamageWidget"));
+	StimuliSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("StimuliSource"));
 	const ConstructorHelpers::FObjectFinder<UBehaviorTree> BTree(TEXT("/Script/AIModule.BehaviorTree'/Game/BT/MinionTree.MinionTree'"));
 	if (BTree.Succeeded())
 		MonsterBehaviorTree = BTree.Object;
@@ -56,6 +57,13 @@ void AMinionMonster::BeginPlay()
 	Ac3 = GetWorld()->SpawnActorDeferred<AAction3_Monster>(Sk3, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
 	Ac3->SetAttackDamage(Info->Skill1_ATK);
 	UGameplayStatics::FinishSpawningActor(Ac3, Xform);
+	if (StimuliSource)
+	{
+		StimuliSource->RegisterForSense(TSubclassOf<UAISense_Sight>());
+		StimuliSource->RegisterForSense(TSubclassOf<UAISense_Hearing>());
+		StimuliSource->RegisterWithPerceptionSystem();
+		StimuliSource->SetAutoActivate(true);
+	}
 }
 
 // Called every frame
@@ -72,17 +80,6 @@ void  AMinionMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 
 }
-void AMinionMonster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME(AMinionMonster, HP);
-	DOREPLIFETIME(AMinionMonster, MonSterAnim);
-}
-void AMinionMonster::OnRep_Health()
-{
-	UMonsterHPBar* hp = Cast<UMonsterHPBar>(Damagesh->GetWidget());
-	hp->SetHpBar(HP);
-}
 
 void AMinionMonster::AttackSuper()
 {
@@ -93,12 +90,23 @@ void AMinionMonster::AttackShooting()
 float AMinionMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	MeshComponent->SetOverlayMaterial(Overlap);
+	GetWorld()->GetTimerManager().ClearTimer(Timer);
+	GetWorld()->GetTimerManager().SetTimer(Timer, [this]() {
+		MeshComponent->SetOverlayMaterial(nullptr);
+		}, 0.3, false);
 	MonsterHp -= DamageAmount;
 	float HpTemp = (MonsterHp/ MonsterHpConst) * 100;
 	HP = HpTemp / 100.0F;
 	if (HasAuthority()) // 서버에서만 변경
+		Multicast_Sethp(HP);
+	else
+		Server_Sethp(HP);
+	if (MonsterHp <= KINDA_SMALL_NUMBER && !Death)
 	{
-		OnRep_Health(); // 서버에서도 즉시 UI 반영
+		Death_M();
+		if (HasAuthority())
+			Destroy();
 	}
 	return DamageAmount;
 }
@@ -166,4 +174,15 @@ void AMinionMonster::Server_Death_Implementation(EMonsterDefaultAnim type)
 void AMinionMonster::Server_idle_Implementation(EMonsterDefaultAnim type)
 {
 	Multicast_idle(type);
+}
+
+void AMinionMonster::Multicast_Sethp_Implementation(float hp)
+{
+	UMonsterHPBar* hpbar = Cast<UMonsterHPBar>(Damagesh->GetWidget());
+	hpbar->SetHpBar(hp);
+}
+
+void AMinionMonster::Server_Sethp_Implementation(float hp)
+{
+	Multicast_Sethp(hp);
 }

@@ -5,6 +5,7 @@
 #include "../Gameinfo.h"
 #include "../singleton/UImanager.h"
 #include "../player/MyCharacter.h"
+#include "../Monster/SpawnPortalClass.h"
 #include "GameFramework/Actor.h"
 #include "PartyRoomController.generated.h"
 
@@ -25,6 +26,14 @@ protected:
 	AMyCharacter* HostPawn;
 	AMyCharacter* ClientPawn;
 	TArray<AActor*> Players;
+	TArray<AActor*> Monsters;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Portal")
+	TObjectPtr<ASpawnPortalClass> Portal;
+	FTimerHandle Timer;
+	bool CanSpawn=true;
+	float Addtime = 0;
+	int32 Maxium = 4;
+	bool CanMaxium = false;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

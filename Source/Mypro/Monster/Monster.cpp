@@ -146,8 +146,8 @@ float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	MeshComponent->SetOverlayMaterial(Overlap);
-	GetWorld()->GetTimerManager().ClearTimer(Timmer);
-	GetWorld()->GetTimerManager().SetTimer(Timmer, [this]() {
+	GetWorld()->GetTimerManager().ClearTimer(Timer);
+	GetWorld()->GetTimerManager().SetTimer(Timer, [this]() {
 		MeshComponent->SetOverlayMaterial(nullptr);
 		}, 0.3, false);
 	if (CanStun)

@@ -34,19 +34,18 @@ protected:
 	bool ShootingM = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UWidgetComponent> Damagesh;
-	UPROPERTY(ReplicatedUsing = OnRep_Health)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
+	UAIPerceptionStimuliSourceComponent* StimuliSource;
 	float HP = 1.0F;
 	float MonsterHp;
 	float MonsterHpConst;
 	bool Death = false;
 	const FCMonsterInfo* Info;
 	TObjectPtr<UBehaviorTree> MonsterBehaviorTree;
-	UFUNCTION()
-	void OnRep_Health();
+	FTimerHandle Timer;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
 	TSubclassOf<AAction3_Monster> Sk3;
 	AAction3_Monster* Ac3;
-	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps)  const override;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
@@ -54,7 +53,6 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser);
 	TObjectPtr<UMonsterAnimInstance> AnimInstance;
-	UPROPERTY(Replicated)
 	EMonsterDefaultAnim MonSterAnim;
 public:
 	void AttackSuper();
@@ -74,6 +72,8 @@ public:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void Multicast_idle(EMonsterDefaultAnim type);
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_Sethp(float hp);
 	UFUNCTION(Server, Reliable)
 	void Server_PlayAttack(EMonsterDefaultAnim type);
 
@@ -85,6 +85,8 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void Server_idle(EMonsterDefaultAnim type);
+	UFUNCTION(Server, Reliable)
+	void Server_Sethp(float hp);
 	float DistanceToTarget(AActor* Target)
 	{
 		float dis = 0.0f;

@@ -60,7 +60,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "portal")
 	TSubclassOf<APortalClass> Portal;
 	UPlayMainUI* UI;
-	FTimerHandle Timmer;
+	FTimerHandle Timer;
 public:	
 	void Start();
 	void Attack1();

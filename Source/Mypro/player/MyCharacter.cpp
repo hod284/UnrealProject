@@ -13,6 +13,7 @@ AMyCharacter::AMyCharacter()
 	CameraHead = CreateDefaultSubobject<USceneComponent>(TEXT("CameraHead"));
 	Niagara = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Particle"));
 	Damagesh = CreateDefaultSubobject<UWidgetComponent>(TEXT("DamageWidget"));
+	StimuliSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("StimuliSource"));
 	static ConstructorHelpers::FClassFinder<UDamageShowing>UI(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/widget/DamageWidget.DamageWidget_C'"));
 	if(UI.Succeeded())
 	Damagesh->SetWidgetClass(UI.Class);
@@ -65,6 +66,13 @@ void AMyCharacter::BeginPlay()
 		PS->Inventoryco->ItemMinus.AddUObject(this,& AMyCharacter::SetMinusCanPortal);
 	}
 	GetCharacterMovement()->NetworkSmoothingMode = ENetworkSmoothingMode::Linear;
+	if (StimuliSource)
+	{
+		StimuliSource->RegisterForSense(TSubclassOf<UAISense_Sight>());
+		StimuliSource->RegisterForSense(TSubclassOf<UAISense_Hearing>());
+		StimuliSource->RegisterWithPerceptionSystem();
+		StimuliSource->SetAutoActivate(true);
+	}
 }
 void AMyCharacter::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
@@ -525,7 +533,8 @@ void AMyCharacter::BackKey(const FInputActionValue& Value)
 {
 	if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
 		BackDash(CurrentVelocity);
-	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp
+		|| GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
 	{
 		if (HasAuthority())
 			Multicast_Back(CurrentVelocity);
@@ -537,7 +546,8 @@ void AMyCharacter::DashKey(const FInputActionValue& Value)
 {
 	if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
 		Dash(CurrentVelocity);
-	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp
+		|| GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
 	{
 		if (HasAuthority())
 			Multicast_Dash(CurrentVelocity);

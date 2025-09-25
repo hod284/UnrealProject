@@ -19,6 +19,14 @@ void AGreyStone::NAttack()
         else  if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
             Server_NAttack(CurrentVelocity, channel);
     }
+    else if ( GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
+    {
+        channel = ECollisionChannel::ECC_GameTraceChannel2;
+        if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
+            Multicast_NAttack(CurrentVelocity, channel);
+        else  if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
+            Server_NAttack(CurrentVelocity, channel);
+    }
 }
 void AGreyStone::BeginPlay()
 {

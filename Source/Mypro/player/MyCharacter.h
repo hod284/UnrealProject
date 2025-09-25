@@ -33,6 +33,8 @@ protected:
 	TObjectPtr<USceneComponent> CameraHead;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UWidgetComponent> Damagesh;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
+	UAIPerceptionStimuliSourceComponent* StimuliSource;
 	FVector CurrentVelocity;
 	bool DashMoving = false;
 	bool BackMoving = false;

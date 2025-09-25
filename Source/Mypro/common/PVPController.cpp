@@ -18,8 +18,6 @@ void APVPController::BeginPlay()
 	Super::BeginPlay();
 	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UINot);
 	ui = Cast<UPvPUIClass>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPvP_widget());
-	APawn* mych = Cast<APawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	Mychar = Cast<AMyCharacter>(mych);
 	if (ui&& GetWorld()->GetFirstPlayerController()->IsLocalController())
 	{
 		ui->AddToViewport();
@@ -28,6 +26,9 @@ void APVPController::BeginPlay()
 	GetWorld() ->GetTimerManager().SetTimerForNextTick(FTimerDelegate::CreateLambda([this]() {
 	if (HasAuthority())
 	{
+
+		APawn* mych = Cast<APawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
+		Mychar = Cast<AMyCharacter>(mych);
 		APlayerController* PC = GetWorld()->GetFirstPlayerController();
 		if (PC)
 		{
@@ -41,6 +42,8 @@ void APVPController::BeginPlay()
 	}
 	else
 	{
+		APawn* mych = Cast<APawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
+		Mychar = Cast<AMyCharacter>(mych);
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMyCharacter::StaticClass(), Players);
 		for (AActor* actor : Players)
 		{
@@ -53,7 +56,6 @@ void APVPController::BeginPlay()
 			UE_LOG(LogTemp, Warning, TEXT("Players:%s"), *actor->GetName());
 		}
 	}
-
 	}));
 	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetGameState(NowGameState::pvp);
 	
@@ -73,8 +75,11 @@ void APVPController::Tick(float DeltaTime)
 				ui->SetHostMpBar(PS->PlayerMP_H);
 				ui->SetClientHpBar(PS->PlayerHP_C);
 				ui->SetClientMpBar(PS->PlayerMP_C);
-				Mychar->CurrentVelocity_H = PS->CurrentVelocity_H;
-				Mychar->CurrentVelocity_C = PS->CurrentVelocity_C;
+				if (Mychar)
+				{
+					Mychar->CurrentVelocity_H = PS->CurrentVelocity_H;
+					Mychar->CurrentVelocity_C = PS->CurrentVelocity_C;
+				}
 				if (PS->PlayerHP_H <= KINDA_SMALL_NUMBER || PS->PlayerHP_C <= KINDA_SMALL_NUMBER)
 					UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
 			}
@@ -90,9 +95,12 @@ void APVPController::Tick(float DeltaTime)
 			AMainPlayerController* PC = Cast<AMainPlayerController>(GetWorld()->GetFirstPlayerController());
 			if (PC)
 			{
-				APawn* mych = PC->GetPawn();
-				if(mych)
-				mych->SetActorRotation(FRotator(0, 90, 0));
+				if (Mychar)
+				{
+					Mychar->SetActorRotation(FRotator(0, 90, 0));
+					Mychar->CurrentVelocity_C = PC->CurrentVelocity_C;
+					Mychar->CurrentVelocity_H = PC->CurrentVelocity_H;
+				}
 				PC->Sever_GettheMPandHP();
 				PC->Sever_GettheMeshPitch();
 				PC->Sever_GettheSelectCharacter();
@@ -105,8 +113,6 @@ void APVPController::Tick(float DeltaTime)
 				ui->SetClientMpBar(PC->PlayerMP_C);
 				if (PC->PlayerHP_H <= KINDA_SMALL_NUMBER || PC->PlayerHP_C <= KINDA_SMALL_NUMBER)
 					UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
-				Mychar->CurrentVelocity_C = PC->CurrentVelocity_C;
-				Mychar->CurrentVelocity_H = PC->CurrentVelocity_H;
 				if (HostPawn)
 				{
 					HostPawn->GetMesh()->SetRelativeRotation(FRotator(0, PC->MeshPitch_h, 0));
