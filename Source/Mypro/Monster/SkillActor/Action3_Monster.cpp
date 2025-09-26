@@ -7,10 +7,12 @@ AAction3_Monster::AAction3_Monster()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	Scene = CreateDefaultSubobject<USceneComponent>(TEXT("se"));
 	BoxColider = CreateDefaultSubobject<UCapsuleComponent>(TEXT("BOX"));
 	NiagaraParticle = CreateDefaultSubobject<UNiagaraComponent>(TEXT("PARTICLE"));
-	SetRootComponent(NiagaraParticle);
-	BoxColider->SetupAttachment(NiagaraParticle);
+	SetRootComponent(Scene);
+	NiagaraParticle ->SetupAttachment(Scene);
+	BoxColider->SetupAttachment(Scene);
 	BoxColider->SetCollisionProfileName("Monsterskill");
 	BoxColider->OnComponentHit.AddDynamic(this, &AAction3_Monster::OnHit_Action3_M);
 	// ������ �κ�Ʈ Ȱ��ȭ
@@ -70,7 +72,7 @@ void AAction3_Monster::Init()
 	FHitResult result;
 	ECollisionChannel Ch = ECollisionChannel::ECC_GameTraceChannel1;
 	FVector Start = GetActorLocation();
-	FVector End = Start + GetActorUpVector() * 3000.f;
+	FVector End = Start + GetActorForwardVector() * 3000.f;
 	bool bHit = GetWorld()->LineTraceSingleByChannel(result, Start, End, Ch);
 	DrawDebugLine(GetWorld(), Start, End, bHit ? FColor::Red : FColor::Green, false, 0.3f, 0, 1.f);
 	if (bHit)

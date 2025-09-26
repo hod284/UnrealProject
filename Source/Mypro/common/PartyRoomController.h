@@ -32,7 +32,7 @@ protected:
 	FTimerHandle Timer;
 	bool CanSpawn=true;
 	float Addtime = 0;
-	int32 Maxium = 4;
+	int32 Maxium = 2;
 	bool CanMaxium = false;
 public:	
 	// Called every frame

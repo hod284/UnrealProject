@@ -113,10 +113,7 @@ void AMinionMonster::AttackShooting()
 	FVector SpawnLocation = LO1;
 	AActor* a3 = Cast<AActor>(Ac3);
 	a3->SetActorLocation(SpawnLocation);
-	if(GetActorRotation().Yaw< KINDA_SMALL_NUMBER)
-	a3->SetActorRotation(FRotator(0,FMath::Abs(GetActorRotation().Yaw),90));
-	else
-		a3->SetActorRotation(FRotator(0, -FMath::Abs(GetActorRotation().Yaw), 90));
+	a3->SetActorRotation(FRotator(0,GetActorRotation().Yaw,0));
 	if(Ac3)
 	Ac3->Init();
 }

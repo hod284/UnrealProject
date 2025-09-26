@@ -95,7 +95,7 @@ void AMonster::Attack2()
 void AMonster::Attack3()
 {
 	FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 90);
-	FRotator SpawnRotation = FRotator(90, -GetActorRotation().Yaw, 0);
+	FRotator SpawnRotation = FRotator(0, GetActorRotation().Yaw, 0);
 	AActor* VI = Cast<AActor>(Ac3);
 	VI->SetActorLocationAndRotation(SpawnLocation, SpawnRotation);
 	Ac3->Init();
