@@ -2,7 +2,7 @@
 
 
 #include "SpawnPortalClass.h"
-
+#include "../player/MyCharacter.h"
 // Sets default values
 ASpawnPortalClass::ASpawnPortalClass()
 {
@@ -26,6 +26,11 @@ ASpawnPortalClass::ASpawnPortalClass()
 	static ConstructorHelpers::FClassFinder<UMonsterHPBar>Minion_sH(TEXT("/Script/Engine.Blueprint'/Game/bluePrint/MinionShooting.MinionShooting_C'"));
 	if (Minion_sH.Succeeded())
 		Minion_gun = Minion_sH.Class;
+	Sphere->OnComponentHit.AddDynamic(this, &ASpawnPortalClass::OnHit);
+	// ?????? ?¥ê?? ????
+	Sphere->SetGenerateOverlapEvents(true); // ??????? ??¥á?
+	Sphere->OnComponentBeginOverlap.AddDynamic(this, &ASpawnPortalClass::OnCapsuleBeginOverlap);
+	Sphere->OnComponentEndOverlap.AddDynamic(this, &ASpawnPortalClass::OnCapsuleEndOverlap);
 }
 
 // Called when the game starts or when spawned
@@ -38,6 +43,36 @@ void ASpawnPortalClass::BeginPlay()
 void ASpawnPortalClass::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+}
+void  ASpawnPortalClass::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
+	const FHitResult& Hit)
+{
+	AMyCharacter* ch = Cast<AMyCharacter>(OtherActor);
+	if (ch)
+	{
+		UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
+	}
+}
+void  ASpawnPortalClass::OnCapsuleBeginOverlap(
+	UPrimitiveComponent* OverlappedComp,
+	AActor* OtherActor,
+	UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex,
+	bool bFromSweep,
+	const FHitResult& SweepResult)
+{
+
+
+}
+void  ASpawnPortalClass::OnCapsuleEndOverlap(
+	UPrimitiveComponent* OverlappedComp,
+	AActor* OtherActor,
+	UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex)
+{
+
 
 }
 
