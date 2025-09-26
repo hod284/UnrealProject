@@ -64,6 +64,10 @@ protected:
 	void ApplyInitialSideKick(); 
 	void UpdateAccel(float dt); 
 	AActor* OwnerActor;
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_Damage(float damage,AActor *actor);
+	UFUNCTION(Server, Reliable)
+	void Server_Damage(float damage, AActor* actor);
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

@@ -40,9 +40,9 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void Server_PlaySkill1(FTransform form);
 	UFUNCTION(NetMulticast, Reliable)
-	void Multicast_PlaySkill2(FTransform form);
+	void Multicast_PlaySkill2(FTransform form, USceneComponent* TargetScene);
 	UFUNCTION(Server, Reliable)
-	void Server_PlaySkill2(FTransform form);
+	void Server_PlaySkill2(FTransform form, USceneComponent* TargetScene);
 	UFUNCTION(NetMulticast, Reliable)
 	void Multicast_PlaySkill3(FTransform form);
 	UFUNCTION(Server, Reliable)

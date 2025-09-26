@@ -105,8 +105,6 @@ float AMinionMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& 
 	if (MonsterHp <= KINDA_SMALL_NUMBER && !Death)
 	{
 		Death_M();
-		if (HasAuthority())
-			Destroy();
 	}
 	return DamageAmount;
 }

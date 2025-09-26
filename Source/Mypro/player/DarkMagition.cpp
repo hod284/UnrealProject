@@ -150,9 +150,9 @@ void ADarkMagition::Skill2()
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
         if (PlayerController && PlayerController->IsLocalController()&&HasAuthority())
-            Multicast_PlaySkill2(Xform);
+            Multicast_PlaySkill2(Xform, TargetTransform);
         else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
-            Server_PlaySkill2(Xform);
+            Server_PlaySkill2(Xform, TargetTransform);
     }
     MpbarSync(10.0F);
 }
@@ -248,18 +248,18 @@ void ADarkMagition::Server_PlaySkill1_Implementation(FTransform form)
     Multicast_PlaySkill1(form);
 }
 
-void ADarkMagition::Multicast_PlaySkill2_Implementation(FTransform form)
+void ADarkMagition::Multicast_PlaySkill2_Implementation(FTransform form, USceneComponent *TargetScene)
 {
         A2 = GetWorld()->SpawnActorDeferred<ASkill2_Magition>(Sk2, form, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-        A2->SetTagetTransform(TargetTransform);
+        A2->SetTagetTransform(TargetScene);
         A2->SetAttackDamage(Info->Skill2_ATK);
         A2->IngoreActor(this);
         UGameplayStatics::FinishSpawningActor(A2, form);
 }
 
-void ADarkMagition::Server_PlaySkill2_Implementation(FTransform form)
+void ADarkMagition::Server_PlaySkill2_Implementation(FTransform form, USceneComponent* TargetScene)
 {
-    Multicast_PlaySkill2(form);
+    Multicast_PlaySkill2(form, TargetScene);
 }
 
 void ADarkMagition::Multicast_PlaySkill3_Implementation(FTransform form)

@@ -85,28 +85,25 @@ void ASkill2_Magition::Tick(float DeltaTime)
 }
 void ASkill2_Magition::ProjectileStop(const FHitResult& rersult)
 {
-	Destroy();
 	FString s = rersult.GetActor()->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("skil2_Stophit :%s"), *s);
 	float pe = static_cast<float>(AttackDamage);
 	if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
-	UGameplayStatics::ApplyDamage(rersult.GetActor(), pe, GetInstigatorController(), this, UDamageType::StaticClass());
+	{
+		UGameplayStatics::ApplyDamage(rersult.GetActor(), pe, GetInstigatorController(), this, UDamageType::StaticClass());
+	}
 	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
 	{
-		AMainPlayerController* PC = Cast<AMainPlayerController>(GetInstigatorController());
-		if (PC)
-		{
-			if (PC->IsLocalController()&&!rersult.GetActor()->HasAuthority())
-			{
-				PC->Server_HittheDamageHost(rersult.GetActor(), pe);
-			}
-			else if(PC->IsLocalController())
-			{
-				PC->Server_HittheDamageClient(rersult.GetActor(), pe);
-			}
-		}
+	   if (HasAuthority())
+	   {
+	   	Multicast_Damage(pe, rersult.GetActor());
+	   }
+	   else
+	   {
+	   	Server_Damage(pe, rersult.GetActor());
+	   }
 	}
-
+	Destroy();
 }
 
 void ASkill2_Magition::ApplyInitialSideKick()
@@ -147,4 +144,14 @@ void ASkill2_Magition::UpdateAccel(float dt)
 			Movement->HomingAccelerationMagnitude = FMath::Max(Movement->HomingAccelerationMagnitude, EndAccel * 1.5f);
 		}
 	}
+}
+
+void ASkill2_Magition::Multicast_Damage_Implementation(float damage, AActor* actor)
+{
+	UGameplayStatics::ApplyDamage(actor, damage, GetInstigatorController(), this, UDamageType::StaticClass());
+}
+
+void ASkill2_Magition::Server_Damage_Implementation(float damage, AActor* actor)
+{
+	Multicast_Damage(damage, actor);
 }
