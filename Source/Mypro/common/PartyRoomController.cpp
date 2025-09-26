@@ -85,21 +85,28 @@ void APartyRoomController::Tick(float DeltaTime)
 			ClientPawn->GetMesh()->SetRelativeRotation(FRotator(0, PS->MeshPitch_C, 0));
 			if (Portal && CanSpawn && !CanMaxium)
 			{
-				CanSpawn = false;
-				GetWorld()->GetTimerManager().ClearTimer(Timer);
-				GetWorld()->GetTimerManager().SetTimer(Timer, [this]()
-					{
-						Portal->Spawn();
-						CanSpawn = true;
-						Addtime = 3.0f;
-					}, 0.5 + Addtime, false);
+				if (AddMaxium < Maxium)
+				{
+					CanSpawn = false;
+					AddMaxium += 2;
+					GetWorld()->GetTimerManager().ClearTimer(Timer);
+					GetWorld()->GetTimerManager().SetTimer(Timer, [this]()
+						{
+							Portal->Spawn();
+							CanSpawn = true;
+							Addtime = 3.0f;
+						}, 0.5 + Addtime, false);
+				}
+				else
+					CanMaxium = true;
 			}
 		}
-		if (Monsters.Num() ==0)
+		if (AddMaxium == 0)
+		{
+			Addtime = 0.0f;
 			CanMaxium = false;
-		if(Monsters.Num() >= Maxium)
-			CanMaxium = true;
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMinionMonster::StaticClass(), Monsters);
+		}
+		UE_LOG(LogMypro, Warning, TEXT("AddMaxium:%d"), AddMaxium);
 	}
 	else
 	{

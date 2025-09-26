@@ -2,7 +2,7 @@
 
 
 #include "MinionMonster.h"
-
+#include "../common/PartyRoomController.h"
 // Sets default values
 AMinionMonster::AMinionMonster()
 {
@@ -126,9 +126,11 @@ void AMinionMonster::Death()
 {
 	if (HasAuthority())
 	{
-		Destroy();
+		APartyRoomController* party = Cast<APartyRoomController>(UGameplayStatics::GetActorOfClass(GetWorld(), APartyRoomController::StaticClass()));
+		party->MinusMaxium();
 		if (Ac3)
-		Ac3->Destroy();
+			Ac3->Destroy();
+		Destroy();
 	}
 }
 float AMinionMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
