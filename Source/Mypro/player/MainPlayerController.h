@@ -52,11 +52,6 @@ public:
 	void Sever_GettheMeshPitch();
 	UFUNCTION(Client , Reliable)
 	void Client_GedtheMeshRotate(float RO_H,float RO_C);
-	TSubclassOf<APawn> GetSelectCharactertClass();
-	UFUNCTION(Server, Reliable)
-	void Server_HittheDamageHost(AActor* actor, float damage);
-	UFUNCTION(Server, Reliable)
-	void Server_HittheDamageClient(AActor* actor, float damage);
 	UFUNCTION(Server, Reliable)
 	void Server_SendthetotalHP(float hp);
 	UFUNCTION(Server, Reliable)
@@ -88,4 +83,5 @@ public:
     FString TargetName;
 	Characters MyCharacter_C = Characters::None;
 	Characters MyCharacter_H = Characters::None;
+	TSubclassOf<APawn> GetSelectCharactertClass();
 };

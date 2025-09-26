@@ -144,41 +144,6 @@ void AMainPlayerController::Client_GedtheMeshRotate_Implementation(float RO_H, f
 	MeshPitch_h = RO_H;
 	MeshPitch_c = RO_C;
 }
-
-void AMainPlayerController::Server_HittheDamageHost_Implementation(AActor* actor, float damage)
-{
-	AMyCharacter* mychar = Cast<AMyCharacter>(actor);
-	if (mychar)
-	{
-		APlayerController* PC = GetWorld()->GetFirstPlayerController();
-		if (PC)
-		{
-			AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
-			PS->PlayerHPtotal_H -= damage;
-		   float hpb = (PS->PlayerHPtotal_H / PS->PlayerHPtotalconst_H) * 100;
-		   hpb = hpb / 100.0f;
-		   PS->PlayerHP_H = hpb;
-		}
-	}
-}
-
-void AMainPlayerController::Server_HittheDamageClient_Implementation(AActor* actor, float damage)
-{
-		AMyCharacter* mychar = Cast<AMyCharacter>(actor);
-		if (mychar)
-		{
-			APlayerController* PC = GetWorld()->GetFirstPlayerController();
-			if (PC )
-			{
-				AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
-				PS->PlayerHPtotal_C -= damage;
-				float hpb = (PS->PlayerHPtotal_C / PS->PlayerHPtotalconst_C) * 100;
-				hpb = hpb / 100.0f;
-				PS->PlayerHP_C = hpb;
-			}
-		}
-}
-
 void AMainPlayerController::Server_SendthetotalHP_Implementation(float hp)
 {
 	APlayerController* PC = GetWorld()->GetFirstPlayerController();
