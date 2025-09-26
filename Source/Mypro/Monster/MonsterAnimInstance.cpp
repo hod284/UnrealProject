@@ -160,6 +160,15 @@ void UMonsterAnimInstance::AnimNotify_AtEnd()
 				AIController->GetBlackboardComponent()->SetValueAsBool(TEXT("AttackEnd"), true);
 				IdleAni();
 		}
-
+	}
+	AMinionMonster* Minion = Cast<	AMinionMonster>(TryGetPawnOwner());
+	if (Minion)
+	{
+		AAIController* AIController = Cast<AAIController>(Minion->GetController());
+		if (AIController)
+		{
+			AIController->GetBlackboardComponent()->SetValueAsBool(TEXT("AttackEnd"), true);
+			IdleAni();
+		}
 	}
 }

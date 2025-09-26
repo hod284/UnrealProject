@@ -85,7 +85,7 @@ void AAction3_Monster::Init()
 		UE_LOG(LogMypro, Warning, TEXT("startlocation:%s"), *GetActorLocation().ToString());
 		NiagaraParticle->SetVariableFloat(TEXT("BeamLength"),dis);
 		BoxColider->SetCapsuleHalfHeight(dis/2.0f);
-		BoxColider->SetRelativeLocation(FVector(0, 0, dis/2.0f));
+		BoxColider->SetRelativeLocation(FVector(dis / 2.0f,0 , 0));
 	}
 	NiagaraParticle->SetActive(true);
 	BoxColider->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);

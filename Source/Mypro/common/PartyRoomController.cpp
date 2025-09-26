@@ -77,7 +77,7 @@ void APartyRoomController::Tick(float DeltaTime)
 				Mychar->CurrentVelocity_H = PS->CurrentVelocity_H;
 				Mychar->CurrentVelocity_C = PS->CurrentVelocity_C;
 			}
-			if (PS->PlayerHP_H <= KINDA_SMALL_NUMBER || PS->PlayerHP_C <= KINDA_SMALL_NUMBER)
+			if (PS->PlayerHP_H <= KINDA_SMALL_NUMBER)
 				UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
 		}
 		if (ClientPawn)
@@ -129,8 +129,10 @@ void APartyRoomController::Tick(float DeltaTime)
 			ui->SetotherMpBar(PC->PlayerMP_H);
 			ui->SetPlayerHpBar(PC->PlayerHP_C);
 			ui->SetPlayerMpBar(PC->PlayerMP_C);
-			if (PC->PlayerHP_H <= KINDA_SMALL_NUMBER || PC->PlayerHP_C <= KINDA_SMALL_NUMBER)
-				UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
+			if (PC->PlayerHP_C <= KINDA_SMALL_NUMBER)
+			{
+				Mychar->SetBackMoving(true);
+			}
 			if (HostPawn)
 			{
 				HostPawn->GetMesh()->SetRelativeRotation(FRotator(0, PC->MeshPitch_h, 0));
