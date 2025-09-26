@@ -59,6 +59,7 @@ void AMyCharacter::BeginPlay()
 	SavedBrakingDecel = Move->BrakingDecelerationWalking;
 	ui = Cast<UPlayMainUI>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPlayMainUI_widget());
 	uipvp = Cast<UPvPUIClass>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPvP_widget());
+	uiParty = Cast<UPartyRoomWidgetClass>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPartyRoom_widget());
 	Niagara->SetVisibility(false);
 	if (AMyPlayerState* PS = GetPlayerState<AMyPlayerState>())
 	{
@@ -133,6 +134,19 @@ void AMyCharacter::Tick(float DeltaTime)
 				uipvp->SetPercent1_c(Skill1cool);
 			}
 		}
+		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
+		{
+			if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
+			{
+				Skill1cool -= DeltaTime * Skill1Speed;
+				uiParty->SetPercent1(Skill1cool);
+			}
+			else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
+			{
+				Skill1cool -= DeltaTime * Skill1Speed;
+				uiParty->SetPercent1_c(Skill1cool);
+			}
+		}
 	}
 	if (!Canskill2)
 	{
@@ -152,6 +166,19 @@ void AMyCharacter::Tick(float DeltaTime)
 			{
 				Skill2cool -= DeltaTime * Skill2Speed;
 				uipvp->SetPercent2_c(Skill2cool);
+			}
+		}
+		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
+		{
+			if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
+			{
+				Skill2cool -= DeltaTime * Skill1Speed;
+				uiParty->SetPercent2(Skill2cool);
+			}
+			else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
+			{
+				Skill2cool -= DeltaTime * Skill1Speed;
+				uiParty->SetPercent2_c(Skill2cool);
 			}
 		}
 	}
@@ -175,6 +202,19 @@ void AMyCharacter::Tick(float DeltaTime)
 				uipvp->SetPercent3_c(Skill3cool);
 			}
 		}
+		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
+		{
+			if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
+			{
+				Skill3cool -= DeltaTime * Skill3Speed;
+				uiParty->SetPercent3(Skill3cool);
+			}
+			else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
+			{
+				Skill3cool -= DeltaTime * Skill3Speed;
+				uiParty->SetPercent3_c(Skill3cool);
+			}
+		}
 	}
 	if (!Canskill4)
 	{
@@ -196,6 +236,19 @@ void AMyCharacter::Tick(float DeltaTime)
 				uipvp->SetPercent4_c(Skill4cool);
 			}
 		}
+		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
+		{
+			if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
+			{
+				Skill4cool -= DeltaTime * Skill4Speed;
+				uiParty->SetPercent4(Skill4cool);
+			}
+			else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
+			{
+				Skill4cool -= DeltaTime * Skill4Speed;
+				uiParty->SetPercent4_c(Skill4cool);
+			}
+		}
 	}
 	if (Skill1cool < 0.0f)
 	{
@@ -210,6 +263,13 @@ void AMyCharacter::Tick(float DeltaTime)
 			else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
 				uipvp->SetPercent1_c(Skill1cool);
 		}
+		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
+		{
+			if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
+				uiParty->SetPercent1(1.0f);
+			else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
+				uiParty->SetPercent1_c(Skill1cool);
+		}
 	}
 	if (Skill2cool < 0.0f)
 	{
@@ -223,6 +283,13 @@ void AMyCharacter::Tick(float DeltaTime)
 			uipvp->SetPercent2(1.0f);
 			else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
 			uipvp->SetPercent2_c(1.0f);
+		}
+		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
+		{
+			if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
+				uiParty->SetPercent2(1.0f);
+			else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
+				uiParty->SetPercent2_c(1.0f);
 		}
 	}
 	if (Skill3cool < 0.0f)
@@ -241,6 +308,17 @@ void AMyCharacter::Tick(float DeltaTime)
 			uipvp->SetPercent3(1.0f);
 			else if(PlayerController && PlayerController->IsLocalController() && !HasAuthority())
 				uipvp->SetPercent3_c(1.0f);
+		}
+		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
+		{
+			if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
+				uiParty->SetPercent3(1.0f);
+			else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
+				uiParty->SetPercent3_c(1.0f);
+		}
+		if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp ||
+			uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
+		{
 			if (HasAuthority())
 				Multicast_NullOverlap();
 			else
@@ -260,6 +338,13 @@ void AMyCharacter::Tick(float DeltaTime)
 			uipvp->SetPercent4(1.0f);
 			else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
 				uipvp->SetPercent4_c(1.0f);
+		}
+		else if (uipvp && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
+		{
+			if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
+				uiParty->SetPercent4(1.0f);
+			else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
+				uiParty->SetPercent4_c(1.0f);
 		}
 	}
 	if (LookAt)
@@ -366,7 +451,8 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 			ui->TypingStart();
 		}
 	}
-	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp
+		|| GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
 	{
 		if (!BackMoving && !DashMoving)
 		{

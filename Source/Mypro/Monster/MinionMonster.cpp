@@ -54,9 +54,10 @@ void AMinionMonster::BeginPlay()
 	FRotator Rot = FRotator::ZeroRotator;
 	FVector  Scl = FVector(1, 1, 1);
 	FTransform Xform(Rot, Loc, Scl);
-	Ac3 = GetWorld()->SpawnActorDeferred<AAction3_Monster>(Sk3, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-	Ac3->SetAttackDamage(Info->Skill1_ATK);
-	UGameplayStatics::FinishSpawningActor(Ac3, Xform);
+		Ac3 = GetWorld()->SpawnActorDeferred<AAction3_Monster>(Sk3, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+		Ac3->SetAttackDamage(Info->Skill1_ATK);
+		UGameplayStatics::FinishSpawningActor(Ac3, Xform);
+	
 	if (StimuliSource)
 	{
 		StimuliSource->RegisterForSense(TSubclassOf<UAISense_Sight>());
@@ -80,12 +81,58 @@ void  AMinionMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 
 }
-
 void AMinionMonster::AttackSuper()
 {
+	TArray<FHitResult>	result;
+	FCollisionQueryParams	param;
+	param.AddIgnoredActor(this);
+	param.bTraceComplex = false;
+	float Radious = 100.0f;
+	FVector center = GetActorLocation() + GetActorForwardVector() * 150;
+	bool Collision;
+	ECollisionChannel channel = ECollisionChannel::ECC_GameTraceChannel6; 
+	Collision = GetWorld()->SweepMultiByChannel(result, center, center,
+		FQuat::Identity, channel,
+		FCollisionShape::MakeCapsule(Radious, 200), param);
+	DrawDebugCapsule(GetWorld(), center, 200, Radious, FQuat::Identity, FColor::Green, false, 2.f);
+	float pe = static_cast<float>(Info->Skill1_ATK);
+	if (Collision)
+	{
+		for (auto& Hit : result)
+		{
+			if (Hit.GetActor()->IsA<APawn>())
+			{
+				 UGameplayStatics::ApplyDamage(Hit.GetActor(), pe, GetInstigatorController(), this, UDamageType::StaticClass());
+			}
+		}
+	}
 }
 void AMinionMonster::AttackShooting()
 {
+	FVector LO1 = MeshComponent->GetSocketLocation("Muzzle_Front");
+	FVector SpawnLocation = LO1;
+	AActor* a3 = Cast<AActor>(Ac3);
+	a3->SetActorLocation(SpawnLocation);
+	if(GetActorRotation().Yaw< KINDA_SMALL_NUMBER)
+	a3->SetActorRotation(FRotator(0,FMath::Abs(GetActorRotation().Yaw),90));
+	else
+		a3->SetActorRotation(FRotator(0, -FMath::Abs(GetActorRotation().Yaw), 90));
+	if(Ac3)
+	Ac3->Init();
+}
+void AMinionMonster::AttackShootingEnd()
+{
+	if (Ac3)
+	Ac3->Reset();
+}
+void AMinionMonster::Death()
+{
+	if (HasAuthority())
+	{
+		Destroy();
+		if (Ac3)
+		Ac3->Destroy();
+	}
 }
 float AMinionMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
@@ -102,7 +149,7 @@ float AMinionMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& 
 		Multicast_Sethp(HP);
 	else
 		Server_Sethp(HP);
-	if (MonsterHp <= KINDA_SMALL_NUMBER && !Death)
+	if (MonsterHp <= KINDA_SMALL_NUMBER)
 	{
 		Death_M();
 	}

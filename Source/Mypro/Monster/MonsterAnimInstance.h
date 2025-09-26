@@ -61,6 +61,8 @@ public:
 	void AnimNotify_At1MinionPlay();
 	UFUNCTION()
 	void AnimNotify_At1MinionShootingPlay();
+	UFUNCTION()
+	void AnimNotify_At1MinionShootingPlayEnd();
 	TMap<FName, TObjectPtr<UAnimSequence>> shooting()
 	{
 		return SequenceMap_minion_shooting;

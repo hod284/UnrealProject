@@ -39,7 +39,6 @@ protected:
 	float HP = 1.0F;
 	float MonsterHp;
 	float MonsterHpConst;
-	bool Death = false;
 	const FCMonsterInfo* Info;
 	TObjectPtr<UBehaviorTree> MonsterBehaviorTree;
 	FTimerHandle Timer;
@@ -57,6 +56,8 @@ protected:
 public:
 	void AttackSuper();
 	void AttackShooting();
+	void AttackShootingEnd();
+	void Death();
 	void Idle_M();
 	void Attack_M();
 	void Death_M();
@@ -105,10 +106,6 @@ public:
 	float GetHP() const
 	{
 		return HP;
-	}
-	float GetDeath() const
-	{
-		return Death;
 	}
 	bool GetShootingM() const
 	{

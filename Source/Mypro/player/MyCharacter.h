@@ -56,6 +56,7 @@ protected:
 	float SavedBrakingDecel = 2048.f;
 	UPlayMainUI* ui;
 	UPvPUIClass* uipvp;
+	UPartyRoomWidgetClass* uiParty;
 	bool Canskill1 = true;
 	float Skill1cool = 1.0F;
 	float Skill1Speed = 0.0F;
@@ -68,7 +69,7 @@ protected:
 	bool Canskill4 =true;
 	float Skill4cool = 1.0F;
 	float Skill4Speed = 0.0F;
-	FVector TargetLocation;
+	FVector TargetLocation = FVector::ZeroVector;
 	USceneComponent* TargetTransform;
 	int32 AttackDamage;
 	int32 AttackDamageUp;
