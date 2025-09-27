@@ -54,7 +54,8 @@ void ADarkMagition::NAttack()
     }
     FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 90);
     FRotator SpawnRotation = FRotator::ZeroRotator;
-    if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+    if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame|| 
+        GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
         SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, pitch);
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
@@ -80,7 +81,8 @@ void ADarkMagition::NAttack()
         if (AS->SomeHit)
             AddMpbar(10);
     }
-    else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+    else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp||
+        GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
     {
         if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
             Multicast_PlayASkill(Xform);
@@ -93,7 +95,11 @@ void ADarkMagition::NAttack()
 void ADarkMagition::Skill1()
 {
     Skill1coolTime(0.5f);
-    FVector SpawnLocation = FVector(TargetLocation.X, TargetLocation.Y, 0);
+    FVector SpawnLocation = FVector::ZeroVector;
+    if (CameraTarget != NULL)
+        SpawnLocation = FVector(TargetLocation.X, TargetLocation.Y, 0);
+    else
+        SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 0) + GetActorForwardVector() * 100.0f;
     FRotator SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
     FVector  Loc = SpawnLocation;
     FRotator Rot = SpawnRotation;
@@ -106,7 +112,8 @@ void ADarkMagition::Skill1()
         A1->IngoreActor(this);
         UGameplayStatics::FinishSpawningActor(A1, Xform);
     }
-    else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+    else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp||
+        GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
     {
         if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
             Multicast_PlaySkill1(Xform);
@@ -121,7 +128,8 @@ void ADarkMagition::Skill2()
     Skill2coolTime(0.5f);
     FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 120);
     FRotator SpawnRotation = FRotator::ZeroRotator;
-    if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+    if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame||
+        GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
         SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
@@ -147,7 +155,8 @@ void ADarkMagition::Skill2()
         A2->IngoreActor(this);
         UGameplayStatics::FinishSpawningActor(A2, Xform);
     }
-    else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+    else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp||
+        GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
     {
         if (PlayerController && PlayerController->IsLocalController()&&HasAuthority())
             Multicast_PlaySkill2(Xform, TargetTransform);
@@ -162,7 +171,8 @@ void ADarkMagition::Skill3()
     Skill3coolTime(0.5f);
     FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 80);
     FRotator SpawnRotation = FRotator::ZeroRotator;
-    if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
+    if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame||
+        GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
         SpawnRotation = FRotator(0, GetMesh()->GetRelativeRotation().Yaw, 0);
     else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
     {
@@ -187,7 +197,8 @@ void ADarkMagition::Skill3()
         A3->IngoreActor(this);
         UGameplayStatics::FinishSpawningActor(A3, Xform);
     }
-    else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+    else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp||
+        GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
     {
         if (PlayerController && PlayerController->IsLocalController()&&HasAuthority())
             Multicast_PlaySkill3(Xform);
@@ -200,7 +211,11 @@ void ADarkMagition::Skill3()
 void ADarkMagition::Skill4()
 {
     Skill4coolTime(0.5f);
-    FVector SpawnLocation = FVector(TargetLocation.X, TargetLocation.Y, 0);
+    FVector SpawnLocation = FVector::ZeroVector;
+    if (CameraTarget != NULL)
+        SpawnLocation = FVector(TargetLocation.X, TargetLocation.Y, 0);
+    else
+        SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 0) + GetActorForwardVector() * 100.0f;
     FRotator SpawnRotation =  FRotator::ZeroRotator;
     FVector  Loc = SpawnLocation;
     FRotator Rot = SpawnRotation;
@@ -213,7 +228,8 @@ void ADarkMagition::Skill4()
         A4->IngoreActor(this);
         UGameplayStatics::FinishSpawningActor(A4, Xform);
     }
-    else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+    else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp||
+        GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
     {
         if (PlayerController && PlayerController->IsLocalController()&&HasAuthority())
             Multicast_PlaySkill4(Xform);
