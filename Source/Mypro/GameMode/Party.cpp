@@ -6,9 +6,10 @@
 #include "../player/MyCharacter.h"
 AParty::AParty()
 {
-	DefaultPawnClass = ASpectatorPawn::StaticClass();
+	DefaultPawnClass = NULL;
 	PlayerControllerClass = AMainPlayerController::StaticClass();
 	PlayerStateClass = AMyPlayerState::StaticClass();
+	SpectatorClass = ASpectatorPawn::StaticClass();
 }
 void AParty::BeginPlay()
 {

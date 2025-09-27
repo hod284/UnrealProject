@@ -3,6 +3,7 @@
 #pragma once
 
 #include "../Gameinfo.h"
+#include "../player/MyCharacter.h"
 #include "MonsterPawnMovement.h"
 #include "AIController.h"
 #include "MinionController.generated.h"
@@ -23,8 +24,10 @@ protected:
 	TObjectPtr<UAISenseConfig_Damage>	DamageConfig;
 	AMinionController();
 	float DetectiveRange = 3000.0f;
-	AActor* TargetActor;
 	TArray<AActor*> PerceivedActors;
+	int32 Count = 0;
+	AActor* ClosestActor;
+	AActor* One;
 	virtual void Tick(float DeltaTime) override;
 public:
 	virtual void OnConstruction(const FTransform& Transform) override;
@@ -35,9 +38,4 @@ public:
 
 	virtual void StopMovement() override;
 	void ClearMovment();
-
-	AActor* GetTarget()
-	{
-		return TargetActor;
-	}
 };

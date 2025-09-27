@@ -66,6 +66,10 @@ public:
 	void Server_GetttheTargetName();
 	UFUNCTION(Client, Reliable)
 	void Client_GetttheTargetName(const FString& na);
+	UFUNCTION(Server, Reliable)
+	void Server_RequestSpectator();
+	UFUNCTION(Server, Reliable)
+	void Server_DClient(APawn *pa);
 	float Pitch_c;
 	float Pitch_h;
 	float MeshPitch_c =-90;

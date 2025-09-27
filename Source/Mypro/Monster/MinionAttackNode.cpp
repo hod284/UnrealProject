@@ -65,25 +65,36 @@ void  UMinionAttackNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 	if (BlackboardComp->GetValueAsBool("AttackEnd"))
 	{
 		BlackboardComp->SetValueAsBool("AttackEnd", false);
-		float Distance = Monster->DistanceToTarget(TargetActor);
-		if (Distance > BlackboardComp->GetValueAsFloat("NoramlAttackRange"))
+		AMyCharacter* mych = Cast<AMyCharacter>(TargetActor);
+		if (mych && mych->GetHP() <= KINDA_SMALL_NUMBER)
 		{
-			// 공격이 끝났다면 Task를 종료한다.
-			FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+			BlackboardComp->ClearValue("Target");
+			Monster->Idle_M();
+			FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 			return;
 		}
 		else
 		{
-			FVector CurrentLocation = Monster->GetActorLocation();
-			CurrentLocation.Z = 0;
-			FVector TargetLocation = TargetActor->GetActorLocation();
-			TargetLocation.Z = 0;
-			FRotator Rot = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
-			Monster->SetActorRotation(Rot);
-		}
-		if (Distance <= BlackboardComp->GetValueAsFloat("NoramlAttackRange"))
-		{
-			Monster->Attack_M();
+			float Distance = Monster->DistanceToTarget(TargetActor);
+			if (Distance > BlackboardComp->GetValueAsFloat("NoramlAttackRange"))
+			{
+				// 공격이 끝났다면 Task를 종료한다.
+				FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+				return;
+			}
+			else
+			{
+				FVector CurrentLocation = Monster->GetActorLocation();
+				CurrentLocation.Z = 0;
+				FVector TargetLocation = TargetActor->GetActorLocation();
+				TargetLocation.Z = 0;
+				FRotator Rot = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
+				Monster->SetActorRotation(Rot);
+			}
+			if (Distance <= BlackboardComp->GetValueAsFloat("NoramlAttackRange"))
+			{
+				Monster->Attack_M();
+			}
 		}
 	}
 }

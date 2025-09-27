@@ -40,8 +40,6 @@ void APartyRoomController::BeginPlay()
 	}
 	else
 	{
-		APawn* mych = Cast<APawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
-		Mychar = Cast<AMyCharacter>(mych);
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMyCharacter::StaticClass(), Players);
 		for (AActor* actor : Players)
 		{
@@ -77,8 +75,8 @@ void APartyRoomController::Tick(float DeltaTime)
 				Mychar->CurrentVelocity_H = PS->CurrentVelocity_H;
 				Mychar->CurrentVelocity_C = PS->CurrentVelocity_C;
 			}
-			if (PS->PlayerHP_H <= KINDA_SMALL_NUMBER)
-				UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
+		//	if (PS->PlayerHP_H <= KINDA_SMALL_NUMBER)
+		//		UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
 		}
 		if (ClientPawn)
 		{
@@ -113,6 +111,8 @@ void APartyRoomController::Tick(float DeltaTime)
 		AMainPlayerController* PC = Cast<AMainPlayerController>(GetWorld()->GetFirstPlayerController());
 		if (PC)
 		{
+			APawn* mych = Cast<APawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
+			Mychar = Cast<AMyCharacter>(mych);
 			if (Mychar)
 			{
 				Mychar->SetActorRotation(FRotator(0, -90, 0));
@@ -131,7 +131,8 @@ void APartyRoomController::Tick(float DeltaTime)
 			ui->SetPlayerMpBar(PC->PlayerMP_C);
 			if (PC->PlayerHP_C <= KINDA_SMALL_NUMBER)
 			{
-				Mychar->SetBackMoving(true);
+				PC->Server_DClient(Mychar);
+				PC->Server_RequestSpectator();
 			}
 			if (HostPawn)
 			{

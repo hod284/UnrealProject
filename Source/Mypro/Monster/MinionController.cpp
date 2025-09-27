@@ -38,40 +38,28 @@ void  AMinionController::BeginPlay()
 void AMinionController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (TargetActor == NULL)
+	auto TA = Blackboard->GetValueAsObject(TEXT("Target"));
+	if (TA == NULL)
 	{
-		PerceivedActors.Empty();
-		PerceptionComponent->GetCurrentlyPerceivedActors(UAISense_Sight::StaticClass(), PerceivedActors);
-
-		AActor* ClosestActor = nullptr;
-		float ClosestDistance = TNumericLimits<float>::Max();
-
-		for (AActor* Actor : PerceivedActors)
+		Count = 0;
+		for (TActorIterator<AMyCharacter> It(GetWorld()); It; ++It)
 		{
-			APawn* Pa = Cast<APawn>(Actor);
-			if (Pa)
+			Count++;
+			One = *It;
+		}
+		if (Count > 1)
+		{
+			PerceivedActors.Reset();
+			PerceptionComponent->GetCurrentlyPerceivedActors(UAISense_Sight::StaticClass(), PerceivedActors);
+			float ClosestDistance = TNumericLimits<float>::Max();
+
+			for (AActor* Actor : PerceivedActors)
 			{
-				AAIController* AIController = Cast<AAIController>(Pa->GetController());
-				if (AIController)
-				{
-					IGenericTeamAgentInterface* TeamAgent = Cast<IGenericTeamAgentInterface>(AIController);
-					if (TeamAgent && TeamAgent->GetGenericTeamId() == GetGenericTeamId())
-					{
-						continue; // °°Àº ÆÀÀÌ¸é ½ºÅµ
-					}
-					else
-					{
-						float Distance = FVector::Dist(Actor->GetActorLocation(), GetPawn()->GetActorLocation());
-						if (Distance < ClosestDistance)
-						{
-							ClosestDistance = Distance;
-							ClosestActor = Actor;
-						}
-					}
-				}
-				else
+				AMyCharacter* Pa = Cast<AMyCharacter>(Actor);
+				if (Pa)
 				{
 					FString name = "";
+
 					APlayerController* PC = GetWorld()->GetFirstPlayerController();
 					AMyPlayerState* PS = PC->GetPlayerState<AMyPlayerState>();
 					if (HasAuthority())
@@ -82,23 +70,26 @@ void AMinionController::Tick(float DeltaTime)
 						MPC->Server_GetttheTargetName();
 						name = MPC->TargetName;
 					}
-					if (Actor->GetName()== name )
+
+					if (Actor->GetName() == name)
 					{
 						continue;
 					}
 					else
 					{
-						float Distance = FVector::Dist(Actor->GetActorLocation(), GetPawn()->GetActorLocation());
+						float Distance = FVector::DistSquared(Actor->GetActorLocation(), GetPawn()->GetActorLocation());
 						if (Distance < ClosestDistance)
 							ClosestActor = Actor;
 					}
 				}
 			}
 		}
-
+		else
+		{
+				ClosestActor = One;
+		}
 		if (ClosestActor)
 		{
-			TargetActor = ClosestActor;
 			APlayerController* PC = GetWorld()->GetFirstPlayerController();
 			AMyPlayerState* PS = PC->GetPlayerState<AMyPlayerState>();
 			if (HasAuthority())
@@ -106,7 +97,7 @@ void AMinionController::Tick(float DeltaTime)
 			else
 			{
 				AMainPlayerController* MPC = Cast<AMainPlayerController>(PC);
-				MPC->Server_SendttheTargetName(ClosestActor->GetName());
+				MPC->Server_SendttheTargetName(ClosestActor->GetName()); 
 			}
 			Blackboard->SetValueAsObject(TEXT("Target"), ClosestActor);
 		}

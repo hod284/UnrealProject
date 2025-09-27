@@ -468,7 +468,12 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 				}
 			}
 			else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
+			{
 				PlayerController->Sever_SendtheClientHP(DamageAmount);
+				PlayerHp -= DamageAmount;
+				float HpTemp = (PlayerHp / PlayerHp_Const) * 100;
+				HP = HpTemp / 100;
+			}
 		}
 	}
 	return  DamageAmount;

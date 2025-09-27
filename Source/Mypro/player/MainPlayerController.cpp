@@ -189,3 +189,46 @@ void AMainPlayerController::Client_GetttheTargetName_Implementation(const FStrin
 {
 	TargetName = na;
 }
+void AMainPlayerController::Server_RequestSpectator_Implementation()
+{
+	// 1) 이미 내가 가진 SpectatorPawn이 있나?
+	if (ASpectatorPawn* SP = GetSpectatorPawn())
+	{
+		Possess(SP);
+		return;
+	}
+	// 2) 월드에 떠 있는 관전 폰 중 “비소유”가 있나?
+	for (TActorIterator<ASpectatorPawn> It(GetWorld()); It; ++It)
+	{
+		ASpectatorPawn* Free = *It;
+		if (IsValid(Free) && !IsValid(Free->GetController()))
+		{
+			Possess(Free);
+			return;
+		}
+	}
+
+	// 3) 없다면 그때만 생성
+	if (UClass* SpectatorClass = GetWorld()->GetAuthGameMode()->SpectatorClass)
+	{
+		ASpectatorPawn* NewSP = GetWorld()->SpawnActor<ASpectatorPawn>(SpectatorClass, FVector(0,0,112), FRotator::ZeroRotator);
+		NewSP->SetActorEnableCollision(true);
+		Possess(NewSP);
+	}
+}
+
+void AMainPlayerController::Server_DClient_Implementation(APawn* pa)
+{
+	for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It)
+	{
+		APlayerController* PC = It->Get();
+		if (!PC) continue;
+
+		APawn* Pa = PC->GetPawn();
+		UE_LOG(LogTemp, Warning, TEXT("Found Pawn: %s"), *Pa->GetName());
+		if (Pa ==pa)
+		{
+			Pa->Destroy();
+		}
+	}
+}
