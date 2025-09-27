@@ -92,7 +92,8 @@ void ASkill2_Magition::ProjectileStop(const FHitResult& rersult)
 	{
 		UGameplayStatics::ApplyDamage(rersult.GetActor(), pe, GetInstigatorController(), this, UDamageType::StaticClass());
 	}
-	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp)
+	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp||
+		GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
 	{
 	   if (HasAuthority())
 	   {

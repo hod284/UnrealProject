@@ -172,12 +172,12 @@ void AMyCharacter::Tick(float DeltaTime)
 		{
 			if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
 			{
-				Skill2cool -= DeltaTime * Skill1Speed;
+				Skill2cool -= DeltaTime * Skill2Speed;
 				uiParty->SetPercent2(Skill2cool);
 			}
 			else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
 			{
-				Skill2cool -= DeltaTime * Skill1Speed;
+				Skill2cool -= DeltaTime * Skill2Speed;
 				uiParty->SetPercent2_c(Skill2cool);
 			}
 		}
@@ -680,7 +680,6 @@ void AMyCharacter::Skill4Key(const FInputActionValue& Value)
 }
 void AMyCharacter::Skill1coolTime(float speed)
 {
-	PlayerMp -=10.0f;
 	Canskill1 = false;
 	Skill1cool = 1.0F;
 	Skill1Speed = speed;
