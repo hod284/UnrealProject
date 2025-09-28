@@ -17,6 +17,8 @@
 
 
 //
+#include "Animation/AnimSingleNodeInstance.h" 
+#include "Components/SkeletalMeshComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Engine/DamageEvents.h"
 #include "Components/AudioComponent.h"
@@ -48,7 +50,6 @@
 #include "MediaSoundComponent.h"
 #include "NiagaraSystem.h"
 #include "NiagaraComponent.h"
-#include "Components/AudioComponent.h"
 #include "LevelSequenceActor.h"
 #include "LevelSequencePlayer.h"
 #include "LevelSequence.h"

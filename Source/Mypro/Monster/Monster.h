@@ -54,8 +54,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
 	TSubclassOf<AAction2_Monster> Sk2;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
-	TSubclassOf<AAction3_Monster> Sk3;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
 	TSubclassOf<AAction4_Monster> Sk4;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "portal")
 	TSubclassOf<APortalClass> Portal;
@@ -67,9 +65,9 @@ public:
 	void Attack2();
 	void Attack3();
 	void Attack4();
+	void AttackEnd();
 	AAction1_Monster* Ac1;
 	AAction2_Monster* Ac2;
-	AAction3_Monster* Ac3;
 	AAction4_Monster* Ac4;
 	TObjectPtr<UMonsterAnimInstance> AnimInstance;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser);
@@ -114,10 +112,6 @@ public:
 	AAction2_Monster* GetAAction2_Monster()const
 	{
 		return  Ac2;
-	}
-	AAction3_Monster* GetAAction3_Monster()const
-	{
-		return  Ac3;
 	}
 	AAction4_Monster* GetAAction4_Monster()const
 	{

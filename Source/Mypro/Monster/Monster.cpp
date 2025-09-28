@@ -53,10 +53,6 @@ void AMonster::BeginPlay()
 	Ac2->SetAttackDamage(Info->Skill2_ATK);
 	UGameplayStatics::FinishSpawningActor(Ac2, Xform);
 	VI = Cast<AActor>(Ac2);
-	Ac3 = GetWorld()->SpawnActorDeferred<AAction3_Monster>(Sk3, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-	Ac3->SetAttackDamage(Info->Skill3_ATK);
-	UGameplayStatics::FinishSpawningActor(Ac3, Xform);
-	VI = Cast<AActor>(Ac3);
 	Ac4 = GetWorld()->SpawnActorDeferred<AAction4_Monster>(Sk4, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
 	Ac4->SetAttackDamage(Info->Skill4_ATK);
 	UGameplayStatics::FinishSpawningActor(Ac4, Xform);
@@ -94,12 +90,6 @@ void AMonster::Attack2()
 
 void AMonster::Attack3()
 {
-	FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 90);
-	FRotator SpawnRotation = FRotator(0, GetActorRotation().Yaw, 0);
-	AActor* VI = Cast<AActor>(Ac3);
-	VI->SetActorLocationAndRotation(SpawnLocation, SpawnRotation);
-	Ac3->Init();
-	UE_LOG(LogMypro, Warning, TEXT("at3"));
 }
 
 void AMonster::Attack4()
@@ -109,6 +99,18 @@ void AMonster::Attack4()
 	VI->SetActorLocationAndRotation(SpawnLocation, FRotator::ZeroRotator);
 	Ac4->Init();
 	UE_LOG(LogMypro, Warning, TEXT("at4"));
+}
+void AMonster::AttackEnd()
+{
+	AAIController* AIController = Cast<AAIController>(GetController());
+	AIController->GetBlackboardComponent()->SetValueAsBool("AttackEnd", true);
+	MeshComponent->Stop();                 // 이전 재생 깔끔히 정지
+	MeshComponent->SetAnimation(nullptr);  // 잔여 상태 제거(중요)
+    UAnimSingleNodeInstance* Node = MeshComponent->GetSingleNodeInstance();
+	if (Node)
+	{
+		Node->SetPosition(0, false);
+	}
 }
 
 void AMonster::SetMonsterStun(float st)
@@ -211,8 +213,6 @@ float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 		Ac1->Destroy();
 		if (Ac2)
 			Ac2->Destroy();
-		if (Ac3)
-		Ac3->Destroy();
 		if (Ac4)
 		Ac4->Destroy();
 	}

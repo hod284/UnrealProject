@@ -116,8 +116,6 @@ void UMonsterAnimInstance::AnimNotify_At2Reset()
 }
 void UMonsterAnimInstance::AnimNotify_At3Reset()
 {
-	AMonster* monster = Cast<AMonster>(TryGetPawnOwner());
-	monster->GetAAction3_Monster()->Reset();
 }
 void UMonsterAnimInstance::AnimNotify_At4Reset()
 {

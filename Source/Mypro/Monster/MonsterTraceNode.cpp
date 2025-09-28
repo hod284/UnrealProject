@@ -57,6 +57,8 @@ EBTNodeResult::Type UMonsterTraceNode::AbortTask(UBehaviorTreeComponent& OwnerCo
 	AAIController* AIController = OwnerComp.GetAIOwner();
 	if(AIController)
 		AIController->StopMovement();
+	AMonster* Monster = Cast<AMonster>(OwnerComp.GetAIOwner()->GetPawn());
+	Monster->AttackEnd();
 	return EBTNodeResult::Aborted;
 
 }
@@ -113,7 +115,10 @@ void UMonsterTraceNode::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8*
 	Super::OnTaskFinished(OwnerComp, NodeMemory, TaskResult);
 	AMonster* Monster = Cast<AMonster>(OwnerComp.GetAIOwner()->GetPawn());
 	AAIController* AIController = OwnerComp.GetAIOwner();
-	if(Monster)
+	if (Monster)
+	{
 		Monster->AnimInstance->IdleAni();
+	Monster->AttackEnd();
+	}
 }
 
