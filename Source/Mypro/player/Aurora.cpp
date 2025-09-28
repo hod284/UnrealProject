@@ -270,7 +270,7 @@ void AAurora::AttackWeapon(FVector velocity, ECollisionChannel atchannel)
     float pe = static_cast<float>(AttackDamage);
     if (Collision)
     {
-        float	Origin = 45.0f;
+        float	Origin = 60.0f;
         for (auto& Hit : result)
         {
             if (Hit.GetActor()->IsA<APawn>())

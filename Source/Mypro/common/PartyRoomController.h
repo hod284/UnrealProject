@@ -29,11 +29,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Portal")
 	TObjectPtr<ASpawnPortalClass> Portal;
 	FTimerHandle Timer;
-	bool CanSpawn=true;
-	float Addtime = 0;
 	int32 AddMaxium = 0;
 	int32 Maxium = 4;
 	bool CanMaxium = false;
+	bool ClientPawnSpawn=false;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
