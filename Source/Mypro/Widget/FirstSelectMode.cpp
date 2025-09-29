@@ -160,7 +160,6 @@ void  UFirstSelectMode::FinishedSession(bool ok)
 	auto LocalId = GetLocalIdSafe();
 	if (!LocalId.IsValid()) { UE_LOG(LogTemp, Error, TEXT("LocalId invalid")); return; }
 
-	// 후보 추리기 (그냥 첫 결과 쓰기보단 최소한 유효 검사)
 	TArray<FOnlineSessionSearchResult> Candidates;
 	if (ok && Search.IsValid()) {
 		for (const auto& R : Search->SearchResults) {
@@ -175,8 +174,6 @@ void  UFirstSelectMode::FinishedSession(bool ok)
 		Session->JoinSession(*LocalId, NAME_GameSession, Candidates[0]);
 		return;
 	}
-
-	// ★ 아직 못 찾았으면 N회 재탐색 후에만 호스트 전환
 	if (FindRetries < MaxFindRetries)
 	{
 		FindRetries++;
@@ -195,7 +192,6 @@ void  UFirstSelectMode::FinishedSession(bool ok)
 		return;
 	}
 
-	// ★ 정말 없을 때만 호스트 생성. Destroy → 완료 콜백에서 Create
 	if (Session->GetNamedSession(NAME_GameSession) != nullptr)
 	{
 		Session->OnDestroySessionCompleteDelegates.RemoveAll(this);
@@ -203,7 +199,7 @@ void  UFirstSelectMode::FinishedSession(bool ok)
 		Session->DestroySession(NAME_GameSession);
 		return;
 	}
-	CreateLanSession(); // 바로 생성
+	CreateLanSession();
 }
 
 void UFirstSelectMode::OnDestroyThenCreate(FName, bool bOk)
