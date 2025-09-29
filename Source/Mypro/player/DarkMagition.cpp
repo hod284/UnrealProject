@@ -15,23 +15,25 @@ void ADarkMagition::BeginPlay()
     Info = GI->GetDatainfo_D();
     PlayerHp = static_cast<float>(Info->HP);
     PlayerMp = static_cast<float>(Info->MP);
-    PlayerController = Cast<AMainPlayerController>(GetWorld()->GetFirstPlayerController());
-    if (PlayerController)
+    if (PlayerController && HasAuthority())
     {
-        if (PlayerController-> HasAuthority())
+        AMyPlayerState* ps = Cast<AMyPlayerState>(PlayerController->PlayerState);
+        if (ps)
         {
-            AMyPlayerState* ps = Cast<AMyPlayerState>(PlayerController->PlayerState);
             ps->PlayerHPtotal_H = PlayerHp;
             ps->PlayerHPtotalconst_H = PlayerHp;
-        }
-        else
-        {
-            PlayerController->Server_SendthetotalHP(PlayerHp);
+            ps->ForceNetUpdate();
         }
     }
+    if (PlayerController&&!HasAuthority())
+        PlayerController->Server_SendthetotalHP(PlayerHp);
     PlayerHp_Const = PlayerHp;
     PlayerMp_Const = PlayerMp;
-    AttackDamage = 0;
+    AttackDamage1 = Info->Skill1_ATK;
+    AttackDamage2 = Info->Skill2_ATK;
+    AttackDamage3 = Info->Skill3_ATK;
+    AttackDamage4 = Info->Skill4_ATK;
+    AttackDamage = Info->ATK;
     AttackDamageUp = 0;
 }
 
@@ -76,7 +78,7 @@ void ADarkMagition::NAttack()
     if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
     {
         AS = GetWorld()->SpawnActorDeferred<ASlashAttack_Magition>(Attack, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-        AS->SetAttackDamage(Info->ATK);
+        AS->SetAttackDamage(AttackDamage);
         UGameplayStatics::FinishSpawningActor(AS, Xform);
         if (AS->SomeHit)
             AddMpbar(10);
@@ -108,7 +110,7 @@ void ADarkMagition::Skill1()
     if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
     {
         A1 = GetWorld()->SpawnActorDeferred<ASkill1_Magition>(Sk1, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-        A1->SetAttackDamage(Info->Skill1_ATK);
+        A1->SetAttackDamage(AttackDamage1);
         A1->IngoreActor(this);
         UGameplayStatics::FinishSpawningActor(A1, Xform);
     }
@@ -151,7 +153,7 @@ void ADarkMagition::Skill2()
     {
         A2 = GetWorld()->SpawnActorDeferred<ASkill2_Magition>(Sk2, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
         A2->SetTagetTransform(TargetTransform);
-        A2->SetAttackDamage(Info->Skill2_ATK);
+        A2->SetAttackDamage(AttackDamage2);
         A2->IngoreActor(this);
         UGameplayStatics::FinishSpawningActor(A2, Xform);
     }
@@ -193,7 +195,7 @@ void ADarkMagition::Skill3()
     if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
     {
         A3 = GetWorld()->SpawnActorDeferred<ASkill3_Magition>(Sk3, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-        A3->SetAttackDamage(Info->Skill3_ATK);
+        A3->SetAttackDamage(AttackDamage3);
         A3->IngoreActor(this);
         UGameplayStatics::FinishSpawningActor(A3, Xform);
     }
@@ -224,7 +226,7 @@ void ADarkMagition::Skill4()
     if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
     {
         A4 = GetWorld()->SpawnActorDeferred<ASkill4_Magition>(Sk4, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-        A4->SetAttackDamage(Info->Skill4_ATK);
+        A4->SetAttackDamage(AttackDamage4);
         A4->IngoreActor(this);
         UGameplayStatics::FinishSpawningActor(A4, Xform);
     }
@@ -241,7 +243,7 @@ void ADarkMagition::Skill4()
 void ADarkMagition::Multicast_PlayASkill_Implementation(FTransform form)
 {
     AS = GetWorld()->SpawnActorDeferred<ASlashAttack_Magition>(Attack, form, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-    AS->SetAttackDamage(Info->ATK);
+    AS->SetAttackDamage(AttackDamage);
     AS->IngoreActor(this);
     UGameplayStatics::FinishSpawningActor(AS, form);
 }
@@ -254,7 +256,7 @@ void ADarkMagition::Server_PlayASkill_Implementation(FTransform form)
 void ADarkMagition::Multicast_PlaySkill1_Implementation(FTransform form)
 {
     A1 = GetWorld()->SpawnActorDeferred<ASkill1_Magition>(Sk1, form, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-    A1->SetAttackDamage(Info->Skill1_ATK);
+    A1->SetAttackDamage(AttackDamage1);
     A1->IngoreActor(this);
     UGameplayStatics::FinishSpawningActor(A1, form);
 }
@@ -268,7 +270,7 @@ void ADarkMagition::Multicast_PlaySkill2_Implementation(FTransform form, USceneC
 {
         A2 = GetWorld()->SpawnActorDeferred<ASkill2_Magition>(Sk2, form, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
         A2->SetTagetTransform(TargetScene);
-        A2->SetAttackDamage(Info->Skill2_ATK);
+        A2->SetAttackDamage(AttackDamage2);
         A2->IngoreActor(this);
         UGameplayStatics::FinishSpawningActor(A2, form);
 }
@@ -281,7 +283,7 @@ void ADarkMagition::Server_PlaySkill2_Implementation(FTransform form, USceneComp
 void ADarkMagition::Multicast_PlaySkill3_Implementation(FTransform form)
 {
     A3 = GetWorld()->SpawnActorDeferred<ASkill3_Magition>(Sk3, form, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-    A3->SetAttackDamage(Info->Skill3_ATK);
+    A3->SetAttackDamage(AttackDamage3);
     A3->IngoreActor(this);
     UGameplayStatics::FinishSpawningActor(A3, form);
 }
@@ -294,7 +296,7 @@ void ADarkMagition::Server_PlaySkill3_Implementation(FTransform form)
 void ADarkMagition::Multicast_PlaySkill4_Implementation(FTransform form)
 {
     A4 = GetWorld()->SpawnActorDeferred<ASkill4_Magition>(Sk4, form, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-    A4->SetAttackDamage(Info->Skill4_ATK);
+    A4->SetAttackDamage(AttackDamage4);
     A4->IngoreActor(this);
     UGameplayStatics::FinishSpawningActor(A4, form);
 }

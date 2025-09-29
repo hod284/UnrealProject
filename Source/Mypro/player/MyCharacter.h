@@ -72,6 +72,10 @@ protected:
 	FVector TargetLocation = FVector::ZeroVector;
 	USceneComponent* TargetTransform;
 	int32 AttackDamage;
+	int32 AttackDamage1;
+	int32 AttackDamage2;
+	int32 AttackDamage3;
+	int32 AttackDamage4;
 	int32 AttackDamageUp;
 	AActor* CameraTarget = NULL;
 	UFUNCTION()

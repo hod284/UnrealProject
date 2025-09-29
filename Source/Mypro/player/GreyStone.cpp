@@ -35,22 +35,24 @@ void AGreyStone::BeginPlay()
     Info = GI->GetDatainfo_G();
     PlayerHp = static_cast<float>(Info->HP);
     PlayerMp = static_cast<float>(Info->MP);
-    PlayerController = Cast<AMainPlayerController>(GetWorld()->GetFirstPlayerController());
-    if (PlayerController)
+    if (PlayerController && HasAuthority())
     {
-        if (PlayerController->HasAuthority())
+        AMyPlayerState* ps = Cast<AMyPlayerState>(PlayerController ->PlayerState);
+        if (ps)
         {
-            AMyPlayerState* ps = Cast<AMyPlayerState>(PlayerController->PlayerState);
             ps->PlayerHPtotal_H = PlayerHp;
             ps->PlayerHPtotalconst_H = PlayerHp;
-        }
-        else
-        {
-            PlayerController->Server_SendthetotalHP(PlayerHp);
+            ps->ForceNetUpdate();
         }
     }
+    if (PlayerController && !HasAuthority())
+        PlayerController->Server_SendthetotalHP(PlayerHp);
     PlayerHp_Const = PlayerHp;
     PlayerMp_Const = PlayerMp;
+    AttackDamage1 = Info->Skill1_ATK;
+    AttackDamage2 = Info->Skill2_ATK;;
+    AttackDamage3 = 0;
+    AttackDamage4 = Info->Skill4_ATK;;
     AttackDamage = Info->ATK;
     AttackDamageUp = Info->Skill3_ATK;
 }
@@ -81,7 +83,7 @@ void AGreyStone::Skill1()
     if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
     {
         A1 = GetWorld()->SpawnActorDeferred<ASkill1_Actor>(Sk1, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-        A1->SetAttackDamage(Info->Skill1_ATK);
+        A1->SetAttackDamage(AttackDamage1);
         A1->IngoreActor(this);
         UGameplayStatics::FinishSpawningActor(A1, Xform);
     }
@@ -124,7 +126,7 @@ void AGreyStone::Skill2()
     if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
     {
         A2 = GetWorld()->SpawnActorDeferred<ASkill2_Actor>(Sk2, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-        A2->SetAttackDamage(Info->Skill2_ATK);
+        A2->SetAttackDamage(AttackDamage2);
         A2->IngoreActor(this);
         UGameplayStatics::FinishSpawningActor(A2, Xform);
     }
@@ -175,7 +177,7 @@ void AGreyStone::Skill4()
     if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::playgame)
     {
         A4 = GetWorld()->SpawnActorDeferred<ASkill4_Actor>(Sk4, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-        A4->SetAttackDamage(Info->Skill4_ATK);
+        A4->SetAttackDamage(AttackDamage4);
         A4->IngoreActor(this);
         UGameplayStatics::FinishSpawningActor(A4, Xform);
     }
@@ -197,7 +199,7 @@ AGreyStone::AGreyStone()
 void AGreyStone::Multicast_PlaySkill1_Implementation(FTransform form)
 {
     A1 = GetWorld()->SpawnActorDeferred<ASkill1_Actor>(Sk1, form, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-    A1->SetAttackDamage(Info->Skill1_ATK);
+    A1->SetAttackDamage(AttackDamage1);
     A1->IngoreActor(this);
     UGameplayStatics::FinishSpawningActor(A1, form);
 }
@@ -210,7 +212,7 @@ void AGreyStone::Server_PlaySkill1_Implementation(FTransform form)
 void AGreyStone::Multicast_PlaySkill2_Implementation(FTransform form)
 {
     A2 = GetWorld()->SpawnActorDeferred<ASkill2_Actor>(Sk2, form, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-    A2->SetAttackDamage(Info->Skill2_ATK);
+    A2->SetAttackDamage(AttackDamage2);
     A2->IngoreActor(this);
     UGameplayStatics::FinishSpawningActor(A2, form);
 }
@@ -234,7 +236,7 @@ void AGreyStone::Server_PlaySkill3_Implementation()
 void AGreyStone::Multicast_PlaySkill4_Implementation(FTransform form)
 {
     A4 = GetWorld()->SpawnActorDeferred<ASkill4_Actor>(Sk4, form, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-    A4->SetAttackDamage(Info->Skill4_ATK);
+    A4->SetAttackDamage(AttackDamage4);
     A4->IngoreActor(this);
     UGameplayStatics::FinishSpawningActor(A4, form);
 }

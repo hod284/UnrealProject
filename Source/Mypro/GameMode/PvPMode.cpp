@@ -25,22 +25,24 @@ void APvPMode::PostLogin(APlayerController* NewPlayer)
 }
 void APvPMode::RestartPlayer(AController* NewPlayer)
 {
-	int32 PlayerCount = GetNumPlayers();
+	bool bIsHostPC = NewPlayer->IsLocalController();
 	FVector SpawnLocation;
 	FRotator SpawnRotation;
 	FVector Scale = FVector(1, 1, 1);
 	TSubclassOf<APawn> ch= nullptr;
 	AMainPlayerController* MyPC = Cast<AMainPlayerController>(NewPlayer);
-	if (PlayerCount ==1)
+	if (bIsHostPC)
 	{
 	   SpawnLocation = FVector(110,690, 95);
 	   SpawnRotation = FRotator(0, -90, 0);
+	   if(MyPC)
 	   ch= MyPC->GetSelectCharactertClass();
 	}
 	else
 	{
 		SpawnLocation = FVector(110, -670, 95);
 		SpawnRotation = FRotator(0, 90, 0);
+		if (MyPC)
 		ch = GetDefaultPawnClassForController(NewPlayer);
 	}
 	FTransform T(SpawnRotation, SpawnLocation, Scale);
@@ -63,17 +65,17 @@ UClass* APvPMode::GetDefaultPawnClassForController_Implementation(AController* I
 		case Characters::Guiden:
 			return  StaticLoadClass(
 				AMyCharacter::StaticClass(), nullptr,
-				TEXT("/Script/Engine.Blueprint'/Game/bluePrint/PlayGudion.PlayGudion_C'"));
+				TEXT("Class'/Game/bluePrint/PlayGudion.PlayGudion_C'"));
 			break;
 		case Characters::Warrior:
 			return StaticLoadClass(
 				AMyCharacter::StaticClass(), nullptr,
-				TEXT("/Script/Engine.Blueprint'/Game/bluePrint/PlayWarrior.PlayWarrior_C'"));
+				TEXT("Class'/Game/bluePrint/PlayWarrior.PlayWarrior_C'"));
 			break;
 		case Characters::DarkMagion:
 			return  StaticLoadClass(
 				AMyCharacter::StaticClass(), nullptr,
-				TEXT("/Script/Engine.Blueprint'/Game/bluePrint/PlayDark.PlayDark_C'"));
+				TEXT("Class'/Game/bluePrint/PlayDark.PlayDark_C'"));
 			break;
 		}
 	}

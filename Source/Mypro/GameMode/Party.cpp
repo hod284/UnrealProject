@@ -27,22 +27,24 @@ void AParty::PostLogin(APlayerController* NewPlayer)
 }
 void AParty::RestartPlayer(AController* NewPlayer)
 {
-	int32 PlayerCount = GetNumPlayers();
+	bool bIsHostPC = NewPlayer->IsLocalController();
 	FVector SpawnLocation;
 	FRotator SpawnRotation;
 	FVector Scale = FVector(1, 1, 1);
 	TSubclassOf<APawn> ch = nullptr;
 	AMainPlayerController* MyPC = Cast<AMainPlayerController>(NewPlayer);
-	if (PlayerCount == 1)
+	if (bIsHostPC)
 	{
 		SpawnLocation = FVector(-640, 520, 85);
 		SpawnRotation = FRotator(0, -90, 0);
+		if (MyPC)
 		ch = MyPC->GetSelectCharactertClass();
 	}
 	else
 	{
 		SpawnLocation = FVector(60, 520, 85);
 		SpawnRotation = FRotator(0, -90, 0);
+		if (MyPC)
 		ch = GetDefaultPawnClassForController(NewPlayer);
 	}
 	FTransform T(SpawnRotation, SpawnLocation, Scale);

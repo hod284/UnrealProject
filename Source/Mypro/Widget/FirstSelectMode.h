@@ -55,6 +55,12 @@ protected:
 	void FinishedSession(bool ok);
 	void CreateSessionComplete(FName, bool ok);
 	void JoinSessionComplete(FName, EOnJoinSessionCompleteResult::Type res);
+	void OnDestroyThenCreate(FName, bool bOk);
+	void CreateLanSession();
+	static TSharedPtr<const FUniqueNetId> GetLocalIdSafe();
 	TSharedPtr<FOnlineSessionSearch> Search;
 	IOnlineSessionPtr Session;
+	int32 FindRetries = 0;
+	int32 MaxFindRetries = 5;
+	float FindRetryDelay = 1.0f; // 1√  ∞£∞›
 };

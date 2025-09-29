@@ -53,11 +53,13 @@ void  URoomWidgetClass::Character1Click()
 		AMyPlayerState* PS = Cast<AMyPlayerState>(PCfirst->PlayerState);
 		PS->Pitch_H = 0;
 		PS->MyCharacter_H = Characters::Warrior;
+		PS->ForceNetUpdate();
 	}
 	else
 	{
 		PC->Sever_SendtheRotate(0);
 		PC->Server_SetSelectedPawn(Characters::Warrior);
+		PC->Sever_GettheSelectCharacter();
 	}
 }
 
@@ -71,12 +73,14 @@ void  URoomWidgetClass::Character2Click()
 		AMyPlayerState* PS = Cast<AMyPlayerState>(PCfirst->PlayerState);
 		 PS->Pitch_H =-90;
 		 PS->MyCharacter_H = Characters::Guiden;
+		 PS->ForceNetUpdate();
 	}
 	else
 	{
 
 		PC->Sever_SendtheRotate(-90);
 		PC->Server_SetSelectedPawn(Characters::Guiden);
+		PC->Sever_GettheSelectCharacter();
 	}
 }
 
@@ -90,11 +94,13 @@ void  URoomWidgetClass::Character3Click()
 		AMyPlayerState* PS = Cast<AMyPlayerState>(PCfirst->PlayerState);
 		PS->Pitch_H = -180;
 		PS->MyCharacter_H = Characters::DarkMagion;
+		PS->ForceNetUpdate();
 	}
 	else
 	{
 		PC->Sever_SendtheRotate(-180);
 		PC->Server_SetSelectedPawn(Characters::DarkMagion);
+		PC->Sever_GettheSelectCharacter();
 	}
 }
 void URoomWidgetClass::ReadyButton()

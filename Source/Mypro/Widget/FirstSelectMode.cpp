@@ -144,6 +144,7 @@ void UFirstSelectMode::ClickMultiPartyButton()
 		Session = oss ? oss->GetSessionInterface() : nullptr;
 	if (!Session.IsValid())
 		return;
+	FindRetries = 0;
 	Search = MakeShared<FOnlineSessionSearch>();
 	Search->bIsLanQuery = true;
 	Search->MaxSearchResults = 50;
@@ -156,30 +157,94 @@ void  UFirstSelectMode::FinishedSession(bool ok)
 {
 	Session->OnFindSessionsCompleteDelegates.RemoveAll(this);
 
-	auto localid = GEngine->GetFirstGamePlayer(GetWorld())->GetPreferredUniqueNetId();
-	if (ok && Search.IsValid() && Search->SearchResults.Num() > 0)
+	auto LocalId = GetLocalIdSafe();
+	if (!LocalId.IsValid()) { UE_LOG(LogTemp, Error, TEXT("LocalId invalid")); return; }
+
+	// 후보 추리기 (그냥 첫 결과 쓰기보단 최소한 유효 검사)
+	TArray<FOnlineSessionSearchResult> Candidates;
+	if (ok && Search.IsValid()) {
+		for (const auto& R : Search->SearchResults) {
+			if (R.IsValid()) { Candidates.Add(R); break; }
+		}
+	}
+
+	if (Candidates.Num() > 0)
 	{
+		Session->OnJoinSessionCompleteDelegates.RemoveAll(this);
 		Session->OnJoinSessionCompleteDelegates.AddUObject(this, &UFirstSelectMode::JoinSessionComplete);
-		Session->JoinSession(*localid, NAME_GameSession, Search->SearchResults[0]);
+		Session->JoinSession(*LocalId, NAME_GameSession, Candidates[0]);
 		return;
 	}
+
+	// ★ 아직 못 찾았으면 N회 재탐색 후에만 호스트 전환
+	if (FindRetries < MaxFindRetries)
+	{
+		FindRetries++;
+		FTimerHandle H;
+		GetWorld()->GetTimerManager().SetTimer(H, [this, LocalId]()
+			{
+				Search = MakeShared<FOnlineSessionSearch>();
+				Search->bIsLanQuery = true;
+				Search->MaxSearchResults = 50;
+				Search->TimeoutInSeconds = 5.0f;
+
+				Session->OnFindSessionsCompleteDelegates.RemoveAll(this);
+				Session->OnFindSessionsCompleteDelegates.AddUObject(this, &UFirstSelectMode::FinishedSession);
+				Session->FindSessions(*LocalId, Search.ToSharedRef());
+			}, FindRetryDelay, false);
+		return;
+	}
+
+	// ★ 정말 없을 때만 호스트 생성. Destroy → 완료 콜백에서 Create
+	if (Session->GetNamedSession(NAME_GameSession) != nullptr)
+	{
+		Session->OnDestroySessionCompleteDelegates.RemoveAll(this);
+		Session->OnDestroySessionCompleteDelegates.AddUObject(this, &UFirstSelectMode::OnDestroyThenCreate);
+		Session->DestroySession(NAME_GameSession);
+		return;
+	}
+	CreateLanSession(); // 바로 생성
+}
+
+void UFirstSelectMode::OnDestroyThenCreate(FName, bool bOk)
+{
+	Session->OnDestroySessionCompleteDelegates.RemoveAll(this);
+	CreateLanSession();
+}
+void UFirstSelectMode::CreateLanSession()
+{
+	if (!Session.IsValid()) return;
+
 	FOnlineSessionSettings s;
-	s.bIsLANMatch = Search->bIsLanQuery;
+	s.bIsLANMatch = true;
 	s.bShouldAdvertise = true;
 	s.NumPublicConnections = 2;
 	s.bAllowJoinInProgress = true;
-	s.bUsesPresence = true;
-	Session->OnCreateSessionCompleteDelegates.AddUObject(this, &UFirstSelectMode::CreateSessionComplete);
-	Session->DestroySession(NAME_GameSession);
-	Session->CreateSession(*localid, NAME_GameSession, s);
-}
 
+	Session->OnCreateSessionCompleteDelegates.RemoveAll(this);
+	Session->OnCreateSessionCompleteDelegates.AddUObject(this, &UFirstSelectMode::CreateSessionComplete);
+
+	auto LocalId = GetLocalIdSafe();
+	if (!LocalId.IsValid()) { UE_LOG(LogTemp, Error, TEXT("LocalId invalid")); return; }
+
+	Session->CreateSession(*LocalId, NAME_GameSession, s);
+}
+TSharedPtr<const FUniqueNetId> UFirstSelectMode::GetLocalIdSafe()
+{
+	if (auto OSS = IOnlineSubsystem::Get()) {
+		auto Identity = OSS->GetIdentityInterface();
+		if (Identity.IsValid()) 
+			return 
+		Identity->GetUniquePlayerId(0);
+	}
+	return nullptr;
+}
 void  UFirstSelectMode::CreateSessionComplete(FName, bool ok)
 {
 	Session->OnCreateSessionCompleteDelegates.RemoveAll(this);
 	if (!ok)
 		return;
-	GetWorld()->ServerTravel("/Game/Virtual_Studio_Kit/Maps/Room?listen");
+	UGameplayStatics::OpenLevel(GetWorld(), FName("/Game/Virtual_Studio_Kit/Maps/Room"), true, TEXT("listen"));
 }
 void  UFirstSelectMode::JoinSessionComplete(FName, EOnJoinSessionCompleteResult::Type res)
 {
@@ -189,6 +254,19 @@ void  UFirstSelectMode::JoinSessionComplete(FName, EOnJoinSessionCompleteResult:
 	FString add;
 	if (Session->GetResolvedConnectString(NAME_GameSession, add))
 	{
+		if (add.EndsWith(TEXT(":0")))
+		{
+			int32 Port = 7777;
+			GConfig->GetInt(TEXT("/Script/Engine.Engine"), TEXT("DefaultPort"), Port, GEngineIni); 
+			GConfig->GetInt(TEXT("URL"), TEXT("Port"), Port, GEngineIni);
+
+			int32 ColonIdx;
+			if (add.FindLastChar(':', ColonIdx))
+			{
+				add = add.Left(ColonIdx) + TEXT(":") + FString::FromInt(Port);
+			}
+		}
+
 		if (APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0))
 		{
 			PC->ClientTravel(add, TRAVEL_Absolute);

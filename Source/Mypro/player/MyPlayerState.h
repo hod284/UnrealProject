@@ -18,7 +18,6 @@ protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps)  const override;
 	AMyPlayerState();
 	virtual void BeginPlay() override;
-	virtual void CopyProperties(APlayerState* NewPlayerState) override;
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
 	TObjectPtr<UInventoryComponent> Inventoryco;

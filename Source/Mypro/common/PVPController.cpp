@@ -18,42 +18,12 @@ void APVPController::BeginPlay()
 	Super::BeginPlay();
 	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UINot);
 	ui = Cast<UPvPUIClass>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPvP_widget());
-	if (ui&& GetWorld()->GetFirstPlayerController()->IsLocalController())
+	if (ui)
 	{
 		ui->AddToViewport();
 		ui->SkillInite();
 	}
-	GetWorld() ->GetTimerManager().SetTimerForNextTick(FTimerDelegate::CreateLambda([this]() {
-	if (HasAuthority())
-	{
-		APlayerController* PC = GetWorld()->GetFirstPlayerController();
-		if (PC)
-		{
-			AMyPlayerState* PS = PC->GetPlayerState<AMyPlayerState>();
-			if (PS)
-			{
-				ui->SetHostImagebyCharacter(PS->MyCharacter_H);
-				ui->SetClientImagebyCharacter(PS->MyCharacter_C);
-			}
-		}
-	}
-	else
-	{
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMyCharacter::StaticClass(), Players);
-		for (AActor* actor : Players)
-		{
-			AMyCharacter* otherchar = Cast<AMyCharacter>(actor);
-			if (otherchar != Mychar)
-			{
-				HostPawn = otherchar;
-				break;
-			}
-			UE_LOG(LogTemp, Warning, TEXT("Players:%s"), *actor->GetName());
-		}
-	}
-	}));
 	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetGameState(NowGameState::pvp);
-	
 }
 
 // Called every frame
@@ -68,6 +38,8 @@ void APVPController::Tick(float DeltaTime)
 			AMyPlayerState* PS = GetWorld()->GetFirstPlayerController()->GetPlayerState<AMyPlayerState>();
 			if (PS)
 			{
+				ui->SetHostImagebyCharacter(PS->MyCharacter_H);
+				ui->SetClientImagebyCharacter(PS->MyCharacter_C);
 				ui->SetHostHpBar(PS->PlayerHP_H);
 				ui->SetHostMpBar(PS->PlayerMP_H);
 				ui->SetClientHpBar(PS->PlayerHP_C);
@@ -77,15 +49,17 @@ void APVPController::Tick(float DeltaTime)
 					Mychar->CurrentVelocity_H = PS->CurrentVelocity_H;
 					Mychar->CurrentVelocity_C = PS->CurrentVelocity_C;
 				}
+				ui->SetHostImagebyCharacter(PS->MyCharacter_H);
+				ui->SetClientImagebyCharacter(PS->MyCharacter_C);
 				if (PS->PlayerHP_H <= KINDA_SMALL_NUMBER || PS->PlayerHP_C <= KINDA_SMALL_NUMBER)
 					UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
-			}
-			if (ClientPawn)
-			{
-				ClientPawn->SetColision("Monster");
-				ClientPawn->GetMesh()->SetRelativeRotation(FRotator(0, PS->MeshPitch_C, 0));
-				if (Mychar)
-					Mychar->SetCameraTarget(ClientPawn);
+				if (ClientPawn)
+				{
+					ClientPawn->SetColision("Monster");
+					ClientPawn->GetMesh()->SetRelativeRotation(FRotator(0, PS->MeshPitch_C, 0));
+					if (Mychar)
+						Mychar->SetCameraTarget(ClientPawn);
+				}
 			}
 		}
 		else
@@ -112,13 +86,21 @@ void APVPController::Tick(float DeltaTime)
 				ui->SetClientHpBar(PC->PlayerHP_C);
 				ui->SetClientMpBar(PC->PlayerMP_C);
 				if (PC->PlayerHP_H <= KINDA_SMALL_NUMBER || PC->PlayerHP_C <= KINDA_SMALL_NUMBER)
-					UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
+					PC->Server_EndPvP();
 				if (HostPawn)
 				{
 					HostPawn->GetMesh()->SetRelativeRotation(FRotator(0, PC->MeshPitch_h, 0));
 					if (Mychar)
 						Mychar->SetCameraTarget(HostPawn);
 					HostPawn->SetColision("Monster");
+				}
+			}
+			if (HostPawn == NULL)
+			{
+				for (TActorIterator<AMyCharacter> It(GetWorld()); It; ++It)
+				{
+					if (Mychar != *It)
+						HostPawn = *It;
 				}
 			}
 		}

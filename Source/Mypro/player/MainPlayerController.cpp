@@ -58,12 +58,14 @@ void AMainPlayerController::Sever_SendtheReady_Implementation(bool ready)
 	APlayerController* PC = GetWorld()->GetFirstPlayerController();
 	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
 	PS->Ready_C = ready;
+	PS->ForceNetUpdate();
 }
 void AMainPlayerController::Server_SetSelectedPawn_Implementation(Characters CH)
 {
 	APlayerController* PC = GetWorld()->GetFirstPlayerController();
 	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
 	PS ->MyCharacter_C = CH;
+	PS->ForceNetUpdate();
 	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSelectCharacter_client(CH);
 }
 void  AMainPlayerController::Sever_SendtheRotate_Implementation(float Pi_h)
@@ -71,6 +73,7 @@ void  AMainPlayerController::Sever_SendtheRotate_Implementation(float Pi_h)
 	APlayerController* PC = GetWorld()->GetFirstPlayerController();
 	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
 	PS->Pitch_C = Pi_h;
+	PS->ForceNetUpdate();
 }
 void AMainPlayerController::Sever_GettheReady_Implementation()
 {
@@ -95,6 +98,8 @@ void AMainPlayerController::Client_GettheSelectCharacter_Implementation(Characte
 {
 	MyCharacter_C = ch_c;
 	MyCharacter_H = ch_h;
+	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSelectCharacter(ch_h);
+	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetSelectCharacter_client(ch_h);
 }
 
 void AMainPlayerController::Sever_GettheMPandHP_Implementation()
@@ -119,6 +124,7 @@ void AMainPlayerController::Sever_SendtheClientHP_Implementation(float damage)
 	float hpb = (PS->PlayerHPtotal_C / PS->PlayerHPtotalconst_C) * 100;
 	hpb = hpb / 100.0f;
 	PS->PlayerHP_C = hpb;
+	PS->ForceNetUpdate();
 }
 
 void AMainPlayerController::Sever_SendtheClientMP_Implementation(float Mp)
@@ -126,12 +132,14 @@ void AMainPlayerController::Sever_SendtheClientMP_Implementation(float Mp)
 	APlayerController* PC = GetWorld()->GetFirstPlayerController();
 	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
 	PS->PlayerMP_C = Mp;
+	PS->ForceNetUpdate();
 }
 void AMainPlayerController::Sever_SendtheClientMeshPitch_Implementation(float Pitch)
 {
 	APlayerController* PC = GetWorld()->GetFirstPlayerController();
 	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
 	PS->MeshPitch_C = Pitch;
+	PS->ForceNetUpdate();
 }
 void AMainPlayerController::Sever_GettheMeshPitch_Implementation()
 {
@@ -150,12 +158,14 @@ void AMainPlayerController::Server_SendthetotalHP_Implementation(float hp)
 	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
 	PS->PlayerHPtotal_C = hp;
 	PS->PlayerHPtotalconst_C = hp;
+	PS->ForceNetUpdate();
 }
 void AMainPlayerController::Server_SendtheVelocity_Implementation(FVector ve)
 {
 	APlayerController* PC = GetWorld()->GetFirstPlayerController();
 	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
 	PS->CurrentVelocity_C = ve;
+	PS->ForceNetUpdate();
 }
 
 void AMainPlayerController::Server_GetttheVelocity_Implementation()
@@ -176,6 +186,7 @@ void AMainPlayerController::Server_SendttheTargetName_Implementation(const FStri
 	APlayerController* PC = GetWorld()->GetFirstPlayerController();
 	AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
 	PS->TargetName = na;
+	PS->ForceNetUpdate();
 }
 
 void AMainPlayerController::Server_GetttheTargetName_Implementation()
@@ -231,4 +242,9 @@ void AMainPlayerController::Server_DClient_Implementation(APawn* pa)
 			Pa->Destroy();
 		}
 	}
+}
+
+void AMainPlayerController::Server_EndPvP_Implementation()
+{
+	UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
 }

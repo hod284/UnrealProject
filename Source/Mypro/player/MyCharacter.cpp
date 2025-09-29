@@ -465,6 +465,7 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 					float HpTemp = (PS->PlayerHPtotal_H / PS->PlayerHPtotalconst_H) * 100;
 					HP = HpTemp / 100;
 					PS->PlayerHP_H = HP;
+					PS->ForceNetUpdate();
 				}
 			}
 			else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
@@ -744,7 +745,10 @@ void AMyCharacter::MpbarSync(float cost)
 		{
 			AMyPlayerState* PS = GetPlayerState<AMyPlayerState>();
 			if (PS)
+			{
 				PS->PlayerMP_H = MP;
+				PS->ForceNetUpdate();
+			}
 		}
 		else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
 			PlayerController->Sever_SendtheClientMP(MP);
@@ -766,7 +770,10 @@ void AMyCharacter::AddMpbar(float cost)
 	  {
 		  AMyPlayerState* PS = GetPlayerState<AMyPlayerState>();
 		  if (PS)
+		  {
 			  PS->PlayerMP_H = MP;
+			  PS->ForceNetUpdate();
+		  }
 	  }
 	  else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
 		  PlayerController->Sever_SendtheClientMP(MP);

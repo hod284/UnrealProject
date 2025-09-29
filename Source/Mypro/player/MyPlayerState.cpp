@@ -48,15 +48,7 @@ AMyPlayerState::AMyPlayerState()
     SetReplicates(true);
 }
 
-void AMyPlayerState::CopyProperties(APlayerState* NewPlayerState)
-{
-    Super::CopyProperties(NewPlayerState);
-    AMyPlayerState* state  =Cast<AMyPlayerState>(NewPlayerState);
-    if (state)
-    {
-        state->MyCharacter_C = MyCharacter_C;
-    }
-}
+
 
 
 

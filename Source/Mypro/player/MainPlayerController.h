@@ -70,6 +70,8 @@ public:
 	void Server_RequestSpectator();
 	UFUNCTION(Server, Reliable)
 	void Server_DClient(APawn *pa);
+	UFUNCTION(Server, Reliable)
+	void Server_EndPvP();
 	float Pitch_c;
 	float Pitch_h;
 	float MeshPitch_c =-90;
