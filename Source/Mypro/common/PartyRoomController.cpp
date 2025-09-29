@@ -67,8 +67,8 @@ void APartyRoomController::Tick(float DeltaTime)
 				Mychar->CurrentVelocity_H = PS->CurrentVelocity_H;
 				Mychar->CurrentVelocity_C = PS->CurrentVelocity_C;
 			}
-			//if (PS->PlayerHP_H <= KINDA_SMALL_NUMBER)
-			//	UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
+			if (PS->PlayerHP_H <= KINDA_SMALL_NUMBER)
+				UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
 			if (ClientPawn)
 			{
 				ClientPawnSpawn = true;
@@ -114,15 +114,14 @@ void APartyRoomController::Tick(float DeltaTime)
 				HostPawn->GetMesh()->SetRelativeRotation(FRotator(0, PC->MeshPitch_h, 0));
 			}
 		}
-		if (HostPawn == NULL)
+	}
+	if (HostPawn == NULL)
+	{
+		for (TActorIterator<AMyCharacter> It(GetWorld()); It; ++It)
 		{
-			for (TActorIterator<AMyCharacter> It(GetWorld()); It; ++It)
-			{
-				if (Mychar != *It)
-					HostPawn = *It;
-			}
+			if (Mychar != *It)
+				HostPawn = *It;
 		}
 	}
-
 }
 
