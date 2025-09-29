@@ -35,8 +35,6 @@ void URoomWidgetClass::NativeTick(const FGeometry& MyGeometry, float InDeltaTime
 	if (PC->HasAuthority())
 	{
 		AMyPlayerState* PS = Cast<AMyPlayerState>(PC->PlayerState);
-		UE_LOG(LogMypro, Warning, TEXT("bool°©%s"), (PS->Ready_H ? TEXT("true") : TEXT("false")));
-		UE_LOG(LogMypro, Warning, TEXT("bool°ªH%s"), (PS->Ready_C ?TEXT("true") : TEXT("false")));
 		if(PS->Ready_H&& PS->Ready_C)
 		Start->SetVisibility(ESlateVisibility::Visible);
 	}
