@@ -52,6 +52,12 @@ protected:
 	float MonsterStun_Const =0.0f;
 	const FItmeTexturAndMeshInfo* Texture;
 	UStaticMesh* Mesh;
+	UPROPERTY(EditDefaultsOnly)
+	UNiagaraComponent* Niagara1 = nullptr;
+	UPROPERTY(EditDefaultsOnly)
+	UNiagaraComponent* Niagara2 = nullptr;
+	UPROPERTY(EditDefaultsOnly)
+	UNiagaraComponent* Niagara3 = nullptr;
 	bool CanStun=true;
 	bool Death = false;
 	UBrainComponent* Brain;

@@ -57,6 +57,7 @@ protected:
 	UPlayMainUI* ui;
 	UPvPUIClass* uipvp;
 	UPartyRoomWidgetClass* uiParty;
+	const FItemtableInfo* itemlist;
 	bool Canskill1 = true;
 	float Skill1cool = 1.0F;
 	float Skill1Speed = 0.0F;

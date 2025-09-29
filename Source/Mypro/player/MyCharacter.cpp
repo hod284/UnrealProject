@@ -37,6 +37,8 @@ AMyCharacter::AMyCharacter()
 void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
+    itemlist = GI->GetItemInfo();
 	AnimInstance = Cast<UMyPlayerAnimInstance>(GetMesh()->GetAnimInstance());
     PlayerController = Cast<AMainPlayerController>(GetController());
 	if (PlayerController)
@@ -81,9 +83,7 @@ void AMyCharacter::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 {
 	FString s = OtherActor->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("hit:%s"), *s);
-	UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
-	const FItemtableInfo* itemlist = GI->GetItemInfo();
-	if (s.Contains(GI->GetItemInfo()->Name))
+	if (s.Contains(itemlist->Name))
 	{
 		if (AMyPlayerState* PS = GetPlayerState<AMyPlayerState>())
 		{

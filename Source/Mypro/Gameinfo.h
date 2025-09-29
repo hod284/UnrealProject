@@ -77,14 +77,13 @@
 #include "Components/ScrollBox.h"
 #include "Components/ScrollBoxSlot.h"
 //
-//������	��� ���� ��Ƴ�����
+
 #include "Camera/CameraComponent.h"
 #include "Gameinfo.generated.h"
 
 
 DECLARE_LOG_CATEGORY_EXTERN(LogMypro, Warning, All);
 
-// Team : 0 ~ 255 ������ ��
 #define	TeamNeutral	255
 #define	TeamMonster	30
 #define	TeamPlayer	1
@@ -92,66 +91,58 @@ DECLARE_LOG_CATEGORY_EXTERN(LogMypro, Warning, All);
 
 
 
-/*
-  �̳� Ŭ������ �̳��� ������
-  �̳��� �� �̳�Ŭ������ �������� ������������ �ڽ��� �ڽĿ� �������� �δ³��� ���̿� Ÿ���� �������� ������ �ִ�
-  �̳��� �ڵ����� int�� ���ϴ� �ݸ� �̳� Ŭ������ �����ڰ� �����־���� Ÿ���� �����ȴ�
-  �������� ������ �ٸ��� ���� �̳��� �ߺ��� ������ �ȵǴ� �ݸ� �̳� Ŭ������ �ߺ��� ����� �ȴ�
-*/
-//���ӻ��� ����
 UENUM()
 enum class  NowGameState: uint8
 {
 	None,Intro, playgame, gameover, pvp,Room,Party
 };
-//���ӻ��� ����
+
 UENUM()
 enum class  SingleORmulti : uint8
 {
 	None,single,Multi,MultiParty
 };
 
-//����UI ���� �ƴ��� ����
+
 UENUM(BlueprintType)
 enum class UIORNOT : uint8
 {
 	UI, UINot
 };
 
-//����ĳ���� ����
 UENUM(BlueprintType)
 enum class Characters : uint8
 {
 	Guiden, Warrior,DarkMagion, None
 };
-// ���� ���̾� ����
+
 UENUM(BlueprintType)
 enum class ObjestLayer : uint8
 {
 	wall,floor,light
 };
-// ���� ������ ����ü ����	
+	
 USTRUCT(BlueprintType)
 struct FCharacterInfo:public FTableRowBase
 {
 	GENERATED_BODY()
 public:
 	UPROPERTY(EditAnywhere)
-	Characters CType; // ĳ���� Ÿ��
+	Characters CType =Characters::None; 
 	UPROPERTY(EditAnywhere)
-	int32 HP; // ü��
+	int32 HP=0; 
 	UPROPERTY(EditAnywhere)
-	int32 MP; // ����
+	int32 MP=0; 
 	UPROPERTY(EditAnywhere)
-	int32 ATK; // ���ݷ�
+	int32 ATK=0; 
 	UPROPERTY(EditAnywhere)
-	int32 Skill1_ATK; // ��ų1 ���ݷ� 
+	int32 Skill1_ATK=0;  
 	UPROPERTY(EditAnywhere)
-	int32 Skill2_ATK; // ��ų2 ���ݷ� 
+	int32 Skill2_ATK=0;  
 	UPROPERTY(EditAnywhere)
-	int32 Skill3_ATK; // ��ų3 ���ݷ� 
+	int32 Skill3_ATK=0; 
 	UPROPERTY(EditAnywhere)
-	int32 Skill4_ATK; // ��ų4 ���ݷ� 
+	int32 Skill4_ATK=0; 
 };
 USTRUCT(BlueprintType)
 struct FCMonsterInfo :public FTableRowBase
@@ -159,17 +150,17 @@ struct FCMonsterInfo :public FTableRowBase
 	GENERATED_BODY()
 public:
 	UPROPERTY(EditAnywhere)
-	int32 HP; // ü��
+	int32 HP=0; 
 	UPROPERTY(EditAnywhere)
-	int32 StunGage; // ���ϰ�����
+	int32 StunGage=0; 
 	UPROPERTY(EditAnywhere)
-	int32 Skill1_ATK; // ��ų1 ���ݷ� 
+	int32 Skill1_ATK=0; 
 	UPROPERTY(EditAnywhere)
-	int32 Skill2_ATK; // ��ų2 ���ݷ� 
+	int32 Skill2_ATK=0; 
 	UPROPERTY(EditAnywhere)
-	int32 Skill3_ATK; // ��ų3 ���ݷ� 
+	int32 Skill3_ATK=0;  
 	UPROPERTY(EditAnywhere)
-	int32 Skill4_ATK; // ��ų4 ���ݷ� 
+	int32 Skill4_ATK=0;  
 };
 USTRUCT(BlueprintType)
 struct FItemtableInfo :public FTableRowBase
@@ -177,17 +168,17 @@ struct FItemtableInfo :public FTableRowBase
 	GENERATED_BODY()
 public:
 	UPROPERTY(EditAnywhere)
-	FString Name;// ������ ����
+	FString Name="";
 	UPROPERTY(EditAnywhere)
-	int32 AddAttack; // �߰� ���ݷ�
+	int32 AddAttack=0; 
 	UPROPERTY(EditAnywhere)
-	int32 AddMoveSpeed;// �߰� ȸ�Ƿ� 
+	int32 AddMoveSpeed=0;
 	UPROPERTY(EditAnywhere)
-	int32 AddDefence; //�߰� ����  
+	int32 AddDefence=0;   
 	UPROPERTY(EditAnywhere)
-	int32 AddMp; // �߰� mp 
+	int32 AddMp=0;  
 	UPROPERTY(EditAnywhere)
-	int32 AddHp; //�߰� hp
+	int32 AddHp=0; 
 };
 USTRUCT(BlueprintType)
 struct FPlayerAnimInfo : public FTableRowBase

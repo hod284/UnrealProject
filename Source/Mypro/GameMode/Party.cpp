@@ -67,17 +67,17 @@ UClass* AParty::GetDefaultPawnClassForController_Implementation(AController* InC
 		case Characters::Guiden:
 			return  StaticLoadClass(
 				AMyCharacter::StaticClass(), nullptr,
-				TEXT("/Script/Engine.Blueprint'/Game/bluePrint/PlayGudion.PlayGudion_C'"));
+				TEXT("Class'/Game/bluePrint/PlayGudion.PlayGudion_C'"));
 			break;
 		case Characters::Warrior:
 			return StaticLoadClass(
 				AMyCharacter::StaticClass(), nullptr,
-				TEXT("/Script/Engine.Blueprint'/Game/bluePrint/PlayWarrior.PlayWarrior_C'"));
+				TEXT("Class'/Game/bluePrint/PlayWarrior.PlayWarrior_C'"));
 			break;
 		case Characters::DarkMagion:
 			return  StaticLoadClass(
 				AMyCharacter::StaticClass(), nullptr,
-				TEXT("/Script/Engine.Blueprint'/Game/bluePrint/PlayDark.PlayDark_C'"));
+				TEXT("Class'/Game/bluePrint/PlayDark.PlayDark_C'"));
 			break;
 		}
 	}

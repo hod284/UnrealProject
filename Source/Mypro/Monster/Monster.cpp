@@ -16,7 +16,13 @@ AMonster::AMonster()
 	const ConstructorHelpers::FObjectFinder<UBehaviorTree> BTree(TEXT("/Script/AIModule.BehaviorTree'/Game/BT/MonsterTREE.MonsterTREE'"));
     if(BTree.Succeeded())
 	    MonsterBehaviorTree = BTree.Object;
+	Niagara1  = CreateDefaultSubobject<UNiagaraComponent>(TEXT("N1"));
+	Niagara2 = CreateDefaultSubobject<UNiagaraComponent>(TEXT("N2"));
+	Niagara3 = CreateDefaultSubobject<UNiagaraComponent>(TEXT("N3"));
 	CapsuleComponent->SetCollisionProfileName("Monster");
+	Niagara1->SetupAttachment(RootComponent);
+	Niagara2->SetupAttachment(RootComponent);
+	Niagara3->SetupAttachment(RootComponent);
 	MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	AIControllerClass = AMonsterController::StaticClass();
@@ -62,6 +68,12 @@ void AMonster::BeginPlay()
 	UGameplayStatics::FinishSpawningActor(Ac4, Xform);
 	VI = Cast<AActor>(Ac4);
 	UI = Cast<UPlayMainUI>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPlayMainUI_widget());
+	if (Niagara1)
+		Niagara1->SetHiddenInGame(true);
+	if (Niagara2)
+		Niagara2->SetHiddenInGame(true);
+	if (Niagara3)
+		Niagara3->SetHiddenInGame(true);
 }
 
 void AMonster::Start()
@@ -200,15 +212,21 @@ float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 		FVector LO1 = MeshComponent->GetSocketLocation("Melee_Impact_R");
 		FVector LO2 = MeshComponent->GetSocketLocation("Impact");
 		FVector LO3 = MeshComponent->GetSocketLocation("Melee_Impact_L");
-		UNiagaraSystem* Niagara1 = LoadObject<UNiagaraSystem>(GetWorld(), TEXT("/Script/Niagara.NiagaraSystem'/Game/Pack_Simple_Particle_Burst/01_Niagara_Systems/NS_Simple_Burst_Level_3.NS_Simple_Burst_Level_3'"));
-
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), Niagara1, LO1);
-		UNiagaraSystem* Niagara2 = LoadObject<UNiagaraSystem>(GetWorld(), TEXT("/Script/Niagara.NiagaraSystem'/Game/Pack_Simple_Particle_Burst/01_Niagara_Systems/NS_Simple_Burst_Level_3.NS_Simple_Burst_Level_3'"));
-
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), Niagara2, LO2);
-		UNiagaraSystem* Niagara3 = LoadObject<UNiagaraSystem>(GetWorld(), TEXT("/Script/Niagara.NiagaraSystem'/Game/Pack_Simple_Particle_Burst/01_Niagara_Systems/NS_Simple_Burst_Level_3.NS_Simple_Burst_Level_3'"));
-
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), Niagara3, LO3);
+		if (Niagara1)
+		{
+			Niagara1->SetHiddenInGame(false);
+			Niagara1->SetWorldLocation(LO1);
+		}
+		if (Niagara2)
+		{
+			Niagara2->SetHiddenInGame(false);
+			Niagara2->SetWorldLocation(LO2);
+		}
+		if (Niagara3)
+		{
+			Niagara3->SetHiddenInGame(false);
+			Niagara3->SetWorldLocation(LO3);
+		}
 		Death = true;
 		if(Ac1)
 		Ac1->Destroy();
