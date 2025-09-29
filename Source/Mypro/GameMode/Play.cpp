@@ -25,7 +25,6 @@ void APlay::PostLogin(APlayerController* NewPlayer)
 	AMainPlayerController* MyPC = Cast<AMainPlayerController>(NewPlayer);
 	TSubclassOf<APawn> SelectedCharacterClass = MyPC->GetSelectCharactertClass();
 
-    // ĳ���� ���� �� Possess
     FVector SpawnLocation = FVector(20,1030,90);
     FRotator SpawnRotation = FRotator(0,-90,0);
     APawn* NewPawn = GetWorld()->SpawnActor<APawn>(SelectedCharacterClass, SpawnLocation, SpawnRotation);
