@@ -43,6 +43,7 @@ void AMinionMonster::BeginPlay()
 	Info = GI->GetDatainfo_Minion();
 	MonsterHpConst =MonsterHp = static_cast <float>(Info->HP);
 	HP = 1.0f;
+	Attack1 = static_cast <float>(Info->Skill1_ATK);
 	AnimInstance = Cast<UMonsterAnimInstance>(MeshComponent->GetAnimInstance());
 	AAIController* AIController = Cast<AAIController>(GetController());
 	if (AIController && MonsterBehaviorTree)
@@ -55,7 +56,7 @@ void AMinionMonster::BeginPlay()
 	FVector  Scl = FVector(1, 1, 1);
 	FTransform Xform(Rot, Loc, Scl);
 		Ac3 = GetWorld()->SpawnActorDeferred<AAction3_Monster>(Sk3, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-		Ac3->SetAttackDamage(Info->Skill1_ATK);
+		Ac3->SetAttackDamage(Attack1);
 		UGameplayStatics::FinishSpawningActor(Ac3, Xform);
 	
 	if (StimuliSource)
@@ -95,14 +96,13 @@ void AMinionMonster::AttackSuper()
 		FQuat::Identity, channel,
 		FCollisionShape::MakeCapsule(Radious, 200), param);
 	DrawDebugCapsule(GetWorld(), center, 200, Radious, FQuat::Identity, FColor::Green, false, 2.f);
-	float pe = static_cast<float>(Info->Skill1_ATK);
 	if (Collision)
 	{
 		for (auto& Hit : result)
 		{
 			if (Hit.GetActor()->IsA<APawn>())
 			{
-				 UGameplayStatics::ApplyDamage(Hit.GetActor(), pe, GetInstigatorController(), this, UDamageType::StaticClass());
+				 UGameplayStatics::ApplyDamage(Hit.GetActor(), Attack1, GetInstigatorController(), this, UDamageType::StaticClass());
 			}
 		}
 	}

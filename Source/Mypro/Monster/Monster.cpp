@@ -30,10 +30,13 @@ void AMonster::BeginPlay()
 	Super::BeginPlay();
 	UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
 	Info = GI->GetDatainfo_Monster();
-	MonsterHp = static_cast <float>(Info->HP);
-	MonsterStun = static_cast <float>(Info->StunGage);
+	MonsterHp_Const = MonsterHp = static_cast <float>(Info->HP);
+	MonsterStun_Const  =MonsterStun = static_cast <float>(Info->StunGage);
 	HP = 1.0f;
 	Stun = 1.0f;
+	Attak4 = static_cast <float>(Info->Skill4_ATK);
+	Attak1= static_cast <float>(Info->Skill1_ATK);
+	Attak2= static_cast <float>(Info->Skill2_ATK);
 	AnimInstance = Cast<UMonsterAnimInstance>(MeshComponent ->GetAnimInstance());
 	AAIController* AIController = Cast<AAIController>(GetController());
 	if (AIController && MonsterBehaviorTree)
@@ -50,11 +53,11 @@ void AMonster::BeginPlay()
 	FTransform Xform(Rot, Loc, Scl);
 	AActor* VI = Cast<AActor>(Ac1);
 	Ac2 = GetWorld()->SpawnActorDeferred<AAction2_Monster>(Sk2, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-	Ac2->SetAttackDamage(Info->Skill2_ATK);
+	Ac2->SetAttackDamage(Attak2);
 	UGameplayStatics::FinishSpawningActor(Ac2, Xform);
 	VI = Cast<AActor>(Ac2);
 	Ac4 = GetWorld()->SpawnActorDeferred<AAction4_Monster>(Sk4, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-	Ac4->SetAttackDamage(Info->Skill4_ATK);
+	Ac4->SetAttackDamage(Attak4);
 	UGameplayStatics::FinishSpawningActor(Ac4, Xform);
 	VI = Cast<AActor>(Ac4);
 	UI = Cast<UPlayMainUI>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPlayMainUI_widget());
@@ -75,7 +78,7 @@ void AMonster::Attack1()
 	FVector  Scl = FVector(1, 1, 1);
 	FTransform Xform(Rot, Loc, Scl);
 	Ac1 = GetWorld()->SpawnActorDeferred<AAction1_Monster>(Sk1, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-	Ac1->SetAttackDamage(Info->Skill1_ATK);
+	Ac1->SetAttackDamage(Attak1);
 	UGameplayStatics::FinishSpawningActor(Ac1, Xform);
 	UE_LOG(LogMypro, Warning, TEXT("at1"));
 }
@@ -115,16 +118,15 @@ void AMonster::AttackEnd()
 
 void AMonster::SetMonsterStun(float st)
 {
-	float conststun = static_cast<float>(Info->StunGage);
 	MonsterStun = st;
 	UE_LOG(LogMypro, Warning, TEXT("mst:%f"), MonsterStun);
-	float StunTemp = (MonsterStun / conststun) * 100;
+	float StunTemp = (MonsterStun / MonsterStun_Const) * 100.0f;
 	UE_LOG(LogMypro, Warning, TEXT("mst:%f"), StunTemp);
-	Stun = StunTemp / 100;
+	Stun = StunTemp / 100.0f;
 	UE_LOG(LogMypro, Warning, TEXT("mst:%f"), Stun);
-	if (MonsterStun > conststun)
+	if (MonsterStun > MonsterStun_Const)
 	{
-		MonsterStun = conststun;
+		MonsterStun = MonsterStun_Const;
 		Stun = 1.0f;
 	}
 	UI->OnStunDamage.Broadcast(Stun);
@@ -156,9 +158,9 @@ float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 	{
 		MonsterStun -= DamageAmount;
 		UE_LOG(LogMypro, Warning, TEXT("mst:%f"), MonsterStun);
-		float StunTemp  =(MonsterStun/ static_cast<float>(Info->StunGage)) * 100;
+		float StunTemp  =(MonsterStun/ MonsterStun_Const) * 100.0f;
 		UE_LOG(LogMypro, Warning, TEXT("mst:%f"), StunTemp);
-		Stun = StunTemp/100;
+		Stun = StunTemp/100.0f;
 		UE_LOG(LogMypro, Warning, TEXT("mst:%f"),Stun);
 		UI ->OnStunDamage.Broadcast(Stun);
 	}
@@ -166,7 +168,7 @@ float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 	{
 		MonsterHp -= DamageAmount;
 		UE_LOG(LogMypro, Warning, TEXT("mhp:%f"), MonsterHp);
-		float hptemp = (MonsterHp  /static_cast<float>(Info->HP)) * 100;
+		float hptemp = (MonsterHp  / MonsterHp_Const) * 100.0f;
 		UE_LOG(LogMypro, Warning, TEXT("mhp:%f"), hptemp);
 		HP =hptemp/100.0f;
 		UE_LOG(LogMypro, Warning, TEXT("mhp:%f"), HP);

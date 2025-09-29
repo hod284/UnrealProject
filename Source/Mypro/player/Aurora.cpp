@@ -262,7 +262,7 @@ void AAurora::AttackWeapon(FVector velocity, ECollisionChannel atchannel)
     param.AddIgnoredActor(this);
     param.bTraceComplex = false;
     float Radious = 100.0f;
-    FVector center = GetActorLocation() + velocity * 100;
+    FVector center = GetActorLocation() + velocity * 80;
     bool Collision;
     ECollisionChannel channel = atchannel;
     Collision = GetWorld()->SweepMultiByChannel(result, center, center,

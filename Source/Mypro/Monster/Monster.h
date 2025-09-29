@@ -43,8 +43,13 @@ protected:
 	FTimerHandle TimeSkill;
 	float HP = 1.0F;
 	float Stun = 1.0F;
-	float MonsterHp;
-	float MonsterStun;
+	float Attak4 =0.0f;
+	float Attak1 =0.0f;
+	float Attak2 =0.0f;
+	float MonsterHp=0.0f;
+	float MonsterStun =0.0f;
+	float MonsterHp_Const =0.0f;
+	float MonsterStun_Const =0.0f;
 	bool CanStun=true;
 	bool Death = false;
 	UBrainComponent* Brain;

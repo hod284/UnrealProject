@@ -37,8 +37,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
 	UAIPerceptionStimuliSourceComponent* StimuliSource;
 	float HP = 1.0F;
-	float MonsterHp;
-	float MonsterHpConst;
+	float MonsterHp =0.0f;
+	float MonsterHpConst =0.0f;
+	float Attack1 =0.0f;
 	const FCMonsterInfo* Info;
 	TObjectPtr<UBehaviorTree> MonsterBehaviorTree;
 	FTimerHandle Timer;
