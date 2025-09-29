@@ -10,6 +10,7 @@ AParty::AParty()
 	PlayerControllerClass = AMainPlayerController::StaticClass();
 	PlayerStateClass = AMyPlayerState::StaticClass();
 	SpectatorClass = ASpectatorPawn::StaticClass();
+	bUseSeamlessTravel = true;
 }
 void AParty::BeginPlay()
 {

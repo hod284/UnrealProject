@@ -17,6 +17,9 @@
 
 
 //
+#include "OnlineSubsystem.h"
+#include "Interfaces/OnlineIdentityInterface.h"
+#include "Interfaces/OnlineSessionInterface.h"
 #include "Animation/AnimSingleNodeInstance.h" 
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/WidgetComponent.h"

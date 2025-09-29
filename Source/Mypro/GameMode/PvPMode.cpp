@@ -8,6 +8,7 @@ APvPMode::APvPMode()
 	DefaultPawnClass = ASpectatorPawn::StaticClass();
 	PlayerControllerClass = AMainPlayerController::StaticClass();
 	PlayerStateClass = AMyPlayerState::StaticClass();
+	bUseSeamlessTravel = true;
 }
 void APvPMode::BeginPlay()
 {

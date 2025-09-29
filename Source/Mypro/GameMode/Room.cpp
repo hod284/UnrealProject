@@ -7,6 +7,7 @@ void ARoom::BeginPlay()
 {
 	Super::BeginPlay();
 	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetGameState(NowGameState::Room);
+	bUseSeamlessTravel = true;
 }
 
 ARoom::ARoom()
