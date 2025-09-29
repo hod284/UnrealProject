@@ -196,10 +196,7 @@ public:
 		if (name == "Portal")
 			CanPortal = false;
 	}
-	void SetColision(FString cporfile)
-	{
-	    GetCapsuleComponent()->SetCollisionProfileName(FName(*cporfile));
-	}
+	void SetColision(FString cporfile);
 	void SetCameraTarget(AActor* target)
 	{
 		CameraTarget = target;

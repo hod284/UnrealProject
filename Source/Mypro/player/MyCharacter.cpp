@@ -881,3 +881,7 @@ void AMyCharacter::Multicast_Back_Implementation(FVector velocity)
 {
 	BackDash(velocity);
 }
+void AMyCharacter::SetColision(FString cporfile)
+{
+	GetCapsuleComponent()->SetCollisionProfileName(FName(*cporfile));
+}
