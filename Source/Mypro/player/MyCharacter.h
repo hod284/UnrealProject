@@ -71,12 +71,12 @@ protected:
 	float Skill4Speed = 0.0F;
 	FVector TargetLocation = FVector::ZeroVector;
 	USceneComponent* TargetTransform;
-	int32 AttackDamage;
-	int32 AttackDamage1;
-	int32 AttackDamage2;
-	int32 AttackDamage3;
-	int32 AttackDamage4;
-	int32 AttackDamageUp;
+	int32 AttackDamage=0;
+	int32 AttackDamage1=0;
+	int32 AttackDamage2=0;
+	int32 AttackDamage3=0;
+	int32 AttackDamage4=0;
+	int32 AttackDamageUp=0;
 	AActor* CameraTarget = NULL;
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
