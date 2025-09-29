@@ -29,6 +29,7 @@ void AMonster::BeginPlay()
 {
 	Super::BeginPlay();
 	UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
+	Texture = GI->GetTextureInfo();
 	Info = GI->GetDatainfo_Monster();
 	MonsterHp_Const = MonsterHp = static_cast <float>(Info->HP);
 	MonsterStun_Const  =MonsterStun = static_cast <float>(Info->StunGage);
@@ -189,9 +190,7 @@ float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 		if (MeshActor)
 		{
 			MeshActor->SetMobility(EComponentMobility::Movable);
-			UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
-			const FItmeTexturAndMeshInfo* Texture = GI->GetTextureInfo();
-			UStaticMesh* Mesh = Texture->MeshMap["Portal"];
+		    Mesh = Texture->MeshMap["Portal"];
 			MeshActor->GetStaticMeshComponent()->SetStaticMesh(Mesh);
 			MeshActor->SetActorScale3D(FVector(1.0f)); 
 		}

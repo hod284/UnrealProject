@@ -50,6 +50,8 @@ protected:
 	float MonsterStun =0.0f;
 	float MonsterHp_Const =0.0f;
 	float MonsterStun_Const =0.0f;
+	const FItmeTexturAndMeshInfo* Texture;
+	UStaticMesh* Mesh;
 	bool CanStun=true;
 	bool Death = false;
 	UBrainComponent* Brain;
