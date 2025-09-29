@@ -50,11 +50,6 @@ void APvPMode::RestartPlayer(AController* NewPlayer)
 	if (po)
 	{
 		po->bUseControllerRotationYaw = false;
-		if (PlayerCount != 1)
-		{
-			AMyCharacter* mych = Cast<AMyCharacter>(po);
-			mych->SetColision("Monster");
-		}
 		NewPlayer->Possess(po);
 	}
 }

@@ -26,9 +26,6 @@ void APVPController::BeginPlay()
 	GetWorld() ->GetTimerManager().SetTimerForNextTick(FTimerDelegate::CreateLambda([this]() {
 	if (HasAuthority())
 	{
-
-		APawn* mych = Cast<APawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
-		Mychar = Cast<AMyCharacter>(mych);
 		APlayerController* PC = GetWorld()->GetFirstPlayerController();
 		if (PC)
 		{
@@ -42,8 +39,6 @@ void APVPController::BeginPlay()
 	}
 	else
 	{
-		APawn* mych = Cast<APawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
-		Mychar = Cast<AMyCharacter>(mych);
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMyCharacter::StaticClass(), Players);
 		for (AActor* actor : Players)
 		{
@@ -67,6 +62,8 @@ void APVPController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 		if (HasAuthority())
 		{
+			APawn* mych = Cast<APawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
+			Mychar = Cast<AMyCharacter>(mych);
 			ClientPawn = Cast<AMyCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 1));
 			AMyPlayerState* PS = GetWorld()->GetFirstPlayerController()->GetPlayerState<AMyPlayerState>();
 			if (PS)
@@ -85,13 +82,16 @@ void APVPController::Tick(float DeltaTime)
 			}
 			if (ClientPawn)
 			{
-				Mychar->SetCameraTarget(ClientPawn);
+				ClientPawn->SetColision("Monster");
 				ClientPawn->GetMesh()->SetRelativeRotation(FRotator(0, PS->MeshPitch_C, 0));
+				if (Mychar)
+					Mychar->SetCameraTarget(ClientPawn);
 			}
 		}
 		else
 		{
-			
+			APawn* mych = Cast<APawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
+			Mychar = Cast<AMyCharacter>(mych);
 			AMainPlayerController* PC = Cast<AMainPlayerController>(GetWorld()->GetFirstPlayerController());
 			if (PC)
 			{
@@ -116,7 +116,8 @@ void APVPController::Tick(float DeltaTime)
 				if (HostPawn)
 				{
 					HostPawn->GetMesh()->SetRelativeRotation(FRotator(0, PC->MeshPitch_h, 0));
-					Mychar->SetCameraTarget(HostPawn);
+					if (Mychar)
+						Mychar->SetCameraTarget(HostPawn);
 					HostPawn->SetColision("Monster");
 				}
 			}
