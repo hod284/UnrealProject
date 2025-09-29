@@ -43,7 +43,6 @@ void ASelectCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (IsHover)
 	{
-		UE_LOG(	LogMypro, Warning, TEXT("HOVER"));
 		SkeletalMeshComponent->SetCustomDepthStencilValue(3);
 	}
 	else
