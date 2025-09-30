@@ -35,8 +35,13 @@ void AMonster::BeginPlay()
 {
 	Super::BeginPlay();
 	UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
-	Texture = GI->GetTextureInfo();
-	Info = GI->GetDatainfo_Monster();
+	const FItmeTexturAndMeshInfo* Texture = GI->GetTextureInfo();
+	textureMap = Texture->textureMap;
+	MeshMap =Texture->MeshMap;
+	const FCMonsterInfo* Info = GI->GetDatainfo_Monster();
+    LO1 = MeshComponent->GetSocketLocation("Melee_Impact_R");
+    LO2 = MeshComponent->GetSocketLocation("Impact");
+    LO3 = MeshComponent->GetSocketLocation("Melee_Impact_L");
 	MonsterHp_Const = MonsterHp = static_cast <float>(Info->HP);
 	MonsterStun_Const  =MonsterStun = static_cast <float>(Info->StunGage);
 	HP = 1.0f;
@@ -196,22 +201,16 @@ float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 			Brain->PauseLogic(TEXT("Death")); 
 		FVector SpawnLocation(0, 0, 100);
 		FRotator SpawnRotation(0, 0, 0);
-
-		AStaticMeshActor* MeshActor = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), SpawnLocation, SpawnRotation);
+		FVector Scale(1.0, 1.0, 1.0);
+		FTransform xtransform(SpawnRotation,SpawnLocation, Scale);
+		AStaticMeshActor* MeshActor = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), xtransform);
 		MeshActor ->Rename(TEXT("Portal1"));
 		if (MeshActor)
 		{
 			MeshActor->SetMobility(EComponentMobility::Movable);
-		    Mesh = Texture->MeshMap["Portal"];
+		    Mesh = MeshMap["Portal"];
 			MeshActor->GetStaticMeshComponent()->SetStaticMesh(Mesh);
-			MeshActor->SetActorScale3D(FVector(1.0f)); 
 		}
-		FActorSpawnParameters param;
-		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-		GetWorld()->SpawnActor<AActor>(Portal, FVector(0, -200, 10), FRotator::ZeroRotator, param);
-		FVector LO1 = MeshComponent->GetSocketLocation("Melee_Impact_R");
-		FVector LO2 = MeshComponent->GetSocketLocation("Impact");
-		FVector LO3 = MeshComponent->GetSocketLocation("Melee_Impact_L");
 		if (Niagara1)
 		{
 			Niagara1->SetHiddenInGame(false);

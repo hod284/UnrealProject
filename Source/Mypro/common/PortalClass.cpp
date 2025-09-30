@@ -78,3 +78,11 @@ void APortalClass::Tick(float DeltaTime)
 
 }
 
+void APortalClass::SetNoColision()
+{
+	Sphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+void APortalClass::SetColision()
+{
+	Sphere->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+}

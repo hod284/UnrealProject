@@ -15,17 +15,28 @@ APlaySceneObject::APlaySceneObject()
 void APlaySceneObject::BeginPlay()
 {
 	Super::BeginPlay();
+	Monster = Cast<AMonster>(UGameplayStatics::GetActorOfClass(GetWorld(), AMonster::StaticClass()));
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMonster::StaticClass(), FoundActors_M);
 	if(IsValid(CutsceneSequence))
 		PlaySequence();
+	Po = Cast<APortalClass>(Portal);
+	if(Po)
+		Po->SetNoColision();
+	Portal->SetActorHiddenInGame(true);
 }
 
 // Called every frame
 void APlaySceneObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+	if (Monster->GetDeath())
+	{
+		if (Po)
+			Po->SetColision();
+		Portal->SetActorHiddenInGame(false);
+	}
 }
+
 
 void APlaySceneObject::PlaySequence()
 {
@@ -57,7 +68,6 @@ void APlaySceneObject::OnSequenceFinished()
 		ui->AddToViewport();
 		ui->SkillInite();
 	}
-	AMonster* monster = Cast<AMonster>(UGameplayStatics::GetActorOfClass(GetWorld(), AMonster::StaticClass()));
 	AMainPlayerController* PC = Cast<AMainPlayerController>( UGameplayStatics::GetPlayerController(this, 0));
 	if (PC)
 	{
@@ -74,5 +84,5 @@ void APlaySceneObject::OnSequenceFinished()
 		if (ui->GetInventory())
 			ui->GetInventory()->SetItemInventory(PS->Inventoryco);
 	}
-	monster->Start();
+	Monster->Start();
 }

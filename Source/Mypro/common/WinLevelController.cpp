@@ -21,20 +21,20 @@ void AWinLevelController::BeginPlay()
 	case  Characters::Warrior:
 		PlayerController = UGameplayStatics::GetPlayerController(this, 0);
 		PlayerController->SetViewTargetWithBlend(Auroa, cameratime);
-		Giden->Destroy();
-		GraySton->Destroy();
+		Giden->SetActorHiddenInGame(true);
+		GraySton->SetActorHiddenInGame(true);
 		break;
 	case  Characters::DarkMagion:
 		 PlayerController = UGameplayStatics::GetPlayerController(this, 0);
 		PlayerController->SetViewTargetWithBlend(Giden, cameratime);
-		Auroa->Destroy();
-		GraySton->Destroy();
+		Auroa->SetActorHiddenInGame(true);
+		GraySton->SetActorHiddenInGame(true);
 		break;
 	case  Characters::Guiden:
 		 PlayerController = UGameplayStatics::GetPlayerController(this, 0);
 		PlayerController->SetViewTargetWithBlend(GraySton, cameratime);
-		Auroa->Destroy();
-		Giden->Destroy();
+		Auroa->SetActorHiddenInGame(true);
+		Giden->SetActorHiddenInGame(true);
 		break;
 	} 
 	GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetWiner_widget()->AddToViewport();

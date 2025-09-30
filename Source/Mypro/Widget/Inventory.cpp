@@ -58,12 +58,9 @@ void UInventory::AddInventory(FString name)
 
 void UInventory::MinusInventory(FString name)
 {
-	if (ItemArray.Contains(name))
-		ItemArray[name] -= 1;
-	if (ItemArray[name] == 0)
-		ItemArray.Remove(name);
-	if (!ItemArray.IsEmpty())
+	if (ItemArray.Contains(name) && !ItemArray.IsEmpty() && ItemArray[name] > 1)
 	{
+		ItemArray[name] -= 1;
 		for (UInventorySlot* sl : SlotArray)
 		{
 			if (sl->GetName() == name)
@@ -72,16 +69,17 @@ void UInventory::MinusInventory(FString name)
 			}
 		}
 	}
-	else
+	else if (ItemArray[name] == 1)
 	{
+		ItemArray.Remove(name);
 		for (UInventorySlot* sl : SlotArray)
 		{
-				sl->SetTexture(NULL);
-				sl->Settext("0");
-				sl->SetName("");
-				sl->SetNotEmpty(false);
-				break;
-			
+			sl->SetTexture(NULL);
+			sl->Settext("0");
+			sl->SetName("");
+			sl->SetNotEmpty(false);
+			break;
+
 		}
 	}
 }

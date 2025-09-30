@@ -6,6 +6,7 @@
 #include "../Monster/Monster.h"
 #include "../singleton/UImanager.h"
 #include "../singleton/GameManager.h"
+#include "PortalClass.h"
 #include  "../player/MainPlayerController.h"
 #include "GameFramework/Actor.h"
 #include "PlaySceneObject.generated.h"
@@ -26,7 +27,10 @@ protected:
 	ALevelSequenceActor* SequenceActor;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cutscene")
 	TObjectPtr<ACameraActor> CineCamera;
-	// ������ �÷���
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "portal")
+	TObjectPtr<AActor> Portal;
+	APortalClass* Po;
+	AMonster* Monster;
 	void PlaySequence();
 	UFUNCTION()
 	void OnSequenceFinished();

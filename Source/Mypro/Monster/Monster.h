@@ -9,7 +9,6 @@
 #include "MonsterAnimInstance.h"
 #include "../singleton/UImanager.h"
 #include "../common/MySingleton.h"
-#include "../common/PortalClass.h"
 #include "SkillActor/Action1_Monster.h"
 #include "SkillActor/Action2_Monster.h"
 #include "SkillActor/Action3_Monster.h"
@@ -50,7 +49,8 @@ protected:
 	float MonsterStun =0.0f;
 	float MonsterHp_Const =0.0f;
 	float MonsterStun_Const =0.0f;
-	const FItmeTexturAndMeshInfo* Texture;
+	TMap<FName, TObjectPtr<UTexture2D>>	textureMap;
+	TMap<FName, TObjectPtr<UStaticMesh>> MeshMap;
 	UStaticMesh* Mesh;
 	UPROPERTY(EditDefaultsOnly)
 	UNiagaraComponent* Niagara1 = nullptr;
@@ -58,18 +58,18 @@ protected:
 	UNiagaraComponent* Niagara2 = nullptr;
 	UPROPERTY(EditDefaultsOnly)
 	UNiagaraComponent* Niagara3 = nullptr;
+	FVector LO1 = FVector::ZeroVector;
+	FVector LO2 = FVector::ZeroVector;
+	FVector LO3 = FVector::ZeroVector;
 	bool CanStun=true;
 	bool Death = false;
 	UBrainComponent* Brain;
-	const FCMonsterInfo* Info;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
 	TSubclassOf<AAction1_Monster> Sk1;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
 	TSubclassOf<AAction2_Monster> Sk2;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
 	TSubclassOf<AAction4_Monster> Sk4;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "portal")
-	TSubclassOf<APortalClass> Portal;
 	UPlayMainUI* UI;
 	FTimerHandle Timer;
 public:	
