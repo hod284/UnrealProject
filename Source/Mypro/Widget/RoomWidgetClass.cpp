@@ -27,6 +27,9 @@ void  URoomWidgetClass::NativeConstruct()
 	PC = Cast<AMainPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
 	Start->SetVisibility(ESlateVisibility::Collapsed);
 	Ready->SetVisibility(ESlateVisibility::Visible);
+	Character1->SetVisibility(ESlateVisibility::Visible);
+	Character2->SetVisibility(ESlateVisibility::Visible);
+	Character3->SetVisibility(ESlateVisibility::Visible);
 	Character1Click();
 }
 void URoomWidgetClass::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
