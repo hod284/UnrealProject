@@ -52,12 +52,6 @@ protected:
 	TMap<FName, TObjectPtr<UTexture2D>>	textureMap;
 	TMap<FName, TObjectPtr<UStaticMesh>> MeshMap;
 	UStaticMesh* Mesh;
-	UPROPERTY(EditDefaultsOnly)
-	UNiagaraComponent* Niagara1 = nullptr;
-	UPROPERTY(EditDefaultsOnly)
-	UNiagaraComponent* Niagara2 = nullptr;
-	UPROPERTY(EditDefaultsOnly)
-	UNiagaraComponent* Niagara3 = nullptr;
 	bool CanStun=true;
 	bool Death = false;
 	UBrainComponent* Brain;
