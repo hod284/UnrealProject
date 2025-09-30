@@ -108,6 +108,10 @@ void AMonster::Attack4()
 }
 void AMonster::AttackEnd()
 {
+	if (Ac2)
+		Ac2->ResetAction();
+	if (Ac4)
+		Ac4->ResetAction();
 	AAIController* AIController = Cast<AAIController>(GetController());
 	AIController->GetBlackboardComponent()->SetValueAsBool("AttackEnd", true);
 	MeshComponent->Stop();                 // 이전 재생 깔끔히 정지

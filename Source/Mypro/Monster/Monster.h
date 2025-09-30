@@ -74,7 +74,7 @@ public:
 	AAction2_Monster* Ac2;
 	AAction4_Monster* Ac4;
 	TObjectPtr<UMonsterAnimInstance> AnimInstance;
-	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser);
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 	float DistanceToTarget( AActor* Target)
 	{
 		float dis = 0.0f;
