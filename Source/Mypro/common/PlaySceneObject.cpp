@@ -29,7 +29,7 @@ void APlaySceneObject::BeginPlay()
 void APlaySceneObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (Monster->GetDeath())
+	if (Monster->GetNohp())
 	{
 		if (Po)
 			Po->SetColision();

@@ -71,4 +71,8 @@ public:
 	{
 		return SequenceMap_minion;
 	}
+	EMonsterDefaultAnim	GetAnimType()
+	{
+		return mAnimType;
+	}
 };

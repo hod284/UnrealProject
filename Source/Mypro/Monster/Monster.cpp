@@ -143,7 +143,37 @@ void AMonster::SetMonsterStun(float st)
 void AMonster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	if (MonsterStun <= KINDA_SMALL_NUMBER)
+	{
+		CanStun = false;
+	}
+	if (MonsterHp <= KINDA_SMALL_NUMBER)
+	{
+		Nohp = true;
+		if (Brain&&Brain->IsRunning())
+			Brain->StopLogic(TEXT("DIE"));
+		if (Ac2 )
+			Ac2->ResetAction();
+		if (Ac4)
+			Ac4->ResetAction();
+		if (AnimInstance ->GetAnimType() != EMonsterDefaultAnim::Death)
+		AnimInstance->DeathAni();
+		if (MeshActor == NULL)
+		{
+			FVector SpawnLocation(0, 0, 100);
+			FRotator SpawnRotation(0, 0, 0);
+			FVector Scale(1.0, 1.0, 1.0);
+			FTransform xtransform(SpawnRotation, SpawnLocation, Scale);
+		    MeshActor = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), xtransform);
+			MeshActor->Rename(TEXT("Portal1"));
+			if (MeshActor)
+			{
+				MeshActor->SetMobility(EComponentMobility::Movable);
+				UStaticMesh* Mesh = MeshMap[TEXT("Portal")];
+				MeshActor->GetStaticMeshComponent()->SetStaticMesh(Mesh);
+			}
+		}
+	}
 }
 
 // Called to bind functionality to input
@@ -181,34 +211,6 @@ float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 		UE_LOG(LogMypro, Warning, TEXT("mhp:%f"), HP);
 		UI->OnDamage_M.Broadcast(HP);
 	}
-	if (MonsterStun <= KINDA_SMALL_NUMBER)
-		CanStun = false;
-	if (MonsterHp <= KINDA_SMALL_NUMBER&&!Death)
-	{
-		AnimInstance->DeathAni();
-		if (Brain)
-			Brain->PauseLogic(TEXT("Death")); 
-		FVector SpawnLocation(0, 0, 100);
-		FRotator SpawnRotation(0, 0, 0);
-		FVector Scale(1.0, 1.0, 1.0);
-		FTransform xtransform(SpawnRotation,SpawnLocation, Scale);
-		AStaticMeshActor* MeshActor = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), xtransform);
-		MeshActor ->Rename(TEXT("Portal1"));
-		if (MeshActor)
-		{
-			MeshActor->SetMobility(EComponentMobility::Movable);
-		    Mesh = MeshMap[TEXT("Portal")];
-			MeshActor->GetStaticMeshComponent()->SetStaticMesh(Mesh);
-		}
-		Death = true;
-		if(Ac1)
-		Ac1->Destroy();
-		if (Ac2)
-			Ac2->Destroy();
-		if (Ac4)
-		Ac4->Destroy();
-	}
-
 	return DamageAmount;
 }
 

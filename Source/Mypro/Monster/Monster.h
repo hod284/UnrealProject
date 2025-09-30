@@ -51,9 +51,9 @@ protected:
 	float MonsterStun_Const =0.0f;
 	TMap<FName, TObjectPtr<UTexture2D>>	textureMap;
 	TMap<FName, TObjectPtr<UStaticMesh>> MeshMap;
-	UStaticMesh* Mesh;
+	AStaticMeshActor* MeshActor = NULL;
 	bool CanStun=true;
-	bool Death = false;
+	bool Nohp = false;
 	UBrainComponent* Brain;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
 	TSubclassOf<AAction1_Monster> Sk1;
@@ -105,9 +105,9 @@ public:
 	{
 		return Stun;
 	}
-	float GetDeath() const
+	float GetNohp() const
 	{
-		return Death;
+		return Nohp;
 	}
 	AAction1_Monster* GetAAction1_Monster()const
 	{

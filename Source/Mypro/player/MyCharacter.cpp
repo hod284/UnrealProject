@@ -39,6 +39,7 @@ void AMyCharacter::BeginPlay()
 	Super::BeginPlay();
 	UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
     itemlist = GI->GetItemInfo();
+	Itemname = itemlist->Name;
 	AnimInstance = Cast<UMyPlayerAnimInstance>(GetMesh()->GetAnimInstance());
     PlayerController = Cast<AMainPlayerController>(GetController());
 	if (PlayerController)
@@ -81,9 +82,8 @@ void AMyCharacter::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
 	const FHitResult& Hit)
 {
-	FString s = OtherActor->GetName();
-	UE_LOG(LogMypro, Warning, TEXT("hit:%s"), *s);
-	if (!s.IsEmpty() && s.Contains(itemlist->Name))
+	FString Name = OtherActor->GetFName().ToString(); 
+	if (!Name.IsEmpty() && Name.Contains(Itemname, ESearchCase::IgnoreCase))
 	{
 		if (AMyPlayerState* PS = GetPlayerState<AMyPlayerState>())
 		{
@@ -361,7 +361,7 @@ void AMyCharacter::Tick(float DeltaTime)
 			TargetLocation = CameraTarget->GetActorLocation();
 			
 			AMonster* m = Cast<AMonster>(CameraTarget);
-			if (m&&m->GetDeath())
+			if (m&&m->GetNohp())
 			{
 				LookAt = false;
 				CameraHead->SetRelativeRotation(FRotator(0, 180, 0));
