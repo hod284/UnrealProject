@@ -39,9 +39,6 @@ void AMonster::BeginPlay()
 	textureMap = Texture->textureMap;
 	MeshMap =Texture->MeshMap;
 	const FCMonsterInfo* Info = GI->GetDatainfo_Monster();
-    LO1 = MeshComponent->GetSocketLocation("Melee_Impact_R");
-    LO2 = MeshComponent->GetSocketLocation("Impact");
-    LO3 = MeshComponent->GetSocketLocation("Melee_Impact_L");
 	MonsterHp_Const = MonsterHp = static_cast <float>(Info->HP);
 	MonsterStun_Const  =MonsterStun = static_cast <float>(Info->StunGage);
 	HP = 1.0f;
@@ -211,6 +208,9 @@ float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 		    Mesh = MeshMap["Portal"];
 			MeshActor->GetStaticMeshComponent()->SetStaticMesh(Mesh);
 		}
+		FVector LO1 = MeshComponent->GetSocketLocation("Melee_Impact_R");
+		FVector LO2 = MeshComponent->GetSocketLocation("Impact");
+		FVector LO3 = MeshComponent->GetSocketLocation("Melee_Impact_L");
 		if (Niagara1)
 		{
 			Niagara1->SetHiddenInGame(false);
@@ -219,12 +219,12 @@ float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 		if (Niagara2)
 		{
 			Niagara2->SetHiddenInGame(false);
-			Niagara2->SetWorldLocation(LO2);
+			Niagara1->SetWorldLocation(LO2);
 		}
 		if (Niagara3)
 		{
 			Niagara3->SetHiddenInGame(false);
-			Niagara3->SetWorldLocation(LO3);
+			Niagara1->SetWorldLocation(LO3);
 		}
 		Death = true;
 		if(Ac1)

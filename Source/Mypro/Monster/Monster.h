@@ -58,9 +58,6 @@ protected:
 	UNiagaraComponent* Niagara2 = nullptr;
 	UPROPERTY(EditDefaultsOnly)
 	UNiagaraComponent* Niagara3 = nullptr;
-	FVector LO1 = FVector::ZeroVector;
-	FVector LO2 = FVector::ZeroVector;
-	FVector LO3 = FVector::ZeroVector;
 	bool CanStun=true;
 	bool Death = false;
 	UBrainComponent* Brain;

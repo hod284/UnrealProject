@@ -14,6 +14,10 @@ void UInventory::NativeConstruct()
 	Closebu = Cast<UButton>(GetWidgetFromName(TEXT("clo")));
 	if(!Closebu->OnClicked.IsBound())
 	Closebu->OnClicked.AddDynamic(this,&UInventory::Close);
+	UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
+	const FItmeTexturAndMeshInfo* Texture = GI->GetTextureInfo();
+	textureMap = Texture->textureMap;
+	MeshMap = Texture->MeshMap;
 }
 
 void UInventory::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
@@ -23,9 +27,7 @@ void UInventory::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 
 void UInventory::AddInventory(FString name)
 {
-    UMySingleton* GI = Cast<UMySingleton>(UGameplayStatics::GetGameInstance(GetWorld()));
-	const FItmeTexturAndMeshInfo* Texture = GI->GetTextureInfo();
-	if (Texture->textureMap.Contains(FName(*name)))
+	if (textureMap.Contains(FName(*name)))
 	{
 		if (!ItemArray.Contains(name))
 		{
@@ -34,7 +36,7 @@ void UInventory::AddInventory(FString name)
 			{
 				if (!sl->GetNotEmpty())
 				{
-					sl->SetTexture(Texture->textureMap[FName(*name)]);
+					sl->SetTexture(textureMap[FName(*name)]);
 					sl->Settext("1");
 					sl->SetName(name);
 					sl->SetNotEmpty(true);

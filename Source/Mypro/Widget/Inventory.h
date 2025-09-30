@@ -31,6 +31,8 @@ protected:
 	void Close();
 	void AddInventory(FString name);
 	void MinusInventory(FString name);
+	TMap<FName, TObjectPtr<UTexture2D>>	textureMap;
+	TMap<FName, TObjectPtr<UStaticMesh>> MeshMap;
 public:
 	void SetItemInventory(UInventoryComponent *compnent);
 	UInventoryComponent* GetItemInventory() const
