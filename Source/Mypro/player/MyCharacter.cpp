@@ -83,7 +83,7 @@ void AMyCharacter::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 {
 	FString s = OtherActor->GetName();
 	UE_LOG(LogMypro, Warning, TEXT("hit:%s"), *s);
-	if (s.Contains(itemlist->Name))
+	if (!s.IsEmpty() && s.Contains(itemlist->Name))
 	{
 		if (AMyPlayerState* PS = GetPlayerState<AMyPlayerState>())
 		{
