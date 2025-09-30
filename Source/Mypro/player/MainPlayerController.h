@@ -67,8 +67,6 @@ public:
 	UFUNCTION(Client, Reliable)
 	void Client_GetttheTargetName(const FString& na);
 	UFUNCTION(Server, Reliable)
-	void Server_RequestSpectator();
-	UFUNCTION(Server, Reliable)
 	void Server_DClient(APawn *pa);
 	UFUNCTION(Server, Reliable)
 	void Server_EndPvP();

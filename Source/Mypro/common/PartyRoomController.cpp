@@ -106,8 +106,9 @@ void APartyRoomController::Tick(float DeltaTime)
 			ui->SetPlayerMpBar(PC->PlayerMP_C);
 			if (PC->PlayerHP_C <= KINDA_SMALL_NUMBER)
 			{
+				if (HostPawn)
+					PC->SetViewTarget(HostPawn);
 				PC->Server_DClient(Mychar);
-				PC->Server_RequestSpectator();
 			}
 			if (HostPawn)
 			{

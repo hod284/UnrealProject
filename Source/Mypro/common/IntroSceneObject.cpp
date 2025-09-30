@@ -24,6 +24,7 @@ void AIntroSceneObject::BeginPlay()
 	{
 		Settings->SetScreenResolution(FIntPoint(1920, 1080));
 		Settings->ApplySettings(true); 
+		Settings->SetFullscreenMode(EWindowMode::NumWindowModes);
 	}
 	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UI);
 }
