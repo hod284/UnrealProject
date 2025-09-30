@@ -74,5 +74,5 @@ public:
 		AttackDamage = da;
 	}
 	void Init();
-	void Reset();
+	void ResetAction();
 };

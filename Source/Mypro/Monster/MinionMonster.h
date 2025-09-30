@@ -58,7 +58,7 @@ public:
 	void AttackSuper();
 	void AttackShooting();
 	void AttackShootingEnd();
-	void Death();
+	void MinionDeath();
 	void Idle_M();
 	void Attack_M();
 	void Death_M();

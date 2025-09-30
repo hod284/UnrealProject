@@ -112,7 +112,7 @@ void UMonsterAnimInstance::AnimNotify_At4Play()
 void UMonsterAnimInstance::AnimNotify_At2Reset()
 {
 	AMonster* monster = Cast<AMonster>(TryGetPawnOwner());
-	monster->GetAAction2_Monster()->Reset();
+	monster->GetAAction2_Monster()->ResetAction();
 }
 void UMonsterAnimInstance::AnimNotify_At3Reset()
 {
@@ -120,7 +120,7 @@ void UMonsterAnimInstance::AnimNotify_At3Reset()
 void UMonsterAnimInstance::AnimNotify_At4Reset()
 {
 	AMonster* monster = Cast<AMonster>(TryGetPawnOwner());
-	monster->GetAAction4_Monster()->Reset();
+	monster->GetAAction4_Monster()->ResetAction();
 }
 
 void UMonsterAnimInstance::AnimNotify_At1MinionPlay()
@@ -145,7 +145,7 @@ void UMonsterAnimInstance::AnimNotify_At1MinionShootingPlayEnd()
 void UMonsterAnimInstance::AnimNotify_Death()
 {
 	AMinionMonster* monster = Cast<AMinionMonster>(TryGetPawnOwner());
-	monster->Death();
+	monster->MinionDeath();
 }
 void UMonsterAnimInstance::AnimNotify_AtEnd()
 {

@@ -71,7 +71,7 @@ void AAction2_Monster::Init()
 		BoxColider->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		}), 0.5, false);
 }
-void AAction2_Monster::Reset()
+void AAction2_Monster::ResetAction()
 {
 	NiagaraParticle->SetActive(false);
 	BoxColider->SetCollisionEnabled(ECollisionEnabled::NoCollision);

@@ -120,9 +120,9 @@ void AMinionMonster::AttackShooting()
 void AMinionMonster::AttackShootingEnd()
 {
 	if (Ac3)
-	Ac3->Reset();
+	Ac3->ResetAction();
 }
-void AMinionMonster::Death()
+void AMinionMonster::MinionDeath()
 {
 	if (HasAuthority())
 	{

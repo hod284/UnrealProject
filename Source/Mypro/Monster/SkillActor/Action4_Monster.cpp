@@ -118,7 +118,7 @@ void AAction4_Monster::Init()
 		BoxColider4->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		}), 0.5, false);
 }
-void AAction4_Monster::Reset()
+void AAction4_Monster::ResetAction()
 {
 	NiagaraParticle1->SetActive(false);
 	NiagaraParticle2->SetActive(false);
