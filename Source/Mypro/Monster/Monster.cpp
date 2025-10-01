@@ -116,7 +116,8 @@ void AMonster::MonsterDeath()
 		FTransform xtransform(SpawnRotation, SpawnLocation, Scale);
 		FActorSpawnParameters Params;
 		Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-		MeshActor->Rename(TEXT("Portal1"));
+		Params.Name = TEXT("Portal1");                 // Rename 대신 스폰 시 이름 부여
+		Params.Owner = this;
 		MeshActor = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), xtransform,Params);
 		if (MeshActor)
 		{
