@@ -37,6 +37,7 @@ EBTNodeResult::Type UStunNode::ExecuteTask(UBehaviorTreeComponent& OwnerComp, ui
 	if (Monster->AnimInstance)
 	Monster->AnimInstance->StunAni();
 	Gage = 0.0F;
+	Monster->AttackallReset();
 	return EBTNodeResult::InProgress;
 }
 EBTNodeResult::Type UStunNode::AbortTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -73,8 +74,6 @@ void UStunNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, f
 	if (Monster->GetStun() >= 1.0f)
 	{
 		Monster->SetCanStun(true);
-		if (Monster->AnimInstance)
-		Monster->AnimInstance->IdleAni();
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		return;
 	}
