@@ -144,8 +144,12 @@ void UMonsterAnimInstance::AnimNotify_At1MinionShootingPlayEnd()
 
 void UMonsterAnimInstance::AnimNotify_Death()
 {
-	AMinionMonster* monster = Cast<AMinionMonster>(TryGetPawnOwner());
-	monster->MinionDeath();
+	AMinionMonster* minion = Cast<AMinionMonster>(TryGetPawnOwner());
+	if(minion)
+	minion->MinionDeath();
+	AMonster* monster = Cast<AMonster>(TryGetPawnOwner());
+	if(monster)
+		monster ->MonsterDeath();
 }
 void UMonsterAnimInstance::AnimNotify_AtEnd()
 {

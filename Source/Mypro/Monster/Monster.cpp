@@ -106,6 +106,26 @@ void AMonster::Attack4()
 	Ac4->Init();
 	UE_LOG(LogMypro, Warning, TEXT("at4"));
 }
+void AMonster::MonsterDeath()
+{
+	if (MeshActor == NULL)
+	{
+		FVector SpawnLocation(0, 0, 100);
+		FRotator SpawnRotation(0, 0, 0);
+		FVector Scale(1.0, 1.0, 1.0);
+		FTransform xtransform(SpawnRotation, SpawnLocation, Scale);
+		FActorSpawnParameters Params;
+		Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+		MeshActor->Rename(TEXT("Portal1"));
+		MeshActor = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), xtransform,Params);
+		if (MeshActor)
+		{
+			MeshActor->SetMobility(EComponentMobility::Movable);
+			UStaticMesh* Mesh = MeshMap[TEXT("Portal")];
+			MeshActor->GetStaticMeshComponent()->SetStaticMesh(Mesh);
+		}
+	}
+}
 void AMonster::AttackallReset()
 {
 	if (Ac2)
@@ -151,21 +171,6 @@ void AMonster::Tick(float DeltaTime)
 			Ac4->ResetAction();
 		if (AnimInstance&&AnimInstance ->GetAnimType() != EMonsterDefaultAnim::Death)
 		AnimInstance->DeathAni();
-		if (MeshActor == NULL)
-		{
-			FVector SpawnLocation(0, 0, 100);
-			FRotator SpawnRotation(0, 0, 0);
-			FVector Scale(1.0, 1.0, 1.0);
-			FTransform xtransform(SpawnRotation, SpawnLocation, Scale);
-		    MeshActor = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), xtransform);
-			MeshActor->Rename(TEXT("Portal1"));
-			if (MeshActor)
-			{
-				MeshActor->SetMobility(EComponentMobility::Movable);
-				UStaticMesh* Mesh = MeshMap[TEXT("Portal")];
-				MeshActor->GetStaticMeshComponent()->SetStaticMesh(Mesh);
-			}
-		}
 	}
 }
 

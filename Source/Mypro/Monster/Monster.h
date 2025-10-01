@@ -51,6 +51,7 @@ protected:
 	float MonsterStun_Const =0.0f;
 	TMap<FName, TObjectPtr<UTexture2D>>	textureMap;
 	TMap<FName, TObjectPtr<UStaticMesh>> MeshMap;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	AStaticMeshActor* MeshActor = NULL;
 	bool CanStun=true;
 	bool Nohp = false;
@@ -69,10 +70,12 @@ public:
 	void Attack2();
 	void Attack3();
 	void Attack4();
+	void MonsterDeath();
 	void AttackallReset();
 	AAction1_Monster* Ac1;
 	AAction2_Monster* Ac2;
 	AAction4_Monster* Ac4;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UMonsterAnimInstance> AnimInstance;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 	float DistanceToTarget( AActor* Target)
