@@ -20,11 +20,12 @@ void AIntroSceneObject::BeginPlay()
 	SoundComp->RegisterComponent();
 	ui->SetMeDiasound(SoundComp);
 	GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetIntroMainUI_widget()->AddToViewport();
-	if (UGameUserSettings* Settings = GEngine->GetGameUserSettings())
+	UGameUserSettings* Settings = GEngine->GetGameUserSettings();
+	if (Settings)
 	{
+		Settings->SetFullscreenMode(EWindowMode::Windowed);
 		Settings->SetScreenResolution(FIntPoint(1920, 1080));
-		Settings->ApplySettings(true); 
-		Settings->SetFullscreenMode(EWindowMode::NumWindowModes);
+		Settings->ApplySettings(false);
 	}
 	GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UI);
 }
