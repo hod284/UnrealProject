@@ -34,6 +34,7 @@ EBTNodeResult::Type UStunNode::ExecuteTask(UBehaviorTreeComponent& OwnerComp, ui
 	{
 		return EBTNodeResult::Failed;
 	}
+	if (Monster->AnimInstance)
 	Monster->AnimInstance->StunAni();
 	Gage = 0.0F;
 	return EBTNodeResult::InProgress;
@@ -41,6 +42,9 @@ EBTNodeResult::Type UStunNode::ExecuteTask(UBehaviorTreeComponent& OwnerComp, ui
 EBTNodeResult::Type UStunNode::AbortTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	Super::AbortTask(OwnerComp, NodeMemory);
+	AMonster* Monster = Cast<AMonster>(OwnerComp.GetAIOwner()->GetPawn());
+	if (Monster)
+		Monster->AttackallReset();
 	return EBTNodeResult::Aborted;
 }
 void UStunNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
@@ -69,12 +73,14 @@ void UStunNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, f
 	if (Monster->GetStun() >= 1.0f)
 	{
 		Monster->SetCanStun(true);
+		if (Monster->AnimInstance)
 		Monster->AnimInstance->IdleAni();
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		return;
 	}
 	else
 	{
+		if (Monster->AnimInstance)
 		Monster->AnimInstance->StunAni();
 		Gage += (DeltaSeconds*5.0f);
 		Monster->SetMonsterStun(Gage);
@@ -86,6 +92,8 @@ void UStunNode::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 	AMonster* Monster = Cast<AMonster>(OwnerComp.GetAIOwner()->GetPawn());
 	Gage = 0.0f;
 	if (Monster)
-		Monster->AnimInstance->IdleAni();
+	{
+		Monster->AttackallReset();
+	}
 }
 

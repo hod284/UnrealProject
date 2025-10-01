@@ -106,21 +106,14 @@ void AMonster::Attack4()
 	Ac4->Init();
 	UE_LOG(LogMypro, Warning, TEXT("at4"));
 }
-void AMonster::AttackEnd()
+void AMonster::AttackallReset()
 {
 	if (Ac2)
 		Ac2->ResetAction();
 	if (Ac4)
 		Ac4->ResetAction();
-	AAIController* AIController = Cast<AAIController>(GetController());
-	AIController->GetBlackboardComponent()->SetValueAsBool("AttackEnd", true);
-	MeshComponent->Stop();                 // 이전 재생 깔끔히 정지
-	MeshComponent->SetAnimation(nullptr);  // 잔여 상태 제거(중요)
-    UAnimSingleNodeInstance* Node = MeshComponent->GetSingleNodeInstance();
-	if (Node)
-	{
-		Node->SetPosition(0, false);
-	}
+	if (AnimInstance)
+	AnimInstance->IdleAni();
 }
 
 void AMonster::SetMonsterStun(float st)
@@ -156,7 +149,7 @@ void AMonster::Tick(float DeltaTime)
 			Ac2->ResetAction();
 		if (Ac4)
 			Ac4->ResetAction();
-		if (AnimInstance ->GetAnimType() != EMonsterDefaultAnim::Death)
+		if (AnimInstance&&AnimInstance ->GetAnimType() != EMonsterDefaultAnim::Death)
 		AnimInstance->DeathAni();
 		if (MeshActor == NULL)
 		{

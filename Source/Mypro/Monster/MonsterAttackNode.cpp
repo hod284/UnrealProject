@@ -42,15 +42,19 @@ EBTNodeResult::Type UMonsterAttackNode:: ExecuteTask(UBehaviorTreeComponent& Own
 	switch (Random)
 	{
 	case 0:
+		if (Monster->AnimInstance)
 		Monster->AnimInstance->MonsterAttack1();
 		break;
 	case 1:
+		if (Monster->AnimInstance)
 		Monster->AnimInstance->MonsterAttack2();
 		break;
 	case 2:
+		if (Monster->AnimInstance)
 		Monster->AnimInstance->MonsterAttack3();
 		break;
 	case 3:
+		if (Monster->AnimInstance)
 		Monster->AnimInstance->MonsterAttack4();
 		break;
 	}
@@ -60,7 +64,8 @@ EBTNodeResult::Type UMonsterAttackNode::AbortTask(UBehaviorTreeComponent& OwnerC
 {
 	Super::AbortTask(OwnerComp, NodeMemory);
 	AMonster* Monster = Cast<AMonster>(OwnerComp.GetAIOwner()->GetPawn());
-	Monster->AttackEnd();
+	if (Monster)
+	Monster->AttackallReset();
 	return EBTNodeResult::Aborted;
 }
 void UMonsterAttackNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
@@ -127,15 +132,19 @@ void UMonsterAttackNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 		switch (Random)
 		{
 		case 0:
+			if (Monster->AnimInstance)
 			Monster->AnimInstance->MonsterAttack1();
 			break;
 		case 1:
+			if (Monster->AnimInstance)
 			Monster->AnimInstance->MonsterAttack2();
 			break;
 		case 2:
+			if (Monster->AnimInstance)
 			Monster->AnimInstance->MonsterAttack3();
 			break;
 		case 3:
+			if (Monster->AnimInstance)
 			Monster->AnimInstance->MonsterAttack4();
 			break;
 		}
@@ -147,8 +156,7 @@ void UMonsterAttackNode::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8
 	AMonster* Monster = Cast<AMonster>(OwnerComp.GetAIOwner()->GetPawn());
 	if(Monster)
 	{
-		Monster->AttackEnd();
-		Monster->AnimInstance->IdleAni();
+		Monster->AttackallReset();
 	}
 
 }

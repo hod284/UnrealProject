@@ -69,7 +69,7 @@ public:
 	void Attack2();
 	void Attack3();
 	void Attack4();
-	void AttackEnd();
+	void AttackallReset();
 	AAction1_Monster* Ac1;
 	AAction2_Monster* Ac2;
 	AAction4_Monster* Ac4;
