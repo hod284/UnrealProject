@@ -116,7 +116,7 @@ void AMonster::MonsterDeath()
 		FTransform xtransform(SpawnRotation, SpawnLocation, Scale);
 		FActorSpawnParameters Params;
 		Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-		Params.Name = TEXT("Portal1");                 // Rename 대신 스폰 시 이름 부여
+		Params.Name = TEXT("Portal1");                 
 		Params.Owner = this;
 		MeshActor = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), xtransform,Params);
 		if (MeshActor)
@@ -173,6 +173,8 @@ void AMonster::Tick(float DeltaTime)
 		if (AnimInstance&&AnimInstance ->GetAnimType() != EMonsterDefaultAnim::Death)
 		AnimInstance->DeathAni();
 	}
+	if(UI->GetPlayerLose()&& Brain && Brain->IsRunning())
+		Brain->StopLogic(TEXT("DIE"));
 }
 
 // Called to bind functionality to input

@@ -31,6 +31,7 @@ void UPlayMainUI::NativeConstruct()
 	MonsterStun->SetPercent(1.0);
 	MonsterHp->SetPercent(1.0);
 	PlayerMp->SetPercent(1.0);
+	PlayerLose = false;
 	LoseTyping->SetText(FText::FromString(""));
 }
 
@@ -185,6 +186,7 @@ void UPlayMainUI::Typing()
 	switch (TimeCount)
 	{
 	case 1:
+		PlayerLose = true;
 		LoseTyping->SetText(FText::FromString("L"));
 		break;
 	case 2:

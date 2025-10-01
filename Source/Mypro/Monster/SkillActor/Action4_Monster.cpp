@@ -83,10 +83,14 @@ void AAction4_Monster::OnCapsuleBeginOverlap_Action4_M(
 	UE_LOG(LogMypro, Warning, TEXT("AC4_overlap:%s"), *s);
 	float pe = static_cast<float>(AttackDamage);
 	UGameplayStatics::ApplyDamage(OtherActor, pe, GetInstigatorController(), this, UDamageType::StaticClass());
+	if (BoxColider1)
 	BoxColider1->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	if (BoxColider2)
 	BoxColider2->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	if (BoxColider3)
 	BoxColider3->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	BoxColider4->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	if (BoxColider4)
+		BoxColider4->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 void AAction4_Monster::OnCapsuleEndOverlap_Action4_M(
 	UPrimitiveComponent* OverlappedComp,
@@ -112,9 +116,13 @@ void AAction4_Monster::Init()
 	NiagaraParticle4->SetActive(true);
 	GetWorldTimerManager().ClearTimer(Time_Colider);
 	GetWorld()->GetTimerManager().SetTimer(Time_Colider, FTimerDelegate::CreateLambda([this]() {	
+		if(BoxColider1)
 		BoxColider1->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		if (BoxColider1)
 		BoxColider2->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		if (BoxColider1)
 		BoxColider3->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		if (BoxColider1)
 		BoxColider4->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		}), 0.5, false);
 }
@@ -124,9 +132,13 @@ void AAction4_Monster::ResetAction()
 	NiagaraParticle2->SetActive(false);
 	NiagaraParticle3->SetActive(false);
 	NiagaraParticle4->SetActive(false);
+	if (BoxColider1)
 	BoxColider1->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	if (BoxColider2)
 	BoxColider2->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	if (BoxColider3)
 	BoxColider3->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	if (BoxColider4)
 	BoxColider4->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 

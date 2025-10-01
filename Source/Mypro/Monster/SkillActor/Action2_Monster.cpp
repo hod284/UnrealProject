@@ -45,6 +45,7 @@ void AAction2_Monster::OnCapsuleBeginOverlap_Action2_M(
 	UE_LOG(LogMypro, Warning, TEXT("AC2_overlap:%s"), *s);
 	float pe = static_cast<float>(AttackDamage);
 	UGameplayStatics::ApplyDamage(OtherActor, pe, GetInstigatorController(), this, UDamageType::StaticClass());
+	if (BoxColider)
 	BoxColider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 void AAction2_Monster::OnCapsuleEndOverlap_Action2_M(
@@ -74,5 +75,6 @@ void AAction2_Monster::Init()
 void AAction2_Monster::ResetAction()
 {
 	NiagaraParticle->SetActive(false);
+	if (BoxColider)
 	BoxColider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }

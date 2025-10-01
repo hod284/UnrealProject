@@ -61,7 +61,9 @@ protected:
 	void SetPMpBar(float da);
 	int32 TimeCount;
 	FTimerHandle Timer;
+	bool PlayerLose=false;
 public:
+
 	void Typing();
 	void TypingStart();
 	virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)override;
@@ -112,4 +114,8 @@ public:
 		return  Inventory;
 	}
 	void SkillInite();
+	bool GetPlayerLose()
+	{
+		return PlayerLose;
+	}
 };
