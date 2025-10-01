@@ -118,11 +118,11 @@ void AAction4_Monster::Init()
 	GetWorld()->GetTimerManager().SetTimer(Time_Colider, FTimerDelegate::CreateLambda([this]() {	
 		if(BoxColider1)
 		BoxColider1->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		if (BoxColider1)
+		if (BoxColider2)
 		BoxColider2->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		if (BoxColider1)
+		if (BoxColider3)
 		BoxColider3->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		if (BoxColider1)
+		if (BoxColider4)
 		BoxColider4->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		}), 0.5, false);
 }
