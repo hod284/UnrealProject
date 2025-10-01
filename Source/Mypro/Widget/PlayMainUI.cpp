@@ -84,8 +84,8 @@ bool UPlayMainUI::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent
 		FVector Origin, Dir;
 		PC->DeprojectScreenPositionToWorld(ViewPos.X, ViewPos.Y, Origin, Dir);
 
-		 float YawDeg = -40.f;  // ��(-) / ��(+)
-		 float PitchDeg = -10.f;  // ��(-) / �Ʒ�(+), Rotator ��Ģ ����
+		 float YawDeg = -40.f; 
+		 float PitchDeg = -10.f;  
 		 FRotator DeltaRot(PitchDeg, YawDeg, 0.f);
 		 FVector  DiagDir = DeltaRot.RotateVector(Dir).GetSafeNormal();
 
@@ -99,7 +99,7 @@ bool UPlayMainUI::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent
 
 		bool bHit = GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params);
 
-		DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 2.f, 0, 1.f);
+		//DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 2.f, 0, 1.f);
 
 		if (!bHit) 
 			return false;

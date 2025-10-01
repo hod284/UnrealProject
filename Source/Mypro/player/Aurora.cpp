@@ -268,7 +268,7 @@ void AAurora::AttackWeapon(FVector velocity, ECollisionChannel atchannel)
     Collision = GetWorld()->SweepMultiByChannel(result, center, center,
         FQuat::Identity, channel,
         FCollisionShape::MakeCapsule(Radious, 200), param);
-    DrawDebugCapsule(GetWorld(), center, 200, Radious, FQuat::Identity, FColor::Green, false, 2.f);
+    //DrawDebugCapsule(GetWorld(), center, 200, Radious, FQuat::Identity, FColor::Green, false, 2.f);
     float pe = static_cast<float>(AttackDamage);
     if (Collision)
     {

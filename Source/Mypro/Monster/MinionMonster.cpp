@@ -95,7 +95,7 @@ void AMinionMonster::AttackSuper()
 	Collision = GetWorld()->SweepMultiByChannel(result, center, center,
 		FQuat::Identity, channel,
 		FCollisionShape::MakeCapsule(Radious, 200), param);
-	DrawDebugCapsule(GetWorld(), center, 200, Radious, FQuat::Identity, FColor::Green, false, 2.f);
+	//DrawDebugCapsule(GetWorld(), center, 200, Radious, FQuat::Identity, FColor::Green, false, 2.f);
 	if (Collision)
 	{
 		for (auto& Hit : result)
