@@ -42,17 +42,16 @@ bool UInventorySlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEv
 {
     if (UMyDragDropOperation* Op = Cast<UMyDragDropOperation>(InOperation))
     {
-        // 예: 실제 인벤토리 로직에 반영
-        FString co = Op->Count;
-        SetTexture(Op->Texture);
-        Settext(co);
-        SetNotEmpty(true);
-        SetName(Op->Itemname);
-        Op->SourceSlot->SetTexture(NULL);
-        Op->SourceSlot->Settext("0");
-        Op->SourceSlot->SetNotEmpty(false);
-        Op->SourceSlot->SetName("");
-        return true;
+            FString co = Op->Count;
+            Op->SourceSlot->SetTexture(NULL);
+            Op->SourceSlot->Settext("0");
+            Op->SourceSlot->SetNotEmpty(false);
+            Op->SourceSlot->SetName("");
+            SetTexture(Op->Texture);
+            Settext(co);
+            SetNotEmpty(true);
+            SetName(Op->Itemname);
+            return true;
     }
 	return false;
 }
