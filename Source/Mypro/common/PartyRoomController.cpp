@@ -69,7 +69,10 @@ void APartyRoomController::Tick(float DeltaTime)
 				Mychar->CurrentVelocity_C = PS->CurrentVelocity_C;
 			}
 			if (PS->PlayerHP_H <= KINDA_SMALL_NUMBER)
+			{
+				GetWorld()->GetTimerManager().ClearTimer(Timer);
 				UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
+			}
 			if (ClientPawn)
 			{
 				ClientPawnSpawn = true;
@@ -115,8 +118,9 @@ void APartyRoomController::Tick(float DeltaTime)
 			ui->SetPlayerMpBar(PC->PlayerMP_C);
 			if (PC->PlayerHP_C <= KINDA_SMALL_NUMBER)
 			{
-				if (HostPawn)
+				if (HostPawn&& PC->GetViewTarget() != HostPawn)
 					PC->SetViewTarget(HostPawn);
+				if(Mychar)
 				PC->Server_DClient(Mychar);
 			}
 			if (HostPawn)
