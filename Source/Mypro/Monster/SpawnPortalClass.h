@@ -56,9 +56,13 @@ protected:
 		AActor* OtherActor,
 		UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex);
+	bool GottotheMain = false;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	void Spawn();
-
+	bool GetGototheMain()
+	{
+		return GottotheMain;
+	}
 };

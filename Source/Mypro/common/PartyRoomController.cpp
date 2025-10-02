@@ -8,7 +8,6 @@ APartyRoomController::APartyRoomController()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
@@ -68,7 +67,7 @@ void APartyRoomController::Tick(float DeltaTime)
 				Mychar->CurrentVelocity_H = PS->CurrentVelocity_H;
 				Mychar->CurrentVelocity_C = PS->CurrentVelocity_C;
 			}
-			if (PS->PlayerHP_H <= KINDA_SMALL_NUMBER)
+			if (PS->PlayerHP_H <= KINDA_SMALL_NUMBER|| Portal->GetGototheMain())
 			{
 				GetWorld()->GetTimerManager().ClearTimer(Timer);
 				UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
@@ -126,6 +125,11 @@ void APartyRoomController::Tick(float DeltaTime)
 			if (HostPawn)
 			{
 				HostPawn->GetMesh()->SetRelativeRotation(FRotator(0, PC->MeshPitch_h, 0));
+			}
+			if (Portal->GetGototheMain())
+			{
+				GetWorld()->GetTimerManager().ClearTimer(Timer);
+				PC->Server_EndPvP();
 			}
 		}
 	}

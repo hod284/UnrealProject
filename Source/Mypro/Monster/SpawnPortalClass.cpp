@@ -52,7 +52,6 @@ void  ASpawnPortalClass::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	AMyCharacter* ch = Cast<AMyCharacter>(OtherActor);
 	if (ch)
 	{
-		UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
 	}
 }
 void  ASpawnPortalClass::OnCapsuleBeginOverlap(
