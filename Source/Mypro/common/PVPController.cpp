@@ -34,7 +34,6 @@ void APVPController::Tick(float DeltaTime)
 		{
 			APawn* mych = Cast<APawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
 			Mychar = Cast<AMyCharacter>(mych);
-			ClientPawn = Cast<AMyCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 1));
 			AMyPlayerState* PS = GetWorld()->GetFirstPlayerController()->GetPlayerState<AMyPlayerState>();
 			if (PS)
 			{
@@ -48,6 +47,8 @@ void APVPController::Tick(float DeltaTime)
 				{
 					Mychar->CurrentVelocity_H = PS->CurrentVelocity_H;
 					Mychar->CurrentVelocity_C = PS->CurrentVelocity_C;
+					if (ClientPawn == NULL)
+					ClientPawn = Cast<AMyCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 1));
 				}
 				ui->SetHostImagebyCharacter(PS->MyCharacter_H);
 				ui->SetClientImagebyCharacter(PS->MyCharacter_C);
@@ -74,6 +75,14 @@ void APVPController::Tick(float DeltaTime)
 					Mychar->SetActorRotation(FRotator(0, 90, 0));
 					Mychar->CurrentVelocity_C = PC->CurrentVelocity_C;
 					Mychar->CurrentVelocity_H = PC->CurrentVelocity_H;
+					if (HostPawn == NULL)
+					{
+						for (TActorIterator<AMyCharacter> It(GetWorld()); It; ++It)
+						{
+							if (Mychar != *It)
+								HostPawn = *It;
+						}
+					}
 				}
 				PC->Sever_GettheMPandHP();
 				PC->Sever_GettheMeshPitch();
@@ -93,14 +102,6 @@ void APVPController::Tick(float DeltaTime)
 					if (Mychar)
 						Mychar->SetCameraTarget(HostPawn);
 					HostPawn->SetColision("Monster");
-				}
-			}
-			if (HostPawn == NULL)
-			{
-				for (TActorIterator<AMyCharacter> It(GetWorld()); It; ++It)
-				{
-					if (Mychar != *It)
-						HostPawn = *It;
 				}
 			}
 		}

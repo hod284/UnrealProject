@@ -52,7 +52,6 @@ void APartyRoomController::Tick(float DeltaTime)
 	{
 		APawn* mych = Cast<APawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
 		Mychar = Cast<AMyCharacter>(mych);
-		ClientPawn = Cast<AMyCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 1));
 		AMyPlayerState* PS = GetWorld()->GetFirstPlayerController()->GetPlayerState<AMyPlayerState>();
 		if (PS)
 		{
@@ -64,6 +63,8 @@ void APartyRoomController::Tick(float DeltaTime)
 			ui->SetotherMpBar(PS->PlayerMP_C);
 			if (Mychar)
 			{
+				if (ClientPawn == NULL)
+				ClientPawn = Cast<AMyCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 1));
 				Mychar->CurrentVelocity_H = PS->CurrentVelocity_H;
 				Mychar->CurrentVelocity_C = PS->CurrentVelocity_C;
 			}
@@ -93,6 +94,14 @@ void APartyRoomController::Tick(float DeltaTime)
 				Mychar->SetActorRotation(FRotator(0, -90, 0));
 				Mychar->CurrentVelocity_C = PC->CurrentVelocity_C;
 				Mychar->CurrentVelocity_H = PC->CurrentVelocity_H;
+				if (HostPawn == NULL)
+				{
+					for (TActorIterator<AMyCharacter> It(GetWorld()); It; ++It)
+					{
+						if (Mychar != *It)
+							HostPawn = *It;
+					}
+				}
 			}
 			PC->Sever_GettheMPandHP();
 			PC->Sever_GettheMeshPitch();
@@ -114,14 +123,6 @@ void APartyRoomController::Tick(float DeltaTime)
 			{
 				HostPawn->GetMesh()->SetRelativeRotation(FRotator(0, PC->MeshPitch_h, 0));
 			}
-		}
-	}
-	if (HostPawn == NULL)
-	{
-		for (TActorIterator<AMyCharacter> It(GetWorld()); It; ++It)
-		{
-			if (Mychar != *It)
-				HostPawn = *It;
 		}
 	}
 }
