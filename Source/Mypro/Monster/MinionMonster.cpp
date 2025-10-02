@@ -72,7 +72,12 @@ void AMinionMonster::BeginPlay()
 void  AMinionMonster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	if (MonsterHp <= KINDA_SMALL_NUMBER)
+	{
+		if (Ac3)
+			Ac3->Destroy();
+		Death_M();
+	}
 } 
 
 // Called to bind functionality to input
@@ -128,8 +133,6 @@ void AMinionMonster::MinionDeath()
 	{
 		APartyRoomController* party = Cast<APartyRoomController>(UGameplayStatics::GetActorOfClass(GetWorld(), APartyRoomController::StaticClass()));
 		party->MinusMaxium();
-		if (Ac3)
-			Ac3->Destroy();
 		Destroy();
 	}
 }
@@ -148,10 +151,6 @@ float AMinionMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& 
 		Multicast_Sethp(HP);
 	else
 		Server_Sethp(HP);
-	if (MonsterHp <= KINDA_SMALL_NUMBER)
-	{
-		Death_M();
-	}
 	return DamageAmount;
 }
 

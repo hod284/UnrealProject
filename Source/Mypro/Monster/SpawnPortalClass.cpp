@@ -27,7 +27,6 @@ ASpawnPortalClass::ASpawnPortalClass()
 	if (Minion_sH.Succeeded())
 		Minion_gun = Minion_sH.Class;
 	Sphere->OnComponentHit.AddDynamic(this, &ASpawnPortalClass::OnHit);
-	// ?????? ?¥ê?? ????
 	Sphere->SetGenerateOverlapEvents(true); // ??????? ??¥á?
 	Sphere->OnComponentBeginOverlap.AddDynamic(this, &ASpawnPortalClass::OnCapsuleBeginOverlap);
 	Sphere->OnComponentEndOverlap.AddDynamic(this, &ASpawnPortalClass::OnCapsuleEndOverlap);
@@ -37,6 +36,7 @@ ASpawnPortalClass::ASpawnPortalClass()
 void ASpawnPortalClass::BeginPlay()
 {
 	Super::BeginPlay();
+	GottotheMain = false;
 }
 
 // Called every frame
@@ -52,6 +52,7 @@ void  ASpawnPortalClass::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	AMyCharacter* ch = Cast<AMyCharacter>(OtherActor);
 	if (ch)
 	{
+		GottotheMain = true;
 	}
 }
 void  ASpawnPortalClass::OnCapsuleBeginOverlap(
