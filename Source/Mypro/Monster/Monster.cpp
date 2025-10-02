@@ -108,7 +108,7 @@ void AMonster::Attack4()
 }
 void AMonster::MonsterDeath()
 {
-	if (MeshActor == NULL)
+	if (!itemon)
 	{
 		FVector SpawnLocation(0, 0, 100);
 		FRotator SpawnRotation(0, 0, 0);
@@ -125,6 +125,7 @@ void AMonster::MonsterDeath()
 			UStaticMesh* Mesh = MeshMap[TEXT("Portal")];
 			MeshActor->GetStaticMeshComponent()->SetStaticMesh(Mesh);
 		}
+		itemon = true;
 	}
 }
 void AMonster::AttackallReset()

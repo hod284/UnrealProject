@@ -55,6 +55,7 @@ protected:
 	AStaticMeshActor* MeshActor = NULL;
 	bool CanStun=true;
 	bool Nohp = false;
+	bool itemon = false;
 	UBrainComponent* Brain;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
 	TSubclassOf<AAction1_Monster> Sk1;
