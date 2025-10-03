@@ -37,6 +37,10 @@ void APartyRoomController::BeginPlay()
 					else
 						CanMaxium = true;
 				}
+				if (AddMaxium == 0)
+				{
+					CanMaxium = false;
+				}
 			}, 6.0f, true,2.0f);
 	}
 	}));
@@ -78,11 +82,6 @@ void APartyRoomController::Tick(float DeltaTime)
 				ClientPawn->GetMesh()->SetRelativeRotation(FRotator(0, PS->MeshPitch_C, 0));
 			}
 		}
-		if (AddMaxium == 0)
-		{
-			CanMaxium = false;
-		}
-		UE_LOG(LogMypro, Warning, TEXT("AddMaxium:%d"), AddMaxium);
 	}
 	else
 	{
