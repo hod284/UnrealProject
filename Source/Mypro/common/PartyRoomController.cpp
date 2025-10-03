@@ -41,6 +41,10 @@ void APartyRoomController::BeginPlay()
 				{
 					CanMaxium = false;
 				}
+				if (ClientPawn&& !ClientPawnSpawn)
+				{
+					ClientPawnSpawn = true;
+				}
 			}, 6.0f, true,2.0f);
 	}
 	}));
@@ -74,11 +78,10 @@ void APartyRoomController::Tick(float DeltaTime)
 			if (PS->PlayerHP_H <= KINDA_SMALL_NUMBER|| Portal->GetGototheMain())
 			{
 				GetWorld()->GetTimerManager().ClearTimer(Timer);
-				UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
+			    UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
 			}
-			if (ClientPawn)
+			if (ClientPawn&& PS->PlayerHP_C > KINDA_SMALL_NUMBER)
 			{
-				ClientPawnSpawn = true;
 				ClientPawn->GetMesh()->SetRelativeRotation(FRotator(0, PS->MeshPitch_C, 0));
 			}
 		}

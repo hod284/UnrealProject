@@ -51,14 +51,15 @@ void AMinionMonster::BeginPlay()
 		AIController->RunBehaviorTree(MonsterBehaviorTree);
 		AIController->GetBlackboardComponent()->SetValueAsFloat("NoramlAttackRange", NoramlAttackRange);
 	}
+	if(HasAuthority())
+	Brain = AIController->BrainComponent;
 	FVector  Loc = FVector::ZeroVector;
 	FRotator Rot = FRotator::ZeroRotator;
 	FVector  Scl = FVector(1, 1, 1);
 	FTransform Xform(Rot, Loc, Scl);
-		Ac3 = GetWorld()->SpawnActorDeferred<AAction3_Monster>(Sk3, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
-		Ac3->SetAttackDamage(Attack1);
-		UGameplayStatics::FinishSpawningActor(Ac3, Xform);
-	
+	Ac3 = GetWorld()->SpawnActorDeferred<AAction3_Monster>(Sk3, Xform, this, GetInstigator(), ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+	Ac3->SetAttackDamage(Attack1);
+	UGameplayStatics::FinishSpawningActor(Ac3, Xform);
 	if (StimuliSource)
 	{
 		StimuliSource->RegisterForSense(TSubclassOf<UAISense_Sight>());
@@ -74,6 +75,8 @@ void  AMinionMonster::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (MonsterHp <= KINDA_SMALL_NUMBER)
 	{
+		if (Brain && Brain->IsRunning())
+			Brain->StopLogic(TEXT("DIE"));
 		if (Ac3)
 			Ac3->Destroy();
 		Death_M();

@@ -41,6 +41,7 @@ protected:
 	float MonsterHpConst =0.0f;
 	float Attack1 =0.0f;
 	const FCMonsterInfo* Info;
+	UBrainComponent* Brain;
 	TObjectPtr<UBehaviorTree> MonsterBehaviorTree;
 	FTimerHandle Timer;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "sk")
