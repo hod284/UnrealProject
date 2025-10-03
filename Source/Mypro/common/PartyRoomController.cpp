@@ -117,18 +117,18 @@ void APartyRoomController::Tick(float DeltaTime)
 			ui->SetotherMpBar(PC->PlayerMP_H);
 			ui->SetPlayerHpBar(PC->PlayerHP_C);
 			ui->SetPlayerMpBar(PC->PlayerMP_C);
-			if (PC->PlayerHP_C <= KINDA_SMALL_NUMBER)
+			if (PC->PlayerHP_C <= KINDA_SMALL_NUMBER&& PC->PlayerHP_H > KINDA_SMALL_NUMBER)
 			{
 				if (HostPawn&& PC->GetViewTarget() != HostPawn)
 					PC->SetViewTarget(HostPawn);
 				if(Mychar)
 				PC->Server_DClient(Mychar);
 			}
-			if (HostPawn)
+			if (HostPawn && PC->PlayerHP_H > KINDA_SMALL_NUMBER)
 			{
 				HostPawn->GetMesh()->SetRelativeRotation(FRotator(0, PC->MeshPitch_h, 0));
 			}
-			if (Portal->GetGototheMain())
+			if (Portal&&Portal->GetGototheMain())
 			{
 				GetWorld()->GetTimerManager().ClearTimer(Timer);
 				PC->Server_EndPvP();
