@@ -439,11 +439,6 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 		HP = HpTemp / 100;
 		UE_LOG(LogMypro, Warning, TEXT("PMP:%f"), HP);
 		ui->OnDamage_P.Broadcast(HP);
-		if (HP <= KINDA_SMALL_NUMBER)
-		{
-			GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UI);
-			ui->TypingStart();
-		}
 	}
 	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp
 		|| GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
@@ -461,6 +456,11 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 					PS->PlayerHP_H = HP;
 					PS->ForceNetUpdate();
 				}
+				if (HP <= KINDA_SMALL_NUMBER && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
+				{
+					GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UI);
+					uiParty->TypingStart();
+				}
 			}
 			else if (PlayerController && PlayerController->IsLocalController() && !HasAuthority())
 			{
@@ -469,11 +469,6 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 				float HpTemp = (PlayerHp / PlayerHp_Const) * 100;
 				HP = HpTemp / 100;
 			}
-		}
-		if (HP <= KINDA_SMALL_NUMBER&& GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
-		{
-			GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UI);
-			uiParty->TypingStart();
 		}
 	}
 	return  DamageAmount;
