@@ -439,6 +439,11 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 		HP = HpTemp / 100;
 		UE_LOG(LogMypro, Warning, TEXT("PMP:%f"), HP);
 		ui->OnDamage_P.Broadcast(HP);
+		if (HP <= KINDA_SMALL_NUMBER)
+		{
+			GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UI);
+			ui->TypingStart();
+		}
 	}
 	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp
 		|| GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
