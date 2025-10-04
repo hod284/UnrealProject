@@ -18,9 +18,9 @@ AMinionMonster::AMinionMonster()
 	const ConstructorHelpers::FObjectFinder<UBehaviorTree> BTree(TEXT("/Script/AIModule.BehaviorTree'/Game/BT/MinionTree.MinionTree'"));
 	if (BTree.Succeeded())
 		MonsterBehaviorTree = BTree.Object;
-	static ConstructorHelpers::FClassFinder<UMonsterHPBar>UI(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/widget/MonsterHpbarWidget.MonsterHpbarWidget_C'"));
-	if (UI.Succeeded())
-		Damagesh->SetWidgetClass(UI.Class);
+	static ConstructorHelpers::FClassFinder<UMonsterHPBar>DamageUI(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/widget/MonsterHpbarWidget.MonsterHpbarWidget_C'"));
+	if (DamageUI.Succeeded())
+		Damagesh->SetWidgetClass(DamageUI.Class);
 	Damagesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Damagesh->SetWidgetSpace(EWidgetSpace::Screen);
 	Damagesh->SetDrawSize(FVector2D(200, 80));
@@ -67,6 +67,7 @@ void AMinionMonster::BeginPlay()
 		StimuliSource->RegisterWithPerceptionSystem();
 		StimuliSource->SetAutoActivate(true);
 	}
+	UI = Cast<UPartyRoomWidgetClass>(GetWorld()->GetGameInstance()->GetSubsystem<UUImanager>()->GetPartyRoom_widget());
 }
 
 // Called every frame
@@ -81,6 +82,8 @@ void  AMinionMonster::Tick(float DeltaTime)
 			Ac3->Destroy();
 		Death_M();
 	}
+	if (UI&&UI->GetLose() && Brain && Brain->IsRunning())
+		Brain->StopLogic(TEXT("DIE"));
 } 
 
 // Called to bind functionality to input

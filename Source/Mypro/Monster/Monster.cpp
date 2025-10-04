@@ -174,7 +174,7 @@ void AMonster::Tick(float DeltaTime)
 		if (AnimInstance&&AnimInstance ->GetAnimType() != EMonsterDefaultAnim::Death)
 		AnimInstance->DeathAni();
 	}
-	if(UI->GetPlayerLose()&& Brain && Brain->IsRunning())
+	if(UI&&UI->GetPlayerLose()&& Brain && Brain->IsRunning())
 		Brain->StopLogic(TEXT("DIE"));
 }
 

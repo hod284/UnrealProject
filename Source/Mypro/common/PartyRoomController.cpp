@@ -70,19 +70,27 @@ void APartyRoomController::Tick(float DeltaTime)
 			ui->SetotherMpBar(PS->PlayerMP_C);
 			if (Mychar)
 			{
-				if (ClientPawn == NULL)
+				if (ClientPawn == NULL) 
 				ClientPawn = Cast<AMyCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 1));
 				Mychar->CurrentVelocity_H = PS->CurrentVelocity_H;
 				Mychar->CurrentVelocity_C = PS->CurrentVelocity_C;
 			}
-			if (PS->PlayerHP_H <= KINDA_SMALL_NUMBER|| Portal->GetGototheMain())
+			if (Portal && Portal->GetGototheMain())
 			{
 				GetWorld()->GetTimerManager().ClearTimer(Timer);
-			    UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
+				UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
+			}
+			if (PS->PlayerHP_H <= KINDA_SMALL_NUMBER)
+			{
+				GetWorld()->GetTimerManager().ClearTimer(Timer);
 			}
 			if (ClientPawn&& PS->PlayerHP_C > KINDA_SMALL_NUMBER)
 			{
 				ClientPawn->GetMesh()->SetRelativeRotation(FRotator(0, PS->MeshPitch_C, 0));
+			}
+			if (ui&&ui->GetLose())
+			{
+				UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
 			}
 		}
 	}

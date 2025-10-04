@@ -6,6 +6,7 @@
 #include "../Widget/MonsterHPBar.h"
 #include "MonsterAnimInstance.h"
 #include "MinionController.h"
+#include "../singleton/UImanager.h"
 #include "SkillActor/Action3_Monster.h"
 #include "../common/MySingleton.h"
 #include "MonsterPawnMovement.h"
@@ -55,6 +56,7 @@ protected:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser);
 	TObjectPtr<UMonsterAnimInstance> AnimInstance;
 	EMonsterDefaultAnim MonSterAnim;
+    UPartyRoomWidgetClass* UI;
 public:
 	void AttackSuper();
 	void AttackShooting();

@@ -92,13 +92,10 @@ void AMyCharacter::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 		OtherActor->Destroy();
 	}
 }
-
 void AMyCharacter::OnCapsuleBeginOverlap(UPrimitiveComponent* Comp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32, bool bFromSweep,
 	const FHitResult& Sweep)
 {
-
-
 }
 void AMyCharacter::OnCapsuleEndOverlap(
 	UPrimitiveComponent* OverlappedComp,
@@ -106,9 +103,7 @@ void AMyCharacter::OnCapsuleEndOverlap(
 	UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex)
 {
-
 }
-
 // Called every frame
 void AMyCharacter::Tick(float DeltaTime)
 {
@@ -446,7 +441,6 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 		ui->OnDamage_P.Broadcast(HP);
 		if (HP <= KINDA_SMALL_NUMBER)
 		{
-
 			GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UI);
 			ui->TypingStart();
 		}
@@ -475,6 +469,11 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 				float HpTemp = (PlayerHp / PlayerHp_Const) * 100;
 				HP = HpTemp / 100;
 			}
+		}
+		if (HP <= KINDA_SMALL_NUMBER&& GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
+		{
+			GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UI);
+			uiParty->TypingStart();
 		}
 	}
 	return  DamageAmount;

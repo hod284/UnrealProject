@@ -16,6 +16,7 @@ void UPartyRoomWidgetClass::NativeConstruct()
 	Player_OtherImage = Cast<UImage>(GetWidgetFromName("OtherImage"));
 	PlayerHp_other = Cast<UProgressBar>(GetWidgetFromName("OtherHP"));
 	PlayerMp_other = Cast<UProgressBar>(GetWidgetFromName("OtherMP"));
+	LoseTyping = Cast<UTextBlock>(GetWidgetFromName("Lose"));
 }
 void UPartyRoomWidgetClass::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
@@ -146,4 +147,44 @@ void UPartyRoomWidgetClass::SetotherHpBar(float da)
 void UPartyRoomWidgetClass::SetotherMpBar(float da)
 {
 	PlayerMp_other->SetPercent(da);
+}
+void UPartyRoomWidgetClass::Typing()
+{
+	TimeCount += 1;
+	switch (TimeCount)
+	{
+	case 1:
+		LoseTyping->SetText(FText::FromString("L"));
+		break;
+	case 2:
+		LoseTyping->SetText(FText::FromString("L "));
+		break;
+	case 3:
+		LoseTyping->SetText(FText::FromString("L O"));
+		break;
+	case 4:
+		LoseTyping->SetText(FText::FromString("L O "));
+		break;
+	case 5:
+		LoseTyping->SetText(FText::FromString("L O S"));
+		break;
+	case 6:
+		LoseTyping->SetText(FText::FromString("L O S "));
+		break;
+	case 7:
+		LoseTyping->SetText(FText::FromString("L O S E"));
+		break;
+	case 9:
+		TimeCount = 0;
+		GetWorld()->GetTimerManager().ClearTimer(Timer);
+		Lose=true;
+		break;
+	default:
+		break;
+	}
+}
+void UPartyRoomWidgetClass::TypingStart()
+{
+	GetWorld()->GetTimerManager().ClearTimer(Timer);
+	GetWorld()->GetTimerManager().SetTimer(Timer, this, &UPartyRoomWidgetClass::Typing, 0.5f, true);
 }

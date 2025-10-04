@@ -17,6 +17,8 @@ class MYPRO_API UPartyRoomWidgetClass : public UUserWidget
 	GENERATED_BODY()
 protected:
 	UPROPERTY(BlueprintReadWrite)
+	TObjectPtr<UTextBlock> LoseTyping;
+	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<USkillStatus> Skill1;
 	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<USkillStatus> Skill2;
@@ -38,7 +40,12 @@ protected:
 	TObjectPtr<UImage> 	Player_OtherImage;
 	virtual void NativeConstruct() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+	int32 TimeCount;
+	FTimerHandle Timer;
+	bool Lose = false;
 public:
+	void TypingStart();
+	void Typing();
 	void SetPlayerImagebyCharacter(Characters ch);
 	void SetPlayerOtherImagebyCharacter(Characters ch);
 	AMainPlayerController* PC;
@@ -116,6 +123,10 @@ public:
 	float GetPercent4_c()
 	{
 		return Percent4_c;
+	}
+	bool GetLose()
+	{
+		return Lose;
 	}
 	float Percent1 = 1.0f;
 	float Percent1_c = 1.0f;
