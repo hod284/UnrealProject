@@ -3,6 +3,7 @@
 
 #include "MyCharacter.h"
 #include"MyPlayerState.h"
+#include "../common/PartyRoomController.h"
 // Sets default values
 AMyCharacter::AMyCharacter()
 {
@@ -448,6 +449,7 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 	else if (GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::pvp
 		|| GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
 	{
+		APartyRoomController* PartySceneObject = Cast<APartyRoomController>(UGameplayStatics::GetActorOfClass(GetWorld(), APartyRoomController::StaticClass()));
 		if (!BackMoving && !DashMoving)
 		{
 			if (PlayerController && PlayerController->IsLocalController() && HasAuthority())
@@ -461,7 +463,8 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 					PS->PlayerHP_H = HP;
 					PS->ForceNetUpdate();
 				}
-				if (HP <= KINDA_SMALL_NUMBER && GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
+				if (PartySceneObject &&PartySceneObject->GetClientDead() && HP <= KINDA_SMALL_NUMBER &&
+					GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
 				{
 					GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UI);
 					uiParty->TypingStart();
@@ -473,6 +476,12 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 				PlayerHp -= DamageAmount;
 				float HpTemp = (PlayerHp / PlayerHp_Const) * 100;
 				HP = HpTemp / 100;
+				if (PartySceneObject && PartySceneObject->GetHostDead()&&HP <= KINDA_SMALL_NUMBER &&
+					GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->GetGameState() == NowGameState::Party)
+				{
+					GetWorld()->GetGameInstance()->GetSubsystem<UGameManager>()->SetCusorVisual(UIORNOT::UI);
+					uiParty->TypingStart();
+				} 
 			}
 		}
 	}

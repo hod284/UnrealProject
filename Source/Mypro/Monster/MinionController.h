@@ -3,7 +3,6 @@
 #pragma once
 
 #include "../Gameinfo.h"
-#include "../player/MyCharacter.h"
 #include "MonsterPawnMovement.h"
 #include "AIController.h"
 #include "MinionController.generated.h"

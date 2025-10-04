@@ -154,6 +154,7 @@ void UPartyRoomWidgetClass::Typing()
 	switch (TimeCount)
 	{
 	case 1:
+		MonsterStop = true;
 		LoseTyping->SetText(FText::FromString("L"));
 		break;
 	case 2:
@@ -176,8 +177,8 @@ void UPartyRoomWidgetClass::Typing()
 		break;
 	case 9:
 		TimeCount = 0;
+		Lose= true;
 		GetWorld()->GetTimerManager().ClearTimer(Timer);
-		Lose=true;
 		break;
 	default:
 		break;

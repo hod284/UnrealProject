@@ -75,14 +75,26 @@ void APartyRoomController::Tick(float DeltaTime)
 				Mychar->CurrentVelocity_H = PS->CurrentVelocity_H;
 				Mychar->CurrentVelocity_C = PS->CurrentVelocity_C;
 			}
+			if (PS->PlayerHP_H <= KINDA_SMALL_NUMBER && PS->PlayerHP_C > KINDA_SMALL_NUMBER)
+			{
+				APlayerController* PC = GetWorld()->GetFirstPlayerController();
+				if (ClientPawn && PC->GetViewTarget() != ClientPawn)
+					PC->SetViewTarget(ClientPawn);
+				if (Mychar)
+					Mychar->Destroy();
+			}
 			if (Portal && Portal->GetGototheMain())
 			{
 				GetWorld()->GetTimerManager().ClearTimer(Timer);
 				UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Virtual_Studio_Kit/Maps/StudioC"));
 			}
-			if (PS->PlayerHP_H <= KINDA_SMALL_NUMBER)
+			if (PS->PlayerHP_H <= KINDA_SMALL_NUMBER&& PS->PlayerHP_C <= KINDA_SMALL_NUMBER)
 			{
 				GetWorld()->GetTimerManager().ClearTimer(Timer);
+			}
+			if (PS->PlayerHP_C <= KINDA_SMALL_NUMBER)
+			{
+				ClientDead = true;
 			}
 			if (ClientPawn&& PS->PlayerHP_C > KINDA_SMALL_NUMBER)
 			{
@@ -132,6 +144,10 @@ void APartyRoomController::Tick(float DeltaTime)
 				if(Mychar)
 				PC->Server_DClient(Mychar);
 			}
+			if ( PC->PlayerHP_H <= KINDA_SMALL_NUMBER)
+			{
+				HostDead = true;
+			}
 			if (HostPawn && PC->PlayerHP_H > KINDA_SMALL_NUMBER)
 			{
 				HostPawn->GetMesh()->SetRelativeRotation(FRotator(0, PC->MeshPitch_h, 0));
@@ -139,6 +155,14 @@ void APartyRoomController::Tick(float DeltaTime)
 			if (Portal&&Portal->GetGototheMain())
 			{
 				GetWorld()->GetTimerManager().ClearTimer(Timer);
+				PC->Server_EndPvP();
+			}
+			if (PC->PlayerHP_C <= KINDA_SMALL_NUMBER && PC->PlayerHP_H <= KINDA_SMALL_NUMBER)
+			{
+				GetWorld()->GetTimerManager().ClearTimer(Timer);
+			}
+			if (ui && ui->GetLose())
+			{
 				PC->Server_EndPvP();
 			}
 		}

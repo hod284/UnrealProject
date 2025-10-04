@@ -4,6 +4,7 @@
 #include "MinionController.h"
 #include "../player/MainPlayerController.h"
 #include "../player/MyPlayerState.h"
+#include "../player/MyCharacter.h"
 #include "MinionMonster.h"
 AMinionController::AMinionController()
 {

@@ -26,6 +26,8 @@ protected:
 	AMyCharacter* HostPawn;
 	AMyCharacter* ClientPawn;
 	TArray<AActor*> Players;
+	bool HostDead=false;
+	bool ClientDead =false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Portal")
 	TObjectPtr<ASpawnPortalClass> Portal;
 	FTimerHandle Timer;
@@ -39,5 +41,13 @@ public:
 	void MinusMaxium()
 	{
 		AddMaxium -= 1;
+	}
+	bool GetClientDead()
+	{
+		return   ClientDead;
+	}
+	bool GetHostDead()
+	{
+		return HostDead;
 	}
 };

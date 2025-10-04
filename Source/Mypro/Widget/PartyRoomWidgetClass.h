@@ -43,6 +43,7 @@ protected:
 	int32 TimeCount;
 	FTimerHandle Timer;
 	bool Lose = false;
+	bool MonsterStop = false;
 public:
 	void TypingStart();
 	void Typing();
@@ -127,6 +128,10 @@ public:
 	bool GetLose()
 	{
 		return Lose;
+	}
+	bool GetMonsterStop()
+	{
+		return  MonsterStop;
 	}
 	float Percent1 = 1.0f;
 	float Percent1_c = 1.0f;
