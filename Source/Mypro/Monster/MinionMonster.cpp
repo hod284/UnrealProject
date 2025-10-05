@@ -82,12 +82,6 @@ void  AMinionMonster::Tick(float DeltaTime)
 			Ac3->Destroy();
 		Death_M();
 	}
-	if (UI && UI->GetMonsterStop() && Brain && Brain->IsRunning())
-	{
-		if (Ac3)
-			Ac3->Destroy();
-		Brain->StopLogic(TEXT("DIE"));
-	}
 } 
 
 // Called to bind functionality to input
