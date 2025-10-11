@@ -158,12 +158,20 @@ void  UFirstSelectMode::FinishedSession(bool ok)
 	Session->OnFindSessionsCompleteDelegates.RemoveAll(this);
 
 	auto LocalId = GetLocalIdSafe();
-	if (!LocalId.IsValid()) { UE_LOG(LogTemp, Error, TEXT("LocalId invalid")); return; }
+	if (!LocalId.IsValid()) 
+	{
+		UE_LOG(LogTemp, Error, TEXT("LocalId invalid")); 
+		return; 
+	}
 
 	TArray<FOnlineSessionSearchResult> Candidates;
 	if (ok && Search.IsValid()) {
 		for (const auto& R : Search->SearchResults) {
-			if (R.IsValid()) { Candidates.Add(R); break; }
+			if (R.IsValid()) 
+			{
+				Candidates.Add(R); 
+			    break; 
+			}
 		}
 	}
 
