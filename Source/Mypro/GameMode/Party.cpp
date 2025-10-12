@@ -21,9 +21,6 @@ void AParty::BeginPlay()
 void AParty::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
-	if (APawn* Old = NewPlayer->GetPawn())
-		Old->Destroy();
-	RestartPlayer(NewPlayer);
 }
 void AParty::RestartPlayer(AController* NewPlayer)
 {

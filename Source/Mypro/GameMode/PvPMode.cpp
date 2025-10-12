@@ -19,9 +19,6 @@ void APvPMode::BeginPlay()
 void APvPMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
-	if (APawn* Old = NewPlayer->GetPawn())
-		Old->Destroy();
-	RestartPlayer(NewPlayer);
 }
 void APvPMode::RestartPlayer(AController* NewPlayer)
 {
